@@ -54,7 +54,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 openMainPage();
                 break;
             case R.id.nav_gyms:
-
+                openGymsPage();
                 break;
         }
 
@@ -65,6 +65,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void openMainPage() {
         FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_HOME_ID);
         setMenuChecked(R.id.nav_home);
+    }
+
+    private void openGymsPage() {
+        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_GYMS_ID);
+        setMenuChecked(R.id.nav_gyms);
     }
 
     private void setMenuChecked(int menuId) {

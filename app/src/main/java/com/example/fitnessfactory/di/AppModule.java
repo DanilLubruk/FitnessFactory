@@ -1,5 +1,6 @@
 package com.example.fitnessfactory.di;
 
+import com.example.fitnessfactory.data.repositories.GymRepository;
 import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
 
@@ -21,5 +22,11 @@ public class AppModule {
     @Singleton
     public FirebaseAuthManager provideFirebaseAuthManager() {
         return new FirebaseAuthManager();
+    }
+
+    @Provides
+    @AppScope
+    public GymRepository provideGymRepository() {
+        return new GymRepository();
     }
 }

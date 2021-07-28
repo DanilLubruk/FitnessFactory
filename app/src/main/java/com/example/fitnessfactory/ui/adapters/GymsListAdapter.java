@@ -21,6 +21,11 @@ public class GymsListAdapter extends RecyclerView.Adapter<GymsListViewHolder> {
         this.gyms = gyms;
     }
 
+    public void setGyms(List<Gym> gyms) {
+        this.gyms = gyms;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public GymsListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

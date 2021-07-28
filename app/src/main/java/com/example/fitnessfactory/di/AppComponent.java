@@ -1,6 +1,7 @@
 package com.example.fitnessfactory.di;
 
 import com.example.fitnessfactory.ui.viewmodels.AuthViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.GymsListViewModel;
 
 import javax.inject.Singleton;
 
@@ -12,4 +13,5 @@ import dagger.Component;
 public interface AppComponent {
 
     void inject(AuthViewModel authViewModel);
+    void inject(GymsListViewModel gymsListViewModel);
 }
