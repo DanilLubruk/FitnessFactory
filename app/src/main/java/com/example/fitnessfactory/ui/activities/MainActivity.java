@@ -1,95 +1,84 @@
 package com.example.fitnessfactory.ui.activities;
 
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.fitnessfactory.R;
-import com.example.fitnessfactory.data.models.Quote;
-import com.example.fitnessfactory.utils.GuiUtils;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.example.fitnessfactory.data.AppConsts;
+import com.example.fitnessfactory.ui.fragments.FragmentProvider;
+import com.google.android.material.navigation.NavigationView;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String QUOTE = "quote";
-    public static final String AUTHOR = "author";
-    @BindView(R.id.tvClientName)
-    TextView tvClientName;
-    @BindView(R.id.edtQuote)
-    EditText edtQuote;
-    @BindView(R.id.edtAuthor)
-    EditText edtAuthor;
-    @BindView(R.id.btnSave)
-    Button btnSave;
-    @BindView(R.id.tvText)
-    TextView tvText;
-
-    private DocumentReference docReference;
+    @BindView(R.id.drawer)
+    DrawerLayout drawer;
+    @BindView(R.id.navView)
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
-        initComponents();
-    }
-
-    private void initComponents() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-           return;
-        }
-        tvClientName.setText(user.getDisplayName());
-        btnSave.setOnClickListener(view -> dispatchData());
-        docReference = FirebaseFirestore.getInstance().document("dataCollection/quotes");
-    }
-
-    private void fetchData(DocumentSnapshot docSnapshot) {
-        try {
-            Quote quote = docSnapshot.toObject(Quote.class);
-            tvText.setText(quote.getQuote().concat(" - ").concat(quote.getAuthor()));
-        } catch (Exception e) {
-            GuiUtils.showMessage(e.getLocalizedMessage());
-        }
-    }
-
-    private void dispatchData() {
-        String quote = edtQuote.getText().toString();
-        String author = edtAuthor.getText().toString();
-
-        if (quote.isEmpty() || author.isEmpty()) {
-            return;
-        }
-        Map<String, Object> data = new HashMap<>();
-        data.put(QUOTE, quote);
-        data.put(AUTHOR, author);
-        docReference.set(data).addOnCompleteListener((task) -> {
-            if (task.isSuccessful()) {
-                edtQuote.setText("");
-                edtAuthor.setText("");
-                GuiUtils.showMessage("Quote added");
-            }
-            else {
-                GuiUtils.showMessage("Failed!");
-            }
-        });
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        docReference.addSnapshotListener(this, (docSnapshot, exception) -> {
-            fetchData(docSnapshot);
-        });
+    public void initComponents() {
+        super.initComponents();
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setItemIconTintList(null);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        openMainPage();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.nav_home:
+                openMainPage();
+                break;
+            case R.id.nav_gyms:
+
+                break;
+        }
+
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    public void openMainPage() {
+        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_HOME_ID);
+        setMenuChecked(R.id.nav_home);
+    }
+
+    private void setMenuChecked(int menuId) {
+        MenuItem item = navigationView.getMenu().findItem(menuId);
+        navigationView.setCheckedItem(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle savedState) {
+        super.onSaveInstanceState(savedState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedState) {
+        super.onRestoreInstanceState(savedState);
     }
 }

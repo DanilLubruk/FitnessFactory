@@ -1,6 +1,15 @@
 <resources>
     <!--development-->
     <string name="app_name">FitnessFactory</string>
+    <string name="title_home">Home</string>
+    <string name="title_gyms">Gyms</string>
+    <string name="navigation_drawer_open">Open menu</string>
+    <string name="navigation_drawer_close">Close menu</string>
+    <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
+    <!--authentication-->
+
     <!--development-->
+
+
 </resources>

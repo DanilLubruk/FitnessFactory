@@ -3,12 +3,17 @@ package com.example.fitnessfactory.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.security.ObfuscateData;
+import com.example.fitnessfactory.ui.viewmodels.AuthViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -34,27 +39,35 @@ public class AuthActivity extends BaseActivity {
     SignInButton btnSignIn;
 
     private final int RC_SIGN_IN = 1;
-    GoogleSignInClient signInClient;
+    private AuthViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setFullScreen();
         setContentView(R.layout.activity_auth);
+        viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
         super.onCreate(savedInstanceState);
-        GoogleSignInOptions signInOptions =
-                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(ObfuscateData.getWebClientId())
-                        .build();
-        signInClient = GoogleSignIn.getClient(this, signInOptions);
-        btnSignIn.setOnClickListener(view -> {
-            googleSignIn();
-        });
+    }
+
+    @Override
+    public void initComponents() {
+        super.initComponents();
+        btnSignIn.setOnClickListener(view -> googleSignIn());
+        hideToolbar();
+    }
+
+    private void hideToolbar() {
+        getToolbar().setVisibility(View.GONE);
+    }
+
+    private void setFullScreen() {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     private void googleSignIn() {
-        if (signInClient == null) {
-            return;
-        }
-        Intent signInIntent = signInClient.getSignInIntent();
+        Intent signInIntent = viewModel.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
@@ -63,42 +76,26 @@ public class AuthActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
+            Task<GoogleSignInAccount> completedTask = GoogleSignIn.getSignedInAccountFromIntent(data);
+            viewModel.handleSignIn(completedTask).observe(this, isHandled -> {
+                if (isHandled) {
+                    showMainActivity();
+                }
+            });
         }
-    }
-
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-            firebaseAuthWithGoogle(completedTask.getResult().getIdToken());
-        } catch (Exception e) {
-            e.printStackTrace();
-            GuiUtils.showMessage(e.getLocalizedMessage());
-            showFailedAuthMessage();
-        }
-    }
-
-    private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        FirebaseAuth.getInstance().signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            showMainActivity();
-                        } else {
-                            showFailedAuthMessage();
-                        }
-                    }
-                });
     }
 
     private void showMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void showFailedAuthMessage() {
-        GuiUtils.showMessage(ResUtils.getString(R.string.caption_wrong_auth));
+        showFailedAuthMessage("");
+    }
+
+    private void showFailedAuthMessage(String errorMessage) {
+        GuiUtils.showMessage(ResUtils.getString(R.string.caption_wrong_auth).concat(errorMessage));
     }
 }
