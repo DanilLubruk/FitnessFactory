@@ -1,5 +1,7 @@
 package com.example.fitnessfactory.utils;
 
+import android.graphics.drawable.Drawable;
+
 import com.example.fitnessfactory.FFApp;
 
 public class ResUtils {
@@ -14,5 +16,9 @@ public class ResUtils {
 
     public static String getString(int id) {
         return FFApp.get().getResources().getString(id);
+    }
+
+    public static Drawable getDrawable(int id) {
+        return FFApp.get().getResources().getDrawable(id);
     }
 }

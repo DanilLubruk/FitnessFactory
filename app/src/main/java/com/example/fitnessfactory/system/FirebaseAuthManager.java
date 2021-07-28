@@ -31,7 +31,6 @@ public class FirebaseAuthManager {
         return Single.create(emitter -> {
             AuthCredential credential = getCredential(completedTask);
             String email = getEmail(completedTask);
-            updateUserEmail(email);
             signInWithFirebase(credential, email, emitter);
         });
     }
@@ -44,6 +43,7 @@ public class FirebaseAuthManager {
 
                     if (!emitter.isDisposed()) {
                         signInInProcess = false;
+                        updateUserEmail(email);
                         emitter.onSuccess(email);
                     }
 
