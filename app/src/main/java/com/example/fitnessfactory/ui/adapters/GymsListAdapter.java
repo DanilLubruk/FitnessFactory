@@ -26,6 +26,10 @@ public class GymsListAdapter extends RecyclerView.Adapter<GymsListViewHolder> {
         notifyDataSetChanged();
     }
 
+    public Gym getGym(int position) {
+        return gyms.get(position);
+    }
+
     @NonNull
     @Override
     public GymsListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

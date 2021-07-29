@@ -1,10 +1,10 @@
 package com.example.fitnessfactory.system;
-
-import android.app.Activity;
 import android.content.Intent;
 
 import com.example.fitnessfactory.FFApp;
+import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.security.ObfuscateData;
+import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -15,16 +15,21 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 
 public class FirebaseAuthManager {
 
-    FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
     private boolean signInInProcess = false;
 
     public FirebaseAuthManager() {
         mAuth = FirebaseAuth.getInstance();
+    }
+
+    public static boolean isLoggedIn() {
+        return FirebaseAuth.getInstance().getCurrentUser() != null;
     }
 
     public Single<String> handleSignInResult(Task<GoogleSignInAccount> completedTask) {
@@ -32,6 +37,16 @@ public class FirebaseAuthManager {
             AuthCredential credential = getCredential(completedTask);
             String email = getEmail(completedTask);
             signInWithFirebase(credential, email, emitter);
+        });
+    }
+
+    public Single<Boolean> isUsersIdSaved() {
+        return Single.create(emitter -> {
+            String userId = AppPrefs.gymOwnerId().getValue();
+            boolean isIdSaved = !StringUtils.isEmpty(userId);
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(isIdSaved);
+            }
         });
     }
 

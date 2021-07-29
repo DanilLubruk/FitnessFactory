@@ -50,6 +50,11 @@ public class AuthViewModel extends BaseViewModel {
                         isRegistered ?
                                 Single.just(true) :
                                 userRepository.registerUser(userEmail.get()))
+                .flatMap(isRegistered -> authManager.isUsersIdSaved())
+                .flatMap(isIdSaved ->
+                        isIdSaved ?
+                                Single.just(true) :
+                                userRepository.saveUserId(userEmail.get()))
                 .observeOn(getMainThreadScheduler())
                 .subscribe(observer::setValue, throwable -> handleAuthError(throwable, observer)));
 

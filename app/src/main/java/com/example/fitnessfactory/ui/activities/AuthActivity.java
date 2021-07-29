@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.security.ObfuscateData;
+import com.example.fitnessfactory.system.FirebaseAuthManager;
 import com.example.fitnessfactory.ui.viewmodels.AuthViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
@@ -52,6 +53,9 @@ public class AuthActivity extends BaseActivity {
     @Override
     public void initComponents() {
         super.initComponents();
+        if (FirebaseAuthManager.isLoggedIn()) {
+            showMainActivity();
+        }
         btnSignIn.setOnClickListener(view -> googleSignIn());
         hideToolbar();
     }

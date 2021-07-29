@@ -7,10 +7,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.ui.fragments.FragmentProvider;
+import com.example.fitnessfactory.utils.GuiUtils;
 import com.google.android.material.navigation.NavigationView;
 
 import butterknife.BindView;
@@ -42,7 +44,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onResume() {
         super.onResume();
-        openMainPage();
+        if (getCurrFragment() == null) {
+            openMainPage();
+        }
+    }
+
+    private Fragment getCurrFragment() {
+        try {
+            return getSupportFragmentManager().findFragmentById(R.id.container);
+        } catch (Exception e) {
+            e.printStackTrace();
+            GuiUtils.showMessage(e.getLocalizedMessage());
+            return null;
+        }
     }
 
     @Override

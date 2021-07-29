@@ -4,6 +4,7 @@ import com.google.firebase.firestore.auth.User;
 
 public class AppUser {
 
+    public static final String ID_FIELD = "id";
     public static final String EMAIL_FILED = "email";
 
     private String id;

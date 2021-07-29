@@ -5,6 +5,17 @@
     <string name="title_gyms">Gyms</string>
     <string name="navigation_drawer_open">Open menu</string>
     <string name="navigation_drawer_close">Close menu</string>
+    <string name="caption_edit">Edit</string>
+    <string name="caption_delete">Delete</string>
+    <string name="caption_save">Save</string>
+    <string name="caption_name">Name</string>
+    <string name="caption_address">Address</string>
+    <string name="caption_ok">OK</string>
+    <string name="caption_cancel">Cancel</string>
+    <string name="caption_blank_fields">You need to fill in the blank fields!</string>
+    <string name="caption_log_out">Log out</string>
+    <string name="message_error_gyms_data_obtain">Error occurred when obtaining data</string>
+    <string name="message_error_ununique_id">ID is not unique</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <!--authentication-->

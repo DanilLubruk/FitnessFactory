@@ -7,4 +7,6 @@ public class AppConsts {
 
     public static final String FRAGMENT_HOME_NAME = "MENU_HOME_FRAGMENT";
     public static final String FRAGMENT_GYMS_NAME = "MENU_GYMS_FRAGMENT";
+
+    public static final String GYM_ID_EXTRA = "GYM_ID_EXTRA";
 }

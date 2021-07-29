@@ -2,6 +2,7 @@ package com.example.fitnessfactory.data.models;
 
 public class Gym {
 
+    public static final String ID_FIELD = "id";
     public static final String NAME_FILED = "name";
     public static final String ADDRESS_FIELD = "address";
 
