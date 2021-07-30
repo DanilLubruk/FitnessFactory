@@ -1,6 +1,5 @@
 package com.example.fitnessfactory.ui.viewmodels.lists;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fitnessfactory.FFApp;
@@ -24,20 +23,20 @@ public class GymsListViewModel extends BaseViewModel {
         FFApp.get().getAppComponent().inject(this);
     }
 
-    public void refreshGymsData() {
-        subscribeInIOThread(gymRepository.getGymsAsync(),
-                new SingleData<>(gyms -> gymsList.setValue(gyms),
-                        throwable -> {
-                            throwable.printStackTrace();
-                            GuiUtils.showMessage(throwable.getLocalizedMessage());
-                        }));
+    public void addGymsListDataListener() {
+        subscribeInIOThread(gymRepository.addGymsListListener());
     }
 
-    public LiveData<List<Gym>> getGymsList() {
-        if (gymsList.getValue() == null) {
-            refreshGymsData();
-        }
+    public void removeGymsListDataListener() {
+        subscribeInIOThread(gymRepository.removeGymsListListener());
+    }
 
-        return gymsList;
+    public void deleteGym(Gym gym) {
+        subscribeInIOThread(gymRepository.deleteCompletable(gym), () -> {}, this::handleError);
+    }
+
+    private void handleError(Throwable throwable) {
+        throwable.printStackTrace();
+        GuiUtils.showMessage(throwable.getLocalizedMessage());
     }
 }

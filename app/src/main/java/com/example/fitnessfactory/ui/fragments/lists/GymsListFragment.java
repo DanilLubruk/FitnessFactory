@@ -2,6 +2,7 @@ package com.example.fitnessfactory.ui.fragments.lists;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -9,14 +10,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
+import com.example.fitnessfactory.data.events.GymsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.Gym;
+import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.ui.activities.editors.GymEditorActivity;
 import com.example.fitnessfactory.ui.adapters.GymsListAdapter;
 import com.example.fitnessfactory.ui.fragments.BaseFragment;
 import com.example.fitnessfactory.ui.viewmodels.lists.GymsListViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
+import com.example.fitnessfactory.utils.ResUtils;
+import com.example.fitnessfactory.utils.dialogs.DialogUtils;
 import com.github.clans.fab.FloatingActionButton;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -54,7 +63,8 @@ public class GymsListFragment extends BaseFragment {
                     showEditorActivity(gym);
                     break;
                 case R.id.btnDelete:
-
+                    gym = adapter.getGym(position);
+                    askForDelete(gym);
                     break;
             }
         });
@@ -70,7 +80,39 @@ public class GymsListFragment extends BaseFragment {
 
             }
         });
-        viewModel.getGymsList().observe(this, this::setGymsData);
+    }
+
+    private void askForDelete(Gym gym) {
+        subscribeInMainThread(
+                DialogUtils.showAskDialog(
+                        getBaseActivity(),
+                        getDeleteMessage(),
+                        ResUtils.getString(R.string.caption_ok),
+                        ResUtils.getString(R.string.caption_cancel)),
+                new SingleData<>(
+                        doDelete -> {
+                            if (doDelete) {
+                                deleteGym(gym);
+                            }
+                        },
+                        throwable -> {
+                            throwable.printStackTrace();
+                            GuiUtils.showMessage(throwable.getLocalizedMessage());
+                        }
+                ));
+    }
+
+    private void deleteGym(Gym gym) {
+        viewModel.deleteGym(gym);
+    }
+
+    private String getDeleteMessage() {
+        return ResUtils.getString(R.string.message_ask_delete_gym);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGymsListDataListenerEvent(GymsListDataListenerEvent gymsListDataListenerEvent) {
+        setGymsData(gymsListDataListenerEvent.getGyms());
     }
 
     private void showEditorActivity(Gym gym) {
@@ -91,10 +133,27 @@ public class GymsListFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (viewModel != null) {
-            viewModel.refreshGymsData();
-        }
+        viewModel.addGymsListDataListener();
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        viewModel.removeGymsListDataListener();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
 
     @Override
     protected int getContentViewId() {

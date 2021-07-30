@@ -8,6 +8,7 @@
     <string name="caption_edit">Edit</string>
     <string name="caption_delete">Delete</string>
     <string name="caption_save">Save</string>
+    <string name="caption_close">Close</string>
     <string name="caption_name">Name</string>
     <string name="caption_address">Address</string>
     <string name="caption_ok">OK</string>
@@ -15,7 +16,14 @@
     <string name="caption_blank_fields">You need to fill in the blank fields!</string>
     <string name="caption_log_out">Log out</string>
     <string name="message_error_gyms_data_obtain">Error occurred when obtaining data</string>
+    <string name="message_error_gyms_data_save">Error occurred when saving data</string>
+    <string name="message_error_gym_null">Gym is null</string>
     <string name="message_error_ununique_id">ID is not unique</string>
+    <string name="caption_warning_title">Warning</string>
+    <string name="caption_no_button">No</string>
+    <string name="caption_yes_button">Yes</string>
+    <string name="message_data_modified">Close without saving?</string>
+    <string name="message_ask_delete_gym">Delete gym?</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <!--authentication-->

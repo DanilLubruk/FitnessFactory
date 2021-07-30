@@ -5,9 +5,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.callbacks.EditorCallback;
+import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.ui.activities.BaseActivity;
+import com.example.fitnessfactory.ui.viewmodels.EditorViewModel;
+import com.example.fitnessfactory.utils.GuiUtils;
+import com.example.fitnessfactory.utils.ResUtils;
+import com.example.fitnessfactory.utils.dialogs.DialogUtils;
 
-public class EditorActivity extends BaseActivity {
+public abstract class EditorActivity extends BaseActivity {
 
     private final int MENU_SAVE = 21;
     private final int MENU_DELETE = 22;
@@ -30,22 +36,113 @@ public class EditorActivity extends BaseActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    protected abstract EditorViewModel getViewModel();
+
+    @Override
+    public void onBackPressed() {
+        cancelAndClose();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         switch (id) {
             case android.R.id.home:
-
+                cancelAndClose();
                 return false;
             case MENU_SAVE:
-
+                save();
                 return false;
             case MENU_DELETE:
-
+                askForDelete();
                 return false;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void askForDelete() {
+        subscribeInMainThread(
+                DialogUtils.showAskDialog(
+                        this,
+                        getDeleteMessage(),
+                        ResUtils.getString(R.string.caption_ok),
+                        ResUtils.getString(R.string.caption_cancel)),
+                new SingleData<>(
+                        doDelete -> {
+                            if (doDelete) {
+                                delete();
+                            }
+                        },
+                        throwable -> {
+                            throwable.printStackTrace();
+                            GuiUtils.showMessage(throwable.getLocalizedMessage());
+                        }
+                ));
+    }
+
+    private void delete() {
+        getViewModel().delete()
+                .observe(this, isDeleted -> {
+                    if (isDeleted) {
+                        close();
+                    }
+                });
+    }
+
+    protected abstract String getDeleteMessage();
+
+    private void cancelAndClose() {
+        isModified(isModified -> {
+           if (isModified) {
+               askForClose();
+           } else {
+               close();
+           }
+        });
+    }
+
+    private void isModified(EditorCallback callback) {
+        getViewModel().isModified().observe(this, callback::callback);
+    }
+
+    private void askForClose() {
+        subscribeInMainThread(
+                DialogUtils.showAskDialog(
+                        this,
+                        ResUtils.getString(R.string.message_data_modified),
+                        ResUtils.getString(R.string.caption_save),
+                        ResUtils.getString(R.string.caption_close)),
+                new SingleData<>(
+                        doSave -> {
+                            if (doSave) {
+                                save();
+                            } else {
+                                close();
+                            }
+                        },
+                        throwable -> {
+                            throwable.printStackTrace();
+                            GuiUtils.showMessage(throwable.getLocalizedMessage());
+                        }));
+    }
+
+    private void save() {
+        if (isDataValid()) {
+            save(isSaved -> {
+                if (isSaved) {
+                    close();
+                }
+            });
+        }
+    }
+
+    protected boolean isDataValid() {
+        return true;
+    }
+
+    private void save(EditorCallback callback) {
+        getViewModel().save().observe(this, callback::callback);
     }
 }

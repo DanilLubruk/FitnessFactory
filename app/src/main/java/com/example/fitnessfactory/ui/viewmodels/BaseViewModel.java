@@ -1,5 +1,6 @@
 package com.example.fitnessfactory.ui.viewmodels;
 
+import android.app.Notification;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -17,6 +18,8 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class BaseViewModel extends ViewModel {
@@ -61,6 +64,15 @@ public class BaseViewModel extends ViewModel {
 
     protected void addSubscription(Disposable disposable) {
         disposables.add(disposable);
+    }
+
+    protected <T> void subscribeInIOThread(Completable subscriber,
+                                           Action onComplete,
+                                           Consumer<? super Throwable> onError) {
+        addSubscription(subscriber
+                .subscribeOn(getIOScheduler())
+                .observeOn(getMainThreadScheduler())
+                .subscribe(onComplete, onError));
     }
 
     protected <T> void subscribeInIOThread(Completable subscriber) {

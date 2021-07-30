@@ -145,6 +145,10 @@ public class BaseActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    protected void close() {
+        finish();
+    }
+
     @Override
     protected void onDestroy() {
         unBind();
