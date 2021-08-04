@@ -39,41 +39,33 @@ public class AuthViewModel extends BaseViewModel {
         return authManager.getSignInIntent();
     }
 
-    public SingleLiveEvent<List<AppUser>> handleSignIn(Task<GoogleSignInAccount> completedTask) {
+    public SingleLiveEvent<List<AppUser>> handleSignIn(Intent authData) {
         SingleLiveEvent<List<AppUser>> observer = new SingleLiveEvent<>();
 
         AtomicReference<String> userEmail = new AtomicReference<>();
-        addSubscription(authManager.handleSignInResult(completedTask)
+        addSubscription(authManager.handleSignInResult(authData)
                 .observeOn(getIOScheduler())
                 .subscribeOn(getIOScheduler())
                 .flatMap(email -> {
                     userEmail.set(email);
                     return userRepository.isRegistered(email);
                 })
+                .observeOn(getIOScheduler())
                 .flatMap(isRegistered ->
                         isRegistered ?
-                                Single.just(userEmail.get()) :
+                                userRepository.getAppUserByEmailAsync(userEmail.get()) :
                                 userRepository.registerUser(
                                         userEmail.get(),
                                         FirebaseAuthManager.getCurrentUserName()))
-                .flatMap(email -> accessRepository.getOwnersByInvitedEmail(email))
+                .observeOn(getIOScheduler())
+                .flatMap(user -> accessRepository.getOwnersByInvitedEmail(user))
+                .observeOn(getIOScheduler())
                 .flatMap(ownersIds -> userRepository.getOwnersByIds(ownersIds))
                 .observeOn(getMainThreadScheduler())
                 .subscribe(observer::setValue, throwable -> handleAuthError(throwable, observer)));
 
         return observer;
     }
-
-    /*public SingleLiveEvent<String> handleSignIn(Task<GoogleSignInAccount> completedTask) {
-        SingleLiveEvent<String> observer = new SingleLiveEvent<>();
-
-        subscribeInIOThread(authManager.handleSignInResult(completedTask),
-                new SingleData<>(
-                        observer::setValue,
-                        throwable -> handleAuthError(throwable, observer)));
-
-        return observer;
-    }*/
 
     public SingleLiveEvent<Boolean> isRegistered(String email) {
         SingleLiveEvent<Boolean> observer = new SingleLiveEvent<>();

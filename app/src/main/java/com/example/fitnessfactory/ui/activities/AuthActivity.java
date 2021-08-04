@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,6 +33,12 @@ public class AuthActivity extends BaseActivity {
 
     @BindView(R.id.btnSignIn)
     SignInButton btnSignIn;
+    @BindView(R.id.pkProgress)
+    ProgressBar pkProgress;
+    @BindView(R.id.tvAppName)
+    TextView tvAppName;
+    @BindView(R.id.imgLogo)
+    ImageView imgLogo;
 
     private final int RC_SIGN_IN = 1;
     private AuthViewModel viewModel;
@@ -63,6 +72,7 @@ public class AuthActivity extends BaseActivity {
     }
 
     private void googleSignIn() {
+        showProgress();
         Intent signInIntent = viewModel.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -78,7 +88,10 @@ public class AuthActivity extends BaseActivity {
 
     private void showAskUserTypeDialog(List<AppUser> gymOwners) {
         subscribeInMainThread(DialogUtils.showAskOwnerDialog(this, gymOwners),
-                this::showMainActivity,
+                () -> {
+                    closeProgress();
+                    showMainActivity();
+                },
                 throwable -> {
                     throwable.printStackTrace();
                     GuiUtils.showMessage(throwable.getLocalizedMessage());
@@ -86,15 +99,34 @@ public class AuthActivity extends BaseActivity {
     }
 
     private void handleSignIn(Intent data) {
-        Task<GoogleSignInAccount> completedTask = GoogleSignIn.getSignedInAccountFromIntent(data);
-        viewModel.handleSignIn(completedTask)
-                .observe(this, this::showAskUserTypeDialog);
+        viewModel.handleSignIn(data)
+                .observe(this, owners -> {
+                    if (owners != null) {
+                        showAskUserTypeDialog(owners);
+                    }
+                });
     }
 
     private void showMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void showProgress() {
+        pkProgress.setVisibility(View.VISIBLE);
+        tvAppName.setVisibility(View.GONE);
+        imgLogo.setVisibility(View.GONE);
+        btnSignIn.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void closeProgress() {
+        pkProgress.setVisibility(View.GONE);
+        tvAppName.setVisibility(View.VISIBLE);
+        imgLogo.setVisibility(View.VISIBLE);
+        btnSignIn.setVisibility(View.VISIBLE);
     }
 
     private void showFailedAuthMessage() {

@@ -37,22 +37,19 @@ public class FirebaseAuthManager {
         return isLoggedIn() ? FirebaseAuth.getInstance().getCurrentUser().getDisplayName() : "";
     }
 
-    public Single<String> handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+    public Single<String> handleSignInResult(Intent data) {
         return Single.create(emitter -> {
-            AuthCredential credential = getCredential(completedTask);
-            String email = getEmail(completedTask);
+            GoogleSignInAccount signInAccount = Tasks.await(GoogleSignIn.getSignedInAccountFromIntent(data));
+            AuthCredential credential = getCredential(signInAccount);
+            String email = signInAccount.getEmail();
             signInWithFirebase(credential, email, emitter);
         });
     }
 
-    private AuthCredential getCredential(Task<GoogleSignInAccount> completedTask) {
-        String idToken = completedTask.getResult().getIdToken();
+    private AuthCredential getCredential(GoogleSignInAccount signInAccount) {
+        String idToken = signInAccount.getIdToken();
 
         return GoogleAuthProvider.getCredential(idToken, null);
-    }
-
-    private String getEmail(Task<GoogleSignInAccount> completedTask) {
-        return completedTask.getResult().getEmail();
     }
 
     private void signInWithFirebase(AuthCredential credential,

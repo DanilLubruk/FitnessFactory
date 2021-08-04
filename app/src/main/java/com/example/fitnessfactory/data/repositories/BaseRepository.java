@@ -13,10 +13,7 @@ public class BaseRepository {
     }
 
     protected CollectionReference getCollection() {
-        if (colReference == null) {
-            initCollection();
-        }
-
+        initCollection();
         return colReference;
     }
 

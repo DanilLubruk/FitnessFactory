@@ -68,18 +68,11 @@ public class StaffAccessRepository extends BaseRepository {
 
     }
 
-    public Single<List<String>> getOwnersByInvitedEmail(String userEmail) {
+    public Single<List<String>> getOwnersByInvitedEmail(AppUser user) {
         return Single.create(emitter -> {
             List<String> ownerIds = new ArrayList<>();
-            ownerIds.add(userEmail);
-            try {
-                ownerIds = getOwnerIdsByInvitedEmail(userEmail);
-            } catch (Exception e) {
-                if (!emitter.isDisposed()) {
-                    emitter.onError(e);
-                }
-                return;
-            }
+            ownerIds.add(user.getId());
+            ownerIds.addAll(getOwnerIdsByInvitedEmail(user.getEmail()));
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(ownerIds);
