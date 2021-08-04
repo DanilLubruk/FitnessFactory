@@ -32,7 +32,7 @@ public class GymsListViewModel extends BaseViewModel {
     }
 
     public void deleteGym(Gym gym) {
-        subscribeInIOThread(gymRepository.deleteCompletable(gym), () -> {}, this::handleError);
+        subscribeInIOThread(gymRepository.deleteCompletable(gym), this::handleError);
     }
 
     private void handleError(Throwable throwable) {

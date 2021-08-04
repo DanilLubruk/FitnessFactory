@@ -11,10 +11,17 @@
     </group>
 
     <group android:id="@+id/grGymOptions">
+
+        <item
+            android:id="@+id/nav_admins"
+            android:checkable="true"
+            android:title="@string/title_admins"/>
+
         <item
             android:id="@+id/nav_gyms"
             android:checkable="true"
             android:title="@string/title_gyms" />
+
     </group>
 
 </menu>

@@ -89,6 +89,9 @@ public class GymRepository extends BaseRepository {
            gymsListListener = getCollection().addSnapshotListener((querySnapshot, exception) -> {
                if (exception != null) {
                    exception.printStackTrace();
+                   if (!source.isDisposed()) {
+                       source.onError(exception);
+                   }
                    return;
                }
 

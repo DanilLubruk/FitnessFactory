@@ -1,13 +1,13 @@
 package com.example.fitnessfactory.data.models;
 
-import com.google.firebase.firestore.auth.User;
-
 public class AppUser {
 
     public static final String ID_FIELD = "id";
+    public static final String NAME_FIELD = "name";
     public static final String EMAIL_FILED = "email";
 
     private String id;
+    private String name;
     private String email;
 
     public AppUser() {
@@ -28,5 +28,13 @@ public class AppUser {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

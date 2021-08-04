@@ -21,8 +21,6 @@ public class MenuFragment extends BaseFragment {
 
     @BindView(R.id.tvGreeting)
     TextView tvGreeting;
-    @BindView(R.id.btnLogOut)
-    Button btnLogOut;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -32,18 +30,6 @@ public class MenuFragment extends BaseFragment {
         if (user != null) {
             tvGreeting.setText(user.getDisplayName() + " " + user.getEmail());
         }
-        btnLogOut.setOnClickListener(view -> logOut());
-    }
-
-    private void logOut() {
-        FirebaseAuth.getInstance().signOut();
-        showAuthActivity();
-    }
-
-    private void showAuthActivity() {
-        Intent intent = new Intent(getBaseActivity(), AuthActivity.class);
-        startActivity(intent);
-        getBaseActivity().finish();
     }
 
     @Override

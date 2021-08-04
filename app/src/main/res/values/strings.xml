@@ -3,6 +3,7 @@
     <string name="app_name">FitnessFactory</string>
     <string name="title_home">Home</string>
     <string name="title_gyms">Gyms</string>
+    <string name="title_admins">Administrators</string>
     <string name="navigation_drawer_open">Open menu</string>
     <string name="navigation_drawer_close">Close menu</string>
     <string name="caption_edit">Edit</string>
@@ -10,6 +11,7 @@
     <string name="caption_save">Save</string>
     <string name="caption_close">Close</string>
     <string name="caption_name">Name</string>
+    <string name="caption_email">Email</string>
     <string name="caption_address">Address</string>
     <string name="caption_ok">OK</string>
     <string name="caption_cancel">Cancel</string>
@@ -24,6 +26,14 @@
     <string name="caption_yes_button">Yes</string>
     <string name="message_data_modified">Close without saving?</string>
     <string name="message_ask_delete_gym">Delete gym?</string>
+    <string name="caption_organisation_owner">Organisation owner</string>
+    <string name="caption_my_own_gym">My own one</string>
+    <string name="caption_personnel">Personnel</string>
+    <string name="title_ask_gym_owner">Which gym are you working with?</string>
+    <string name="title_invite_admin">Send email invitation</string>
+    <string name="caption_send">Send</string>
+    <string name="caption_job_offer">Job offer</string>
+    <string name="text_invitation_to_admin">Hello! You\'ve been chosen as one of the admins in our gym! We are waiting for you on our app FitnessFactory! Just log in with your email and enjoy working with our team!</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <!--authentication-->

@@ -1,7 +1,4 @@
 package com.example.fitnessfactory.ui.fragments;
-
-import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -9,6 +6,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
+import com.example.fitnessfactory.ui.fragments.lists.AdminsListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.GymsListFragment;
 
 public class FragmentProvider {
@@ -25,6 +23,10 @@ public class FragmentProvider {
             case AppConsts.FRAGMENT_GYMS_ID:
                 curFragment = new GymsListFragment();
                 fragmentName = AppConsts.FRAGMENT_GYMS_NAME;
+                break;
+            case AppConsts.FRAGMENT_ADMINS_ID:
+                curFragment = new AdminsListFragment();
+                fragmentName = AppConsts.FRAGMENT_ADMINS_NAME;
                 break;
         }
 

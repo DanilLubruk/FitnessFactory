@@ -4,6 +4,7 @@ import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.FirestoreCollections;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -25,24 +26,17 @@ public class UserRepository extends BaseRepository {
         return FirestoreCollections.USERS_COLLECTION;
     }
 
-    public Single<Boolean> registerUser(String email) {
+    public Single<String> registerUser(String email, String userName) {
         return Single.create(emitter -> {
             DocumentReference documentReference = getCollection().document();
             AppUser appUser = new AppUser();
             appUser.setId(documentReference.getId());
+            appUser.setName(userName);
             appUser.setEmail(email);
-            try {
-                Tasks.await(documentReference.set(appUser));
-            } catch (Exception e) {
-                if (!emitter.isDisposed()) {
-                    emitter.onError(e);
-                }
-            }
-
-            AppPrefs.gymOwnerId().setValue(appUser.getId());
+            Tasks.await(documentReference.set(appUser));
 
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(true);
+                emitter.onSuccess(email);
             }
         });
     }
@@ -53,6 +47,25 @@ public class UserRepository extends BaseRepository {
                emitter.onSuccess(getUsers());
            }
         });
+    }
+
+    public Single<List<AppUser>> getOwnersByIds(List<String> ownerIds) {
+        return Single.create(emitter -> {
+           List<AppUser> owners = new ArrayList<>();
+           for (String ownerId : ownerIds) {
+               AppUser appUser = getAppUser(ownerId);
+               owners.add(appUser);
+           }
+
+           if (!emitter.isDisposed()) {
+               emitter.onSuccess(owners);
+           }
+        });
+    }
+
+    private AppUser getAppUser(String userId) throws Exception {
+        DocumentSnapshot document = Tasks.await(getCollection().document(userId).get());
+        return document.toObject(AppUser.class);
     }
 
     public Single<Boolean> isRegistered(String email) {

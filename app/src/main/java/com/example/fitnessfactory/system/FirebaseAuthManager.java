@@ -10,6 +10,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,6 +33,10 @@ public class FirebaseAuthManager {
         return FirebaseAuth.getInstance().getCurrentUser() != null;
     }
 
+    public static String getCurrentUserName() {
+        return isLoggedIn() ? FirebaseAuth.getInstance().getCurrentUser().getDisplayName() : "";
+    }
+
     public Single<String> handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         return Single.create(emitter -> {
             AuthCredential credential = getCredential(completedTask);
@@ -40,14 +45,14 @@ public class FirebaseAuthManager {
         });
     }
 
-    public Single<Boolean> isUsersIdSaved() {
-        return Single.create(emitter -> {
-            String userId = AppPrefs.gymOwnerId().getValue();
-            boolean isIdSaved = !StringUtils.isEmpty(userId);
-            if (!emitter.isDisposed()) {
-                emitter.onSuccess(isIdSaved);
-            }
-        });
+    private AuthCredential getCredential(Task<GoogleSignInAccount> completedTask) {
+        String idToken = completedTask.getResult().getIdToken();
+
+        return GoogleAuthProvider.getCredential(idToken, null);
+    }
+
+    private String getEmail(Task<GoogleSignInAccount> completedTask) {
+        return completedTask.getResult().getEmail();
     }
 
     private void signInWithFirebase(AuthCredential credential,
@@ -73,21 +78,21 @@ public class FirebaseAuthManager {
                 });
     }
 
-    private AuthCredential getCredential(Task<GoogleSignInAccount> completedTask) {
-        String idToken = completedTask.getResult().getIdToken();
-
-        return GoogleAuthProvider.getCredential(idToken, null);
-    }
-
-    private String getEmail(Task<GoogleSignInAccount> completedTask) {
-        return completedTask.getResult().getEmail();
-    }
-
     private void updateUserEmail(String email) {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             user.updateEmail(email);
         }
+    }
+
+    public Single<Boolean> isUsersIdSaved() {
+        return Single.create(emitter -> {
+            String userId = AppPrefs.gymOwnerId().getValue();
+            boolean isIdSaved = !StringUtils.isEmpty(userId);
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(isIdSaved);
+            }
+        });
     }
 
     public Intent getSignInIntent() {
@@ -96,10 +101,11 @@ public class FirebaseAuthManager {
         }
         signInInProcess = true;
 
-        GoogleSignInOptions signInOptions = getSignInOptions();
-        GoogleSignInClient signInClient = GoogleSignIn.getClient(FFApp.get(), signInOptions);
+        return getGoogleSignInClient().getSignInIntent();
+    }
 
-        return signInClient.getSignInIntent();
+    private GoogleSignInClient getGoogleSignInClient() {
+        return GoogleSignIn.getClient(FFApp.get(), getSignInOptions());
     }
 
     private GoogleSignInOptions getSignInOptions() {
@@ -107,5 +113,32 @@ public class FirebaseAuthManager {
                 .requestIdToken(ObfuscateData.getWebClientId())
                 .requestEmail()
                 .build();
+    }
+
+    public Single<Boolean> signOut() {
+        return Single.create(emitter -> {
+            mAuth.signOut();
+
+            boolean isFirebaseAuthSignedOut = mAuth.getCurrentUser() == null;
+            boolean isGoogleSignedOut = signOutGoogle(emitter);
+
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(isFirebaseAuthSignedOut && isGoogleSignedOut);
+            }
+        });
+    }
+
+    private boolean signOutGoogle(SingleEmitter<Boolean> emitter) {
+        boolean isGoogleSignedOut = false;
+        try {
+            Tasks.await(getGoogleSignInClient().signOut());
+            isGoogleSignedOut = true;
+        } catch (Exception e) {
+            if (!emitter.isDisposed()) {
+                emitter.onError(e);
+            }
+        }
+
+        return isGoogleSignedOut;
     }
 }

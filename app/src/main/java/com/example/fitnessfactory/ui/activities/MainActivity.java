@@ -1,19 +1,28 @@
 package com.example.fitnessfactory.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
+import com.example.fitnessfactory.system.FirebaseAuthManager;
 import com.example.fitnessfactory.ui.fragments.FragmentProvider;
+import com.example.fitnessfactory.ui.viewmodels.MainActivityViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
 
@@ -23,11 +32,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     DrawerLayout drawer;
     @BindView(R.id.navView)
     NavigationView navigationView;
+    @BindView(R.id.btnLogOut)
+    Button btnLogOut;
+
+    private MainActivityViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
     }
 
     @Override
@@ -39,6 +53,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
+        btnLogOut.setOnClickListener(view -> logOut());
+    }
+
+    private void logOut() {
+        viewModel.signOut()
+                .observe(this, isSignedOut -> {
+                    if (isSignedOut) {
+                        showAuthActivity();
+                    }
+                });
+    }
+
+    private void showAuthActivity() {
+        Intent intent = new Intent(this, AuthActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -70,6 +100,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_gyms:
                 openGymsPage();
                 break;
+            case R.id.nav_admins:
+                openAdminsPage();
+                break;
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -84,6 +117,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void openGymsPage() {
         FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_GYMS_ID);
         setMenuChecked(R.id.nav_gyms);
+    }
+
+    private void openAdminsPage() {
+        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_ADMINS_ID);
+        setMenuChecked(R.id.nav_admins);
     }
 
     private void setMenuChecked(int menuId) {

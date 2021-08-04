@@ -67,12 +67,11 @@ public class BaseViewModel extends ViewModel {
     }
 
     protected <T> void subscribeInIOThread(Completable subscriber,
-                                           Action onComplete,
                                            Consumer<? super Throwable> onError) {
         addSubscription(subscriber
                 .subscribeOn(getIOScheduler())
                 .observeOn(getMainThreadScheduler())
-                .subscribe(onComplete, onError));
+                .subscribe(() -> {}, onError));
     }
 
     protected <T> void subscribeInIOThread(Completable subscriber) {

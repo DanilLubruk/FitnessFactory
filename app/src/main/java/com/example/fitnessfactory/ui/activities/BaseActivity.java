@@ -21,11 +21,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import icepick.Icepick;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 @SuppressLint("Registered")
@@ -161,6 +164,20 @@ public class BaseActivity extends AppCompatActivity {
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer.getObserver()::onSuccess, observer.getObserver()::onError));
+    }
+
+    protected <T> void subscribeInMainThread(Completable subscriber, Consumer<Throwable> onError) {
+        addSubscription(subscriber
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {}, onError));
+    }
+
+    protected <T> void subscribeInMainThread(Completable subscriber, Action onComplete, Consumer<Throwable> onError) {
+        addSubscription(subscriber
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(onComplete, onError));
     }
 
     public <T> void subscribeInMainThread(Observable<T> subscriber, SingleData<T> observer) {
