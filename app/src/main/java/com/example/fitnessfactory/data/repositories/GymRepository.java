@@ -127,33 +127,6 @@ public class GymRepository extends BaseRepository {
         });
     }
 
-    public Single<List<Gym>> getGymsAsync() {
-        return Single.create(emitter -> {
-            List<Gym> gyms;
-            try {
-                gyms = getGyms();
-            } catch (Exception e) {
-                emitter.onError(e);
-                return;
-            }
-
-            if (!emitter.isDisposed()) {
-                emitter.onSuccess(gyms);
-            }
-        });
-    }
-
-    private List<Gym> getGyms() throws ExecutionException, InterruptedException {
-        List<Gym> gyms = new ArrayList<>();
-        QuerySnapshot gymsQuery = Tasks.await(getCollection().orderBy(Gym.NAME_FILED).get());
-        List<DocumentSnapshot> gymsDocs = gymsQuery.getDocuments();
-        for (DocumentSnapshot document : gymsDocs) {
-            gyms.add(document.toObject(Gym.class));
-        }
-
-        return gyms;
-    }
-
     public Single<Boolean> deleteSingle(Gym gym) {
         return Single.create(emitter -> {
             boolean isDeleted = deleteGym(gym);
