@@ -73,7 +73,10 @@ public class AuthActivity extends BaseActivity {
 
     private void googleSignIn() {
         showProgress();
-        Intent signInIntent = viewModel.getSignInIntent();
+        viewModel.getSignInIntent().observe(this, this::startAuthentication);
+    }
+
+    private void startAuthentication(Intent signInIntent) {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
@@ -86,6 +89,7 @@ public class AuthActivity extends BaseActivity {
                 handleSignIn(data);
             }
             else if(resultCode == RESULT_CANCELED){
+                viewModel.interruptSignIn();
                 closeProgress();
             }
         }
@@ -98,6 +102,7 @@ public class AuthActivity extends BaseActivity {
                     showMainActivity();
                 },
                 throwable -> {
+                    signInFailed();
                     throwable.printStackTrace();
                     GuiUtils.showMessage(throwable.getLocalizedMessage());
                 });
@@ -108,8 +113,15 @@ public class AuthActivity extends BaseActivity {
                 .observe(this, owners -> {
                     if (owners != null) {
                         showAskUserTypeDialog(owners);
+                    } else {
+                        signInFailed();
                     }
                 });
+    }
+
+    private void signInFailed() {
+        closeProgress();
+        viewModel.signOut();
     }
 
     private void showMainActivity() {

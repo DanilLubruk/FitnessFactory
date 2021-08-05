@@ -1,4 +1,5 @@
 package com.example.fitnessfactory.ui.viewmodels;
+
 import android.content.Intent;
 
 import com.example.fitnessfactory.FFApp;
@@ -35,8 +36,26 @@ public class AuthViewModel extends BaseViewModel {
         FFApp.get().getAppComponent().inject(this);
     }
 
-    public Intent getSignInIntent() {
-        return authManager.getSignInIntent();
+    public SingleLiveEvent<Intent> getSignInIntent() {
+        SingleLiveEvent<Intent> observer = new SingleLiveEvent<>();
+
+        subscribeInIOThread(authManager.getSignInIntentAsync(),
+                new SingleData<>(
+                        observer::setValue,
+                        throwable -> {
+                            throwable.printStackTrace();
+                            GuiUtils.showMessage(throwable.getLocalizedMessage());
+                        }));
+
+        return observer;
+    }
+
+    public void interruptSignIn() {
+        subscribeInIOThread(authManager.interruptSignInAsync(),
+                throwable -> {
+                    throwable.printStackTrace();
+                    GuiUtils.showMessage(throwable.getLocalizedMessage());
+                });
     }
 
     public SingleLiveEvent<List<AppUser>> handleSignIn(Intent authData) {
@@ -88,6 +107,23 @@ public class AuthViewModel extends BaseViewModel {
     }
 
     private void handleIsRegisteredError(Throwable throwable, SingleLiveEvent<Boolean> observer) {
+        observer.setValue(false);
+        throwable.printStackTrace();
+        GuiUtils.showMessage(throwable.getLocalizedMessage());
+    }
+
+    public SingleLiveEvent<Boolean> signOut() {
+        SingleLiveEvent<Boolean> observer = new SingleLiveEvent<>();
+
+        subscribeInIOThread(authManager.signOut(),
+                new SingleData<>(
+                        observer::setValue,
+                        throwable -> handleError(observer, throwable)));
+
+        return observer;
+    }
+
+    private void handleError(SingleLiveEvent<Boolean> observer, Throwable throwable) {
         observer.setValue(false);
         throwable.printStackTrace();
         GuiUtils.showMessage(throwable.getLocalizedMessage());

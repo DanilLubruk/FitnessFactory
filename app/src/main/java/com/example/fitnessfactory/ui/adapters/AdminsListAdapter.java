@@ -35,7 +35,7 @@ public class AdminsListAdapter extends RecyclerView.Adapter<AdminsListViewHolder
     @Override
     public AdminsListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.gyms_list_item_view, parent, false);
+                .inflate(R.layout.admins_list_item_view, parent, false);
         return new AdminsListViewHolder(itemView);
     }
 

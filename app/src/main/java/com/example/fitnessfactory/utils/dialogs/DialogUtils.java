@@ -55,7 +55,7 @@ public class DialogUtils {
         return Completable.create(emitter -> {
             String[] userTypes = new String[gymOwners.size()];
             int myOwnGymIdx = 0;
-            userTypes[myOwnGymIdx] = ResUtils.getString(R.string.caption_organisation_owner);
+            userTypes[myOwnGymIdx] = ResUtils.getString(R.string.caption_my_own_gym);
             int firstOtherGymOwner = 1;
             for (int i = firstOtherGymOwner; i < gymOwners.size(); i++) {
                 userTypes[i] = gymOwners.get(i).getName();

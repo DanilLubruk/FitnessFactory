@@ -55,7 +55,13 @@ public class GymRepository extends BaseRepository {
         if (TextUtils.isEmpty(id)) {
             return new Gym();
         }
-        DocumentSnapshot gymDoc = getGymDocSnapshot(id);
+
+        DocumentSnapshot gymDoc;
+        try {
+             gymDoc = getGymDocSnapshot(id);
+        } catch (InterruptedException e) {
+            return new Gym();
+        }
 
         return gymDoc.toObject(Gym.class);
     }
@@ -149,11 +155,17 @@ public class GymRepository extends BaseRepository {
             throw new Exception(getGymNullErrorMessage());
         }
 
-        boolean isDeleted;
         DocumentReference docReference = getCollection().document(gym.getId());
+        return deleteGym(docReference);
+    }
+
+    private boolean deleteGym(DocumentReference documentReference) {
+        boolean isDeleted;
         try {
-            Tasks.await(docReference.delete());
+            Tasks.await(documentReference.delete());
             isDeleted = true;
+        } catch (InterruptedException e) {
+            isDeleted = false;
         } catch (Exception e) {
             e.printStackTrace();
             isDeleted = false;

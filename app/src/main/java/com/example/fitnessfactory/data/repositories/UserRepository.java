@@ -3,25 +3,32 @@ package com.example.fitnessfactory.data.repositories;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.FirestoreCollections;
+import com.example.fitnessfactory.data.events.AdminsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 
 import static com.example.fitnessfactory.data.models.AppUser.EMAIL_FILED;
 
+import org.greenrobot.eventbus.EventBus;
 import org.w3c.dom.Document;
 
 public class UserRepository extends BaseRepository {
+
+    private ListenerRegistration adminsListListener;
 
     @Override
     protected String getRoot() {
@@ -43,31 +50,24 @@ public class UserRepository extends BaseRepository {
         });
     }
 
-    public Single<List<AppUser>> getUsersAsync() {
-        return Single.create(emitter -> {
-           if (!emitter.isDisposed()) {
-               emitter.onSuccess(getUsers());
-           }
-        });
-    }
-
     public Single<List<AppUser>> getOwnersByIds(List<String> ownerIds) {
         return Single.create(emitter -> {
-           List<AppUser> owners = new ArrayList<>();
-           for (String ownerId : ownerIds) {
-               AppUser appUser = getAppUserById(ownerId);
-               owners.add(appUser);
-           }
-
-           if (!emitter.isDisposed()) {
-               emitter.onSuccess(owners);
-           }
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getAppUsersById(ownerIds));
+            }
         });
     }
 
-    private AppUser getAppUserById(String userId) throws Exception {
-        DocumentSnapshot document = Tasks.await(getCollection().document(userId).get());
-        return document.toObject(AppUser.class);
+    private List<AppUser> getAppUsersById(List<String> ownerIds) throws Exception {
+        QuerySnapshot querySnapshot = Tasks.await(getCollection().whereIn(AppUser.ID_FIELD, ownerIds).get());
+        List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+        List<AppUser> owners = new ArrayList<>();
+
+        for (DocumentSnapshot documentSnapshot : documents) {
+            owners.add(documentSnapshot.toObject(AppUser.class));
+        }
+
+        return owners;
     }
 
     public Single<AppUser> getAppUserByEmailAsync(String email) {
@@ -112,9 +112,9 @@ public class UserRepository extends BaseRepository {
                         }
                     })
                     .addOnFailureListener(exception -> {
-                       if (!emitter.isDisposed()) {
-                           emitter.onError(exception);
-                       }
+                        if (!emitter.isDisposed()) {
+                            emitter.onError(exception);
+                        }
                     });
         });
     }
@@ -167,14 +167,52 @@ public class UserRepository extends BaseRepository {
         AppPrefs.gymOwnerId().setValue(user.getId());
     }
 
-    private List<AppUser> getUsers() throws ExecutionException, InterruptedException {
-        List<AppUser> users = new ArrayList<>();
-        QuerySnapshot usersQuery = Tasks.await(getCollection().orderBy(EMAIL_FILED).get());
-        List<DocumentSnapshot> usersDocs = usersQuery.getDocuments();
-        for (DocumentSnapshot userDoc : usersDocs) {
-            users.add(userDoc.toObject(AppUser.class));
+    public Completable addAdminsListListener(List<String> adminsEmails) {
+        return Completable.create(source -> {
+            if (adminsEmails.size() == 0) {
+                if (!source.isDisposed()) {
+                    source.onComplete();
+                }
+                return;
+            }
+
+            adminsListListener = getCollection().whereIn(EMAIL_FILED, adminsEmails)
+                    .addSnapshotListener((value, error) -> {
+                        if (error != null) {
+                            if (!source.isDisposed()) {
+                                source.onError(error);
+                            }
+                            return;
+                        }
+
+                        List<AppUser> admins = getUsers(value);
+                        EventBus.getDefault().post(new AdminsListDataListenerEvent(admins));
+                        if (!source.isDisposed()) {
+                            source.onComplete();
+                        }
+                    });
+        });
+    }
+
+    private List<AppUser> getUsers(QuerySnapshot value) {
+        List<DocumentSnapshot> documents = value.getDocuments();
+        List<AppUser> admins = new ArrayList<>();
+        for (DocumentSnapshot documentSnapshot : documents) {
+            admins.add(documentSnapshot.toObject(AppUser.class));
         }
 
-        return users;
+        return admins;
+    }
+
+    public Completable removeAdminsListListener() {
+        return Completable.create(source -> {
+            if (adminsListListener != null) {
+                adminsListListener.remove();
+            }
+
+            if (!source.isDisposed()) {
+                source.onComplete();
+            }
+        });
     }
 }

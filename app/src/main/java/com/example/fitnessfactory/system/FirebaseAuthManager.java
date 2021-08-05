@@ -2,8 +2,10 @@ package com.example.fitnessfactory.system;
 import android.content.Intent;
 
 import com.example.fitnessfactory.FFApp;
+import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.security.ObfuscateData;
+import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -92,13 +94,35 @@ public class FirebaseAuthManager {
         });
     }
 
-    public Intent getSignInIntent() {
+    public Single<Intent> getSignInIntentAsync() {
+        return Single.create(emitter -> {
+           if (!emitter.isDisposed()) {
+               emitter.onSuccess(getSignInIntent());
+           }
+        });
+    }
+
+    private Intent getSignInIntent() throws Exception {
         if (signInInProcess) {
-            return null;
+            throw new Exception(ResUtils.getString(R.string.message_error_sign_in_process));
         }
         signInInProcess = true;
 
         return getGoogleSignInClient().getSignInIntent();
+    }
+
+    public Completable interruptSignInAsync() {
+        return Completable.create(source -> {
+           interruptSignIn();
+
+           if (!source.isDisposed()) {
+               source.onComplete();
+           }
+        });
+    }
+
+    private void interruptSignIn() {
+        signInInProcess = false;
     }
 
     private GoogleSignInClient getGoogleSignInClient() {

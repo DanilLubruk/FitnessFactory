@@ -23,8 +23,6 @@ import io.reactivex.SingleEmitter;
 
 public class StaffAccessRepository extends BaseRepository {
 
-    private ListenerRegistration adminsListListener;
-
     @Override
     public String getRoot() {
         return FirestoreCollections.ACCESS_COLLECTION;
@@ -70,7 +68,7 @@ public class StaffAccessRepository extends BaseRepository {
     }
 
     private List<String> getOwnerIdsByInvitedEmail(String userEmail) throws Exception {
-        QuerySnapshot querySnapshot = getOwnerIdsQuerySnapshot(userEmail);
+        QuerySnapshot querySnapshot = Tasks.await(getCollection().whereEqualTo(AccessEntry.USER_EMAIL_FIELD, userEmail).get());
         List<DocumentSnapshot> documents = querySnapshot.getDocuments();
 
         return getOwnerIds(documents);
@@ -90,33 +88,30 @@ public class StaffAccessRepository extends BaseRepository {
         return ownerIds;
     }
 
-    private QuerySnapshot getOwnerIdsQuerySnapshot(String userEmail) throws Exception {
-        return Tasks.await(getCollection().whereEqualTo(AccessEntry.USER_EMAIL_FIELD, userEmail).get());
-    }
-
-    private List<AppUser> getAdmins(QuerySnapshot querySnapshot) {
-        List<AppUser> admins = new ArrayList<>();
-        if (querySnapshot == null) {
-            return admins;
-        }
-
-        List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-        for (DocumentSnapshot documentSnapshot : documents) {
-            admins.add(documentSnapshot.toObject(AppUser.class));
-        }
-
-        return admins;
-    }
-
-    public Completable removeAdminsListListener() {
-        return Completable.create(source -> {
-            if (adminsListListener != null) {
-                adminsListListener.remove();
-            }
-
-            if (!source.isDisposed()) {
-                source.onComplete();
+    public Single<List<String>> getAdminsEmailsByOwnerId(String ownerId) {
+        return Single.create(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getAdminsEmails(ownerId));
             }
         });
+    }
+
+    private List<String> getAdminsEmails(String ownerId) throws Exception {
+        QuerySnapshot snapshot;
+        try {
+            snapshot = Tasks.await(getCollection().whereEqualTo(AccessEntry.OWNER_ID_FIELD, ownerId).get());
+        } catch (InterruptedException e) {
+            return new ArrayList<>();
+        }
+        List<DocumentSnapshot> documents = snapshot.getDocuments();
+        List<String> emails = new ArrayList<>();
+        for (DocumentSnapshot documentSnapshot : documents) {
+            AccessEntry admin = documentSnapshot.toObject(AccessEntry.class);
+            if (admin != null) {
+                emails.add(admin.getUserEmail());
+            }
+        }
+
+        return emails;
     }
 }

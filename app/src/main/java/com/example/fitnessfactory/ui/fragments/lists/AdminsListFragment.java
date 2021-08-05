@@ -123,6 +123,18 @@ public class AdminsListFragment extends BaseFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.addAdminsListListener();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        viewModel.removeAdminsListListener();
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
