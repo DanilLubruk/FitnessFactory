@@ -43,13 +43,7 @@ public class GymRepository extends BaseRepository {
 
     public Single<Gym> getGymAsync(String id) {
         return Single.create(emitter -> {
-            Gym gym;
-            try {
-                gym = getGym(id);
-            } catch (Exception e) {
-                emitter.onError(e);
-                return;
-            }
+            Gym gym = getGym(id);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(gym);
@@ -79,28 +73,28 @@ public class GymRepository extends BaseRepository {
     }
 
     private String getGymsIdUnuniqueErrorMessage() {
-        return  ResUtils.getString(R.string.message_error_gyms_data_obtain)
+        return ResUtils.getString(R.string.message_error_gyms_data_obtain)
                 .concat(" - ")
                 .concat(ResUtils.getString(R.string.message_error_ununique_id));
     }
 
     public Completable addGymsListListener() {
         return Completable.create(source -> {
-           gymsListListener = getCollection().addSnapshotListener((querySnapshot, exception) -> {
-               if (exception != null) {
-                   exception.printStackTrace();
-                   if (!source.isDisposed()) {
-                       source.onError(exception);
-                   }
-                   return;
-               }
+            gymsListListener = getCollection().addSnapshotListener((querySnapshot, exception) -> {
+                if (exception != null) {
+                    exception.printStackTrace();
+                    if (!source.isDisposed()) {
+                        source.onError(exception);
+                    }
+                    return;
+                }
 
-               List<Gym> gyms = getGyms(querySnapshot);
-               EventBus.getDefault().post(new GymsListDataListenerEvent(gyms));
-               if (!source.isDisposed()) {
-                   source.onComplete();
-               }
-           });
+                List<Gym> gyms = getGyms(querySnapshot);
+                EventBus.getDefault().post(new GymsListDataListenerEvent(gyms));
+                if (!source.isDisposed()) {
+                    source.onComplete();
+                }
+            });
         });
     }
 
@@ -142,11 +136,7 @@ public class GymRepository extends BaseRepository {
 
     public Completable deleteCompletable(Gym gym) {
         return Completable.create(source -> {
-            try {
-                deleteGym(gym);
-            } catch (Exception e) {
-                source.onError(e);
-            }
+            deleteGym(gym);
 
             if (!source.isDisposed()) {
                 source.onComplete();
@@ -174,13 +164,7 @@ public class GymRepository extends BaseRepository {
 
     public Single<String> saveAsync(Gym gym) {
         return Single.create(emitter -> {
-            String id;
-            try {
-                id = save(gym);
-            } catch (Exception e) {
-                emitter.onError(e);
-                return;
-            }
+            String id = save(gym);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(id);

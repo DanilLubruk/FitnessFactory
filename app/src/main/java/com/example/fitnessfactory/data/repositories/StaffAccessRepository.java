@@ -37,13 +37,7 @@ public class StaffAccessRepository extends BaseRepository {
             accessEntry.setUserEmail(userEmail);
             accessEntry.setOwnerId(ownerId);
 
-            try {
-                Tasks.await(docReference.set(accessEntry));
-            } catch (Exception e) {
-                if (!source.isDisposed()) {
-                    source.onError(e);
-                }
-            }
+            Tasks.await(docReference.set(accessEntry));
 
             if (!source.isDisposed()) {
                 source.onComplete();
@@ -53,13 +47,8 @@ public class StaffAccessRepository extends BaseRepository {
 
     public Single<Boolean> isAccessRegistered(String email) {
         return Single.create(emitter -> {
-            boolean hasAccessEntryWithThisEmail;
-            try {
-                QuerySnapshot snapshot = Tasks.await(getCollection().whereEqualTo(AccessEntry.USER_EMAIL_FIELD, email).get());
-                hasAccessEntryWithThisEmail = snapshot.getDocuments().size() > 0;
-            } catch (Exception e) {
-                hasAccessEntryWithThisEmail = false;
-            }
+            QuerySnapshot snapshot = Tasks.await(getCollection().whereEqualTo(AccessEntry.USER_EMAIL_FIELD, email).get());
+            boolean hasAccessEntryWithThisEmail = snapshot.getDocuments().size() > 0;
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(hasAccessEntryWithThisEmail);

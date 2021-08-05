@@ -82,7 +82,12 @@ public class AuthActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
-            handleSignIn(data);
+            if(resultCode == RESULT_OK){
+                handleSignIn(data);
+            }
+            else if(resultCode == RESULT_CANCELED){
+                closeProgress();
+            }
         }
     }
 
