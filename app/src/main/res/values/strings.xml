@@ -36,6 +36,8 @@
     <string name="text_invitation_to_admin">Hello! You\'ve been chosen as one of the admins in our gym! We are waiting for you on our app FitnessFactory! Just log in with your email and enjoy working with our team!</string>
     <string name="message_error_email_isnt_unique">user\'s email is not unique</string>
     <string name="message_error_sign_in_process">Signing in is in process</string>
+    <string name="message_obtaining_organistations">Obtaining your data…</string>
+    <string name="message_singing_you_in">Signing you in…</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <!--authentication-->

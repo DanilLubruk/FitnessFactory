@@ -66,6 +66,9 @@ public class DialogUtils {
                     .setItems(userTypes, ((dialog, which) -> {
                         handlePickedOption(which, gymOwners, emitter);
                     }))
+                    .setOnDismissListener(dialog -> {
+                        emitter.onError(new Exception(ResUtils.getString(R.string.caption_wrong_auth)));
+                    })
                     .show();
         });
     }

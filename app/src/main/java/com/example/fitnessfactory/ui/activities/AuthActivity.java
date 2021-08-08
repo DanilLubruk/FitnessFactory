@@ -39,6 +39,8 @@ public class AuthActivity extends BaseActivity {
     TextView tvAppName;
     @BindView(R.id.imgLogo)
     ImageView imgLogo;
+    @BindView(R.id.tvLoadStatus)
+    TextView tvLoadStatus;
 
     private final int RC_SIGN_IN = 1;
     private AuthViewModel viewModel;
@@ -73,6 +75,7 @@ public class AuthActivity extends BaseActivity {
 
     private void googleSignIn() {
         showProgress();
+        setSigningInText();
         viewModel.getSignInIntent().observe(this, this::startAuthentication);
     }
 
@@ -109,6 +112,7 @@ public class AuthActivity extends BaseActivity {
     }
 
     private void handleSignIn(Intent data) {
+        setObtainingDataText();
         viewModel.handleSignIn(data)
                 .observe(this, owners -> {
                     if (owners != null) {
@@ -133,6 +137,7 @@ public class AuthActivity extends BaseActivity {
     @Override
     public void showProgress() {
         pkProgress.setVisibility(View.VISIBLE);
+        tvLoadStatus.setVisibility(View.VISIBLE);
         tvAppName.setVisibility(View.GONE);
         imgLogo.setVisibility(View.GONE);
         btnSignIn.setVisibility(View.GONE);
@@ -141,16 +146,18 @@ public class AuthActivity extends BaseActivity {
     @Override
     public void closeProgress() {
         pkProgress.setVisibility(View.GONE);
+        tvLoadStatus.setVisibility(View.GONE);
+        tvLoadStatus.setText("");
         tvAppName.setVisibility(View.VISIBLE);
         imgLogo.setVisibility(View.VISIBLE);
         btnSignIn.setVisibility(View.VISIBLE);
     }
 
-    private void showFailedAuthMessage() {
-        showFailedAuthMessage("");
+    private void setSigningInText() {
+        tvLoadStatus.setText(ResUtils.getString(R.string.message_singing_you_in));
     }
 
-    private void showFailedAuthMessage(String errorMessage) {
-        GuiUtils.showMessage(ResUtils.getString(R.string.caption_wrong_auth).concat(errorMessage));
+    private void setObtainingDataText() {
+        tvLoadStatus.setText(ResUtils.getString(R.string.message_obtaining_organistations));
     }
 }
