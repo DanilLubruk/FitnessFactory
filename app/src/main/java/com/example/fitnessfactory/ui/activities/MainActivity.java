@@ -14,10 +14,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
+import com.example.fitnessfactory.data.AppPrefs;
+import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
 import com.example.fitnessfactory.ui.fragments.FragmentProvider;
 import com.example.fitnessfactory.ui.viewmodels.MainActivityViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
+import com.example.fitnessfactory.utils.ResUtils;
+import com.example.fitnessfactory.utils.dialogs.DialogUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -54,6 +58,27 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
         btnLogOut.setOnClickListener(view -> logOut());
+        if (AppPrefs.isUserOwner().getValue() && AppPrefs.askForOrganisationName().getValue()) {
+            showAskOrgNameDialog();
+        }
+    }
+
+    private void showAskOrgNameDialog() {
+        subscribeInMainThread(DialogUtils.showOneLineEditDialog(
+                this,
+                ResUtils.getString(R.string.title_ask_org_name),
+                ResUtils.getString(R.string.caption_name),
+                ResUtils.getString(R.string.caption_ok),
+                ResUtils.getString(R.string.caption_cancel)),
+                new SingleData<>(
+                        organisationName -> {
+                            viewModel.setOrganisationName(organisationName);
+                            AppPrefs.askForOrganisationName().setValue(false);
+                        },
+                        throwable -> {
+                            throwable.printStackTrace();
+                            GuiUtils.showMessage(throwable.getLocalizedMessage());
+                        }));
     }
 
     private void logOut() {

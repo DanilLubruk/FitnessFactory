@@ -82,14 +82,18 @@ public class AdminsListFragment extends BaseFragment {
         if (adapter == null) {
             adapter = new AdminsListAdapter(admins);
             rvAdmins.setAdapter(adapter);
-        }
-        else {
+        } else {
             adapter.setAdmins(admins);
         }
     }
 
     private void showSendEmailInvitationDialog() {
-        subscribeInMainThread(DialogUtils.showSendEmailInvitationDialog(getBaseActivity()),
+        subscribeInMainThread(DialogUtils.showOneLineEditDialog(
+                getBaseActivity(),
+                ResUtils.getString(R.string.title_invite_admin),
+                ResUtils.getString(R.string.caption_email),
+                ResUtils.getString(R.string.caption_send),
+                ResUtils.getString(R.string.caption_cancel)),
                 new SingleData<>(
                         email -> {
                             if (!StringUtils.isEmpty(email)) {

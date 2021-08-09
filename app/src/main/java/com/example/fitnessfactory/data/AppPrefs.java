@@ -1,7 +1,5 @@
 package com.example.fitnessfactory.data;
-
-import androidx.annotation.IntegerRes;
-
+import com.tiromansev.prefswrapper.typedprefs.BooleanPreference;
 import com.tiromansev.prefswrapper.typedprefs.IntegerPreference;
 import com.tiromansev.prefswrapper.typedprefs.StringPreference;
 
@@ -14,9 +12,30 @@ public class AppPrefs {
                 .build();
     }
 
+    public static BooleanPreference isUserOwner() {
+        return BooleanPreference
+                .builder("is_user_owner_pref")
+                .setDefaultValue(false)
+                .build();
+    }
+
+    public static StringPreference organisationName() {
+        return StringPreference
+                .builder("organisation_name_pref")
+                .setDefaultValue("")
+                .build();
+    }
+
     public static IntegerPreference currentUserType() {
         return IntegerPreference
                 .builder("is_current_user_owner")
+                .build();
+    }
+
+    public static BooleanPreference askForOrganisationName() {
+        return BooleanPreference
+                .builder("do_ask_for_org_name")
+                .setDefaultValue(false)
                 .build();
     }
 }

@@ -4,23 +4,22 @@ import android.content.Intent;
 
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
+import com.example.fitnessfactory.data.repositories.OrganisationInfoRepository;
 import com.example.fitnessfactory.data.repositories.StaffAccessRepository;
 import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.Task;
+import com.example.fitnessfactory.utils.StringUtils;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
-
-import io.reactivex.Single;
 
 public class AuthViewModel extends BaseViewModel {
 
@@ -30,6 +29,8 @@ public class AuthViewModel extends BaseViewModel {
     StaffAccessRepository accessRepository;
     @Inject
     FirebaseAuthManager authManager;
+    @Inject
+    OrganisationInfoRepository organisationInfoRepository;
 
 
     public AuthViewModel() {
@@ -81,18 +82,27 @@ public class AuthViewModel extends BaseViewModel {
                 .observeOn(getIOScheduler())
                 .flatMap(ownersIds -> userRepository.getOwnersByIds(ownersIds))
                 .observeOn(getMainThreadScheduler())
-                .subscribe(observer::setValue, throwable -> handleAuthError(throwable, observer)));
+                .subscribe(observer::setValue,
+                        throwable -> handleAuthError(throwable, observer)));
 
         return observer;
     }
 
-    public SingleLiveEvent<Boolean> isRegistered(String email) {
+    public void signOut() {
+        subscribeInIOThread(authManager.signOutCompletable(), this::handleError);
+    }
+
+    public SingleLiveEvent<Boolean> checkOrganisationName() {
         SingleLiveEvent<Boolean> observer = new SingleLiveEvent<>();
 
-        subscribeInIOThread(userRepository.isRegistered(email),
-                new SingleData<>(
-                        observer::setValue,
-                        throwable -> handleIsRegisteredError(throwable, observer)));
+        addSubscription(organisationInfoRepository.getOrganisationNameAsync()
+                .subscribeOn(getIOScheduler())
+                .observeOn(getIOScheduler())
+                .flatMapCompletable(organisationInfoRepository::checkOrganisationNameAsync)
+                .observeOn(getMainThreadScheduler())
+                .subscribe(() -> {
+                    observer.setValue(true);
+                }, throwable -> handleError(observer, throwable)));
 
         return observer;
     }
@@ -106,21 +116,9 @@ public class AuthViewModel extends BaseViewModel {
         GuiUtils.showMessage(message);
     }
 
-    private void handleIsRegisteredError(Throwable throwable, SingleLiveEvent<Boolean> observer) {
-        observer.setValue(false);
+    private void handleError(Throwable throwable) {
         throwable.printStackTrace();
         GuiUtils.showMessage(throwable.getLocalizedMessage());
-    }
-
-    public SingleLiveEvent<Boolean> signOut() {
-        SingleLiveEvent<Boolean> observer = new SingleLiveEvent<>();
-
-        subscribeInIOThread(authManager.signOut(),
-                new SingleData<>(
-                        observer::setValue,
-                        throwable -> handleError(observer, throwable)));
-
-        return observer;
     }
 
     private void handleError(SingleLiveEvent<Boolean> observer, Throwable throwable) {

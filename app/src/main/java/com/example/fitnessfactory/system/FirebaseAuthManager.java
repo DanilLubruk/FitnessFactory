@@ -1,4 +1,5 @@
 package com.example.fitnessfactory.system;
+
 import android.content.Intent;
 
 import com.example.fitnessfactory.FFApp;
@@ -11,12 +12,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -96,9 +98,9 @@ public class FirebaseAuthManager {
 
     public Single<Intent> getSignInIntentAsync() {
         return Single.create(emitter -> {
-           if (!emitter.isDisposed()) {
-               emitter.onSuccess(getSignInIntent());
-           }
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getSignInIntent());
+            }
         });
     }
 
@@ -113,11 +115,11 @@ public class FirebaseAuthManager {
 
     public Completable interruptSignInAsync() {
         return Completable.create(source -> {
-           interruptSignIn();
+            interruptSignIn();
 
-           if (!source.isDisposed()) {
-               source.onComplete();
-           }
+            if (!source.isDisposed()) {
+                source.onComplete();
+            }
         });
     }
 
@@ -136,30 +138,51 @@ public class FirebaseAuthManager {
                 .build();
     }
 
-    public Single<Boolean> signOut() {
-        return Single.create(emitter -> {
-            mAuth.signOut();
-
-            boolean isFirebaseAuthSignedOut = mAuth.getCurrentUser() == null;
-            boolean isGoogleSignedOut = signOutGoogle(emitter);
+    public Completable signOutCompletable() {
+        return Completable.create(emitter -> {
+            try {
+                signOut();
+            } catch (InterruptedException e) {
+                emitter.onError(e);
+            } catch (Exception e) {
+                emitter.onError(e);
+            }
 
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(isFirebaseAuthSignedOut && isGoogleSignedOut);
+                emitter.onComplete();
             }
         });
     }
 
-    private boolean signOutGoogle(SingleEmitter<Boolean> emitter) {
-        boolean isGoogleSignedOut = false;
-        try {
-            Tasks.await(getGoogleSignInClient().signOut());
-            isGoogleSignedOut = true;
-        } catch (Exception e) {
-            if (!emitter.isDisposed()) {
+    public Single<Boolean> signOutSingle() {
+        return Single.create(emitter -> {
+            boolean isSignedOut = false;
+            try {
+                isSignedOut = signOut();
+            } catch (InterruptedException e) {
+                emitter.onError(e);
+            } catch (Exception e) {
                 emitter.onError(e);
             }
-        }
 
-        return isGoogleSignedOut;
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(isSignedOut);
+            }
+        });
+    }
+
+    private boolean signOut() throws ExecutionException, InterruptedException {
+        mAuth.signOut();
+
+        boolean isFirebaseAuthSignedOut = mAuth.getCurrentUser() == null;
+        boolean isGoogleSignedOut = signOutGoogle();
+
+        return isFirebaseAuthSignedOut && isGoogleSignedOut;
+    }
+
+    private boolean signOutGoogle() throws ExecutionException, InterruptedException {
+        Tasks.await(getGoogleSignInClient().signOut());
+
+        return true;
     }
 }

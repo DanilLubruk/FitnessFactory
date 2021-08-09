@@ -1,16 +1,11 @@
 package com.example.fitnessfactory.utils.dialogs;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
-import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.example.fitnessfactory.R;
-import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.AppPrefs;
-import com.example.fitnessfactory.data.CurrentUserType;
-import com.example.fitnessfactory.data.callbacks.StringCallback;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.activities.BaseActivity;
 import com.example.fitnessfactory.utils.GuiUtils;
@@ -18,7 +13,6 @@ import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -64,39 +58,45 @@ public class DialogUtils {
             new AlertDialog.Builder(context)
                     .setTitle(ResUtils.getString(R.string.title_ask_gym_owner))
                     .setItems(userTypes, ((dialog, which) -> {
-                        handlePickedOption(which, gymOwners, emitter);
+                        handlePickedOwnerOption(which, gymOwners, emitter);
                     }))
-                    .setOnDismissListener(dialog -> {
-                        emitter.onError(new Exception(ResUtils.getString(R.string.caption_wrong_auth)));
-                    })
+                    .setOnCancelListener(dialog -> emitter.onError(new Exception(ResUtils.getString(R.string.caption_wrong_auth))))
                     .show();
         });
     }
 
-    private static void handlePickedOption(int option,
-                                           List<AppUser> gymOwners,
-                                           CompletableEmitter emitter) {
+    private static void handlePickedOwnerOption(int option,
+                                                List<AppUser> gymOwners,
+                                                CompletableEmitter emitter) {
         String ownerId = gymOwners.get(option).getId();
         AppPrefs.gymOwnerId().setValue(ownerId);
+
+        boolean isOptionMyOwnGym = option == 0;
+        AppPrefs.isUserOwner().setValue(isOptionMyOwnGym);
 
         if (!emitter.isDisposed()) {
             emitter.onComplete();
         }
     }
 
-    public static Single<String> showSendEmailInvitationDialog(BaseActivity context) {
+    public static Single<String> showOneLineEditDialog(BaseActivity context,
+                                                       String title,
+                                                       String hint,
+                                                       String okCaption,
+                                                       String cancelCaption) {
         return Single.create(emitter -> {
-            RelativeLayout dialogView = (RelativeLayout)
-                    context.getLayoutInflater().inflate(R.layout.admin_invitation_dialog_view, null);
-            TextInputEditText edtEmail = dialogView.findViewById(R.id.edtEmail);
+            RelativeLayout dialogView =
+                    getOneLineDialogViewBuilder()
+                    .setHint(hint)
+                    .build(context);
 
             AlertDialog alertDialog = new AlertDialog.Builder(context)
-                    .setTitle(ResUtils.getString(R.string.title_invite_admin))
+                    .setTitle(title)
                     .setView(dialogView)
-                    .setPositiveButton(ResUtils.getString(R.string.caption_send), ((dialog, which) -> {
+                    .setPositiveButton(okCaption, ((dialog, which) -> {
 
                     }))
-                    .setNegativeButton(ResUtils.getString(R.string.caption_cancel), ((dialog, which) -> {
+                    .setNegativeButton(cancelCaption, ((dialog, which) -> {
                         if (!emitter.isDisposed()) {
                             emitter.onSuccess("");
                         }
@@ -105,20 +105,44 @@ public class DialogUtils {
             alertDialog.show();
 
             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((view) -> {
-                String email = edtEmail.getText().toString();
-                handleEmailInput(email, alertDialog, emitter);
+                TextInputEditText edtField = dialogView.findViewById(R.id.edtField);
+                String value = edtField.getText().toString();
+                handleInput(value, alertDialog, emitter);
             });
         });
     }
 
-    private static void handleEmailInput(String email, DialogInterface dialog, SingleEmitter<String> emitter) {
-        if (!StringUtils.isEmpty(email)) {
+    private static void handleInput(String value, DialogInterface dialog, SingleEmitter<String> emitter) {
+        if (!StringUtils.isEmpty(value)) {
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(email);
+                emitter.onSuccess(value);
                 dialog.dismiss();
             }
         } else {
             GuiUtils.showMessage(ResUtils.getString(R.string.caption_blank_fields));
+        }
+    }
+
+    private static OneLineDialogViewBuilder getOneLineDialogViewBuilder() {
+        return new OneLineDialogViewBuilder();
+    }
+
+    private static class OneLineDialogViewBuilder {
+
+        private String hint;
+
+        public OneLineDialogViewBuilder setHint(String hint) {
+            this.hint = hint;
+            return this;
+        }
+
+        public RelativeLayout build(BaseActivity context) {
+            RelativeLayout dialogView = (RelativeLayout)
+                    context.getLayoutInflater().inflate(R.layout.one_line_edit__dialog_view, null);
+            TextInputEditText edtField = dialogView.findViewById(R.id.edtField);
+            edtField.setHint(hint);
+
+            return dialogView;
         }
     }
 }

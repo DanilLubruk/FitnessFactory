@@ -98,19 +98,6 @@ public class AuthActivity extends BaseActivity {
         }
     }
 
-    private void showAskUserTypeDialog(List<AppUser> gymOwners) {
-        subscribeInMainThread(DialogUtils.showAskOwnerDialog(this, gymOwners),
-                () -> {
-                    closeProgress();
-                    showMainActivity();
-                },
-                throwable -> {
-                    signInFailed();
-                    throwable.printStackTrace();
-                    GuiUtils.showMessage(throwable.getLocalizedMessage());
-                });
-    }
-
     private void handleSignIn(Intent data) {
         setObtainingDataText();
         viewModel.handleSignIn(data)
@@ -121,6 +108,23 @@ public class AuthActivity extends BaseActivity {
                         signInFailed();
                     }
                 });
+    }
+
+    private void showAskUserTypeDialog(List<AppUser> gymOwners) {
+        subscribeInMainThread(DialogUtils.showAskOwnerDialog(this, gymOwners),
+                this::checkOrganisationName,
+                throwable -> {
+                    signInFailed();
+                    throwable.printStackTrace();
+                    GuiUtils.showMessage(throwable.getLocalizedMessage());
+                });
+    }
+
+    private void checkOrganisationName() {
+        viewModel.checkOrganisationName().observe(this, isChecked -> {
+            closeProgress();
+            showMainActivity();
+        });
     }
 
     private void signInFailed() {

@@ -38,6 +38,7 @@
     <string name="message_error_sign_in_process">Signing in is in process</string>
     <string name="message_obtaining_organistations">Obtaining your data…</string>
     <string name="message_singing_you_in">Signing you in…</string>
+    <string name="title_ask_org_name">Enter your organisation\'s name</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <!--authentication-->
