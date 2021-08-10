@@ -1,5 +1,6 @@
 package com.example.fitnessfactory.ui.fragments.lists;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.GymsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleData;
+import com.example.fitnessfactory.ui.activities.editors.AdminEditorActivity;
 import com.example.fitnessfactory.ui.activities.editors.GymEditorActivity;
 import com.example.fitnessfactory.ui.adapters.GymsListAdapter;
 import com.example.fitnessfactory.ui.fragments.BaseFragment;
@@ -41,6 +43,7 @@ public class GymsListFragment extends BaseFragment {
     private GymsListViewModel viewModel;
     private GymsListAdapter adapter;
     private RecyclerTouchListener touchListener;
+    private boolean selectMode = false;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -51,6 +54,9 @@ public class GymsListFragment extends BaseFragment {
     }
 
     private void initComponents() {
+        if (getBaseActivity().getIntent().hasExtra(AppConsts.IS_SELECT_MODE_EXTRA)) {
+            selectMode = getBaseActivity().getIntent().getBooleanExtra(AppConsts.IS_SELECT_MODE_EXTRA, false);
+        }
         fabAddGym.setOnClickListener(view -> showEditorActivity(new Gym()));
         GuiUtils.initListView(getBaseActivity(), recyclerView, true);
         touchListener = new RecyclerTouchListener(getBaseActivity(), recyclerView);
@@ -72,7 +78,7 @@ public class GymsListFragment extends BaseFragment {
             @Override
             public void onRowClicked(int position) {
                 Gym gym = adapter.getGym(position);
-                showEditorActivity(gym);
+                GymsListFragment.this.onRowClicked(gym);
             }
 
             @Override
@@ -113,6 +119,21 @@ public class GymsListFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGymsListDataListenerEvent(GymsListDataListenerEvent gymsListDataListenerEvent) {
         setGymsData(gymsListDataListenerEvent.getGyms());
+    }
+
+    private void onRowClicked(Gym gym) {
+        if (!selectMode) {
+            showEditorActivity(gym);
+        } else {
+            sendSelectResult(gym);
+        }
+    }
+
+    private void sendSelectResult(Gym gym) {
+        Intent result = new Intent();
+        result.putExtra(AppConsts.GYM_ID_EXTRA, gym.getId());
+        getBaseActivity().setResult(Activity.RESULT_OK, result);
+        getBaseActivity().finish();
     }
 
     private void showEditorActivity(Gym gym) {

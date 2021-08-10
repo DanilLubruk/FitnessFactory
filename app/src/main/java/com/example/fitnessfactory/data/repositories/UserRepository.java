@@ -56,14 +56,8 @@ public class UserRepository extends BaseRepository {
 
     private List<AppUser> getAppUsersById(List<String> ownerIds) throws Exception {
         QuerySnapshot querySnapshot = Tasks.await(getCollection().whereIn(AppUser.ID_FIELD, ownerIds).get());
-        List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-        List<AppUser> owners = new ArrayList<>();
 
-        for (DocumentSnapshot documentSnapshot : documents) {
-            owners.add(documentSnapshot.toObject(AppUser.class));
-        }
-
-        return owners;
+        return querySnapshot.toObjects(AppUser.class);
     }
 
     public Single<AppUser> getAppUserByEmailAsync(String email) {
@@ -190,16 +184,6 @@ public class UserRepository extends BaseRepository {
     private List<AppUser> getAdminsList(List<String> adminsEmails) throws Exception {
         QuerySnapshot adminsQuery = Tasks.await(getCollection().whereIn(EMAIL_FILED, adminsEmails).get());
 
-        return getUsers(adminsQuery);
-    }
-
-    private List<AppUser> getUsers(QuerySnapshot value) {
-        List<DocumentSnapshot> documents = value.getDocuments();
-        List<AppUser> admins = new ArrayList<>();
-        for (DocumentSnapshot documentSnapshot : documents) {
-            admins.add(documentSnapshot.toObject(AppUser.class));
-        }
-
-        return admins;
+        return adminsQuery.toObjects(AppUser.class);
     }
 }

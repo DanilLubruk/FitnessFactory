@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.FirestoreCollections;
+import com.example.fitnessfactory.data.events.AdminGymsListListenerEvent;
 import com.example.fitnessfactory.data.events.GymsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.utils.ResUtils;
@@ -27,6 +28,7 @@ import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
 
 public class GymRepository extends BaseRepository {
 
@@ -59,7 +61,7 @@ public class GymRepository extends BaseRepository {
 
         DocumentSnapshot gymDoc;
         try {
-             gymDoc = getGymDocSnapshot(id);
+            gymDoc = getGymDocSnapshot(id);
         } catch (InterruptedException e) {
             return gym;
         }
@@ -93,26 +95,13 @@ public class GymRepository extends BaseRepository {
                     return;
                 }
 
-                List<Gym> gyms = getGyms(querySnapshot);
+                List<Gym> gyms = querySnapshot.toObjects(Gym.class);
                 EventBus.getDefault().post(new GymsListDataListenerEvent(gyms));
                 if (!source.isDisposed()) {
                     source.onComplete();
                 }
             });
         });
-    }
-
-    private List<Gym> getGyms(QuerySnapshot querySnapshot) {
-        List<Gym> gyms = new ArrayList<>();
-        if (querySnapshot == null) {
-            return gyms;
-        }
-
-        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-            gyms.add(document.toObject(Gym.class));
-        }
-
-        return gyms;
     }
 
     public Completable removeGymsListListener() {
@@ -169,6 +158,36 @@ public class GymRepository extends BaseRepository {
         }
 
         return isDeleted;
+    }
+
+    public Single<List<Gym>> getGymsByIds(List<String> gymIds) {
+        return Single.create(emitter -> {
+            List<Gym> gyms = getGymsByIds(emitter, gymIds);
+
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(gyms);
+            }
+        });
+    }
+
+    private List<Gym> getGymsByIds(SingleEmitter<List<Gym>> emitter, List<String> gymIds) {
+        List<Gym> gyms = new ArrayList<>();
+        if (gymIds.size() == 0) {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(gyms);
+            }
+            return gyms;
+        }
+
+        try {
+            gyms = Tasks.await(getCollection().whereIn(Gym.ID_FIELD, gymIds).get()).toObjects(Gym.class);
+        } catch (InterruptedException e) {
+            reportError(emitter, e);
+        } catch (Exception e) {
+            reportError(emitter, e);
+        }
+
+        return gyms;
     }
 
     public Single<String> saveAsync(Gym gym) {

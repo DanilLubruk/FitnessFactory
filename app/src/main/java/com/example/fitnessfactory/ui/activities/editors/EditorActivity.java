@@ -15,7 +15,7 @@ import com.example.fitnessfactory.utils.dialogs.DialogUtils;
 
 public abstract class EditorActivity extends BaseActivity {
 
-    private final int MENU_SAVE = 21;
+    protected final int MENU_SAVE = 21;
     private final int MENU_DELETE = 22;
 
     @Override

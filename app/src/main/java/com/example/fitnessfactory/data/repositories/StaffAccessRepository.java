@@ -1,12 +1,14 @@
 package com.example.fitnessfactory.data.repositories;
 
 import com.example.fitnessfactory.data.FirestoreCollections;
+import com.example.fitnessfactory.data.events.AdminGymsListListenerEvent;
 import com.example.fitnessfactory.data.events.AdminsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AccessEntry;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -25,6 +27,7 @@ import io.reactivex.SingleEmitter;
 public class StaffAccessRepository extends BaseRepository {
 
     private ListenerRegistration adminsListListener;
+    private ListenerRegistration adminGymsListListener;
 
     @Override
     public String getRoot() {
@@ -165,18 +168,69 @@ public class StaffAccessRepository extends BaseRepository {
     }
 
     private void deleteAdmin(String ownerId, String email) throws Exception {
+        DocumentReference docReference = getPersonnelDocument(ownerId, email);
+        Tasks.await(docReference.delete());
+    }
+
+    private DocumentReference getPersonnelDocument(String ownerId, String email) throws Exception {
+        return getPersonnelSnapshot(ownerId, email).getReference();
+    }
+
+    private DocumentSnapshot getPersonnelSnapshot(String ownerId, String email) throws Exception {
         List<DocumentSnapshot> documents =
-                Tasks.await(
-                        getCollection()
-                                .whereEqualTo(AccessEntry.OWNER_ID_FIELD, ownerId)
-                                .whereEqualTo(AccessEntry.USER_EMAIL_FIELD, email)
-                                .get())
+                Tasks.await(getPersonnelQuery(ownerId, email).get())
                         .getDocuments();
 
         checkEmailUniqueness(documents);
 
-        DocumentReference docReference = documents.get(0).getReference();
-        Tasks.await(docReference.delete());
+        return documents.get(0);
+    }
+
+    private Query getPersonnelQuery(String ownerId, String email) {
+        return getCollection()
+                .whereEqualTo(AccessEntry.OWNER_ID_FIELD, ownerId)
+                .whereEqualTo(AccessEntry.USER_EMAIL_FIELD, email);
+    }
+
+    public Single<List<String>> getPersonnelGymsAsync(String ownerId, String personnelEmail) {
+        return Single.create(emitter -> {
+           List<String> personnelGyms = getPersonnelGyms(emitter, ownerId, personnelEmail);
+           if (personnelGyms == null) {
+               personnelGyms = new ArrayList<>();
+           }
+
+           if (!emitter.isDisposed()) {
+               emitter.onSuccess(personnelGyms);
+           }
+        });
+    }
+
+    private List<String> getPersonnelGyms(SingleEmitter<List<String>> emitter,
+                                          String ownerId,
+                                          String personnelEmail) {
+        List<String> personnelGyms = new ArrayList<>();
+
+        try {
+            personnelGyms = getPersonnelGyms(ownerId, personnelEmail);
+        } catch (InterruptedException e) {
+            reportError(emitter, e);
+        } catch (Exception e) {
+            reportError(emitter, e);
+        }
+
+        return personnelGyms;
+    }
+
+    private List<String> getPersonnelGyms(String ownerId, String personnelEmail) throws Exception {
+        AccessEntry personnel = getPersonnel(ownerId, personnelEmail);
+
+        return personnel.getGyms();
+    }
+
+    private AccessEntry getPersonnel(String ownerId, String email) throws Exception {
+        DocumentSnapshot documentSnapshot = getPersonnelSnapshot(ownerId, email);
+
+        return documentSnapshot.toObject(AccessEntry.class);
     }
 
     public Completable addAdminsListListener(String ownerId) {
@@ -208,5 +262,96 @@ public class StaffAccessRepository extends BaseRepository {
                emitter.onComplete();
            }
         });
+    }
+
+    public Completable addAdminGymsListListener(String idOwner, String email) {
+        return Completable.create(emitter -> {
+            adminGymsListListener = getPersonnelQuery(idOwner, email)
+                    .addSnapshotListener((snapshot, error) -> {
+                        if (error != null) {
+                            reportError(emitter, error);
+                            return;
+                        }
+
+                        EventBus.getDefault().post(new AdminGymsListListenerEvent());
+                        if (!emitter.isDisposed()) {
+                            emitter.onComplete();
+                        }
+                    });
+        });
+    }
+
+    public Completable removeAdminGymsListListener() {
+        return Completable.create(emitter -> {
+           if (adminGymsListListener != null) {
+               adminGymsListListener.remove();
+           }
+
+           if (!emitter.isDisposed()) {
+               emitter.onComplete();
+           }
+        });
+    }
+
+    public Completable addGymToPersonnelAsync(String idOwner, String email, String gymId) {
+        return Completable.create(emitter -> {
+           addGymToPersonnel(emitter, idOwner, email, gymId);
+
+           if (!emitter.isDisposed()) {
+               emitter.onComplete();
+           }
+        });
+    }
+
+    private void addGymToPersonnel(CompletableEmitter emitter,
+                                   String idOwner,
+                                   String email,
+                                   String gymId) {
+        try {
+            addGymToPersonnel(idOwner, email, gymId);
+        } catch (InterruptedException e) {
+            reportError(emitter, e);
+        } catch (Exception e) {
+            reportError(emitter, e);
+        }
+    }
+
+    private void addGymToPersonnel(String idOwner, String email, String gymId) throws Exception {
+        DocumentReference documentReference = getPersonnelDocument(idOwner, email);
+        Tasks.await(
+                documentReference.update(
+                        FirestoreCollections.GYMS_COLLECTION,
+                        FieldValue.arrayUnion(gymId)));
+    }
+
+    public Completable removeGymFromPersonnelAsync(String idOwner, String email, String gymId) {
+        return Completable.create(emitter -> {
+            removeGymFromPersonnel(emitter, idOwner, email, gymId);
+
+            if (!emitter.isDisposed()) {
+                emitter.onComplete();
+            }
+        });
+    }
+
+    private void removeGymFromPersonnel(CompletableEmitter emitter,
+                                        String idOwner,
+                                        String email,
+                                        String gymId) {
+        try {
+            removeGymFromPersonnel(idOwner, email, gymId);
+        } catch (InterruptedException e) {
+            reportError(emitter, e);
+        } catch (Exception e) {
+            reportError(emitter, e);
+        }
+    }
+
+    private void removeGymFromPersonnel(String idOwner, String email, String gymId) throws Exception {
+        DocumentReference documentReference = getPersonnelDocument(idOwner, email);
+        Tasks.await(
+                documentReference.update(
+                        FirestoreCollections.GYMS_COLLECTION,
+                        FieldValue.arrayRemove(gymId)));
     }
 }

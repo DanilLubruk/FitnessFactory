@@ -8,10 +8,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.AdminsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleData;
+import com.example.fitnessfactory.ui.activities.editors.AdminEditorActivity;
 import com.example.fitnessfactory.ui.adapters.AdminsListAdapter;
 import com.example.fitnessfactory.ui.fragments.BaseFragment;
 import com.example.fitnessfactory.ui.viewmodels.lists.AdminListViewModel;
@@ -60,6 +62,7 @@ public class AdminsListFragment extends BaseFragment {
             switch (viewId) {
                 case R.id.btnEdit:
                     AppUser admin = adapter.getAdmin(position);
+                    showEditorActivity(admin);
                     break;
                 case R.id.btnDelete:
                     admin = adapter.getAdmin(position);
@@ -71,6 +74,7 @@ public class AdminsListFragment extends BaseFragment {
             @Override
             public void onRowClicked(int position) {
                 AppUser admin = adapter.getAdmin(position);
+                showEditorActivity(admin);
             }
 
             @Override
@@ -79,6 +83,16 @@ public class AdminsListFragment extends BaseFragment {
             }
         });
         viewModel.getAdmins().observe(getViewLifecycleOwner(), this::setAdminsData);
+    }
+
+    private void showEditorActivity(AppUser admin) {
+        Intent intent = new Intent(getBaseActivity(), AdminEditorActivity.class);
+
+        intent.putExtra(AppConsts.ADMIN_ID_EXTRA, admin.getId());
+        intent.putExtra(AppConsts.ADMIN_NAME_EXTRA, admin.getName());
+        intent.putExtra(AppConsts.ADMIN_EMAIL_EXTRA, admin.getEmail());
+
+        startActivity(intent);
     }
 
     private void askForDelete(AppUser admin) {
