@@ -86,7 +86,7 @@ public class GymEditorViewModel extends EditorViewModel {
                             this.gym.get().setId(id);
                             observer.setValue(true);
                         },
-                        throwable -> handleError(throwable, observer)
+                        throwable -> handleError(observer, throwable)
                 ));
 
         return observer;
@@ -100,17 +100,6 @@ public class GymEditorViewModel extends EditorViewModel {
                 new SingleData<>(observer::setValue, this::handleError));
 
         return observer;
-    }
-
-    private void handleError(Throwable throwable, SingleLiveEvent<Boolean> observer) {
-        observer.setValue(true);
-        throwable.printStackTrace();
-        GuiUtils.showMessage(throwable.getLocalizedMessage());
-    }
-
-    private void handleError(Throwable throwable) {
-        throwable.printStackTrace();
-        GuiUtils.showMessage(throwable.getLocalizedMessage());
     }
 
     @Override

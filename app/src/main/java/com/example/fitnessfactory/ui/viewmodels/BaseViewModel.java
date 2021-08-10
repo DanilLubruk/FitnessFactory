@@ -7,6 +7,8 @@ import android.util.Log;
 import androidx.lifecycle.ViewModel;
 
 import com.example.fitnessfactory.data.observers.SingleData;
+import com.example.fitnessfactory.data.observers.SingleLiveEvent;
+import com.example.fitnessfactory.utils.GuiUtils;
 
 import java.util.HashMap;
 
@@ -115,5 +117,16 @@ public class BaseViewModel extends ViewModel {
             Icepick.restoreInstanceState(this, inState);
             handle = (HashMap<String, Object>) inState.getSerializable(HANDLE);
         }
+    }
+
+    protected void handleError(Throwable throwable) {
+        throwable.printStackTrace();
+        GuiUtils.showMessage(throwable.getLocalizedMessage());
+    }
+
+    protected void handleError(SingleLiveEvent<Boolean> observer, Throwable throwable) {
+        observer.setValue(false);
+        throwable.printStackTrace();
+        GuiUtils.showMessage(throwable.getLocalizedMessage());
     }
 }

@@ -52,15 +52,16 @@ public class GymRepository extends BaseRepository {
     }
 
     private Gym getGym(String id) throws Exception {
+        Gym gym = new Gym();
         if (TextUtils.isEmpty(id)) {
-            return new Gym();
+            return gym;
         }
 
         DocumentSnapshot gymDoc;
         try {
              gymDoc = getGymDocSnapshot(id);
         } catch (InterruptedException e) {
-            return new Gym();
+            return gym;
         }
 
         return gymDoc.toObject(Gym.class);
@@ -70,10 +71,7 @@ public class GymRepository extends BaseRepository {
         QuerySnapshot gymsQuery = Tasks.await(getCollection().whereEqualTo(Gym.ID_FIELD, id).get());
         List<DocumentSnapshot> gymDocs = gymsQuery.getDocuments();
 
-        boolean isIdNotUnique = gymDocs.size() > 1;
-        if (isIdNotUnique) {
-            throw new Exception(getGymsIdUnuniqueErrorMessage());
-        }
+        checkUniqueness(gymDocs, getGymsIdUnuniqueErrorMessage());
 
         return gymDocs.get(0);
     }
@@ -110,8 +108,7 @@ public class GymRepository extends BaseRepository {
             return gyms;
         }
 
-        List<DocumentSnapshot> gymsDocs = querySnapshot.getDocuments();
-        for (DocumentSnapshot document : gymsDocs) {
+        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
             gyms.add(document.toObject(Gym.class));
         }
 

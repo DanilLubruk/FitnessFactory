@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.AppPrefs;
+import com.example.fitnessfactory.data.CurrentUserType;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
 import com.example.fitnessfactory.ui.fragments.FragmentProvider;
@@ -58,7 +59,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
         btnLogOut.setOnClickListener(view -> logOut());
-        if (AppPrefs.isUserOwner().getValue() && AppPrefs.askForOrganisationName().getValue()) {
+        if (CurrentUserType.isOwner() && AppPrefs.askForOrganisationName().getValue()) {
             showAskOrgNameDialog();
         }
     }

@@ -6,6 +6,7 @@ import android.widget.RelativeLayout;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppPrefs;
+import com.example.fitnessfactory.data.CurrentUserType;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.activities.BaseActivity;
 import com.example.fitnessfactory.utils.GuiUtils;
@@ -72,7 +73,10 @@ public class DialogUtils {
         AppPrefs.gymOwnerId().setValue(ownerId);
 
         boolean isOptionMyOwnGym = option == 0;
-        AppPrefs.isUserOwner().setValue(isOptionMyOwnGym);
+        AppPrefs.currentUserType().setValue(
+                isOptionMyOwnGym ?
+                        CurrentUserType.CURRENT_USER_OWNER :
+                        CurrentUserType.CURRENT_USER_STAFF);
 
         if (!emitter.isDisposed()) {
             emitter.onComplete();

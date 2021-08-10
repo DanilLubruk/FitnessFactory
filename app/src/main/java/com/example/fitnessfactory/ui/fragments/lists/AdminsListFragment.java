@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.events.AdminsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
+import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.ui.adapters.AdminsListAdapter;
 import com.example.fitnessfactory.ui.fragments.BaseFragment;
@@ -62,6 +63,7 @@ public class AdminsListFragment extends BaseFragment {
                     break;
                 case R.id.btnDelete:
                     admin = adapter.getAdmin(position);
+                    askForDelete(admin);
                     break;
             }
         });
@@ -76,6 +78,35 @@ public class AdminsListFragment extends BaseFragment {
 
             }
         });
+        viewModel.getAdmins().observe(getViewLifecycleOwner(), this::setAdminsData);
+    }
+
+    private void askForDelete(AppUser admin) {
+        subscribeInMainThread(
+                DialogUtils.showAskDialog(
+                        getBaseActivity(),
+                        getDeleteMessage(),
+                        ResUtils.getString(R.string.caption_ok),
+                        ResUtils.getString(R.string.caption_cancel)),
+                new SingleData<>(
+                        doDelete -> {
+                            if (doDelete) {
+                                deleteAdmin(admin);
+                            }
+                        },
+                        throwable -> {
+                            throwable.printStackTrace();
+                            GuiUtils.showMessage(throwable.getLocalizedMessage());
+                        }
+                ));
+    }
+
+    private String getDeleteMessage() {
+        return ResUtils.getString(R.string.message_ask_delete_admin);
+    }
+
+    private void deleteAdmin(AppUser admin) {
+        viewModel.deleteAdmin(admin.getEmail());
     }
 
     private void setAdminsData(List<AppUser> admins) {
@@ -118,7 +149,7 @@ public class AdminsListFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAdminsListDataListenerEvent(AdminsListDataListenerEvent adminsListDataListenerEvent) {
-        setAdminsData(adminsListDataListenerEvent.getAdmins());
+        viewModel.getAdminsListData();
     }
 
     @Override

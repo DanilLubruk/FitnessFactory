@@ -36,14 +36,4 @@ public class MainActivityViewModel extends BaseViewModel {
                 organisationInfoRepository.setOrganisationNameAsync(organisationName),
                 this::handleError);
     }
-
-    private void handleError(Throwable throwable) {
-        throwable.printStackTrace();
-        GuiUtils.showMessage(throwable.getLocalizedMessage());
-    }
-
-    private void handleError(SingleLiveEvent<Boolean> observer, Throwable throwable) {
-        observer.setValue(false);
-        handleError(throwable);
-    }
 }

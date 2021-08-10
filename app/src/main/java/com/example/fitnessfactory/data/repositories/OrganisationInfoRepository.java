@@ -11,25 +11,33 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Completable;
+import io.reactivex.CompletableEmitter;
 import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
 
 public class OrganisationInfoRepository extends BaseRepository {
 
     public Single<String> getOrganisationNameAsync() {
         return Single.create(emitter -> {
-            String organisationName = "";
-            try {
-                organisationName = getOrganisationName();
-            } catch (InterruptedException e) {
-                emitter.onError(e);
-            } catch (Exception e) {
-                emitter.onError(e);
-            }
+            String organisationName = getOrganisationName(emitter);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(organisationName);
             }
         });
+    }
+
+    private String getOrganisationName(SingleEmitter<String> emitter) {
+        String organisationName = "";
+        try {
+            organisationName = getOrganisationName();
+        } catch (InterruptedException e) {
+            reportError(emitter, e);
+        } catch (Exception e) {
+            reportError(emitter, e);
+        }
+
+        return organisationName;
     }
 
     private String getOrganisationName() throws ExecutionException, InterruptedException {
@@ -65,18 +73,22 @@ public class OrganisationInfoRepository extends BaseRepository {
 
     public Completable setOrganisationNameAsync(String organisationName) {
         return Completable.create(emitter -> {
-            try {
-                setOrganisationName(organisationName);
-            } catch (InterruptedException e) {
-                emitter.onError(e);
-            } catch (Exception e) {
-                emitter.onError(e);
-            }
+            setOrganisationName(emitter, organisationName);
 
            if (!emitter.isDisposed()) {
                emitter.onComplete();
            }
         });
+    }
+
+    private void setOrganisationName(CompletableEmitter emitter, String organisationName) {
+        try {
+            setOrganisationName(organisationName);
+        } catch (InterruptedException e) {
+            reportError(emitter, e);
+        } catch (Exception e) {
+            reportError(emitter, e);
+        }
     }
 
     private void setOrganisationName(String organisationName) throws ExecutionException, InterruptedException {

@@ -29,6 +29,7 @@ public class AppPrefs {
     public static IntegerPreference currentUserType() {
         return IntegerPreference
                 .builder("is_current_user_owner")
+                .setDefaultValue(CurrentUserType.CURRENT_USER_OWNER)
                 .build();
     }
 

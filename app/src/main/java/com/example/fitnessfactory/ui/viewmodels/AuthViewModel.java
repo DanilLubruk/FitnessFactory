@@ -43,20 +43,14 @@ public class AuthViewModel extends BaseViewModel {
         subscribeInIOThread(authManager.getSignInIntentAsync(),
                 new SingleData<>(
                         observer::setValue,
-                        throwable -> {
-                            throwable.printStackTrace();
-                            GuiUtils.showMessage(throwable.getLocalizedMessage());
-                        }));
+                        this::handleError));
 
         return observer;
     }
 
     public void interruptSignIn() {
         subscribeInIOThread(authManager.interruptSignInAsync(),
-                throwable -> {
-                    throwable.printStackTrace();
-                    GuiUtils.showMessage(throwable.getLocalizedMessage());
-                });
+                this::handleError);
     }
 
     public SingleLiveEvent<List<AppUser>> handleSignIn(Intent authData) {
@@ -114,16 +108,5 @@ public class AuthViewModel extends BaseViewModel {
                 .concat(" - ")
                 .concat(throwable.getLocalizedMessage());
         GuiUtils.showMessage(message);
-    }
-
-    private void handleError(Throwable throwable) {
-        throwable.printStackTrace();
-        GuiUtils.showMessage(throwable.getLocalizedMessage());
-    }
-
-    private void handleError(SingleLiveEvent<Boolean> observer, Throwable throwable) {
-        observer.setValue(false);
-        throwable.printStackTrace();
-        GuiUtils.showMessage(throwable.getLocalizedMessage());
     }
 }

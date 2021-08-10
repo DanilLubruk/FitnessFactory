@@ -1,11 +1,16 @@
 package com.example.fitnessfactory.ui.viewmodels.lists;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.AppPrefs;
+import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.repositories.StaffAccessRepository;
 import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -17,6 +22,8 @@ public class AdminListViewModel extends BaseViewModel {
     StaffAccessRepository accessRepository;
     @Inject
     UserRepository userRepository;
+
+    private MutableLiveData<List<AppUser>> admins = new MutableLiveData<>();
 
     public AdminListViewModel() {
         FFApp.get().getAppComponent().inject(this);
@@ -31,30 +38,37 @@ public class AdminListViewModel extends BaseViewModel {
                                 Completable.complete() :
                                 accessRepository.registerAccess(email, AppPrefs.gymOwnerId().getValue()))
                 .subscribe(() -> {
-                }, throwable -> {
-                    throwable.printStackTrace();
-                    GuiUtils.showMessage(throwable.getLocalizedMessage());
-                }));
+                },this::handleError));
     }
 
     public void addAdminsListListener() {
+        subscribeInIOThread(
+                accessRepository.addAdminsListListener(AppPrefs.gymOwnerId().getValue()),
+                this::handleError);
+    }
+
+    public MutableLiveData<List<AppUser>> getAdmins() {
+        return admins;
+    }
+
+    public void getAdminsListData() {
         addSubscription(accessRepository.getAdminsEmailsByOwnerId(AppPrefs.gymOwnerId().getValue())
-                .observeOn(getMainThreadScheduler())
+                .observeOn(getIOScheduler())
                 .subscribeOn(getIOScheduler())
-                .flatMapCompletable(adminsEmails -> userRepository.addAdminsListListener(adminsEmails))
-                .subscribe(() -> {
-                        },
-                        throwable -> {
-                            throwable.printStackTrace();
-                            GuiUtils.showMessage(throwable.getLocalizedMessage());
-                        }));
+                .flatMap(adminsEmails -> userRepository.getAdminsByEmails(adminsEmails))
+                .observeOn(getMainThreadScheduler())
+                .subscribe(admins::setValue,
+                        this::handleError));
     }
 
     public void removeAdminsListListener() {
-        subscribeInIOThread(userRepository.removeAdminsListListener(),
-                throwable -> {
-                    throwable.printStackTrace();
-                    GuiUtils.showMessage(throwable.getLocalizedMessage());
-                });
+        subscribeInIOThread(accessRepository.removeAdminsListListener(),
+                this::handleError);
+    }
+
+    public void deleteAdmin(String email) {
+        subscribeInIOThread(
+                accessRepository.deleteAdminCompletable(AppPrefs.gymOwnerId().getValue(), email),
+                this::handleError);
     }
 }
