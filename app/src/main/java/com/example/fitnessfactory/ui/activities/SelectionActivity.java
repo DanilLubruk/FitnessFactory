@@ -16,6 +16,7 @@ public class SelectionActivity extends BaseActivity {
 
     @Override
     public void initActivity() {
+        super.initActivity();
         int fragmentId = getIntent().getIntExtra(AppConsts.FRAGMENT_ID_EXTRA, AppConsts.UNDEFINED_VALUE);
         getIntent().putExtra(AppConsts.IS_SELECT_MODE_EXTRA, true);
         FragmentProvider.attachFragment(this, fragmentId);

@@ -53,6 +53,7 @@ public class AdminEditorActivity extends EditorActivity {
     public void initActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_admin_editor);
         viewModel = new ViewModelProvider(this).get(AdminEditorViewModel.class);
+        setTitle(R.string.title_edit_item);
         super.initActivity();
         binding.setModel(viewModel);
         viewModel.setAdminData(getIntent());
@@ -64,10 +65,10 @@ public class AdminEditorActivity extends EditorActivity {
         GuiUtils.initListView(this, rvGyms, true);
         touchListener = new RecyclerTouchListener(this, rvGyms);
         rvGyms.addOnItemTouchListener(touchListener);
-        touchListener.setSwipeOptionViews(R.id.btnEdit, R.id.btnDelete);
+        touchListener.setSwipeOptionViews(R.id.btnRemove);
         touchListener.setSwipeable(R.id.rowFG, R.id.rowBG, (viewId, position) -> {
             switch (viewId) {
-                case R.id.btnDelete:
+                case R.id.btnRemove:
                     Gym gym = adapter.getGym(position);
                     askForDeleteGym(gym);
                     break;
@@ -80,7 +81,7 @@ public class AdminEditorActivity extends EditorActivity {
         subscribeInMainThread(
                 DialogUtils.showAskDialog(
                         this,
-                        getDeleteMessage(),
+                        getDeleteGymMessage(),
                         ResUtils.getString(R.string.caption_ok),
                         ResUtils.getString(R.string.caption_cancel)),
                 new SingleData<>(
@@ -97,7 +98,7 @@ public class AdminEditorActivity extends EditorActivity {
     }
 
     private String getDeleteGymMessage() {
-        return "";
+        return ResUtils.getString(R.string.message_ask_remove_admin_from_gym);
     }
 
     private void deleteGym(Gym gym) {
@@ -129,7 +130,7 @@ public class AdminEditorActivity extends EditorActivity {
 
     private void setData(List<Gym> gyms) {
         if (adapter == null) {
-            adapter = new GymsListAdapter(gyms);
+            adapter = new GymsListAdapter(gyms, R.layout.admins_gyms_list_item_view);
             rvGyms.setAdapter(adapter);
         } else {
             adapter.setGyms(gyms);
@@ -160,6 +161,6 @@ public class AdminEditorActivity extends EditorActivity {
 
     @Override
     public String getDeleteMessage() {
-        return "";
+        return ResUtils.getString(R.string.message_ask_delete_admin);
     }
 }

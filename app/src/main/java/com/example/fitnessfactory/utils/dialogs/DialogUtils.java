@@ -2,6 +2,8 @@ package com.example.fitnessfactory.utils.dialogs;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.fitnessfactory.R;
@@ -13,6 +15,7 @@ import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.material.textfield.TextInputEditText;
+import com.tiromansev.prefswrapper.typedprefs.BooleanPreference;
 
 import java.util.List;
 
@@ -83,6 +86,34 @@ public class DialogUtils {
         }
     }
 
+    public static Single<Boolean> showAskNoMoreDialog(BaseActivity context,
+                                                      String message,
+                                                      BooleanPreference doAskPreference) {
+        return Single.create(emitter -> {
+            LinearLayout dialogView =
+                    (LinearLayout) context.getLayoutInflater().inflate(R.layout.ask_no_more_dialog_view, null);
+            CheckBox cbAskNoMore = dialogView.findViewById(R.id.cbAskNoMore);
+
+            new AlertDialog.Builder(context)
+                    .setTitle(R.string.title_question)
+                    .setMessage(message)
+                    .setView(dialogView)
+                    .setPositiveButton(R.string.caption_yes_button, (dialog, which) -> {
+                        doAskPreference.setValue(!cbAskNoMore.isChecked());
+                        if (!emitter.isDisposed()) {
+                            emitter.onSuccess(true);
+                        }
+                    })
+                    .setNegativeButton(R.string.caption_no_button, (dialog, which) -> {
+                        doAskPreference.setValue(!cbAskNoMore.isChecked());
+                        if (!emitter.isDisposed()) {
+                            emitter.onSuccess(false);
+                        }
+                    })
+                    .show();
+        });
+    }
+
     public static Single<String> showOneLineEditDialog(BaseActivity context,
                                                        String title,
                                                        String hint,
@@ -111,7 +142,7 @@ public class DialogUtils {
             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((view) -> {
                 TextInputEditText edtField = dialogView.findViewById(R.id.edtField);
                 String value = edtField.getText().toString();
-                handleInput(value, alertDialog, emitter);
+                handleInput(value.trim(), alertDialog, emitter);
             });
         });
     }

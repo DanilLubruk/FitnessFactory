@@ -3,7 +3,9 @@
     <string name="app_name">FitnessFactory</string>
     <string name="title_home">Home</string>
     <string name="title_gyms">Gyms</string>
+    <string name="title_select_gyms">Select gym</string>
     <string name="title_admins">Administrators</string>
+    <string name="title_coaches">Coaches</string>
     <string name="navigation_drawer_open">Open menu</string>
     <string name="navigation_drawer_close">Close menu</string>
     <string name="caption_edit">Edit</string>
@@ -40,6 +42,13 @@
     <string name="message_obtaining_organistations">Obtaining your data…</string>
     <string name="message_singing_you_in">Signing you in…</string>
     <string name="title_ask_org_name">Enter your organisation\'s name</string>
+    <string name="message_ask_remove_admin_from_gym">Remove admin from this gym?</string>
+    <string name="caption_remove">Remove</string>
+    <string name="caption_ask_no_more">Ask no more</string>
+    <string name="title_question">Question</string>
+    <string name="message_send_invitation">Send email invitation for this admin?</string>
+    <string name="title_edit_item">Edit item</string>
+    <string name="title_add_item">Add item</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <!--authentication-->

@@ -18,6 +18,7 @@ import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;
@@ -353,5 +354,17 @@ public class StaffAccessRepository extends BaseRepository {
                 documentReference.update(
                         FirestoreCollections.GYMS_COLLECTION,
                         FieldValue.arrayRemove(gymId)));
+    }
+
+    List<DocumentReference> getPersonnelWithGymInList(String gymId) throws ExecutionException, InterruptedException {
+        List<DocumentReference> personnel = new ArrayList<>();
+        List<DocumentSnapshot> documentSnapshots =
+                Tasks.await(getCollection().whereArrayContains(FirestoreCollections.GYMS_COLLECTION, gymId).get()).getDocuments();
+
+        for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+            personnel.add(documentSnapshot.getReference());
+        }
+
+        return personnel;
     }
 }

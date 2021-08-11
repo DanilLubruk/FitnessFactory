@@ -24,30 +24,43 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:text="@={model.admin.name}"
-            android:layout_marginBottom="@dimen/component_margin" />
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+            android:layout_marginBottom="@dimen/component_margin"
+            android:text="@={model.admin.name}" />
 
         <TextView
             android:id="@+id/tvEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvName"
+            android:layout_marginBottom="@dimen/component_margin"
             android:text="@{model.admin.email}"
-            android:layout_marginBottom="@dimen/component_margin"/>
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
         <TextView
             android:id="@+id/tvGyms"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvEmail"
-            android:text="@string/title_gyms"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+            android:layout_marginBottom="@dimen/component_margin"
+            android:text="@string/title_gyms" />
+
+        <View
+            android:id="@+id/separator"
+            android:layout_below="@+id/tvGyms"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/border_width"
+            android:background="@android:color/darker_gray"
             android:layout_marginBottom="@dimen/component_margin"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvGyms"
+            android:background="@drawable/nested_view_border"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/tvGyms"/>
+            android:layout_below="@+id/separator"
+            android:padding="@dimen/component_padding"/>
 
         <ProgressBar
             android:id="@+id/pkProgress"

@@ -39,4 +39,11 @@ public class AppPrefs {
                 .setDefaultValue(false)
                 .build();
     }
+
+    public static BooleanPreference askForSendingAdminEmailInvite() {
+        return BooleanPreference
+                .builder("ask_for_sending_admin_email_invite")
+                .setDefaultValue(true)
+                .build();
+    }
 }

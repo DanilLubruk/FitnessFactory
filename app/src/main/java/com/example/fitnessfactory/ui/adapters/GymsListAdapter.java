@@ -16,9 +16,11 @@ import java.util.List;
 public class GymsListAdapter extends RecyclerView.Adapter<GymsListViewHolder> {
 
     private List<Gym> gyms;
+    private final int layoutResource;
 
-    public GymsListAdapter(List<Gym> gyms) {
+    public GymsListAdapter(List<Gym> gyms, int layoutResource) {
         this.gyms = gyms;
+        this.layoutResource = layoutResource;
     }
 
     public void setGyms(List<Gym> gyms) {
@@ -34,7 +36,7 @@ public class GymsListAdapter extends RecyclerView.Adapter<GymsListViewHolder> {
     @Override
     public GymsListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.gyms_list_item_view, parent, false);
+                .inflate(layoutResource, parent, false);
         return new GymsListViewHolder(itemView);
     }
 

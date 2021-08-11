@@ -48,9 +48,9 @@ public class GymsListFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getBaseActivity().setTitle(R.string.title_gyms);
         viewModel = new ViewModelProvider(this).get(GymsListViewModel.class);
         initComponents();
+        getBaseActivity().setTitle(selectMode ? R.string.title_select_gyms : R.string.title_gyms);
     }
 
     private void initComponents() {
@@ -122,10 +122,10 @@ public class GymsListFragment extends BaseFragment {
     }
 
     private void onRowClicked(Gym gym) {
-        if (!selectMode) {
-            showEditorActivity(gym);
-        } else {
+        if (selectMode) {
             sendSelectResult(gym);
+        } else {
+            showEditorActivity(gym);
         }
     }
 
@@ -144,7 +144,7 @@ public class GymsListFragment extends BaseFragment {
 
     private void setGymsData(List<Gym> gyms) {
         if (adapter == null) {
-            adapter = new GymsListAdapter(gyms);
+            adapter = new GymsListAdapter(gyms, R.layout.gyms_list_item_view);
             recyclerView.setAdapter(adapter);
         } else {
             adapter.setGyms(gyms);

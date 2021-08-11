@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
+import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.events.AdminsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Gym;
@@ -143,13 +144,33 @@ public class AdminsListFragment extends BaseFragment {
                         email -> {
                             if (!StringUtils.isEmpty(email)) {
                                 viewModel.registerAccess(email);
-                                sendEmailInvitation(email);
+                                showAskSendInvitationDialog(email);
                             }
                         },
                         throwable -> {
                             throwable.printStackTrace();
                             GuiUtils.showMessage(throwable.getLocalizedMessage());
                         }));
+    }
+
+    private void showAskSendInvitationDialog(String email) {
+        if (AppPrefs.askForSendingAdminEmailInvite().getValue()) {
+            subscribeInMainThread(DialogUtils.showAskNoMoreDialog(
+                    getBaseActivity(),
+                    ResUtils.getString(R.string.message_send_invitation),
+                    AppPrefs.askForSendingAdminEmailInvite()),
+                    new SingleData<>(
+                            doSend -> {
+                                if (doSend) {
+                                    sendEmailInvitation(email);
+                                }
+                            },
+                            throwable -> {
+                                throwable.printStackTrace();
+                                GuiUtils.showMessage(throwable.getLocalizedMessage());
+                            }
+                    ));
+        }
     }
 
     private void sendEmailInvitation(String email) {

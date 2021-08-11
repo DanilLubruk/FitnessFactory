@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.FirestoreCollections;
 import com.example.fitnessfactory.data.events.AdminGymsListListenerEvent;
@@ -18,6 +19,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Transaction;
 import com.google.firestore.v1.ListenRequest;
 
 import org.greenrobot.eventbus.EventBus;
@@ -25,6 +27,8 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -116,48 +120,8 @@ public class GymRepository extends BaseRepository {
         });
     }
 
-    public Single<Boolean> deleteSingle(Gym gym) {
-        return Single.create(emitter -> {
-            boolean isDeleted = deleteGym(gym);
-
-            if (!emitter.isDisposed()) {
-                emitter.onSuccess(isDeleted);
-            }
-        });
-    }
-
-    public Completable deleteCompletable(Gym gym) {
-        return Completable.create(source -> {
-            deleteGym(gym);
-
-            if (!source.isDisposed()) {
-                source.onComplete();
-            }
-        });
-    }
-
-    private boolean deleteGym(Gym gym) throws Exception {
-        if (gym == null) {
-            throw new Exception(getGymNullErrorMessage());
-        }
-
-        DocumentReference docReference = getCollection().document(gym.getId());
-        return deleteGym(docReference);
-    }
-
-    private boolean deleteGym(DocumentReference documentReference) {
-        boolean isDeleted;
-        try {
-            Tasks.await(documentReference.delete());
-            isDeleted = true;
-        } catch (InterruptedException e) {
-            isDeleted = false;
-        } catch (Exception e) {
-            e.printStackTrace();
-            isDeleted = false;
-        }
-
-        return isDeleted;
+    DocumentReference getGymDocumentReference(Gym gym) {
+        return getCollection().document(gym.getId());
     }
 
     public Single<List<Gym>> getGymsByIds(List<String> gymIds) {
@@ -209,7 +173,7 @@ public class GymRepository extends BaseRepository {
         return isNewInstance ? insert(gym) : update(gym);
     }
 
-    private String getGymNullErrorMessage() {
+    String getGymNullErrorMessage() {
         return ResUtils.getString(R.string.message_error_gyms_data_save)
                 .concat(" - ")
                 .concat(ResUtils.getString(R.string.message_error_gym_null));

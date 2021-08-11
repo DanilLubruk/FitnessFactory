@@ -1,5 +1,6 @@
 package com.example.fitnessfactory.di;
 
+import com.example.fitnessfactory.data.repositories.GymAccessRepository;
 import com.example.fitnessfactory.data.repositories.GymRepository;
 import com.example.fitnessfactory.data.repositories.OrganisationInfoRepository;
 import com.example.fitnessfactory.data.repositories.StaffAccessRepository;
@@ -42,5 +43,11 @@ public class AppModule {
     @AppScope
     public OrganisationInfoRepository provideOrganisationInfoRepository() {
         return new OrganisationInfoRepository();
+    }
+
+    @Provides
+    @AppScope
+    public GymAccessRepository provideGymAccessRepository() {
+        return new GymAccessRepository();
     }
 }

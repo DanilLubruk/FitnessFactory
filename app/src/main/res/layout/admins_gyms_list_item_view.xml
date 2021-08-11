@@ -9,16 +9,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
         <Button
-            android:id="@+id/btnEdit"
-            android:text="@string/caption_edit"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center"
-            android:layout_height="match_parent"
-            android:layout_toLeftOf="@+id/btnDelete"/>
-        <Button
-            android:id="@+id/btnDelete"
+            android:id="@+id/btnRemove"
             android:layout_alignParentRight="true"
-            android:text="@string/caption_delete"
+            android:text="@string/caption_remove"
             android:layout_width="wrap_content"
             android:layout_gravity="center"
             android:layout_height="match_parent"/>

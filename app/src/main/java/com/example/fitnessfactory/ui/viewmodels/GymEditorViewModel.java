@@ -8,6 +8,7 @@ import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
+import com.example.fitnessfactory.data.repositories.GymAccessRepository;
 import com.example.fitnessfactory.data.repositories.GymRepository;
 import com.example.fitnessfactory.utils.GuiUtils;
 
@@ -17,6 +18,9 @@ public class GymEditorViewModel extends EditorViewModel {
 
     @Inject
     GymRepository gymRepository;
+    @Inject
+    GymAccessRepository gymAccessRepository;
+
     private Gym dbGym;
     public ObservableField<Gym> gym = new ObservableField<>();
 
@@ -96,7 +100,7 @@ public class GymEditorViewModel extends EditorViewModel {
     public SingleLiveEvent<Boolean> delete() {
         SingleLiveEvent<Boolean> observer = new SingleLiveEvent<>();
 
-        subscribeInIOThread(gymRepository.deleteSingle(gym.get()),
+        subscribeInIOThread(gymAccessRepository.deleteGymSingle(gym.get()),
                 new SingleData<>(observer::setValue, this::handleError));
 
         return observer;

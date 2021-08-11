@@ -132,9 +132,14 @@ public class AdminEditorViewModel extends EditorViewModel {
             return isDeleted;
         }
 
-        subscribeInIOThread(
-                accessRepository.deleteAdminCompletable(AppPrefs.gymOwnerId().getValue(), admin.getEmail()),
-                throwable -> handleError(isDeleted, throwable));
+        addSubscription(accessRepository.removeAdminGymsListListener()
+                .subscribeOn(getIOScheduler())
+                .observeOn(getIOScheduler())
+                .andThen(accessRepository.deleteAdminCompletable(AppPrefs.gymOwnerId().getValue(), admin.getEmail()))
+                .observeOn(getMainThreadScheduler())
+                .subscribe(
+                        () -> isDeleted.setValue(true),
+                        throwable -> handleError(isDeleted, throwable)));
 
         return isDeleted;
     }

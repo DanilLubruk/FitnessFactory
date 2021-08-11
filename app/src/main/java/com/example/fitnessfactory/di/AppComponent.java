@@ -1,5 +1,6 @@
 package com.example.fitnessfactory.di;
 
+import com.example.fitnessfactory.data.repositories.GymAccessRepository;
 import com.example.fitnessfactory.ui.viewmodels.AdminEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.MainActivityViewModel;
 import com.example.fitnessfactory.ui.viewmodels.lists.AdminListViewModel;
@@ -22,4 +23,5 @@ public interface AppComponent {
     void inject(AdminListViewModel adminListViewModel);
     void inject(MainActivityViewModel mainActivityViewModel);
     void inject(AdminEditorViewModel adminEditorViewModel);
+    void inject(GymAccessRepository gymAccessRepository);
 }
