@@ -7,6 +7,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.fitnessfactory.ui.fragments.lists.AdminsListFragment;
+import com.example.fitnessfactory.ui.fragments.lists.AdminsListTabFragment;
 
 public class PersonnelPageAdapter extends FragmentStateAdapter {
 
@@ -19,7 +20,7 @@ public class PersonnelPageAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new AdminsListFragment();
+                return new AdminsListTabFragment();
             case 1:
                 return new AdminsListFragment();
             default:
@@ -29,6 +30,6 @@ public class PersonnelPageAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 2;
+        return 1;
     }
 }

@@ -5,10 +5,9 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.repositories.StaffAccessRepository;
+import com.example.fitnessfactory.data.repositories.AccessRepository;
 import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
-import com.example.fitnessfactory.utils.GuiUtils;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ import io.reactivex.Completable;
 public class AdminListViewModel extends BaseViewModel {
 
     @Inject
-    StaffAccessRepository accessRepository;
+    AccessRepository accessRepository;
     @Inject
     UserRepository userRepository;
 
@@ -52,7 +51,7 @@ public class AdminListViewModel extends BaseViewModel {
     }
 
     public void getAdminsListData() {
-        addSubscription(accessRepository.getAdminsEmailsByOwnerId(AppPrefs.gymOwnerId().getValue())
+        addSubscription(accessRepository.getAdminsEmailsByOwnerIdAsync(AppPrefs.gymOwnerId().getValue())
                 .observeOn(getIOScheduler())
                 .subscribeOn(getIOScheduler())
                 .flatMap(adminsEmails -> userRepository.getAdminsByEmails(adminsEmails))

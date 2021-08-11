@@ -1,9 +1,10 @@
 package com.example.fitnessfactory.di;
 
-import com.example.fitnessfactory.data.repositories.GymAccessRepository;
+import com.example.fitnessfactory.data.repositories.bondingRepositories.AdminAccessRepository;
+import com.example.fitnessfactory.data.repositories.bondingRepositories.GymAccessRepository;
 import com.example.fitnessfactory.data.repositories.GymRepository;
 import com.example.fitnessfactory.data.repositories.OrganisationInfoRepository;
-import com.example.fitnessfactory.data.repositories.StaffAccessRepository;
+import com.example.fitnessfactory.data.repositories.AccessRepository;
 import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
 
@@ -35,8 +36,8 @@ public class AppModule {
 
     @Provides
     @AppScope
-    public StaffAccessRepository provideStaffAccessRepository() {
-        return new StaffAccessRepository();
+    public AccessRepository provideStaffAccessRepository() {
+        return new AccessRepository();
     }
 
     @Provides
@@ -49,5 +50,11 @@ public class AppModule {
     @AppScope
     public GymAccessRepository provideGymAccessRepository() {
         return new GymAccessRepository();
+    }
+
+    @Provides
+    @AppScope
+    public AdminAccessRepository provideAdminAccessRepository() {
+        return new AdminAccessRepository();
     }
 }

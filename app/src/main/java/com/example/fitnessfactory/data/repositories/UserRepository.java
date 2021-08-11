@@ -153,14 +153,7 @@ public class UserRepository extends BaseRepository {
 
     public Single<List<AppUser>> getAdminsByEmails(List<String> adminsEmails) {
         return Single.create(emitter -> {
-            List<AppUser> admins = new ArrayList<>();
-            if (adminsEmails.size() == 0) {
-                if (!emitter.isDisposed()) {
-                    emitter.onSuccess(admins);
-                }
-            }
-
-            admins = getAdminsList(emitter, adminsEmails);
+            List<AppUser> admins = getAdminsList(emitter, adminsEmails);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(admins);
@@ -181,7 +174,10 @@ public class UserRepository extends BaseRepository {
         return admins;
     }
 
-    private List<AppUser> getAdminsList(List<String> adminsEmails) throws Exception {
+    public List<AppUser> getAdminsList(List<String> adminsEmails) throws Exception {
+        if (adminsEmails.size() == 0) {
+            return new ArrayList<>();
+        }
         QuerySnapshot adminsQuery = Tasks.await(getCollection().whereIn(EMAIL_FILED, adminsEmails).get());
 
         return adminsQuery.toObjects(AppUser.class);

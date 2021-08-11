@@ -14,7 +14,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.greenrobot.eventbus.EventBus;
-import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ import io.reactivex.CompletableEmitter;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 
-public class StaffAccessRepository extends BaseRepository {
+public class AccessRepository extends BaseRepository {
 
     private ListenerRegistration adminsListListener;
     private ListenerRegistration adminGymsListListener;
@@ -107,9 +106,9 @@ public class StaffAccessRepository extends BaseRepository {
         return querySnapshot.getDocuments();
     }
 
-    public Single<List<String>> getAdminsEmailsByOwnerId(String ownerId) {
+    public Single<List<String>> getAdminsEmailsByOwnerIdAsync(String ownerId) {
         return Single.create(emitter -> {
-            List<String> adminEmails = getAdminsEmails(emitter, ownerId);
+            List<String> adminEmails = getAdminsEmailsByOwnerId(emitter, ownerId);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(adminEmails);
@@ -117,10 +116,10 @@ public class StaffAccessRepository extends BaseRepository {
         });
     }
 
-    private List<String> getAdminsEmails(SingleEmitter<List<String>> emitter, String ownerId) {
+    private List<String> getAdminsEmailsByOwnerId(SingleEmitter<List<String>> emitter, String ownerId) {
         List<String> adminEmails = new ArrayList<>();
         try {
-            adminEmails = getAdminsEmails(ownerId);
+            adminEmails = getAdminsEmailsByOwnerId(ownerId);
         } catch (InterruptedException e) {
             reportError(emitter, e);
         } catch (Exception e) {
@@ -130,7 +129,7 @@ public class StaffAccessRepository extends BaseRepository {
         return adminEmails;
     }
 
-    private List<String> getAdminsEmails(String ownerId) throws Exception {
+    private List<String> getAdminsEmailsByOwnerId(String ownerId) throws Exception {
         List<String> emails = new ArrayList<>();
 
         for (DocumentSnapshot documentSnapshot : getAdminsEmailsDocuments(ownerId)) {
@@ -179,7 +178,7 @@ public class StaffAccessRepository extends BaseRepository {
 
     private DocumentSnapshot getPersonnelSnapshot(String ownerId, String email) throws Exception {
         List<DocumentSnapshot> documents =
-                Tasks.await(getPersonnelQuery(ownerId, email).get())
+                Tasks.await(getPersonnelQueryByEmail(ownerId, email).get())
                         .getDocuments();
 
         checkEmailUniqueness(documents);
@@ -187,10 +186,16 @@ public class StaffAccessRepository extends BaseRepository {
         return documents.get(0);
     }
 
-    private Query getPersonnelQuery(String ownerId, String email) {
+    public Query getPersonnelQueryByEmail(String ownerId, String email) {
         return getCollection()
                 .whereEqualTo(AccessEntry.OWNER_ID_FIELD, ownerId)
                 .whereEqualTo(AccessEntry.USER_EMAIL_FIELD, email);
+    }
+
+    public Query getPersonnelQueryByGymId(String ownerId, String gymId) {
+        return getCollection()
+                .whereEqualTo(AccessEntry.OWNER_ID_FIELD, ownerId)
+                .whereArrayContains(AccessEntry.GYMS_FIELD, gymId);
     }
 
     public Single<List<String>> getPersonnelGymsAsync(String ownerId, String personnelEmail) {
@@ -246,10 +251,11 @@ public class StaffAccessRepository extends BaseRepository {
                         }
 
                         EventBus.getDefault().post(new AdminsListDataListenerEvent());
-                        if (!emitter.isDisposed()) {
-                            emitter.onComplete();
-                        }
                     });
+
+            if (!emitter.isDisposed()) {
+                emitter.onComplete();
+            }
         });
     }
 
@@ -267,7 +273,7 @@ public class StaffAccessRepository extends BaseRepository {
 
     public Completable addAdminGymsListListener(String idOwner, String email) {
         return Completable.create(emitter -> {
-            adminGymsListListener = getPersonnelQuery(idOwner, email)
+            adminGymsListListener = getPersonnelQueryByEmail(idOwner, email)
                     .addSnapshotListener((snapshot, error) -> {
                         if (error != null) {
                             reportError(emitter, error);
@@ -275,10 +281,11 @@ public class StaffAccessRepository extends BaseRepository {
                         }
 
                         EventBus.getDefault().post(new AdminGymsListListenerEvent());
-                        if (!emitter.isDisposed()) {
-                            emitter.onComplete();
-                        }
                     });
+
+            if (!emitter.isDisposed()) {
+                emitter.onComplete();
+            }
         });
     }
 
@@ -356,7 +363,7 @@ public class StaffAccessRepository extends BaseRepository {
                         FieldValue.arrayRemove(gymId)));
     }
 
-    List<DocumentReference> getPersonnelWithGymInList(String gymId) throws ExecutionException, InterruptedException {
+    public List<DocumentReference> getPersonnelWithGymInList(String gymId) throws ExecutionException, InterruptedException {
         List<DocumentReference> personnel = new ArrayList<>();
         List<DocumentSnapshot> documentSnapshots =
                 Tasks.await(getCollection().whereArrayContains(FirestoreCollections.GYMS_COLLECTION, gymId).get()).getDocuments();
@@ -366,5 +373,24 @@ public class StaffAccessRepository extends BaseRepository {
         }
 
         return personnel;
+    }
+
+    public List<String> getAdminEmailsByGymId(String ownerId, String gymId) throws Exception {
+        List<AccessEntry> admins =
+                Tasks.await(
+                        getPersonnelQueryByGymId(ownerId, gymId)
+                                .get())
+                        .toObjects(AccessEntry.class);
+
+        return getEmailsFromAccessEntries(admins);
+    }
+
+    private List<String> getEmailsFromAccessEntries(List<AccessEntry> entries) {
+        List<String> emails = new ArrayList<>();
+        for (AccessEntry accessEntry : entries) {
+            emails.add(accessEntry.getUserEmail());
+        }
+
+        return emails;
     }
 }

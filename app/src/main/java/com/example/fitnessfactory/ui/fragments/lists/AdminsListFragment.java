@@ -1,5 +1,6 @@
 package com.example.fitnessfactory.ui.fragments.lists;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -44,16 +45,18 @@ public class AdminsListFragment extends BaseFragment {
     private AdminListViewModel viewModel;
     private AdminsListAdapter adapter;
     private RecyclerTouchListener touchListener;
+    private boolean selectMode = false;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getBaseActivity().setTitle(R.string.title_admins);
+        getBaseActivity().setTitle(selectMode ? R.string.title_select_admins : R.string.title_admins);
         viewModel = new ViewModelProvider(this).get(AdminListViewModel.class);
         initComponents();
     }
 
     private void initComponents() {
+        selectMode = getBaseActivity().getIntent().getBooleanExtra(AppConsts.IS_SELECT_MODE_EXTRA, false);
         fabAddAdmin.setOnClickListener(view -> showSendEmailInvitationDialog());
         GuiUtils.initListView(getBaseActivity(), rvAdmins, true);
         touchListener = new RecyclerTouchListener(getBaseActivity(), rvAdmins);
@@ -75,7 +78,7 @@ public class AdminsListFragment extends BaseFragment {
             @Override
             public void onRowClicked(int position) {
                 AppUser admin = adapter.getAdmin(position);
-                showEditorActivity(admin);
+                AdminsListFragment.this.onRowClicked(admin);
             }
 
             @Override
@@ -84,6 +87,21 @@ public class AdminsListFragment extends BaseFragment {
             }
         });
         viewModel.getAdmins().observe(getViewLifecycleOwner(), this::setAdminsData);
+    }
+
+    private void onRowClicked(AppUser admin) {
+        if (selectMode) {
+            sendSelectResult(admin);
+        } else {
+            showEditorActivity(admin);
+        }
+    }
+
+    private void sendSelectResult(AppUser admin) {
+        Intent result = new Intent();
+        result.putExtra(AppConsts.ADMIN_EMAIL_EXTRA, admin.getEmail());
+        getBaseActivity().setResult(Activity.RESULT_OK, result);
+        getBaseActivity().finish();
     }
 
     private void showEditorActivity(AppUser admin) {
@@ -126,7 +144,7 @@ public class AdminsListFragment extends BaseFragment {
 
     private void setAdminsData(List<AppUser> admins) {
         if (adapter == null) {
-            adapter = new AdminsListAdapter(admins);
+            adapter = new AdminsListAdapter(admins, R.layout.admins_list_item_view);
             rvAdmins.setAdapter(adapter);
         } else {
             adapter.setAdmins(admins);

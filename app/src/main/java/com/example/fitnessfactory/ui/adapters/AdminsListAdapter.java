@@ -17,9 +17,11 @@ import java.util.List;
 public class AdminsListAdapter extends RecyclerView.Adapter<AdminsListViewHolder> {
 
     private List<AppUser> admins;
+    private final int layoutResoruce;
 
-    public AdminsListAdapter(List<AppUser> admins) {
+    public AdminsListAdapter(List<AppUser> admins, int layoutResoruce) {
         this.admins = admins;
+        this.layoutResoruce = layoutResoruce;
     }
 
     public AppUser getAdmin(int position) {
@@ -35,7 +37,7 @@ public class AdminsListAdapter extends RecyclerView.Adapter<AdminsListViewHolder
     @Override
     public AdminsListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.admins_list_item_view, parent, false);
+                .inflate(layoutResoruce, parent, false);
         return new AdminsListViewHolder(itemView);
     }
 

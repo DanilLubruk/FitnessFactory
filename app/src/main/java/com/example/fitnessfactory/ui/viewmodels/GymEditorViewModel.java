@@ -8,9 +8,8 @@ import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
-import com.example.fitnessfactory.data.repositories.GymAccessRepository;
+import com.example.fitnessfactory.data.repositories.bondingRepositories.GymAccessRepository;
 import com.example.fitnessfactory.data.repositories.GymRepository;
-import com.example.fitnessfactory.utils.GuiUtils;
 
 import javax.inject.Inject;
 

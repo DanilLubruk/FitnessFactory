@@ -1,9 +1,11 @@
-package com.example.fitnessfactory.data.repositories;
+package com.example.fitnessfactory.data.repositories.bondingRepositories;
 
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.FirestoreCollections;
-import com.example.fitnessfactory.data.models.AccessEntry;
 import com.example.fitnessfactory.data.models.Gym;
+import com.example.fitnessfactory.data.repositories.AccessRepository;
+import com.example.fitnessfactory.data.repositories.BaseRepository;
+import com.example.fitnessfactory.data.repositories.GymRepository;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
@@ -22,7 +24,7 @@ public class GymAccessRepository extends BaseRepository {
     GymRepository gymRepository;
 
     @Inject
-    StaffAccessRepository accessRepository;
+    AccessRepository accessRepository;
 
     public GymAccessRepository() {
         FFApp.get().getAppComponent().inject(this);
@@ -34,21 +36,21 @@ public class GymAccessRepository extends BaseRepository {
 
     public Completable deleteGymCompletable(Gym gym) {
         return Completable.create(emitter -> {
-           deleteGym(gym);
+            deleteGym(gym);
 
-           if (!emitter.isDisposed()) {
-               emitter.onComplete();
-           }
+            if (!emitter.isDisposed()) {
+                emitter.onComplete();
+            }
         });
     }
 
     public Single<Boolean> deleteGymSingle(Gym gym) {
         return Single.create(emitter -> {
-           boolean isDeleted = deleteGym(gym);
+            boolean isDeleted = deleteGym(gym);
 
-           if (!emitter.isDisposed()) {
-               emitter.onSuccess(isDeleted);
-           }
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(isDeleted);
+            }
         });
     }
 
@@ -68,16 +70,10 @@ public class GymAccessRepository extends BaseRepository {
             }
 
             for (DocumentReference documentReference : personnelWithGym) {
-                try {
-                    AccessEntry entry = Tasks.await(documentReference.get()).toObject(AccessEntry.class);
-                    transaction.update(
-                            documentReference,
-                            FirestoreCollections.GYMS_COLLECTION,
-                            FieldValue.arrayRemove(gym.getId()));
-                    entry = Tasks.await(documentReference.get()).toObject(AccessEntry.class);
-                } catch (Exception e) {
-
-                }
+                transaction.update(
+                        documentReference,
+                        FirestoreCollections.GYMS_COLLECTION,
+                        FieldValue.arrayRemove(gym.getId()));
             }
             transaction.delete(gymDocumentRef);
 

@@ -1,5 +1,7 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
+import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM;
+
 import android.content.Intent;
 import android.view.Menu;
 
@@ -41,8 +43,6 @@ public class AdminEditorActivity extends EditorActivity {
     private ActivityAdminEditorBinding binding;
     private GymsListAdapter adapter;
     private RecyclerTouchListener touchListener;
-
-    public static final int REQUEST_GYM = 20;
 
     @Override
     protected AdminEditorViewModel getViewModel() {
@@ -116,8 +116,10 @@ public class AdminEditorActivity extends EditorActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_GYM:
-                String gymId = data.getStringExtra(AppConsts.GYM_ID_EXTRA);
-                viewModel.addGym(gymId);
+                if (resultCode == RESULT_OK) {
+                    String gymId = data.getStringExtra(AppConsts.GYM_ID_EXTRA);
+                    viewModel.addGym(gymId);
+                }
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);

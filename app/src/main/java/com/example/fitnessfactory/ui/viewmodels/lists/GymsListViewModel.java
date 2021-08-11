@@ -4,11 +4,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.models.Gym;
-import com.example.fitnessfactory.data.observers.SingleData;
-import com.example.fitnessfactory.data.repositories.GymAccessRepository;
+import com.example.fitnessfactory.data.repositories.bondingRepositories.GymAccessRepository;
 import com.example.fitnessfactory.data.repositories.GymRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
-import com.example.fitnessfactory.utils.GuiUtils;
 
 import java.util.List;
 

@@ -101,10 +101,11 @@ public class GymRepository extends BaseRepository {
 
                 List<Gym> gyms = querySnapshot.toObjects(Gym.class);
                 EventBus.getDefault().post(new GymsListDataListenerEvent(gyms));
-                if (!source.isDisposed()) {
-                    source.onComplete();
-                }
             });
+
+            if (!source.isDisposed()) {
+                source.onComplete();
+            }
         });
     }
 
@@ -120,7 +121,7 @@ public class GymRepository extends BaseRepository {
         });
     }
 
-    DocumentReference getGymDocumentReference(Gym gym) {
+    public DocumentReference getGymDocumentReference(Gym gym) {
         return getCollection().document(gym.getId());
     }
 
@@ -173,7 +174,7 @@ public class GymRepository extends BaseRepository {
         return isNewInstance ? insert(gym) : update(gym);
     }
 
-    String getGymNullErrorMessage() {
+    public String getGymNullErrorMessage() {
         return ResUtils.getString(R.string.message_error_gyms_data_save)
                 .concat(" - ")
                 .concat(ResUtils.getString(R.string.message_error_gym_null));

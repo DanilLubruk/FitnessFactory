@@ -19,4 +19,5 @@ public class AppConsts {
 
     public static final String STRING_UNDEFINED_VALUE = "UNDEFINED_VALUE";
     public static final int UNDEFINED_VALUE = -2;
+
 }

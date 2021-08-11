@@ -11,22 +11,19 @@ import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
+import com.example.fitnessfactory.data.repositories.AccessRepository;
 import com.example.fitnessfactory.data.repositories.GymRepository;
-import com.example.fitnessfactory.data.repositories.StaffAccessRepository;
-import com.example.fitnessfactory.data.repositories.UserRepository;
 
 import java.util.List;
 
 import javax.inject.Inject;
-
-import io.reactivex.Single;
 
 public class AdminEditorViewModel extends EditorViewModel {
 
     @Inject
     GymRepository gymRepository;
     @Inject
-    StaffAccessRepository accessRepository;
+    AccessRepository accessRepository;
 
     public ObservableField<AppUser> admin = new ObservableField<>();
     private MutableLiveData<List<Gym>> gyms = new MutableLiveData<>();
