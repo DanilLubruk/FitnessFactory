@@ -7,7 +7,7 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
-import com.example.fitnessfactory.data.repositories.AccessRepository;
+import com.example.fitnessfactory.data.repositories.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.OrganisationInfoRepository;
 import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
@@ -24,7 +24,7 @@ public class AuthViewModel extends BaseViewModel {
     @Inject
     UserRepository userRepository;
     @Inject
-    AccessRepository accessRepository;
+    AdminsAccessRepository adminsAccessRepository;
     @Inject
     FirebaseAuthManager authManager;
     @Inject
@@ -70,7 +70,7 @@ public class AuthViewModel extends BaseViewModel {
                                         userEmail.get(),
                                         FirebaseAuthManager.getCurrentUserName()))
                 .observeOn(getIOScheduler())
-                .flatMap(user -> accessRepository.getOwnersByInvitedEmail(user))
+                .flatMap(user -> adminsAccessRepository.getOwnersByInvitedEmail(user))
                 .observeOn(getIOScheduler())
                 .flatMap(ownersIds -> userRepository.getOwnersByIds(ownersIds))
                 .observeOn(getMainThreadScheduler())

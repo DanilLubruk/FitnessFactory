@@ -1,28 +1,20 @@
 package com.example.fitnessfactory.data.repositories;
 
-import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.FirestoreCollections;
-import com.example.fitnessfactory.data.events.AdminsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.utils.ResUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 
 import static com.example.fitnessfactory.data.models.AppUser.EMAIL_FILED;
-
-import org.greenrobot.eventbus.EventBus;
 
 public class UserRepository extends BaseRepository {
 
@@ -151,9 +143,9 @@ public class UserRepository extends BaseRepository {
         AppPrefs.gymOwnerId().setValue(user.getId());
     }
 
-    public Single<List<AppUser>> getAdminsByEmails(List<String> adminsEmails) {
+    public Single<List<AppUser>> getUsersByEmailsAsync(List<String> emails) {
         return Single.create(emitter -> {
-            List<AppUser> admins = getAdminsList(emitter, adminsEmails);
+            List<AppUser> admins = getUsersByEmails(emitter, emails);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(admins);
@@ -161,24 +153,24 @@ public class UserRepository extends BaseRepository {
         });
     }
 
-    private List<AppUser> getAdminsList(SingleEmitter<List<AppUser>> emitter, List<String> adminsEmails) {
-        List<AppUser> admins = new ArrayList<>();
+    private List<AppUser> getUsersByEmails(SingleEmitter<List<AppUser>> emitter, List<String> emails) {
+        List<AppUser> users = new ArrayList<>();
         try {
-            admins = getAdminsList(adminsEmails);
+            users = getUsersByEmails(emails);
         } catch (InterruptedException e) {
             reportError(emitter, e);
         } catch (Exception e) {
             reportError(emitter, e);
         }
 
-        return admins;
+        return users;
     }
 
-    public List<AppUser> getAdminsList(List<String> adminsEmails) throws Exception {
-        if (adminsEmails.size() == 0) {
+    private List<AppUser> getUsersByEmails(List<String> emails) throws Exception {
+        if (emails.size() == 0) {
             return new ArrayList<>();
         }
-        QuerySnapshot adminsQuery = Tasks.await(getCollection().whereIn(EMAIL_FILED, adminsEmails).get());
+        QuerySnapshot adminsQuery = Tasks.await(getCollection().whereIn(EMAIL_FILED, emails).get());
 
         return adminsQuery.toObjects(AppUser.class);
     }

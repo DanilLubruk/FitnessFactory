@@ -4,23 +4,24 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.AppPrefs;
+import com.example.fitnessfactory.data.managers.AdminsAccessManager;
+import com.example.fitnessfactory.data.managers.AdminsDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.repositories.AccessRepository;
-import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
-
 public class AdminListViewModel extends BaseViewModel {
 
     @Inject
-    AccessRepository accessRepository;
+    AdminsAccessManager adminsAccessManager;
     @Inject
-    UserRepository userRepository;
+    AdminsDataManager adminsDataManager;
+
+    private ListenerRegistration adminsListListener;
 
     private MutableLiveData<List<AppUser>> admins = new MutableLiveData<>();
 
@@ -28,22 +29,12 @@ public class AdminListViewModel extends BaseViewModel {
         FFApp.get().getAppComponent().inject(this);
     }
 
-    public void registerAccess(String email) {
-        addSubscription(accessRepository.isAccessRegistered(email)
-                .subscribeOn(getIOScheduler())
-                .observeOn(getIOScheduler())
-                .flatMapCompletable(isRegistered ->
-                        isRegistered ?
-                                Completable.complete() :
-                                accessRepository.registerAccess(email, AppPrefs.gymOwnerId().getValue()))
-                .subscribe(() -> {
-                },this::handleError));
+    public void registerAdmin(String email) {
+        adminsAccessManager.createAdmin(AppPrefs.gymOwnerId().getValue(), email);
     }
 
     public void addAdminsListListener() {
-        subscribeInIOThread(
-                accessRepository.addAdminsListListener(AppPrefs.gymOwnerId().getValue()),
-                this::handleError);
+        adminsListListener = adminsDataManager.getAdminsListListener();
     }
 
     public MutableLiveData<List<AppUser>> getAdmins() {
@@ -51,23 +42,16 @@ public class AdminListViewModel extends BaseViewModel {
     }
 
     public void getAdminsListData() {
-        addSubscription(accessRepository.getAdminsEmailsByOwnerIdAsync(AppPrefs.gymOwnerId().getValue())
-                .observeOn(getIOScheduler())
-                .subscribeOn(getIOScheduler())
-                .flatMap(adminsEmails -> userRepository.getAdminsByEmails(adminsEmails))
-                .observeOn(getMainThreadScheduler())
-                .subscribe(admins::setValue,
-                        this::handleError));
+        admins.setValue(adminsDataManager.getAdminsListData());
     }
 
     public void removeAdminsListListener() {
-        subscribeInIOThread(accessRepository.removeAdminsListListener(),
-                this::handleError);
+        if (adminsListListener != null) {
+            adminsListListener.remove();
+        }
     }
 
     public void deleteAdmin(String email) {
-        subscribeInIOThread(
-                accessRepository.deleteAdminCompletable(AppPrefs.gymOwnerId().getValue(), email),
-                this::handleError);
+        adminsAccessManager.deleteAdmin(AppPrefs.gymOwnerId().getValue(), email);
     }
 }

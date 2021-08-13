@@ -10,7 +10,7 @@ import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.observers.SingleData;
-import com.example.fitnessfactory.data.repositories.AccessRepository;
+import com.example.fitnessfactory.data.repositories.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.bondingRepositories.AdminAccessRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 
@@ -21,7 +21,7 @@ import javax.inject.Inject;
 public class AdminsListTabViewModel extends BaseViewModel {
 
     @Inject
-    AccessRepository accessRepository;
+    AdminsAccessRepository adminsAccessRepository;
     @Inject
     AdminAccessRepository adminAccessRepository;
 
@@ -42,7 +42,7 @@ public class AdminsListTabViewModel extends BaseViewModel {
         }
 
         subscribeInIOThread(
-                accessRepository.addGymToPersonnelAsync(AppPrefs.gymOwnerId().getValue(), adminEmail, gymId),
+                adminsAccessRepository.addGymToPersonnelAsync(AppPrefs.gymOwnerId().getValue(), adminEmail, gymId),
                 this::handleError);
     }
 
@@ -52,7 +52,7 @@ public class AdminsListTabViewModel extends BaseViewModel {
         }
 
         subscribeInIOThread(
-                accessRepository.removeGymFromPersonnelAsync(AppPrefs.gymOwnerId().getValue(), adminEmail, gymId),
+                adminsAccessRepository.removeGymFromPersonnelAsync(AppPrefs.gymOwnerId().getValue(), adminEmail, gymId),
                 this::handleError);
     }
 

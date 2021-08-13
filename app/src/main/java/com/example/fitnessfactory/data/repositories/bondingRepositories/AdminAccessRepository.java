@@ -3,7 +3,7 @@ package com.example.fitnessfactory.data.repositories.bondingRepositories;
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.events.GymAdminsListListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.repositories.AccessRepository;
+import com.example.fitnessfactory.data.repositories.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -22,7 +22,7 @@ import io.reactivex.SingleEmitter;
 public class AdminAccessRepository extends BaseRepository {
 
     @Inject
-    AccessRepository accessRepository;
+    AdminsAccessRepository adminsAccessRepository;
     @Inject
     UserRepository userRepository;
 
@@ -34,7 +34,7 @@ public class AdminAccessRepository extends BaseRepository {
 
     public Completable addGymAdminsListListener(String ownerId, String gymId) {
         return Completable.create(emitter -> {
-            gymAdminsListListener = accessRepository.getPersonnelQueryByGymId(ownerId, gymId)
+            gymAdminsListListener = adminsAccessRepository.getAdminQueryByGymId(ownerId, gymId)
                     .addSnapshotListener(((value, error) -> {
                         if (error != null) {
                             reportError(emitter, error);
@@ -88,8 +88,8 @@ public class AdminAccessRepository extends BaseRepository {
     }
 
     private List<AppUser> getAdminsByGymId(String ownerId, String gymId) throws Exception {
-        List<String> adminsEmails = accessRepository.getAdminEmailsByGymId(ownerId, gymId);
+        List<String> adminsEmails = adminsAccessRepository.getAdminEmailsByGymId(ownerId, gymId);
 
-        return userRepository.getAdminsList(adminsEmails);
+        return userRepository.getUsersByEmails(adminsEmails);
     }
 }

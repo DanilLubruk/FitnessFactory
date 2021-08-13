@@ -3,7 +3,7 @@ package com.example.fitnessfactory.data.repositories.bondingRepositories;
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.FirestoreCollections;
 import com.example.fitnessfactory.data.models.Gym;
-import com.example.fitnessfactory.data.repositories.AccessRepository;
+import com.example.fitnessfactory.data.repositories.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.example.fitnessfactory.data.repositories.GymRepository;
 import com.google.android.gms.tasks.Tasks;
@@ -24,14 +24,10 @@ public class GymAccessRepository extends BaseRepository {
     GymRepository gymRepository;
 
     @Inject
-    AccessRepository accessRepository;
+    AdminsAccessRepository accessRepository;
 
     public GymAccessRepository() {
         FFApp.get().getAppComponent().inject(this);
-    }
-
-    private FirebaseFirestore getFirestore() {
-        return FirebaseFirestore.getInstance();
     }
 
     public Completable deleteGymCompletable(Gym gym) {

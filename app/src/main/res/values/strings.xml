@@ -50,6 +50,7 @@
     <string name="message_send_invitation">Send email invitation for this admin?</string>
     <string name="title_edit_item">Edit item</string>
     <string name="title_add_item">Add item</string>
+    <string name="message_admin_is_registered">Administrator is already registered</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <!--authentication-->

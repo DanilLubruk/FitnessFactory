@@ -13,7 +13,6 @@ import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.events.AdminsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.ui.activities.editors.AdminEditorActivity;
 import com.example.fitnessfactory.ui.adapters.AdminsListAdapter;
@@ -161,7 +160,7 @@ public class AdminsListFragment extends BaseFragment {
                 new SingleData<>(
                         email -> {
                             if (!StringUtils.isEmpty(email)) {
-                                viewModel.registerAccess(email);
+                                viewModel.registerAdmin(email);
                                 showAskSendInvitationDialog(email);
                             }
                         },

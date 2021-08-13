@@ -1,10 +1,13 @@
 package com.example.fitnessfactory.di;
 
+import com.example.fitnessfactory.data.managers.AdminsAccessManager;
+import com.example.fitnessfactory.data.managers.AdminsDataManager;
+import com.example.fitnessfactory.data.repositories.AdminsAccessRepository;
+import com.example.fitnessfactory.data.repositories.AdminsRepository;
 import com.example.fitnessfactory.data.repositories.bondingRepositories.AdminAccessRepository;
 import com.example.fitnessfactory.data.repositories.bondingRepositories.GymAccessRepository;
 import com.example.fitnessfactory.data.repositories.GymRepository;
 import com.example.fitnessfactory.data.repositories.OrganisationInfoRepository;
-import com.example.fitnessfactory.data.repositories.AccessRepository;
 import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
 
@@ -36,8 +39,26 @@ public class AppModule {
 
     @Provides
     @AppScope
-    public AccessRepository provideStaffAccessRepository() {
-        return new AccessRepository();
+    public AdminsAccessRepository provideStaffAccessRepository() {
+        return new AdminsAccessRepository();
+    }
+
+    @Provides
+    @AppScope
+    public AdminsRepository provideAdminsRepository() {
+        return new AdminsRepository();
+    }
+
+    @Provides
+    @AppScope
+    public AdminsAccessManager provideAdminsAccessManager() {
+        return new AdminsAccessManager();
+    }
+
+    @Provides
+    @AppScope
+    public AdminsDataManager provideAdminsDataManager() {
+        return new AdminsDataManager();
     }
 
     @Provides

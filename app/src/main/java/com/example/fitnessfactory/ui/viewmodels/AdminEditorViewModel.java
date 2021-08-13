@@ -8,11 +8,13 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.AppPrefs;
+import com.example.fitnessfactory.data.managers.AdminsAccessManager;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
-import com.example.fitnessfactory.data.repositories.AccessRepository;
+import com.example.fitnessfactory.data.repositories.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.GymRepository;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.List;
 
@@ -23,7 +25,11 @@ public class AdminEditorViewModel extends EditorViewModel {
     @Inject
     GymRepository gymRepository;
     @Inject
-    AccessRepository accessRepository;
+    AdminsAccessRepository adminsAccessRepository;
+    @Inject
+    AdminsAccessManager adminsAccessManager;
+
+    private ListenerRegistration adminGymsListListener;
 
     public ObservableField<AppUser> admin = new ObservableField<>();
     private MutableLiveData<List<Gym>> gyms = new MutableLiveData<>();
@@ -48,7 +54,7 @@ public class AdminEditorViewModel extends EditorViewModel {
         }
 
         subscribeInIOThread(
-                accessRepository.addGymToPersonnelAsync(
+                adminsAccessRepository.addGymToPersonnelAsync(
                         AppPrefs.gymOwnerId().getValue(),
                         admin.getEmail(),
                         gymId),
@@ -62,7 +68,7 @@ public class AdminEditorViewModel extends EditorViewModel {
         }
 
         subscribeInIOThread(
-                accessRepository.removeGymFromPersonnelAsync(
+                adminsAccessRepository.removeGymFromPersonnelAsync(
                         AppPrefs.gymOwnerId().getValue(),
                         admin.getEmail(),
                         gymId),
@@ -80,12 +86,12 @@ public class AdminEditorViewModel extends EditorViewModel {
         }
 
         subscribeInIOThread(
-                accessRepository.addAdminGymsListListener(AppPrefs.gymOwnerId().getValue(), admin.getEmail()),
+                adminsAccessRepository.addAdminGymsListListener(AppPrefs.gymOwnerId().getValue(), admin.getEmail()),
                 this::handleError);
     }
 
     public void removeAdminEditorGymsListener() {
-        subscribeInIOThread(accessRepository.removeAdminGymsListListener(), this::handleError);
+        subscribeInIOThread(adminsAccessRepository.removeAdminGymsListListener(), this::handleError);
     }
 
     public void getGymsData() {
@@ -94,7 +100,7 @@ public class AdminEditorViewModel extends EditorViewModel {
             return;
         }
 
-        addSubscription(accessRepository.getPersonnelGymsAsync(AppPrefs.gymOwnerId().getValue(), admin.getEmail())
+        addSubscription(adminsAccessRepository.getAdminGymsAsync(AppPrefs.gymOwnerId().getValue(), admin.getEmail())
                 .subscribeOn(getIOScheduler())
                 .observeOn(getIOScheduler())
                 .flatMap(gymsIds -> gymRepository.getGymsByIds(gymsIds))
@@ -129,14 +135,11 @@ public class AdminEditorViewModel extends EditorViewModel {
             return isDeleted;
         }
 
-        addSubscription(accessRepository.removeAdminGymsListListener()
-                .subscribeOn(getIOScheduler())
-                .observeOn(getIOScheduler())
-                .andThen(accessRepository.deleteAdminCompletable(AppPrefs.gymOwnerId().getValue(), admin.getEmail()))
-                .observeOn(getMainThreadScheduler())
-                .subscribe(
-                        () -> isDeleted.setValue(true),
-                        throwable -> handleError(isDeleted, throwable)));
+        isDeleted.setValue(
+                adminsAccessManager
+                        .deleteAdmin(
+                                AppPrefs.gymOwnerId().getValue(),
+                                admin.getEmail()));
 
         return isDeleted;
     }
