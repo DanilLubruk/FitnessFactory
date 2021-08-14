@@ -2,6 +2,7 @@ package com.example.fitnessfactory.data.repositories;
 
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.FirestoreCollections;
+import com.example.fitnessfactory.data.firestoreCollections.UsersCollection;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
@@ -19,8 +20,8 @@ import static com.example.fitnessfactory.data.models.AppUser.EMAIL_FILED;
 public class UserRepository extends BaseRepository {
 
     @Override
-    protected String getRoot() {
-        return FirestoreCollections.USERS_COLLECTION;
+    public String getRoot() {
+        return UsersCollection.getRoot();
     }
 
     public Single<AppUser> registerUser(String email, String userName) {

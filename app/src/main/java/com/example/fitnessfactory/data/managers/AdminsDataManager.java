@@ -17,26 +17,10 @@ public class AdminsDataManager extends BaseManager {
     @Inject
     AdminsRepository adminsRepository;
     @Inject
-    AdminsAccessRepository adminsAccessRepository;
-    @Inject
     UserRepository userRepository;
 
     public AdminsDataManager() {
         FFApp.get().getAppComponent().inject(this);
-    }
-
-    public ListenerRegistration getAdminsListListener() {
-        AtomicReference<ListenerRegistration> adminsListListener = new AtomicReference<>();
-
-        addSubscription(adminsRepository.getAdminsEmailsAsync()
-                .subscribeOn(getIOScheduler())
-                .observeOn(getIOScheduler())
-                .flatMap(adminsEmails -> adminsAccessRepository.getAdminsListListener(adminsEmails))
-                .subscribe(
-                        adminsListListener::set,
-                        this::handleError));
-
-        return adminsListListener.get();
     }
 
     public List<AppUser> getAdminsListData() {

@@ -6,6 +6,7 @@ import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.data.repositories.OrganisationInfoRepository;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
 import com.example.fitnessfactory.utils.GuiUtils;
+import com.example.fitnessfactory.utils.RxUtils;
 
 import javax.inject.Inject;
 
@@ -26,7 +27,7 @@ public class MainActivityViewModel extends BaseViewModel {
         subscribeInIOThread(authManager.signOutSingle(),
                 new SingleData<>(
                         observer::setValue,
-                        throwable -> handleError(observer, throwable)));
+                        throwable -> RxUtils.handleError(observer, throwable)));
 
         return observer;
     }
@@ -34,6 +35,6 @@ public class MainActivityViewModel extends BaseViewModel {
     public void setOrganisationName(String organisationName) {
         subscribeInIOThread(
                 organisationInfoRepository.setOrganisationNameAsync(organisationName),
-                this::handleError);
+                RxUtils::handleError);
     }
 }

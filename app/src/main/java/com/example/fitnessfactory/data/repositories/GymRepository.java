@@ -10,6 +10,7 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.FirestoreCollections;
 import com.example.fitnessfactory.data.events.AdminGymsListListenerEvent;
 import com.example.fitnessfactory.data.events.GymsListDataListenerEvent;
+import com.example.fitnessfactory.data.firestoreCollections.OwnerGymsCollection;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.google.android.gms.tasks.Tasks;
@@ -39,12 +40,8 @@ public class GymRepository extends BaseRepository {
     private ListenerRegistration gymsListListener;
 
     @Override
-    protected String getRoot() {
-        return super.getRoot() +
-                "/" +
-                FirestoreCollections.GYMS_COLLECTION +
-                "/" +
-                FirestoreCollections.GYMS_COLLECTION;
+    public String getRoot() {
+        return OwnerGymsCollection.getRoot();
     }
 
     public Single<Gym> getGymAsync(String id) {

@@ -2,6 +2,8 @@ package com.example.fitnessfactory.data.repositories;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppPrefs;
+import com.example.fitnessfactory.data.firestoreCollections.BaseCollection;
+import com.example.fitnessfactory.data.firestoreCollections.CollectionOperator;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
@@ -18,13 +20,9 @@ import io.reactivex.CompletableEmitter;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 
-public class BaseRepository {
+public abstract class BaseRepository implements CollectionOperator {
 
     private CollectionReference colReference;
-
-    protected String getRoot() {
-        return AppPrefs.gymOwnerId().getValue();
-    }
 
     protected CollectionReference getCollection() {
         initCollection();
@@ -33,50 +31,6 @@ public class BaseRepository {
 
     protected FirebaseFirestore getFirestore() {
         return FirebaseFirestore.getInstance();
-    }
-
-    public Completable commitBatchCompletable(WriteBatch writeBatch) {
-        return Completable.create(emitter -> {
-            commitBatch(emitter, writeBatch);
-
-            if (!emitter.isDisposed()) {
-                emitter.onComplete();
-            }
-        });
-    }
-
-    private void commitBatch(CompletableEmitter emitter, WriteBatch writeBatch) {
-        try {
-            Tasks.await(writeBatch.commit());
-        } catch (ExecutionException e) {
-            reportError(emitter, e);
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-        }
-    }
-
-    public Single<Boolean> commitBatchSingle(WriteBatch writeBatch) {
-        return Single.create(emitter -> {
-            boolean isCommitted = commitBatch(emitter, writeBatch);
-
-            if (!emitter.isDisposed()) {
-                emitter.onSuccess(isCommitted);
-            }
-        });
-    }
-
-    private boolean commitBatch(SingleEmitter<Boolean> emitter, WriteBatch writeBatch) {
-        boolean isCommitted = false;
-        try {
-            Tasks.await(writeBatch.commit());
-            isCommitted = true;
-        } catch (ExecutionException e) {
-            reportError(emitter, e);
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-        }
-
-        return isCommitted;
     }
 
     private void initCollection() {

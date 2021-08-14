@@ -13,6 +13,7 @@ import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
+import com.example.fitnessfactory.utils.RxUtils;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -41,14 +42,14 @@ public class AuthViewModel extends BaseViewModel {
         subscribeInIOThread(authManager.getSignInIntentAsync(),
                 new SingleData<>(
                         observer::setValue,
-                        this::handleError));
+                        RxUtils::handleError));
 
         return observer;
     }
 
     public void interruptSignIn() {
         subscribeInIOThread(authManager.interruptSignInAsync(),
-                this::handleError);
+                RxUtils::handleError);
     }
 
     public SingleLiveEvent<List<AppUser>> handleSignIn(Intent authData) {
@@ -81,7 +82,7 @@ public class AuthViewModel extends BaseViewModel {
     }
 
     public void signOut() {
-        subscribeInIOThread(authManager.signOutCompletable(), this::handleError);
+        subscribeInIOThread(authManager.signOutCompletable(), RxUtils::handleError);
     }
 
     public SingleLiveEvent<Boolean> checkOrganisationName() {
@@ -94,7 +95,7 @@ public class AuthViewModel extends BaseViewModel {
                 .observeOn(getMainThreadScheduler())
                 .subscribe(() -> {
                     observer.setValue(true);
-                }, throwable -> handleError(observer, throwable)));
+                }, throwable -> RxUtils.handleError(observer, throwable)));
 
         return observer;
     }

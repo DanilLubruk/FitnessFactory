@@ -4,11 +4,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.AppPrefs;
+import com.example.fitnessfactory.data.dataListeners.AdminsListDataListener;
 import com.example.fitnessfactory.data.managers.AdminsAccessManager;
 import com.example.fitnessfactory.data.managers.AdminsDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
-import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.List;
 
@@ -20,8 +20,8 @@ public class AdminListViewModel extends BaseViewModel {
     AdminsAccessManager adminsAccessManager;
     @Inject
     AdminsDataManager adminsDataManager;
-
-    private ListenerRegistration adminsListListener;
+    @Inject
+    AdminsListDataListener adminsListListener;
 
     private MutableLiveData<List<AppUser>> admins = new MutableLiveData<>();
 
@@ -34,7 +34,7 @@ public class AdminListViewModel extends BaseViewModel {
     }
 
     public void addAdminsListListener() {
-        adminsListListener = adminsDataManager.getAdminsListListener();
+        adminsListListener.setAdminsListListener();
     }
 
     public MutableLiveData<List<AppUser>> getAdmins() {
@@ -46,9 +46,7 @@ public class AdminListViewModel extends BaseViewModel {
     }
 
     public void removeAdminsListListener() {
-        if (adminsListListener != null) {
-            adminsListListener.remove();
-        }
+        adminsListListener.removeAdminsListListener();
     }
 
     public void deleteAdmin(String email) {

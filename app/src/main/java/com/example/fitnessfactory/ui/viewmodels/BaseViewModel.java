@@ -127,15 +127,4 @@ public class BaseViewModel extends ViewModel {
             handle = (HashMap<String, Object>) inState.getSerializable(HANDLE);
         }
     }
-
-    protected void handleError(Throwable throwable) {
-        throwable.printStackTrace();
-        GuiUtils.showMessage(throwable.getLocalizedMessage());
-    }
-
-    protected void handleError(SingleLiveEvent<Boolean> observer, Throwable throwable) {
-        observer.setValue(false);
-        throwable.printStackTrace();
-        GuiUtils.showMessage(throwable.getLocalizedMessage());
-    }
 }

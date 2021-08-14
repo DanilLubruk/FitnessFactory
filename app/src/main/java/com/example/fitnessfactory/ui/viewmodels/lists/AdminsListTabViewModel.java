@@ -13,6 +13,7 @@ import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.repositories.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.bondingRepositories.AdminAccessRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
+import com.example.fitnessfactory.utils.RxUtils;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class AdminsListTabViewModel extends BaseViewModel {
 
         subscribeInIOThread(
                 adminsAccessRepository.addGymToPersonnelAsync(AppPrefs.gymOwnerId().getValue(), adminEmail, gymId),
-                this::handleError);
+                RxUtils::handleError);
     }
 
     public void removeAdminFromGym(String adminEmail) {
@@ -53,7 +54,7 @@ public class AdminsListTabViewModel extends BaseViewModel {
 
         subscribeInIOThread(
                 adminsAccessRepository.removeGymFromPersonnelAsync(AppPrefs.gymOwnerId().getValue(), adminEmail, gymId),
-                this::handleError);
+                RxUtils::handleError);
     }
 
     public void addGymAdminsListListener() {
@@ -63,11 +64,11 @@ public class AdminsListTabViewModel extends BaseViewModel {
 
         subscribeInIOThread(
                 adminAccessRepository.addGymAdminsListListener(AppPrefs.gymOwnerId().getValue(), gymId),
-                this::handleError);
+                RxUtils::handleError);
     }
 
     public void removeGymAdminsListListener() {
-        subscribeInIOThread(adminAccessRepository.removeGymAdminsListListener(), this::handleError);
+        subscribeInIOThread(adminAccessRepository.removeGymAdminsListListener(), RxUtils::handleError);
     }
 
     public void setGymData(String gymId) {
@@ -81,7 +82,7 @@ public class AdminsListTabViewModel extends BaseViewModel {
 
         subscribeInIOThread(
                 adminAccessRepository.getAdminsByGymIdAsync(AppPrefs.gymOwnerId().getValue(), gymId),
-                new SingleData<>(admins::setValue, this::handleError));
+                new SingleData<>(admins::setValue, RxUtils::handleError));
     }
 
     @Override

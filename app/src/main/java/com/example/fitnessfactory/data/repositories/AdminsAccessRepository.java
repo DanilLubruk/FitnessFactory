@@ -2,14 +2,12 @@ package com.example.fitnessfactory.data.repositories;
 
 import com.example.fitnessfactory.data.FirestoreCollections;
 import com.example.fitnessfactory.data.events.AdminGymsListListenerEvent;
-import com.example.fitnessfactory.data.events.AdminsListDataListenerEvent;
+import com.example.fitnessfactory.data.firestoreCollections.AdminsAccessCollection;
 import com.example.fitnessfactory.data.models.AdminAccessEntry;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
@@ -21,7 +19,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Completable;
-import io.reactivex.CompletableEmitter;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 
@@ -29,7 +26,7 @@ public class AdminsAccessRepository extends BaseRepository {
 
     @Override
     public String getRoot() {
-        return FirestoreCollections.ADMINS_ACCESS_COLLECTION;
+        return AdminsAccessCollection.getRoot();
     }
 
     public Single<WriteBatch> registerAdminAccessEntryAsync(String ownerId, String userEmail) {
@@ -263,31 +260,6 @@ public class AdminsAccessRepository extends BaseRepository {
         return documentSnapshot.toObject(AdminAccessEntry.class);
     }
 
-    public Single<ListenerRegistration> getAdminsListListener(List<String> adminsEmails) {
-        return Single.create(emitter -> {
-            if (adminsEmails.size() == 0) {
-                if (!emitter.isDisposed()) {
-                    emitter.onError(new Exception());
-                }
-            }
-
-            ListenerRegistration adminsListListener =
-                    getCollection()
-                            .whereIn(AdminAccessEntry.USER_EMAIL_FIELD, adminsEmails)
-                            .addSnapshotListener(((value, error) -> {
-                                if (error != null) {
-                                    reportError(emitter, error);
-                                }
-
-                                EventBus.getDefault().post(new AdminsListDataListenerEvent());
-                            }));
-
-            if (!emitter.isDisposed()) {
-                emitter.onSuccess(adminsListListener);
-            }
-        });
-    }
-
     public Completable addAdminGymsListListener(String idOwner, String email) {
         return Completable.create(emitter -> {
             adminGymsListListener = getAdminQueryByEmail(idOwner, email)
@@ -316,68 +288,6 @@ public class AdminsAccessRepository extends BaseRepository {
                 emitter.onComplete();
             }
         });
-    }
-
-    public Completable addGymToPersonnelAsync(String idOwner, String email, String gymId) {
-        return Completable.create(emitter -> {
-            addGymToPersonnel(emitter, idOwner, email, gymId);
-
-            if (!emitter.isDisposed()) {
-                emitter.onComplete();
-            }
-        });
-    }
-
-    private void addGymToPersonnel(CompletableEmitter emitter,
-                                   String idOwner,
-                                   String email,
-                                   String gymId) {
-        try {
-            addGymToPersonnel(idOwner, email, gymId);
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-        } catch (Exception e) {
-            reportError(emitter, e);
-        }
-    }
-
-    private void addGymToPersonnel(String idOwner, String email, String gymId) throws Exception {
-        DocumentReference documentReference = getAdminDocument(idOwner, email);
-        Tasks.await(
-                documentReference.update(
-                        FirestoreCollections.GYMS_COLLECTION,
-                        FieldValue.arrayUnion(gymId)));
-    }
-
-    public Completable removeGymFromPersonnelAsync(String idOwner, String email, String gymId) {
-        return Completable.create(emitter -> {
-            removeGymFromPersonnel(emitter, idOwner, email, gymId);
-
-            if (!emitter.isDisposed()) {
-                emitter.onComplete();
-            }
-        });
-    }
-
-    private void removeGymFromPersonnel(CompletableEmitter emitter,
-                                        String idOwner,
-                                        String email,
-                                        String gymId) {
-        try {
-            removeGymFromPersonnel(idOwner, email, gymId);
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-        } catch (Exception e) {
-            reportError(emitter, e);
-        }
-    }
-
-    private void removeGymFromPersonnel(String idOwner, String email, String gymId) throws Exception {
-        DocumentReference documentReference = getAdminDocument(idOwner, email);
-        Tasks.await(
-                documentReference.update(
-                        FirestoreCollections.GYMS_COLLECTION,
-                        FieldValue.arrayRemove(gymId)));
     }
 
     public List<DocumentReference> getPersonnelWithGymInList(String gymId) throws ExecutionException, InterruptedException {

@@ -42,7 +42,7 @@ public class AdminsAccessManager extends BaseManager {
                         isAdded ?
                         Single.just(registerBatch.get()) :
                         adminsRepository.addAdminAsync(userEmail, registerBatch.get()))
-                .flatMapCompletable(writeBatch -> adminsRepository.commitBatchCompletable(writeBatch))
+                .flatMapCompletable(this::commitBatchCompletable)
                 .subscribe(
                         () -> {
                         },
@@ -56,7 +56,7 @@ public class AdminsAccessManager extends BaseManager {
         .subscribeOn(getIOScheduler())
         .observeOn(getIOScheduler())
         .flatMap(writeBatch -> adminsRepository.deleteAdminAsync(writeBatch, adminEmail))
-        .flatMap(adminsRepository::commitBatchSingle)
+        .flatMap(this::commitBatchSingle)
         .subscribe(
                 isDeleted::set,
                 throwable -> handleError(isDeleted, throwable)));

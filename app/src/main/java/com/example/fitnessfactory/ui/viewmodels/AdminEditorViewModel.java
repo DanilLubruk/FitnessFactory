@@ -9,11 +9,13 @@ import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.managers.AdminsAccessManager;
+import com.example.fitnessfactory.data.managers.AdminsDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.data.repositories.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.GymRepository;
+import com.example.fitnessfactory.utils.RxUtils;
 import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.List;
@@ -28,6 +30,8 @@ public class AdminEditorViewModel extends EditorViewModel {
     AdminsAccessRepository adminsAccessRepository;
     @Inject
     AdminsAccessManager adminsAccessManager;
+    @Inject
+    AdminsDataManager adminsDataManager;
 
     private ListenerRegistration adminGymsListListener;
 
@@ -58,7 +62,7 @@ public class AdminEditorViewModel extends EditorViewModel {
                         AppPrefs.gymOwnerId().getValue(),
                         admin.getEmail(),
                         gymId),
-                this::handleError);
+                RxUtils::handleError);
     }
 
     public void removeGym(String gymId) {
@@ -72,7 +76,7 @@ public class AdminEditorViewModel extends EditorViewModel {
                         AppPrefs.gymOwnerId().getValue(),
                         admin.getEmail(),
                         gymId),
-                this::handleError);
+                RxUtils::handleError);
     }
 
     public MutableLiveData<List<Gym>> getGyms() {
@@ -87,11 +91,11 @@ public class AdminEditorViewModel extends EditorViewModel {
 
         subscribeInIOThread(
                 adminsAccessRepository.addAdminGymsListListener(AppPrefs.gymOwnerId().getValue(), admin.getEmail()),
-                this::handleError);
+                RxUtils::handleError);
     }
 
     public void removeAdminEditorGymsListener() {
-        subscribeInIOThread(adminsAccessRepository.removeAdminGymsListListener(), this::handleError);
+        subscribeInIOThread(adminsAccessRepository.removeAdminGymsListListener(), RxUtils::handleError);
     }
 
     public void getGymsData() {
@@ -106,7 +110,7 @@ public class AdminEditorViewModel extends EditorViewModel {
                 .flatMap(gymsIds -> gymRepository.getGymsByIds(gymsIds))
                 .observeOn(getMainThreadScheduler())
                 .subscribe(gyms::setValue,
-                        this::handleError));
+                        RxUtils::handleError));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.fitnessfactory.di;
 
+import com.example.fitnessfactory.data.dataListeners.AdminsListDataListener;
 import com.example.fitnessfactory.data.managers.AdminsAccessManager;
 import com.example.fitnessfactory.data.managers.AdminsDataManager;
 import com.example.fitnessfactory.data.repositories.AdminsAccessRepository;
@@ -59,6 +60,12 @@ public class AppModule {
     @AppScope
     public AdminsDataManager provideAdminsDataManager() {
         return new AdminsDataManager();
+    }
+
+    @Provides
+    @AppScope
+    public AdminsListDataListener provideAdminsListDataListener() {
+        return new AdminsListDataListener();
     }
 
     @Provides

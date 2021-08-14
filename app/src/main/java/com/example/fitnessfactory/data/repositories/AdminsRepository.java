@@ -1,28 +1,76 @@
 package com.example.fitnessfactory.data.repositories;
 
 import com.example.fitnessfactory.data.FirestoreCollections;
+import com.example.fitnessfactory.data.firestoreCollections.OwnerAdminsCollection;
 import com.example.fitnessfactory.data.models.Admin;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import io.reactivex.Completable;
+import io.reactivex.CompletableEmitter;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 
 public class AdminsRepository extends BaseRepository {
 
     @Override
-    protected String getRoot() {
-        return super.getRoot() +
-                "/" +
-                FirestoreCollections.ADMINS +
-                "/" +
-                FirestoreCollections.ADMINS;
+    public String getRoot() {
+        return OwnerAdminsCollection.getRoot();
+    }
+
+    public Completable removeGymFromAdminAsync(String adminEmail, String gymId) {
+        return Completable.create(emitter -> {
+            removeGymFromAdmin(emitter, adminEmail, gymId);
+
+            if (!emitter.isDisposed()) {
+                emitter.onComplete();
+            }
+        });
+    }
+
+    private void removeGymFromAdmin(CompletableEmitter emitter, String adminEmail, String gymId) {
+        try {
+            removeGymFromAdmin(adminEmail, gymId);
+        } catch (InterruptedException e) {
+            reportError(emitter, e);
+        } catch (Exception e) {
+            reportError(emitter, e);
+        }
+    }
+
+    private void removeGymFromAdmin(String adminEmail, String gymId) throws Exception {
+        Tasks.await(getAdminDocument(adminEmail).update(Admin.GYMS_ARRAY_FIELD, FieldValue.arrayRemove(gymId)));
+    }
+
+    public Completable addGymToAdminAsync(String adminEmail, String gymId) {
+        return Completable.create(emitter -> {
+            addGymToAdmin(emitter, adminEmail, gymId);
+
+            if (!emitter.isDisposed()) {
+                emitter.onComplete();
+            }
+        });
+    }
+
+    private void addGymToAdmin(CompletableEmitter emitter, String adminEmail, String gymId) {
+        try {
+            addGymToAdmin(adminEmail, gymId);
+        } catch (InterruptedException e) {
+            reportError(emitter, e);
+        } catch (Exception e) {
+            reportError(emitter, e);
+        }
+    }
+
+    private void addGymToAdmin(String adminEmail, String gymId) throws Exception {
+        Tasks.await(getAdminDocument(adminEmail).update(Admin.GYMS_ARRAY_FIELD, FieldValue.arrayUnion(gymId)));
     }
 
     public Single<WriteBatch> deleteAdminAsync(WriteBatch writeBatch, String adminEmail) {
@@ -36,8 +84,8 @@ public class AdminsRepository extends BaseRepository {
     }
 
     private void deleteAdmin(SingleEmitter<WriteBatch> emitter,
-                                   WriteBatch writeBatch,
-                                   String adminEmail) {
+                             WriteBatch writeBatch,
+                             String adminEmail) {
         try {
             deleteAdmin(writeBatch, adminEmail);
         } catch (InterruptedException e) {
@@ -97,9 +145,9 @@ public class AdminsRepository extends BaseRepository {
 
     public Single<WriteBatch> addAdminAsync(String userEmail, WriteBatch writeBatch) {
         return Single.create(emitter -> {
-           if (!emitter.isDisposed()) {
-               emitter.onSuccess(addAdmin(userEmail, writeBatch));
-           }
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(addAdmin(userEmail, writeBatch));
+            }
         });
     }
 
@@ -113,11 +161,11 @@ public class AdminsRepository extends BaseRepository {
 
     public Single<Boolean> isAdminAddedAsync(String userEmail) {
         return Single.create(emitter -> {
-           boolean isAdminAdded = isAdminAdded(emitter, userEmail);
+            boolean isAdminAdded = isAdminAdded(emitter, userEmail);
 
-           if (!emitter.isDisposed()) {
-               emitter.onSuccess(isAdminAdded);
-           }
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(isAdminAdded);
+            }
         });
     }
 

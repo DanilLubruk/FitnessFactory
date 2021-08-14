@@ -2,6 +2,7 @@ package com.example.fitnessfactory.data.repositories;
 
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.FirestoreCollections;
+import com.example.fitnessfactory.data.firestoreCollections.BaseCollection;
 import com.example.fitnessfactory.data.models.OrganisationData;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.gms.tasks.Tasks;
@@ -16,6 +17,11 @@ import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 
 public class OrganisationInfoRepository extends BaseRepository {
+
+    @Override
+    public String getRoot() {
+        return BaseCollection.getRoot();
+    }
 
     public Single<String> getOrganisationNameAsync() {
         return Single.create(emitter -> {

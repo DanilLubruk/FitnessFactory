@@ -34,6 +34,6 @@ public class GymsListViewModel extends BaseViewModel {
     }
 
     public void deleteGym(Gym gym) {
-        subscribeInIOThread(gymAccessRepository.deleteGymCompletable(gym), this::handleError);
+        subscribeInIOThread(gymAccessRepository.deleteGymCompletable(gym), RxUtils::handleError);
     }
 }

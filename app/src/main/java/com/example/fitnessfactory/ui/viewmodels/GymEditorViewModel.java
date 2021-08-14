@@ -10,6 +10,7 @@ import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.data.repositories.bondingRepositories.GymAccessRepository;
 import com.example.fitnessfactory.data.repositories.GymRepository;
+import com.example.fitnessfactory.utils.RxUtils;
 
 import javax.inject.Inject;
 
@@ -37,7 +38,7 @@ public class GymEditorViewModel extends EditorViewModel {
         subscribeInIOThread(gymRepository.getGymAsync(id),
                 new SingleData<>(
                         observer::setValue,
-                        this::handleError));
+                        RxUtils::handleError));
 
         return observer;
     }
@@ -89,7 +90,7 @@ public class GymEditorViewModel extends EditorViewModel {
                             this.gym.get().setId(id);
                             observer.setValue(true);
                         },
-                        throwable -> handleError(observer, throwable)
+                        throwable -> RxUtils.handleError(observer, throwable)
                 ));
 
         return observer;
@@ -100,7 +101,7 @@ public class GymEditorViewModel extends EditorViewModel {
         SingleLiveEvent<Boolean> observer = new SingleLiveEvent<>();
 
         subscribeInIOThread(gymAccessRepository.deleteGymSingle(gym.get()),
-                new SingleData<>(observer::setValue, this::handleError));
+                new SingleData<>(observer::setValue, RxUtils::handleError));
 
         return observer;
     }
