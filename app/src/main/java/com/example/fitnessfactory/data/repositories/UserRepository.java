@@ -8,6 +8,7 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class UserRepository extends BaseRepository {
 
     @Override
     public String getRoot() {
-        return FirestoreCollections.USERS_COLLECTION;
+        return UsersCollection.getRoot();
     }
 
     public Single<AppUser> registerUser(String email, String userName) {

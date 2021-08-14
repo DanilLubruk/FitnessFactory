@@ -1,9 +1,5 @@
 package com.example.fitnessfactory.di;
-
-import com.example.fitnessfactory.data.dataListeners.AdminsGymsDataListener;
 import com.example.fitnessfactory.data.dataListeners.AdminsListDataListener;
-import com.example.fitnessfactory.data.dataListeners.GymAdminsDataListener;
-import com.example.fitnessfactory.data.dataListeners.GymsListDataListener;
 import com.example.fitnessfactory.data.managers.AdminsAccessManager;
 import com.example.fitnessfactory.data.managers.AdminsDataManager;
 import com.example.fitnessfactory.data.managers.GymsAccessManager;
@@ -35,9 +31,6 @@ public interface AppComponent {
     void inject(AdminsAccessManager adminsAccessManager);
     void inject(AdminsDataManager adminsDataManager);
     void inject(AdminsListDataListener adminsListDataListener);
-    void inject(AdminsGymsDataListener AdminsGymsDataListener);
     void inject(GymsDataManager gymsDataManager);
-    void inject(GymAdminsDataListener gymAdminsDataListener);
     void inject(GymsAccessManager gymsAccessManager);
-    void inject(GymsListDataListener gymsListDataListener);
 }

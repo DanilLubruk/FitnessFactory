@@ -13,7 +13,7 @@ import io.reactivex.SingleEmitter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public abstract class BaseDataListener {
+public abstract class BaseDataListener extends CollectionOperator {
 
     protected AtomicReference<ListenerRegistration> dataListener = new AtomicReference<>();
 

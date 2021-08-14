@@ -1,27 +1,21 @@
 package com.example.fitnessfactory.data.dataListeners;
-
-import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.events.GymsListDataListenerEvent;
+import com.example.fitnessfactory.data.firestoreCollections.OwnerGymsCollection;
 import com.example.fitnessfactory.data.models.Gym;
-import com.example.fitnessfactory.data.repositories.GymRepository;
 import com.example.fitnessfactory.utils.RxUtils;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
-
-import javax.inject.Inject;
-
 import io.reactivex.Single;
 
 public class GymsListDataListener extends BaseDataListener {
 
-    @Inject
-    GymRepository gymRepository;
-
-    public GymsListDataListener() {
-        FFApp.get().getAppComponent().inject(this);
+    @Override
+    protected String getRoot() {
+        return OwnerGymsCollection.getRoot();
     }
 
     public void setGymsListListener() {
@@ -35,8 +29,7 @@ public class GymsListDataListener extends BaseDataListener {
     private Single<ListenerRegistration> getGymsListListener() {
         return Single.create(emitter -> {
             ListenerRegistration listenerRegistration =
-                    gymRepository
-                            .getGymsListQuery()
+                    getGymsListQuery()
                             .addSnapshotListener(((value, error) -> {
                                 if (error != null) {
                                     reportError(emitter, error);
@@ -52,5 +45,9 @@ public class GymsListDataListener extends BaseDataListener {
                 emitter.onSuccess(listenerRegistration);
             }
         });
+    }
+
+    public Query getGymsListQuery() {
+        return getCollection();
     }
 }

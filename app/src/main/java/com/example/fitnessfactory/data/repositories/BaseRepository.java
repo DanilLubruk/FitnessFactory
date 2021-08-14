@@ -20,25 +20,11 @@ import io.reactivex.CompletableEmitter;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 
-public abstract class BaseRepository {
+public abstract class BaseRepository extends CollectionOperator {
 
-    private CollectionReference colReference;
-
+    @Override
     protected String getRoot() {
-        return AppPrefs.gymOwnerId().getValue();
-    }
-
-    protected CollectionReference getCollection() {
-        initCollection();
-        return colReference;
-    }
-
-    protected FirebaseFirestore getFirestore() {
-        return FirebaseFirestore.getInstance();
-    }
-
-    private void initCollection() {
-        colReference = FirebaseFirestore.getInstance().collection(getRoot());
+        return BaseCollection.getRoot();
     }
 
     protected void checkEmailUniqueness(List<DocumentSnapshot> documents) throws Exception {

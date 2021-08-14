@@ -2,23 +2,20 @@ package com.example.fitnessfactory.data.dataListeners;
 
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.events.GymAdminsListListenerEvent;
-import com.example.fitnessfactory.data.repositories.AdminsRepository;
+import com.example.fitnessfactory.data.firestoreCollections.OwnerAdminsCollection;
+import com.example.fitnessfactory.data.models.Admin;
 import com.example.fitnessfactory.utils.RxUtils;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 
 import org.greenrobot.eventbus.EventBus;
-
-import javax.inject.Inject;
-
 import io.reactivex.Single;
 
 public class GymAdminsDataListener extends BaseDataListener {
 
-    @Inject
-    AdminsRepository adminsRepository;
-
-    public GymAdminsDataListener() {
-        FFApp.get().getAppComponent().inject(this);
+    @Override
+    protected String getRoot() {
+        return OwnerAdminsCollection.getRoot();
     }
 
     public void setGymAdminsDataListener(String gymId) {
@@ -32,8 +29,7 @@ public class GymAdminsDataListener extends BaseDataListener {
     private Single<ListenerRegistration> getGymAdminsListener(String gymId) {
         return Single.create(emitter -> {
            ListenerRegistration listenerRegistration =
-                   adminsRepository
-                           .getAdminQueryByGymId(gymId)
+                   getAdminQueryByGymId(gymId)
                            .addSnapshotListener(((value, error) -> {
                                if (error != null) {
                                    reportError(emitter, error);
@@ -46,5 +42,9 @@ public class GymAdminsDataListener extends BaseDataListener {
                emitter.onSuccess(listenerRegistration);
            }
         });
+    }
+
+    public Query getAdminQueryByGymId(String gymId) {
+        return getCollection().whereArrayContains(Admin.GYMS_ARRAY_FIELD, gymId);
     }
 }

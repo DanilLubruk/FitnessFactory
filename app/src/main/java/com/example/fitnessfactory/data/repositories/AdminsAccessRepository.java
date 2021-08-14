@@ -2,6 +2,7 @@ package com.example.fitnessfactory.data.repositories;
 
 import com.example.fitnessfactory.data.FirestoreCollections;
 import com.example.fitnessfactory.data.events.AdminGymsListListenerEvent;
+import com.example.fitnessfactory.data.firestoreCollections.AdminAccessCollection;
 import com.example.fitnessfactory.data.models.AdminAccessEntry;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.google.android.gms.tasks.Tasks;
@@ -25,7 +26,7 @@ public class AdminsAccessRepository extends BaseRepository {
 
     @Override
     public String getRoot() {
-        return FirestoreCollections.ADMINS_ACCESS_COLLECTION;
+        return AdminAccessCollection.getRoot();
     }
 
     public Single<WriteBatch> getRegisterAdminAccessEntryBatchAsync(String ownerId, String userEmail) {

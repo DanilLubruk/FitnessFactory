@@ -1,6 +1,7 @@
 package com.example.fitnessfactory.data.repositories;
 
 import com.example.fitnessfactory.data.FirestoreCollections;
+import com.example.fitnessfactory.data.firestoreCollections.OwnerAdminsCollection;
 import com.example.fitnessfactory.data.models.Admin;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
@@ -22,11 +23,7 @@ public class AdminsRepository extends BaseRepository {
 
     @Override
     public String getRoot() {
-        return super.getRoot() +
-                "/" +
-                FirestoreCollections.ADMINS +
-                "/" +
-                FirestoreCollections.ADMINS;
+        return OwnerAdminsCollection.getRoot();
     }
 
     public Single<WriteBatch> getRemoveGymFromAdminBatchAsync(WriteBatch writeBatch, String gymId) {

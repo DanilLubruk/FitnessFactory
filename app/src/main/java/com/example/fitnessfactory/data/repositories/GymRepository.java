@@ -42,11 +42,7 @@ public class GymRepository extends BaseRepository {
 
     @Override
     public String getRoot() {
-        return super.getRoot() +
-                "/" +
-                FirestoreCollections.GYMS_COLLECTION +
-                "/" +
-                FirestoreCollections.GYMS_COLLECTION;
+        return OwnerGymsCollection.getRoot();
     }
 
     public Single<WriteBatch> getDeleteGymBatchAsync(String gymId) {
