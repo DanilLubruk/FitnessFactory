@@ -1,12 +1,12 @@
 package com.example.fitnessfactory.data.repositories;
 
 import com.example.fitnessfactory.data.FirestoreCollections;
-import com.example.fitnessfactory.data.firestoreCollections.OwnerAdminsCollection;
 import com.example.fitnessfactory.data.models.Admin;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
@@ -22,7 +22,121 @@ public class AdminsRepository extends BaseRepository {
 
     @Override
     public String getRoot() {
-        return OwnerAdminsCollection.getRoot();
+        return super.getRoot() +
+                "/" +
+                FirestoreCollections.ADMINS +
+                "/" +
+                FirestoreCollections.ADMINS;
+    }
+
+    public Single<WriteBatch> getRemoveGymFromAdminBatchAsync(WriteBatch writeBatch, String gymId) {
+        return Single.create(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getRemoveGymFromAdminBatch(emitter, writeBatch, gymId));
+            }
+        });
+    }
+
+    private WriteBatch getRemoveGymFromAdminBatch(SingleEmitter<WriteBatch> emitter,
+                                                  WriteBatch writeBatch,
+                                                  String gymId) {
+        WriteBatch removeBatch;
+
+        try {
+            removeBatch = getRemoveGymFromAdminBatch(writeBatch, gymId);
+        } catch (InterruptedException e) {
+            reportError(emitter, e);
+            return null;
+        } catch (Exception e) {
+            reportError(emitter, e);
+            return null;
+        }
+
+        return removeBatch;
+    }
+
+    private WriteBatch getRemoveGymFromAdminBatch(WriteBatch writeBatch, String gymId) throws ExecutionException, InterruptedException {
+        for (DocumentSnapshot documentSnapshot : getAdminsListSnapshotsByGymId(gymId)) {
+            writeBatch = writeBatch
+                    .update(
+                            documentSnapshot.getReference(),
+                            Admin.GYMS_ARRAY_FIELD,
+                            FieldValue.arrayRemove(gymId));
+        }
+
+        return writeBatch;
+    }
+
+    private List<DocumentSnapshot> getAdminsListSnapshotsByGymId(String gymId) throws ExecutionException, InterruptedException {
+        return Tasks.await(getCollection().whereArrayContains(Admin.GYMS_ARRAY_FIELD, gymId).get()).getDocuments();
+    }
+
+    public Single<List<String>> getAdminsEmailsByGymIdAsync(String gymId) {
+        return Single.create(emitter -> {
+            List<String> adminsEmails = getAdminsEmailsByGymId(emitter, gymId);
+
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(adminsEmails);
+            }
+        });
+    }
+
+    private List<String> getAdminsEmailsByGymId(SingleEmitter<List<String>> emitter, String gymId) {
+        List<String> adminsEmails = new ArrayList<>();
+
+        try {
+            adminsEmails = getAdminsEmailsByGymId(gymId);
+        } catch (InterruptedException e) {
+            reportError(emitter, e);
+        } catch (Exception e) {
+            reportError(emitter, e);
+        }
+
+        return adminsEmails;
+    }
+
+    private List<String> getAdminsEmailsByGymId(String gymId) throws ExecutionException, InterruptedException {
+        List<Admin> admins = Tasks.await(getAdminQueryByGymId(gymId).get()).toObjects(Admin.class);
+
+        List<String> adminsEmails = new ArrayList<>();
+        for (Admin admin : admins) {
+            adminsEmails.add(admin.getUserEmail());
+        }
+
+        return adminsEmails;
+    }
+
+    public Single<List<String>> getAdminsGymsIdsAsync(String adminEmail) {
+        return Single.create(emitter -> {
+            List<String> gymsIds = getAdminsGymsIds(emitter, adminEmail);
+
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(gymsIds);
+            }
+        });
+    }
+
+    private List<String> getAdminsGymsIds(SingleEmitter<List<String>> emitter, String adminEmail) {
+        List<String> gymsIds = new ArrayList<>();
+
+        try {
+            gymsIds = getAdminsGymsIds(adminEmail);
+        } catch (InterruptedException e) {
+            reportError(emitter, e);
+        } catch (Exception e) {
+            reportError(emitter, e);
+        }
+
+        return gymsIds;
+    }
+
+    private List<String> getAdminsGymsIds(String adminEmail) throws Exception {
+        Admin admin = getAdminSnapshot(adminEmail).toObject(Admin.class);
+        if (admin == null) {
+            throw new Exception();
+        }
+
+        return admin.getGymsIds();
     }
 
     public Completable removeGymFromAdminAsync(String adminEmail, String gymId) {
@@ -73,39 +187,57 @@ public class AdminsRepository extends BaseRepository {
         Tasks.await(getAdminDocument(adminEmail).update(Admin.GYMS_ARRAY_FIELD, FieldValue.arrayUnion(gymId)));
     }
 
-    public Single<WriteBatch> deleteAdminAsync(WriteBatch writeBatch, String adminEmail) {
+    public Single<WriteBatch> getDeleteAdminBatchAsync(WriteBatch writeBatch, String adminEmail) {
         return Single.create(emitter -> {
-            deleteAdmin(emitter, writeBatch, adminEmail);
+            WriteBatch deleteBatch = getDeleteAdminBatch(emitter, writeBatch, adminEmail);
 
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(writeBatch);
+                emitter.onSuccess(deleteBatch);
             }
         });
     }
 
-    private void deleteAdmin(SingleEmitter<WriteBatch> emitter,
-                             WriteBatch writeBatch,
-                             String adminEmail) {
+    private WriteBatch getDeleteAdminBatch(SingleEmitter<WriteBatch> emitter,
+                                           WriteBatch writeBatch,
+                                           String adminEmail) {
+        WriteBatch deleteBatch;
+
         try {
-            deleteAdmin(writeBatch, adminEmail);
+            deleteBatch = getDeleteAdminBatch(writeBatch, adminEmail);
         } catch (InterruptedException e) {
             reportError(emitter, e);
+            return null;
         } catch (Exception e) {
             reportError(emitter, e);
+            return null;
         }
+
+        return deleteBatch;
     }
 
-    private void deleteAdmin(WriteBatch writeBatch, String adminEmail) throws Exception {
-        writeBatch.delete(getAdminDocument(adminEmail));
+    private WriteBatch getDeleteAdminBatch(WriteBatch writeBatch, String adminEmail) throws Exception {
+        return writeBatch.delete(getAdminDocument(adminEmail));
     }
 
     private DocumentReference getAdminDocument(String adminEmail) throws Exception {
+        return getAdminSnapshot(adminEmail).getReference();
+    }
+
+    private DocumentSnapshot getAdminSnapshot(String adminEmail) throws Exception {
         List<DocumentSnapshot> documentSnapshots =
-                Tasks.await(getCollection().whereEqualTo(Admin.USER_EMAIL_FIELD, adminEmail).get()).getDocuments();
+                Tasks.await(getAdminQueryByEmail(adminEmail).get()).getDocuments();
 
         checkEmailUniqueness(documentSnapshots);
 
-        return documentSnapshots.get(0).getReference();
+        return documentSnapshots.get(0);
+    }
+
+    public Query getAdminQueryByEmail(String adminEmail) {
+        return getCollection().whereEqualTo(Admin.USER_EMAIL_FIELD, adminEmail);
+    }
+
+    public Query getAdminQueryByGymId(String gymId) {
+        return getCollection().whereArrayContains(Admin.GYMS_ARRAY_FIELD, gymId);
     }
 
     public Single<List<String>> getAdminsEmailsAsync() {

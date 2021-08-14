@@ -1,12 +1,12 @@
 package com.example.fitnessfactory.di;
 
 import com.example.fitnessfactory.data.dataListeners.AdminsListDataListener;
+import com.example.fitnessfactory.data.dataListeners.GymsListDataListener;
 import com.example.fitnessfactory.data.managers.AdminsAccessManager;
 import com.example.fitnessfactory.data.managers.AdminsDataManager;
+import com.example.fitnessfactory.data.managers.GymsAccessManager;
 import com.example.fitnessfactory.data.repositories.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.AdminsRepository;
-import com.example.fitnessfactory.data.repositories.bondingRepositories.AdminAccessRepository;
-import com.example.fitnessfactory.data.repositories.bondingRepositories.GymAccessRepository;
 import com.example.fitnessfactory.data.repositories.GymRepository;
 import com.example.fitnessfactory.data.repositories.OrganisationInfoRepository;
 import com.example.fitnessfactory.data.repositories.UserRepository;
@@ -76,13 +76,13 @@ public class AppModule {
 
     @Provides
     @AppScope
-    public GymAccessRepository provideGymAccessRepository() {
-        return new GymAccessRepository();
+    public GymsAccessManager provideGymsAccessManager() {
+        return new GymsAccessManager();
     }
 
     @Provides
     @AppScope
-    public AdminAccessRepository provideAdminAccessRepository() {
-        return new AdminAccessRepository();
+    public GymsListDataListener provideGymsListDataListener() {
+        return new GymsListDataListener();
     }
 }

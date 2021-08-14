@@ -8,7 +8,9 @@ import com.example.fitnessfactory.data.dataListeners.AdminsListDataListener;
 import com.example.fitnessfactory.data.managers.AdminsAccessManager;
 import com.example.fitnessfactory.data.managers.AdminsDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
+import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
+import com.example.fitnessfactory.utils.RxUtils;
 
 import java.util.List;
 
@@ -30,7 +32,9 @@ public class AdminListViewModel extends BaseViewModel {
     }
 
     public void registerAdmin(String email) {
-        adminsAccessManager.createAdmin(AppPrefs.gymOwnerId().getValue(), email);
+        subscribeInIOThread(
+                adminsAccessManager.createAdmin(AppPrefs.gymOwnerId().getValue(), email),
+                RxUtils::handleError);
     }
 
     public void addAdminsListListener() {
@@ -42,14 +46,17 @@ public class AdminListViewModel extends BaseViewModel {
     }
 
     public void getAdminsListData() {
-        admins.setValue(adminsDataManager.getAdminsListData());
+        subscribeInIOThread(adminsDataManager.getAdminsListAsync(),
+                new SingleData<>(admins::setValue, RxUtils::handleError));
     }
 
     public void removeAdminsListListener() {
-        adminsListListener.removeAdminsListListener();
+        adminsListListener.removeDataListener();
     }
 
     public void deleteAdmin(String email) {
-        adminsAccessManager.deleteAdmin(AppPrefs.gymOwnerId().getValue(), email);
+        subscribeInIOThread(
+                adminsAccessManager.deleteAdminCompletable(AppPrefs.gymOwnerId().getValue(), email),
+                RxUtils::handleError);
     }
 }

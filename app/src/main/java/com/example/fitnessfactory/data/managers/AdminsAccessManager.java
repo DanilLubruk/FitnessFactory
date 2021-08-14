@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 public class AdminsAccessManager extends BaseManager {
@@ -24,43 +25,37 @@ public class AdminsAccessManager extends BaseManager {
         FFApp.get().getAppComponent().inject(this);
     }
 
-    public void createAdmin(String ownerId, String userEmail) {
+    public Completable createAdmin(String ownerId, String userEmail) {
         AtomicReference<WriteBatch> registerBatch = new AtomicReference<>();
 
-        addSubscription(accessRepository.isAdminRegisteredAsync(userEmail)
-                .subscribeOn(getIOScheduler())
-                .observeOn(getIOScheduler())
+        return accessRepository.isAdminRegisteredAsync(userEmail)
                 .flatMap(isRegistered ->
                         isRegistered ?
-                        Single.error(new Exception(ResUtils.getString(R.string.message_admin_is_registered)))
-                        : accessRepository.registerAdminAccessEntryAsync(ownerId, userEmail))
+                                Single.error(new Exception(ResUtils.getString(R.string.message_admin_is_registered)))
+                                : accessRepository.getRegisterAdminAccessEntryBatchAsync(ownerId, userEmail))
                 .flatMap(writeBatch -> {
                     registerBatch.set(writeBatch);
                     return adminsRepository.isAdminAddedAsync(userEmail);
                 })
                 .flatMap(isAdded ->
                         isAdded ?
-                        Single.just(registerBatch.get()) :
-                        adminsRepository.addAdminAsync(userEmail, registerBatch.get()))
-                .flatMapCompletable(this::commitBatchCompletable)
-                .subscribe(
-                        () -> {
-                        },
-                        this::handleError));
+                                Single.just(registerBatch.get()) :
+                                adminsRepository.addAdminAsync(userEmail, registerBatch.get()))
+                .flatMapCompletable(this::commitBatchCompletable);
     }
 
-    public boolean deleteAdmin(String ownerId, String adminEmail) {
-        AtomicReference<Boolean> isDeleted = new AtomicReference<>();
+    public Single<Boolean> deleteAdminSingle(String ownerId, String adminEmail) {
+        return getDeleteBatch(ownerId, adminEmail)
+                .flatMap(this::commitBatchSingle);
+    }
 
-        addSubscription(accessRepository.deleteAdminAccessEntryAsync(ownerId, adminEmail)
-        .subscribeOn(getIOScheduler())
-        .observeOn(getIOScheduler())
-        .flatMap(writeBatch -> adminsRepository.deleteAdminAsync(writeBatch, adminEmail))
-        .flatMap(this::commitBatchSingle)
-        .subscribe(
-                isDeleted::set,
-                throwable -> handleError(isDeleted, throwable)));
+    public Completable deleteAdminCompletable(String ownerId, String adminEmail) {
+        return getDeleteBatch(ownerId, adminEmail)
+                .flatMapCompletable(this::commitBatchCompletable);
+    }
 
-        return isDeleted.get();
+    private Single<WriteBatch> getDeleteBatch(String ownerId, String adminEmail) {
+        return accessRepository.getDeleteAdminAccessEntryBatchAsync(ownerId, adminEmail)
+                .flatMap(writeBatch -> adminsRepository.getDeleteAdminBatchAsync(writeBatch, adminEmail));
     }
 }

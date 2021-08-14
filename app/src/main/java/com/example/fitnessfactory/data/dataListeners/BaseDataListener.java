@@ -3,6 +3,9 @@ package com.example.fitnessfactory.data.dataListeners;
 import com.example.fitnessfactory.data.firestoreCollections.CollectionOperator;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.CompletableEmitter;
 import io.reactivex.Scheduler;
@@ -10,21 +13,12 @@ import io.reactivex.SingleEmitter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public abstract class BaseDataListener implements CollectionOperator {
+public abstract class BaseDataListener {
 
-    private CollectionReference colReference;
-
-    public CollectionReference getCollection() {
-        initCollection();
-        return colReference;
-    }
+    protected AtomicReference<ListenerRegistration> dataListener = new AtomicReference<>();
 
     protected FirebaseFirestore getFirestore() {
         return FirebaseFirestore.getInstance();
-    }
-
-    private void initCollection() {
-        colReference = FirebaseFirestore.getInstance().collection(getRoot());
     }
 
     protected Scheduler getMainThreadScheduler() {
@@ -44,6 +38,12 @@ public abstract class BaseDataListener implements CollectionOperator {
     protected void reportError(CompletableEmitter emitter, Exception error) {
         if (!emitter.isDisposed()) {
             emitter.onError(error);
+        }
+    }
+
+    public void removeDataListener() {
+        if (dataListener.get() != null) {
+            dataListener.get().remove();
         }
     }
 }

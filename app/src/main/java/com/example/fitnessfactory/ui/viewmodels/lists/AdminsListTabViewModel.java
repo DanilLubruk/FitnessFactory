@@ -7,11 +7,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.AppConsts;
-import com.example.fitnessfactory.data.AppPrefs;
+import com.example.fitnessfactory.data.dataListeners.GymAdminsDataListener;
+import com.example.fitnessfactory.data.managers.AdminsDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.observers.SingleData;
-import com.example.fitnessfactory.data.repositories.AdminsAccessRepository;
-import com.example.fitnessfactory.data.repositories.bondingRepositories.AdminAccessRepository;
+import com.example.fitnessfactory.data.repositories.AdminsRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.utils.RxUtils;
 
@@ -22,9 +22,11 @@ import javax.inject.Inject;
 public class AdminsListTabViewModel extends BaseViewModel {
 
     @Inject
-    AdminsAccessRepository adminsAccessRepository;
+    AdminsRepository adminsRepository;
     @Inject
-    AdminAccessRepository adminAccessRepository;
+    AdminsDataManager adminsDataManager;
+    @Inject
+    GymAdminsDataListener gymAdminsDataListener;
 
     private MutableLiveData<List<AppUser>> admins = new MutableLiveData<>();
     private String gymId;
@@ -42,9 +44,7 @@ public class AdminsListTabViewModel extends BaseViewModel {
             return;
         }
 
-        subscribeInIOThread(
-                adminsAccessRepository.addGymToPersonnelAsync(AppPrefs.gymOwnerId().getValue(), adminEmail, gymId),
-                RxUtils::handleError);
+        subscribeInIOThread(adminsRepository.addGymToAdminAsync(adminEmail, gymId));
     }
 
     public void removeAdminFromGym(String adminEmail) {
@@ -52,9 +52,7 @@ public class AdminsListTabViewModel extends BaseViewModel {
             return;
         }
 
-        subscribeInIOThread(
-                adminsAccessRepository.removeGymFromPersonnelAsync(AppPrefs.gymOwnerId().getValue(), adminEmail, gymId),
-                RxUtils::handleError);
+        subscribeInIOThread(adminsRepository.removeGymFromAdminAsync(adminEmail, gymId));
     }
 
     public void addGymAdminsListListener() {
@@ -62,13 +60,11 @@ public class AdminsListTabViewModel extends BaseViewModel {
             return;
         }
 
-        subscribeInIOThread(
-                adminAccessRepository.addGymAdminsListListener(AppPrefs.gymOwnerId().getValue(), gymId),
-                RxUtils::handleError);
+        gymAdminsDataListener.setGymAdminsDataListener(gymId);
     }
 
     public void removeGymAdminsListListener() {
-        subscribeInIOThread(adminAccessRepository.removeGymAdminsListListener(), RxUtils::handleError);
+        gymAdminsDataListener.removeDataListener();
     }
 
     public void setGymData(String gymId) {
@@ -81,7 +77,7 @@ public class AdminsListTabViewModel extends BaseViewModel {
         }
 
         subscribeInIOThread(
-                adminAccessRepository.getAdminsByGymIdAsync(AppPrefs.gymOwnerId().getValue(), gymId),
+                adminsDataManager.getAdminsListByGymIdAsync(gymId),
                 new SingleData<>(admins::setValue, RxUtils::handleError));
     }
 

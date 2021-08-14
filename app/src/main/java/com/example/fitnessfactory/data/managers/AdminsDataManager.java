@@ -12,6 +12,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
+import io.reactivex.Single;
+
 public class AdminsDataManager extends BaseManager {
 
     @Inject
@@ -23,17 +25,13 @@ public class AdminsDataManager extends BaseManager {
         FFApp.get().getAppComponent().inject(this);
     }
 
-    public List<AppUser> getAdminsListData() {
-        AtomicReference<List<AppUser>> users = new AtomicReference<>();
+    public Single<List<AppUser>> getAdminsListAsync() {
+        return adminsRepository.getAdminsEmailsAsync()
+                .flatMap(userRepository::getUsersByEmailsAsync);
+    }
 
-        addSubscription(adminsRepository.getAdminsEmailsAsync()
-                .subscribeOn(getIOScheduler())
-                .observeOn(getIOScheduler())
-                .flatMap(adminsEmails -> userRepository.getUsersByEmailsAsync(adminsEmails))
-                .subscribe(
-                        users::set,
-                        this::handleError));
-
-        return users.get();
+    public Single<List<AppUser>> getAdminsListByGymIdAsync(String gymId) {
+        return adminsRepository.getAdminsEmailsByGymIdAsync(gymId)
+                .flatMap(userRepository::getUsersByEmailsAsync);
     }
 }

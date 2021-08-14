@@ -2,7 +2,6 @@ package com.example.fitnessfactory.data.repositories;
 
 import com.example.fitnessfactory.data.FirestoreCollections;
 import com.example.fitnessfactory.data.events.AdminGymsListListenerEvent;
-import com.example.fitnessfactory.data.firestoreCollections.AdminsAccessCollection;
 import com.example.fitnessfactory.data.models.AdminAccessEntry;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.google.android.gms.tasks.Tasks;
@@ -26,18 +25,18 @@ public class AdminsAccessRepository extends BaseRepository {
 
     @Override
     public String getRoot() {
-        return AdminsAccessCollection.getRoot();
+        return FirestoreCollections.ADMINS_ACCESS_COLLECTION;
     }
 
-    public Single<WriteBatch> registerAdminAccessEntryAsync(String ownerId, String userEmail) {
+    public Single<WriteBatch> getRegisterAdminAccessEntryBatchAsync(String ownerId, String userEmail) {
         return Single.create(emitter -> {
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(registerAdminAccessEntry(ownerId, userEmail));
+                emitter.onSuccess(getRegisterAdminAccessBatchEntry(ownerId, userEmail));
             }
         });
     }
 
-    private WriteBatch registerAdminAccessEntry(String ownerId, String email) {
+    private WriteBatch getRegisterAdminAccessBatchEntry(String ownerId, String email) {
         DocumentReference docReference = getCollection().document();
         AdminAccessEntry adminAccessEntry = new AdminAccessEntry();
         adminAccessEntry.setUserEmail(email);
@@ -163,9 +162,9 @@ public class AdminsAccessRepository extends BaseRepository {
         return snapshot.getDocuments();
     }
 
-    public Single<WriteBatch> deleteAdminAccessEntryAsync(String ownerId, String email) {
+    public Single<WriteBatch> getDeleteAdminAccessEntryBatchAsync(String ownerId, String email) {
         return Single.create(emitter -> {
-            WriteBatch writeBatch = deleteAdminAccessEntry(emitter, ownerId, email);
+            WriteBatch writeBatch = getDeleteAdminAccessBatchEntry(emitter, ownerId, email);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(writeBatch);
@@ -173,11 +172,11 @@ public class AdminsAccessRepository extends BaseRepository {
         });
     }
 
-    private WriteBatch deleteAdminAccessEntry(SingleEmitter<WriteBatch> emitter, String ownerId, String email) {
+    private WriteBatch getDeleteAdminAccessBatchEntry(SingleEmitter<WriteBatch> emitter, String ownerId, String email) {
         WriteBatch writeBatch;
 
         try {
-            writeBatch = deleteAdminAccessEntry(ownerId, email);
+            writeBatch = getDeleteAdminAccessBatchEntry(ownerId, email);
         } catch (InterruptedException e) {
             reportError(emitter, e);
             return null;
@@ -189,7 +188,7 @@ public class AdminsAccessRepository extends BaseRepository {
         return writeBatch;
     }
 
-    private WriteBatch deleteAdminAccessEntry(String ownerId, String email) throws Exception {
+    private WriteBatch getDeleteAdminAccessBatchEntry(String ownerId, String email) throws Exception {
         return getFirestore().batch().delete(getAdminDocument(ownerId, email));
     }
 
@@ -211,6 +210,14 @@ public class AdminsAccessRepository extends BaseRepository {
         return getCollection()
                 .whereEqualTo(AdminAccessEntry.OWNER_ID_FIELD, ownerId)
                 .whereEqualTo(AdminAccessEntry.USER_EMAIL_FIELD, email);
+    }
+
+    public Query getAdminsListQuery(List<String> adminsEmails) throws Exception {
+        if (adminsEmails.size() == 0) {
+            throw new Exception();
+        }
+
+        return getCollection().whereIn(AdminAccessEntry.USER_EMAIL_FIELD, adminsEmails);
     }
 
     public Query getAdminQueryByGymId(String ownerId, String gymId) {

@@ -20,9 +20,13 @@ import io.reactivex.CompletableEmitter;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 
-public abstract class BaseRepository implements CollectionOperator {
+public abstract class BaseRepository {
 
     private CollectionReference colReference;
+
+    protected String getRoot() {
+        return AppPrefs.gymOwnerId().getValue();
+    }
 
     protected CollectionReference getCollection() {
         initCollection();

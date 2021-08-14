@@ -1,15 +1,11 @@
 package com.example.fitnessfactory.ui.viewmodels.lists;
-
-import androidx.lifecycle.MutableLiveData;
-
 import com.example.fitnessfactory.FFApp;
+import com.example.fitnessfactory.data.dataListeners.GymsListDataListener;
+import com.example.fitnessfactory.data.managers.GymsAccessManager;
 import com.example.fitnessfactory.data.models.Gym;
-import com.example.fitnessfactory.data.repositories.bondingRepositories.GymAccessRepository;
 import com.example.fitnessfactory.data.repositories.GymRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
-
-import java.util.List;
-
+import com.example.fitnessfactory.utils.RxUtils;
 import javax.inject.Inject;
 
 public class GymsListViewModel extends BaseViewModel {
@@ -17,23 +13,27 @@ public class GymsListViewModel extends BaseViewModel {
     @Inject
     GymRepository gymRepository;
     @Inject
-    GymAccessRepository gymAccessRepository;
-
-    private MutableLiveData<List<Gym>> gymsList = new MutableLiveData<>();
+    GymsAccessManager gymsAccessManager;
+    @Inject
+    GymsListDataListener gymsListDataListener;
 
     public GymsListViewModel() {
         FFApp.get().getAppComponent().inject(this);
     }
 
     public void addGymsListDataListener() {
-        subscribeInIOThread(gymRepository.addGymsListListener());
+        gymsListDataListener.setGymsListListener();
     }
 
     public void removeGymsListDataListener() {
-        subscribeInIOThread(gymRepository.removeGymsListListener());
+        gymsListDataListener.removeDataListener();
     }
 
     public void deleteGym(Gym gym) {
-        subscribeInIOThread(gymAccessRepository.deleteGymCompletable(gym), RxUtils::handleError);
+        if (gym == null) {
+            return;
+        }
+
+        subscribeInIOThread(gymsAccessManager.deleteGymCompletable(gym.getId()), RxUtils::handleError);
     }
 }

@@ -8,15 +8,15 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.AppPrefs;
+import com.example.fitnessfactory.data.dataListeners.AdminsGymsDataListener;
 import com.example.fitnessfactory.data.managers.AdminsAccessManager;
-import com.example.fitnessfactory.data.managers.AdminsDataManager;
+import com.example.fitnessfactory.data.managers.GymsDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Gym;
+import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
-import com.example.fitnessfactory.data.repositories.AdminsAccessRepository;
-import com.example.fitnessfactory.data.repositories.GymRepository;
+import com.example.fitnessfactory.data.repositories.AdminsRepository;
 import com.example.fitnessfactory.utils.RxUtils;
-import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.List;
 
@@ -25,15 +25,13 @@ import javax.inject.Inject;
 public class AdminEditorViewModel extends EditorViewModel {
 
     @Inject
-    GymRepository gymRepository;
-    @Inject
-    AdminsAccessRepository adminsAccessRepository;
+    AdminsRepository adminsRepository;
     @Inject
     AdminsAccessManager adminsAccessManager;
     @Inject
-    AdminsDataManager adminsDataManager;
-
-    private ListenerRegistration adminGymsListListener;
+    AdminsGymsDataListener adminsGymsDataListener;
+    @Inject
+    GymsDataManager gymsDataManager;
 
     public ObservableField<AppUser> admin = new ObservableField<>();
     private MutableLiveData<List<Gym>> gyms = new MutableLiveData<>();
@@ -58,10 +56,7 @@ public class AdminEditorViewModel extends EditorViewModel {
         }
 
         subscribeInIOThread(
-                adminsAccessRepository.addGymToPersonnelAsync(
-                        AppPrefs.gymOwnerId().getValue(),
-                        admin.getEmail(),
-                        gymId),
+                adminsRepository.addGymToAdminAsync(admin.getEmail(), gymId),
                 RxUtils::handleError);
     }
 
@@ -72,10 +67,7 @@ public class AdminEditorViewModel extends EditorViewModel {
         }
 
         subscribeInIOThread(
-                adminsAccessRepository.removeGymFromPersonnelAsync(
-                        AppPrefs.gymOwnerId().getValue(),
-                        admin.getEmail(),
-                        gymId),
+                adminsRepository.removeGymFromAdminAsync(admin.getEmail(), gymId),
                 RxUtils::handleError);
     }
 
@@ -89,13 +81,11 @@ public class AdminEditorViewModel extends EditorViewModel {
             return;
         }
 
-        subscribeInIOThread(
-                adminsAccessRepository.addAdminGymsListListener(AppPrefs.gymOwnerId().getValue(), admin.getEmail()),
-                RxUtils::handleError);
+        adminsGymsDataListener.setAdminsGymsListener(admin.getEmail());
     }
 
     public void removeAdminEditorGymsListener() {
-        subscribeInIOThread(adminsAccessRepository.removeAdminGymsListListener(), RxUtils::handleError);
+        adminsGymsDataListener.removeDataListener();
     }
 
     public void getGymsData() {
@@ -104,13 +94,8 @@ public class AdminEditorViewModel extends EditorViewModel {
             return;
         }
 
-        addSubscription(adminsAccessRepository.getAdminGymsAsync(AppPrefs.gymOwnerId().getValue(), admin.getEmail())
-                .subscribeOn(getIOScheduler())
-                .observeOn(getIOScheduler())
-                .flatMap(gymsIds -> gymRepository.getGymsByIds(gymsIds))
-                .observeOn(getMainThreadScheduler())
-                .subscribe(gyms::setValue,
-                        RxUtils::handleError));
+        subscribeInIOThread(gymsDataManager.getGymsByIdsAsync(admin.getEmail()),
+                new SingleData<>(gyms::setValue, RxUtils::handleError));
     }
 
     @Override
@@ -139,11 +124,9 @@ public class AdminEditorViewModel extends EditorViewModel {
             return isDeleted;
         }
 
-        isDeleted.setValue(
-                adminsAccessManager
-                        .deleteAdmin(
-                                AppPrefs.gymOwnerId().getValue(),
-                                admin.getEmail()));
+        subscribeInIOThread(
+                adminsAccessManager.deleteAdminSingle(AppPrefs.gymOwnerId().getValue(), admin.getEmail()),
+                new SingleData<>(isDeleted::setValue, throwable -> RxUtils.handleError(isDeleted, throwable)));
 
         return isDeleted;
     }

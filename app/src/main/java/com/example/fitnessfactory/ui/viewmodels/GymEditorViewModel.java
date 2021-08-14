@@ -5,10 +5,10 @@ import android.os.Bundle;
 import androidx.databinding.ObservableField;
 
 import com.example.fitnessfactory.FFApp;
+import com.example.fitnessfactory.data.managers.GymsAccessManager;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
-import com.example.fitnessfactory.data.repositories.bondingRepositories.GymAccessRepository;
 import com.example.fitnessfactory.data.repositories.GymRepository;
 import com.example.fitnessfactory.utils.RxUtils;
 
@@ -19,7 +19,7 @@ public class GymEditorViewModel extends EditorViewModel {
     @Inject
     GymRepository gymRepository;
     @Inject
-    GymAccessRepository gymAccessRepository;
+    GymsAccessManager gymsAccessManager;
 
     private Gym dbGym;
     public ObservableField<Gym> gym = new ObservableField<>();
@@ -84,7 +84,13 @@ public class GymEditorViewModel extends EditorViewModel {
     public SingleLiveEvent<Boolean> save() {
         SingleLiveEvent<Boolean> observer = new SingleLiveEvent<>();
 
-        subscribeInIOThread(gymRepository.saveAsync(gym.get()),
+        Gym gym = this.gym.get();
+        if (gym == null) {
+            observer.setValue(false);
+            return observer;
+        }
+
+        subscribeInIOThread(gymRepository.saveAsync(gym),
                 new SingleData<>(
                         id -> {
                             this.gym.get().setId(id);
@@ -100,7 +106,13 @@ public class GymEditorViewModel extends EditorViewModel {
     public SingleLiveEvent<Boolean> delete() {
         SingleLiveEvent<Boolean> observer = new SingleLiveEvent<>();
 
-        subscribeInIOThread(gymAccessRepository.deleteGymSingle(gym.get()),
+        Gym gym = this.gym.get();
+        if (gym == null) {
+            observer.setValue(false);
+            return observer;
+        }
+
+        subscribeInIOThread(gymsAccessManager.deleteGymSingle(gym.getId()),
                 new SingleData<>(observer::setValue, RxUtils::handleError));
 
         return observer;

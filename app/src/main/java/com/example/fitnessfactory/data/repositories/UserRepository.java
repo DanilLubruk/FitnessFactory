@@ -21,7 +21,7 @@ public class UserRepository extends BaseRepository {
 
     @Override
     public String getRoot() {
-        return UsersCollection.getRoot();
+        return FirestoreCollections.USERS_COLLECTION;
     }
 
     public Single<AppUser> registerUser(String email, String userName) {

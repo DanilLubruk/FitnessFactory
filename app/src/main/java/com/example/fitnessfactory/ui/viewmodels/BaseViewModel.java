@@ -64,7 +64,7 @@ public class BaseViewModel extends ViewModel {
         }
     }
 
-    protected void addSubscription(Disposable disposable) {
+    private void addSubscription(Disposable disposable) {
         disposables.add(disposable);
     }
 

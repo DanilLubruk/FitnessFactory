@@ -19,20 +19,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class BaseManager {
 
-    private Disposable disposable;
-
-    private void unsubscribe() {
-        if (disposable != null) {
-            if (!disposable.isDisposed()) {
-                disposable.dispose();
-            }
-        }
-    }
-
-    protected void addSubscription(Disposable disposable) {
-        this.disposable = disposable;
-    }
-
     protected Scheduler getMainThreadScheduler() {
         return AndroidSchedulers.mainThread();
     }

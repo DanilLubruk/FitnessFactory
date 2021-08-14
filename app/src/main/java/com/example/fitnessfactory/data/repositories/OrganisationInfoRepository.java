@@ -18,11 +18,6 @@ import io.reactivex.SingleEmitter;
 
 public class OrganisationInfoRepository extends BaseRepository {
 
-    @Override
-    public String getRoot() {
-        return BaseCollection.getRoot();
-    }
-
     public Single<String> getOrganisationNameAsync() {
         return Single.create(emitter -> {
             String organisationName = getOrganisationName(emitter);

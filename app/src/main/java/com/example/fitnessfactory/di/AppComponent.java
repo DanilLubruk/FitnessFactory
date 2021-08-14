@@ -1,10 +1,13 @@
 package com.example.fitnessfactory.di;
 
+import com.example.fitnessfactory.data.dataListeners.AdminsGymsDataListener;
 import com.example.fitnessfactory.data.dataListeners.AdminsListDataListener;
+import com.example.fitnessfactory.data.dataListeners.GymAdminsDataListener;
+import com.example.fitnessfactory.data.dataListeners.GymsListDataListener;
 import com.example.fitnessfactory.data.managers.AdminsAccessManager;
 import com.example.fitnessfactory.data.managers.AdminsDataManager;
-import com.example.fitnessfactory.data.repositories.bondingRepositories.AdminAccessRepository;
-import com.example.fitnessfactory.data.repositories.bondingRepositories.GymAccessRepository;
+import com.example.fitnessfactory.data.managers.GymsAccessManager;
+import com.example.fitnessfactory.data.managers.GymsDataManager;
 import com.example.fitnessfactory.ui.viewmodels.AdminEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.MainActivityViewModel;
 import com.example.fitnessfactory.ui.viewmodels.lists.AdminListViewModel;
@@ -28,11 +31,13 @@ public interface AppComponent {
     void inject(AdminListViewModel adminListViewModel);
     void inject(MainActivityViewModel mainActivityViewModel);
     void inject(AdminEditorViewModel adminEditorViewModel);
-    void inject(GymAccessRepository gymAccessRepository);
     void inject(AdminsListTabViewModel adminsListTabViewModel);
-    void inject(AdminAccessRepository adminAccessRepository);
     void inject(AdminsAccessManager adminsAccessManager);
     void inject(AdminsDataManager adminsDataManager);
     void inject(AdminsListDataListener adminsListDataListener);
-    void inject (AdminsGymsDataListener AdminsGymsDataListener);
+    void inject(AdminsGymsDataListener AdminsGymsDataListener);
+    void inject(GymsDataManager gymsDataManager);
+    void inject(GymAdminsDataListener gymAdminsDataListener);
+    void inject(GymsAccessManager gymsAccessManager);
+    void inject(GymsListDataListener gymsListDataListener);
 }

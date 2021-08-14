@@ -10,6 +10,7 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.FirestoreCollections;
 import com.example.fitnessfactory.data.events.AdminGymsListListenerEvent;
 import com.example.fitnessfactory.data.events.GymsListDataListenerEvent;
+import com.example.fitnessfactory.data.firestoreCollections.BaseCollection;
 import com.example.fitnessfactory.data.firestoreCollections.OwnerGymsCollection;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.utils.ResUtils;
@@ -19,8 +20,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firestore.v1.ListenRequest;
 
 import org.greenrobot.eventbus.EventBus;
@@ -37,11 +40,27 @@ import io.reactivex.SingleEmitter;
 
 public class GymRepository extends BaseRepository {
 
-    private ListenerRegistration gymsListListener;
-
     @Override
     public String getRoot() {
-        return OwnerGymsCollection.getRoot();
+        return super.getRoot() +
+                "/" +
+                FirestoreCollections.GYMS_COLLECTION +
+                "/" +
+                FirestoreCollections.GYMS_COLLECTION;
+    }
+
+    public Single<WriteBatch> getDeleteGymBatchAsync(String gymId) {
+        return Single.create(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getDeleteGymBatchSync(gymId));
+            }
+        });
+    }
+
+    private WriteBatch getDeleteGymBatchSync(String gymId) {
+        DocumentReference documentReference = getGymDocumentReference(gymId);
+
+        return getFirestore().batch().delete(documentReference);
     }
 
     public Single<Gym> getGymAsync(String id) {
@@ -85,41 +104,12 @@ public class GymRepository extends BaseRepository {
                 .concat(ResUtils.getString(R.string.message_error_ununique_id));
     }
 
-    public Completable addGymsListListener() {
-        return Completable.create(source -> {
-            gymsListListener = getCollection().addSnapshotListener((querySnapshot, exception) -> {
-                if (exception != null) {
-                    exception.printStackTrace();
-                    if (!source.isDisposed()) {
-                        source.onError(exception);
-                    }
-                    return;
-                }
-
-                List<Gym> gyms = querySnapshot.toObjects(Gym.class);
-                EventBus.getDefault().post(new GymsListDataListenerEvent(gyms));
-            });
-
-            if (!source.isDisposed()) {
-                source.onComplete();
-            }
-        });
+    public Query getGymsListQuery() {
+        return getCollection();
     }
 
-    public Completable removeGymsListListener() {
-        return Completable.create(source -> {
-            if (gymsListListener != null) {
-                gymsListListener.remove();
-            }
-
-            if (!source.isDisposed()) {
-                source.onComplete();
-            }
-        });
-    }
-
-    public DocumentReference getGymDocumentReference(Gym gym) {
-        return getCollection().document(gym.getId());
+    private DocumentReference getGymDocumentReference(String gymId) {
+        return getCollection().document(gymId);
     }
 
     public Single<List<Gym>> getGymsByIds(List<String> gymIds) {
