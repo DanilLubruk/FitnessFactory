@@ -5,7 +5,7 @@ import java.util.List;
 public class Admin {
 
     public static final String USER_EMAIL_FIELD = "userEmail";
-    public static final String GYMS_ARRAY_FIELD = "gyms";
+    public static final String GYMS_ARRAY_FIELD = "gymsIds";
 
     private String userEmail;
     private List<String> gymsIds;

@@ -19,26 +19,13 @@ import io.reactivex.SingleEmitter;
 public class OrganisationInfoRepository extends BaseRepository {
 
     public Single<String> getOrganisationNameAsync() {
-        return Single.create(emitter -> {
-            String organisationName = getOrganisationName(emitter);
+        return SingleCreate(emitter -> {
+            String organisationName = getOrganisationName();
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(organisationName);
             }
         });
-    }
-
-    private String getOrganisationName(SingleEmitter<String> emitter) {
-        String organisationName = "";
-        try {
-            organisationName = getOrganisationName();
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-        } catch (Exception e) {
-            reportError(emitter, e);
-        }
-
-        return organisationName;
     }
 
     private String getOrganisationName() throws ExecutionException, InterruptedException {
@@ -55,7 +42,7 @@ public class OrganisationInfoRepository extends BaseRepository {
     }
 
     public Completable checkOrganisationNameAsync(String organisationName) {
-        return Completable.create(emitter -> {
+        return CompletableCreate(emitter -> {
             checkOrganisationName(organisationName);
 
             if (!emitter.isDisposed()) {
@@ -73,23 +60,13 @@ public class OrganisationInfoRepository extends BaseRepository {
     }
 
     public Completable setOrganisationNameAsync(String organisationName) {
-        return Completable.create(emitter -> {
-            setOrganisationName(emitter, organisationName);
+        return CompletableCreate(emitter -> {
+            setOrganisationName(organisationName);
 
            if (!emitter.isDisposed()) {
                emitter.onComplete();
            }
         });
-    }
-
-    private void setOrganisationName(CompletableEmitter emitter, String organisationName) {
-        try {
-            setOrganisationName(organisationName);
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-        } catch (Exception e) {
-            reportError(emitter, e);
-        }
     }
 
     private void setOrganisationName(String organisationName) throws ExecutionException, InterruptedException {

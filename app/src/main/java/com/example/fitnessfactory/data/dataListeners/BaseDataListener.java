@@ -11,10 +11,13 @@ import io.reactivex.CompletableEmitter;
 import io.reactivex.Scheduler;
 import io.reactivex.SingleEmitter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public abstract class BaseDataListener extends CollectionOperator {
 
+    private CompositeDisposable disposables = new CompositeDisposable();
     protected AtomicReference<ListenerRegistration> dataListener = new AtomicReference<>();
 
     protected FirebaseFirestore getFirestore() {
@@ -27,6 +30,16 @@ public abstract class BaseDataListener extends CollectionOperator {
 
     protected Scheduler getIOScheduler() {
         return Schedulers.io();
+    }
+
+    private void unsubscribe() {
+        if (!disposables.isDisposed()) {
+            disposables.clear();
+        }
+    }
+
+    protected void addSubscription(Disposable disposable) {
+        disposables.add(disposable);
     }
 
     protected <T> void reportError(SingleEmitter<T> emitter, Exception error) {
@@ -45,5 +58,15 @@ public abstract class BaseDataListener extends CollectionOperator {
         if (dataListener.get() != null) {
             dataListener.get().remove();
         }
+        unsubscribe();
+    }
+
+    protected ListenerRegistration getEmptyListenerRegistration() {
+        return new ListenerRegistration() {
+            @Override
+            public void remove() {
+
+            }
+        };
     }
 }

@@ -20,11 +20,10 @@ public class AdminsGymsDataListener extends BaseDataListener {
     }
 
     public void setAdminsGymsListener(String adminEmail) {
-        getAdminGymsListListener(adminEmail)
+        addSubscription(getAdminGymsListListener(adminEmail)
                 .subscribeOn(getIOScheduler())
-                .observeOn(getIOScheduler())
-                .subscribe(dataListener::set, RxUtils::handleError)
-                .dispose();
+                .observeOn(getMainThreadScheduler())
+                .subscribe(dataListener::set, RxUtils::handleError));
     }
 
     private Single<ListenerRegistration> getAdminGymsListListener(String adminEmail) {

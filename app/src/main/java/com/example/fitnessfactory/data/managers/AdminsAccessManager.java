@@ -40,7 +40,7 @@ public class AdminsAccessManager extends BaseManager {
                 .flatMap(isAdded ->
                         isAdded ?
                                 Single.just(registerBatch.get()) :
-                                adminsRepository.addAdminAsync(userEmail, registerBatch.get()))
+                                adminsRepository.getAddAdminBatchAsync(userEmail, registerBatch.get()))
                 .flatMapCompletable(this::commitBatchCompletable);
     }
 

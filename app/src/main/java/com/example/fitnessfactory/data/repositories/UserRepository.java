@@ -26,7 +26,7 @@ public class UserRepository extends BaseRepository {
     }
 
     public Single<AppUser> registerUser(String email, String userName) {
-        return Single.create(emitter -> {
+        return SingleCreate(emitter -> {
             DocumentReference documentReference = getCollection().document();
             AppUser appUser = new AppUser();
             appUser.setId(documentReference.getId());
@@ -41,11 +41,28 @@ public class UserRepository extends BaseRepository {
     }
 
     public Single<List<AppUser>> getOwnersByIds(List<String> ownerIds) {
-        return Single.create(emitter -> {
+        return SingleCreate(emitter -> {
+            List<AppUser> owners = getAppUsersById(ownerIds);
+            owners = makeCurrentUserFirstInList(owners, ownerIds.get(0));
+
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(getAppUsersById(ownerIds));
+                emitter.onSuccess(owners);
             }
         });
+    }
+
+    private List<AppUser> makeCurrentUserFirstInList(List<AppUser> owners, String currentUserId) {
+        for (int i = 0; i < owners.size(); i++) {
+            AppUser appUser = owners.get(i);
+            if (appUser.getId().equals(currentUserId)) {
+                AppUser currentUser = appUser;
+                AppUser currentFirstUser = owners.get(0);
+                owners.set(0, currentUser);
+                owners.set(i, currentFirstUser);
+            }
+        }
+
+        return owners;
     }
 
     private List<AppUser> getAppUsersById(List<String> ownerIds) throws Exception {
@@ -55,7 +72,7 @@ public class UserRepository extends BaseRepository {
     }
 
     public Single<AppUser> getAppUserByEmailAsync(String email) {
-        return Single.create(emitter -> {
+        return SingleCreate(emitter -> {
             AppUser appUser = getAppUserByEmail(email);
 
             if (!emitter.isDisposed()) {
@@ -75,7 +92,7 @@ public class UserRepository extends BaseRepository {
     }
 
     public Single<Boolean> isRegistered(String email) {
-        return Single.create(emitter -> {
+        return SingleCreate(emitter -> {
             getCollection().whereEqualTo(EMAIL_FILED, email).get()
                     .addOnSuccessListener(snapshot -> {
                         if (snapshot == null) {
@@ -146,26 +163,13 @@ public class UserRepository extends BaseRepository {
     }
 
     public Single<List<AppUser>> getUsersByEmailsAsync(List<String> emails) {
-        return Single.create(emitter -> {
-            List<AppUser> admins = getUsersByEmails(emitter, emails);
+        return SingleCreate(emitter -> {
+            List<AppUser> admins = getUsersByEmails(emails);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(admins);
             }
         });
-    }
-
-    private List<AppUser> getUsersByEmails(SingleEmitter<List<AppUser>> emitter, List<String> emails) {
-        List<AppUser> users = new ArrayList<>();
-        try {
-            users = getUsersByEmails(emails);
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-        } catch (Exception e) {
-            reportError(emitter, e);
-        }
-
-        return users;
     }
 
     private List<AppUser> getUsersByEmails(List<String> emails) throws Exception {

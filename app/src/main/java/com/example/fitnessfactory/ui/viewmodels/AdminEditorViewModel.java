@@ -94,7 +94,7 @@ public class AdminEditorViewModel extends EditorViewModel {
             return;
         }
 
-        subscribeInIOThread(gymsDataManager.getGymsByIdsAsync(admin.getEmail()),
+        subscribeInIOThread(gymsDataManager.getAdminsGymsByEmail(admin.getEmail()),
                 new SingleData<>(gyms::setValue, RxUtils::handleError));
     }
 

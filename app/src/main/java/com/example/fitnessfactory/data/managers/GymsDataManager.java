@@ -22,8 +22,8 @@ public class GymsDataManager extends BaseManager {
         FFApp.get().getAppComponent().inject(this);
     }
 
-    public Single<List<Gym>> getGymsByIdsAsync(String adminEmail) {
-        return adminsRepository.getAdminsGymsIdsAsync(adminEmail)
-                .flatMap(gymRepository::getGymsByIds);
+    public Single<List<Gym>> getAdminsGymsByEmail(String adminEmail) {
+        return adminsRepository.getAdminsGymsEmailAsync(adminEmail)
+                .flatMap(gymRepository::getGymsByIdsAsync);
     }
 }

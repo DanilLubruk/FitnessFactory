@@ -2,6 +2,7 @@ package com.example.fitnessfactory.di;
 import com.example.fitnessfactory.data.dataListeners.AdminsListDataListener;
 import com.example.fitnessfactory.data.managers.AdminsAccessManager;
 import com.example.fitnessfactory.data.managers.AdminsDataManager;
+import com.example.fitnessfactory.data.managers.AuthManager;
 import com.example.fitnessfactory.data.managers.GymsAccessManager;
 import com.example.fitnessfactory.data.managers.GymsDataManager;
 import com.example.fitnessfactory.ui.viewmodels.AdminEditorViewModel;
@@ -33,4 +34,5 @@ public interface AppComponent {
     void inject(AdminsListDataListener adminsListDataListener);
     void inject(GymsDataManager gymsDataManager);
     void inject(GymsAccessManager gymsAccessManager);
+    void inject(AuthManager authManager);
 }

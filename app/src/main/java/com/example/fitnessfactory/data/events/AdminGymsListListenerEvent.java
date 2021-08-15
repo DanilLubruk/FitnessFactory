@@ -1,4 +1,4 @@
 package com.example.fitnessfactory.data.events;
 
-public class AdminGymsListListenerEvent {
+public class AdminGymsListListenerEvent extends BaseEvent {
 }

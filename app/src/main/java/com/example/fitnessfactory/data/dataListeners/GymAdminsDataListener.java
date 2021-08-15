@@ -1,6 +1,5 @@
 package com.example.fitnessfactory.data.dataListeners;
 
-import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.events.GymAdminsListListenerEvent;
 import com.example.fitnessfactory.data.firestoreCollections.OwnerAdminsCollection;
 import com.example.fitnessfactory.data.models.Admin;
@@ -19,11 +18,10 @@ public class GymAdminsDataListener extends BaseDataListener {
     }
 
     public void setGymAdminsDataListener(String gymId) {
-        getGymAdminsListener(gymId)
+        addSubscription(getGymAdminsListener(gymId)
                 .subscribeOn(getIOScheduler())
-                .observeOn(getIOScheduler())
-                .subscribe(dataListener::set, RxUtils::handleError)
-                .dispose();
+                .observeOn(getMainThreadScheduler())
+                .subscribe(dataListener::set, RxUtils::handleError));
     }
 
     private Single<ListenerRegistration> getGymAdminsListener(String gymId) {

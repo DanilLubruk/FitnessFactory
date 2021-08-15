@@ -19,11 +19,10 @@ public class GymsListDataListener extends BaseDataListener {
     }
 
     public void setGymsListListener() {
-        getGymsListListener()
+       addSubscription(getGymsListListener()
                 .subscribeOn(getIOScheduler())
-                .observeOn(getIOScheduler())
-                .subscribe(dataListener::set, RxUtils::handleError)
-                .dispose();
+                .observeOn(getMainThreadScheduler())
+                .subscribe(dataListener::set, RxUtils::handleError));
     }
 
     private Single<ListenerRegistration> getGymsListListener() {

@@ -68,6 +68,11 @@ public class BaseViewModel extends ViewModel {
         disposables.add(disposable);
     }
 
+    protected <T> void subscribe(Single<T> subscriber, SingleData<T> observer) {
+        addSubscription(subscriber
+                .subscribe(observer.getObserver()::onSuccess, observer.getObserver()::onError));
+    }
+
     protected <T> void subscribeInIOThread(Completable subscriber,
                                            Action onComplete,
                                            Consumer<? super Throwable> onError) {
@@ -77,12 +82,20 @@ public class BaseViewModel extends ViewModel {
                 .subscribe(onComplete, onError));
     }
 
+    protected <T> void subscribe(Completable subscriber,
+                                 Action onComplete,
+                                 Consumer<? super Throwable> onError) {
+        addSubscription(subscriber
+                .subscribe(onComplete, onError));
+    }
+
     protected <T> void subscribeInIOThread(Completable subscriber,
                                            Consumer<? super Throwable> onError) {
         addSubscription(subscriber
                 .subscribeOn(getIOScheduler())
                 .observeOn(getMainThreadScheduler())
-                .subscribe(() -> {}, onError));
+                .subscribe(() -> {
+                }, onError));
     }
 
     protected <T> void subscribeInIOThread(Completable subscriber) {

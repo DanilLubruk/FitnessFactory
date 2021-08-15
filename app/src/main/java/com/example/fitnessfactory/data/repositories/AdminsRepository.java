@@ -1,6 +1,5 @@
 package com.example.fitnessfactory.data.repositories;
 
-import com.example.fitnessfactory.data.FirestoreCollections;
 import com.example.fitnessfactory.data.firestoreCollections.OwnerAdminsCollection;
 import com.example.fitnessfactory.data.models.Admin;
 import com.google.android.gms.tasks.Tasks;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Completable;
-import io.reactivex.CompletableEmitter;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 
@@ -27,29 +25,11 @@ public class AdminsRepository extends BaseRepository {
     }
 
     public Single<WriteBatch> getRemoveGymFromAdminBatchAsync(WriteBatch writeBatch, String gymId) {
-        return Single.create(emitter -> {
+        return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(getRemoveGymFromAdminBatch(emitter, writeBatch, gymId));
+                emitter.onSuccess(getRemoveGymFromAdminBatch(writeBatch, gymId));
             }
         });
-    }
-
-    private WriteBatch getRemoveGymFromAdminBatch(SingleEmitter<WriteBatch> emitter,
-                                                  WriteBatch writeBatch,
-                                                  String gymId) {
-        WriteBatch removeBatch;
-
-        try {
-            removeBatch = getRemoveGymFromAdminBatch(writeBatch, gymId);
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-            return null;
-        } catch (Exception e) {
-            reportError(emitter, e);
-            return null;
-        }
-
-        return removeBatch;
     }
 
     private WriteBatch getRemoveGymFromAdminBatch(WriteBatch writeBatch, String gymId) throws ExecutionException, InterruptedException {
@@ -69,27 +49,13 @@ public class AdminsRepository extends BaseRepository {
     }
 
     public Single<List<String>> getAdminsEmailsByGymIdAsync(String gymId) {
-        return Single.create(emitter -> {
-            List<String> adminsEmails = getAdminsEmailsByGymId(emitter, gymId);
+        return SingleCreate(emitter -> {
+            List<String> adminsEmails = getAdminsEmailsByGymId(gymId);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(adminsEmails);
             }
         });
-    }
-
-    private List<String> getAdminsEmailsByGymId(SingleEmitter<List<String>> emitter, String gymId) {
-        List<String> adminsEmails = new ArrayList<>();
-
-        try {
-            adminsEmails = getAdminsEmailsByGymId(gymId);
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-        } catch (Exception e) {
-            reportError(emitter, e);
-        }
-
-        return adminsEmails;
     }
 
     private List<String> getAdminsEmailsByGymId(String gymId) throws ExecutionException, InterruptedException {
@@ -103,9 +69,9 @@ public class AdminsRepository extends BaseRepository {
         return adminsEmails;
     }
 
-    public Single<List<String>> getAdminsGymsIdsAsync(String adminEmail) {
-        return Single.create(emitter -> {
-            List<String> gymsIds = getAdminsGymsIds(emitter, adminEmail);
+    public Single<List<String>> getAdminsGymsEmailAsync(String adminEmail) {
+        return SingleCreate(emitter -> {
+            List<String> gymsIds = getAdminsGymsByEmail(adminEmail);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(gymsIds);
@@ -113,47 +79,33 @@ public class AdminsRepository extends BaseRepository {
         });
     }
 
-    private List<String> getAdminsGymsIds(SingleEmitter<List<String>> emitter, String adminEmail) {
-        List<String> gymsIds = new ArrayList<>();
+    private List<String> getAdminsGymsByEmail(String adminEmail) throws Exception {
+        List<String> adminGymsIds = new ArrayList<>();
 
-        try {
-            gymsIds = getAdminsGymsIds(adminEmail);
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-        } catch (Exception e) {
-            reportError(emitter, e);
+        List<Admin> admins = Tasks.await(
+                getCollection().whereEqualTo(Admin.USER_EMAIL_FIELD, adminEmail).get()).toObjects(Admin.class);
+        if (admins.isEmpty()) {
+            return adminGymsIds;
         }
 
-        return gymsIds;
-    }
+        checkEmailUniqueness(admins);
 
-    private List<String> getAdminsGymsIds(String adminEmail) throws Exception {
-        Admin admin = getAdminSnapshot(adminEmail).toObject(Admin.class);
-        if (admin == null) {
-            throw new Exception();
+        Admin admin = admins.get(0);
+        if (admin.getGymsIds() != null) {
+            adminGymsIds = admin.getGymsIds();
         }
 
-        return admin.getGymsIds();
+        return adminGymsIds;
     }
 
     public Completable removeGymFromAdminAsync(String adminEmail, String gymId) {
-        return Completable.create(emitter -> {
-            removeGymFromAdmin(emitter, adminEmail, gymId);
+        return CompletableCreate(emitter -> {
+            removeGymFromAdmin(adminEmail, gymId);
 
             if (!emitter.isDisposed()) {
                 emitter.onComplete();
             }
         });
-    }
-
-    private void removeGymFromAdmin(CompletableEmitter emitter, String adminEmail, String gymId) {
-        try {
-            removeGymFromAdmin(adminEmail, gymId);
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-        } catch (Exception e) {
-            reportError(emitter, e);
-        }
     }
 
     private void removeGymFromAdmin(String adminEmail, String gymId) throws Exception {
@@ -161,8 +113,8 @@ public class AdminsRepository extends BaseRepository {
     }
 
     public Completable addGymToAdminAsync(String adminEmail, String gymId) {
-        return Completable.create(emitter -> {
-            addGymToAdmin(emitter, adminEmail, gymId);
+        return CompletableCreate(emitter -> {
+            addGymToAdmin(adminEmail, gymId);
 
             if (!emitter.isDisposed()) {
                 emitter.onComplete();
@@ -170,46 +122,18 @@ public class AdminsRepository extends BaseRepository {
         });
     }
 
-    private void addGymToAdmin(CompletableEmitter emitter, String adminEmail, String gymId) {
-        try {
-            addGymToAdmin(adminEmail, gymId);
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-        } catch (Exception e) {
-            reportError(emitter, e);
-        }
-    }
-
     private void addGymToAdmin(String adminEmail, String gymId) throws Exception {
         Tasks.await(getAdminDocument(adminEmail).update(Admin.GYMS_ARRAY_FIELD, FieldValue.arrayUnion(gymId)));
     }
 
     public Single<WriteBatch> getDeleteAdminBatchAsync(WriteBatch writeBatch, String adminEmail) {
-        return Single.create(emitter -> {
-            WriteBatch deleteBatch = getDeleteAdminBatch(emitter, writeBatch, adminEmail);
+        return SingleCreate(emitter -> {
+            WriteBatch deleteBatch = getDeleteAdminBatch(writeBatch, adminEmail);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(deleteBatch);
             }
         });
-    }
-
-    private WriteBatch getDeleteAdminBatch(SingleEmitter<WriteBatch> emitter,
-                                           WriteBatch writeBatch,
-                                           String adminEmail) {
-        WriteBatch deleteBatch;
-
-        try {
-            deleteBatch = getDeleteAdminBatch(writeBatch, adminEmail);
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-            return null;
-        } catch (Exception e) {
-            reportError(emitter, e);
-            return null;
-        }
-
-        return deleteBatch;
     }
 
     private WriteBatch getDeleteAdminBatch(WriteBatch writeBatch, String adminEmail) throws Exception {
@@ -222,15 +146,13 @@ public class AdminsRepository extends BaseRepository {
 
     private DocumentSnapshot getAdminSnapshot(String adminEmail) throws Exception {
         List<DocumentSnapshot> documentSnapshots =
-                Tasks.await(getAdminQueryByEmail(adminEmail).get()).getDocuments();
+                Tasks.await(getCollection().whereEqualTo(Admin.USER_EMAIL_FIELD, adminEmail).get()).getDocuments();
 
         checkEmailUniqueness(documentSnapshots);
 
-        return documentSnapshots.get(0);
-    }
+        checkDataEmpty(documentSnapshots);
 
-    public Query getAdminQueryByEmail(String adminEmail) {
-        return getCollection().whereEqualTo(Admin.USER_EMAIL_FIELD, adminEmail);
+        return documentSnapshots.get(0);
     }
 
     public Query getAdminQueryByGymId(String gymId) {
@@ -238,27 +160,13 @@ public class AdminsRepository extends BaseRepository {
     }
 
     public Single<List<String>> getAdminsEmailsAsync() {
-        return Single.create(emitter -> {
-            List<String> adminsEmails = getAdminsEmails(emitter);
+        return SingleCreate(emitter -> {
+            List<String> adminsEmails = getAdminsEmails();
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(adminsEmails);
             }
         });
-    }
-
-    private List<String> getAdminsEmails(SingleEmitter<List<String>> emitter) {
-        List<String> adminsEmails = new ArrayList<>();
-
-        try {
-            adminsEmails = getAdminsEmails();
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-        } catch (Exception e) {
-            reportError(emitter, e);
-        }
-
-        return adminsEmails;
     }
 
     private List<String> getAdminsEmails() throws ExecutionException, InterruptedException {
@@ -272,15 +180,15 @@ public class AdminsRepository extends BaseRepository {
         return adminsEmails;
     }
 
-    public Single<WriteBatch> addAdminAsync(String userEmail, WriteBatch writeBatch) {
-        return Single.create(emitter -> {
+    public Single<WriteBatch> getAddAdminBatchAsync(String userEmail, WriteBatch writeBatch) {
+        return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(addAdmin(userEmail, writeBatch));
+                emitter.onSuccess(getAddAdminBatch(userEmail, writeBatch));
             }
         });
     }
 
-    private WriteBatch addAdmin(String userEmail, WriteBatch writeBatch) {
+    private WriteBatch getAddAdminBatch(String userEmail, WriteBatch writeBatch) {
         DocumentReference documentReference = getCollection().document();
         Admin admin = new Admin();
         admin.setUserEmail(userEmail);
@@ -289,26 +197,13 @@ public class AdminsRepository extends BaseRepository {
     }
 
     public Single<Boolean> isAdminAddedAsync(String userEmail) {
-        return Single.create(emitter -> {
-            boolean isAdminAdded = isAdminAdded(emitter, userEmail);
+        return SingleCreate(emitter -> {
+            boolean isAdminAdded = isAdminAdded(userEmail);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(isAdminAdded);
             }
         });
-    }
-
-    private boolean isAdminAdded(SingleEmitter<Boolean> emitter, String userEmail) {
-        boolean isAdminAdded = false;
-        try {
-            isAdminAdded = isAdminAdded(userEmail);
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-        } catch (Exception e) {
-            reportError(emitter, e);
-        }
-
-        return isAdminAdded;
     }
 
     private boolean isAdminAdded(String userEmail) throws ExecutionException, InterruptedException {

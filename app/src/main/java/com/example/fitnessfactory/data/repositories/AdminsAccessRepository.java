@@ -1,7 +1,5 @@
 package com.example.fitnessfactory.data.repositories;
 
-import com.example.fitnessfactory.data.FirestoreCollections;
-import com.example.fitnessfactory.data.events.AdminGymsListListenerEvent;
 import com.example.fitnessfactory.data.firestoreCollections.AdminAccessCollection;
 import com.example.fitnessfactory.data.models.AdminAccessEntry;
 import com.example.fitnessfactory.data.models.AppUser;
@@ -12,13 +10,10 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 
@@ -30,7 +25,7 @@ public class AdminsAccessRepository extends BaseRepository {
     }
 
     public Single<WriteBatch> getRegisterAdminAccessEntryBatchAsync(String ownerId, String userEmail) {
-        return Single.create(emitter -> {
+        return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(getRegisterAdminAccessBatchEntry(ownerId, userEmail));
             }
@@ -47,27 +42,13 @@ public class AdminsAccessRepository extends BaseRepository {
     }
 
     public Single<Boolean> isAdminRegisteredAsync(String email) {
-        return Single.create(emitter -> {
-            boolean isAdminRegistered = isAdminRegistered(emitter, email);
+        return SingleCreate(emitter -> {
+            boolean isAdminRegistered = isAdminRegistered(email);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(isAdminRegistered);
             }
         });
-
-    }
-
-    private boolean isAdminRegistered(SingleEmitter<Boolean> emitter, String email) {
-        boolean isAdminRegistered = false;
-        try {
-            isAdminRegistered = isAdminRegistered(email);
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-        } catch (Exception e) {
-            reportError(emitter, e);
-        }
-
-        return isAdminRegistered;
     }
 
     private boolean isAdminRegistered(String email) throws ExecutionException, InterruptedException {
@@ -78,10 +59,10 @@ public class AdminsAccessRepository extends BaseRepository {
     }
 
     public Single<List<String>> getOwnersByInvitedEmail(AppUser user) {
-        return Single.create(emitter -> {
+        return SingleCreate(emitter -> {
             List<String> ownerIds = new ArrayList<>();
             ownerIds.add(user.getId());
-            ownerIds.addAll(getOwnerIds(emitter, user.getEmail()));
+            ownerIds.addAll(getOwnerIds(user.getEmail()));
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(ownerIds);
@@ -89,63 +70,31 @@ public class AdminsAccessRepository extends BaseRepository {
         });
     }
 
-    private List<String> getOwnerIds(SingleEmitter<List<String>> emitter, String userEmail) {
-        List<String> ownerIds = new ArrayList<>();
-
-        try {
-            ownerIds = getOwnerIds(userEmail);
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-        } catch (Exception e) {
-            reportError(emitter, e);
-        }
-
-        return ownerIds;
-    }
-
     private List<String> getOwnerIds(String userEmail) throws Exception {
         List<String> ownerIds = new ArrayList<>();
 
-        for (DocumentSnapshot documentSnapshot : getOwnerIdsDocuments(userEmail)) {
-            AdminAccessEntry adminAccessEntry = documentSnapshot.toObject(AdminAccessEntry.class);
-
-            if (adminAccessEntry != null) {
-                ownerIds.add(adminAccessEntry.getOwnerId());
-            }
+        for (AdminAccessEntry adminAccessEntry : getAdminAccessEntriesByUserEmail(userEmail)) {
+            ownerIds.add(adminAccessEntry.getOwnerId());
         }
 
         return ownerIds;
     }
 
-    private List<DocumentSnapshot> getOwnerIdsDocuments(String userEmail) throws Exception {
-        QuerySnapshot querySnapshot = Tasks.await(getCollection().whereEqualTo(AdminAccessEntry.USER_EMAIL_FIELD, userEmail).get());
-        return querySnapshot.getDocuments();
+    private List<AdminAccessEntry> getAdminAccessEntriesByUserEmail(String userEmail) throws Exception {
+        return Tasks.await(
+                getCollection()
+                        .whereEqualTo(AdminAccessEntry.USER_EMAIL_FIELD, userEmail).get())
+                .toObjects(AdminAccessEntry.class);
     }
 
     public Single<WriteBatch> getDeleteAdminAccessEntryBatchAsync(String ownerId, String email) {
-        return Single.create(emitter -> {
-            WriteBatch writeBatch = getDeleteAdminAccessBatchEntry(emitter, ownerId, email);
+        return SingleCreate(emitter -> {
+            WriteBatch writeBatch = getDeleteAdminAccessBatchEntry(ownerId, email);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(writeBatch);
             }
         });
-    }
-
-    private WriteBatch getDeleteAdminAccessBatchEntry(SingleEmitter<WriteBatch> emitter, String ownerId, String email) {
-        WriteBatch writeBatch;
-
-        try {
-            writeBatch = getDeleteAdminAccessBatchEntry(ownerId, email);
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-            return null;
-        } catch (Exception e) {
-            reportError(emitter, e);
-            return null;
-        }
-
-        return writeBatch;
     }
 
     private WriteBatch getDeleteAdminAccessBatchEntry(String ownerId, String email) throws Exception {
@@ -170,13 +119,5 @@ public class AdminsAccessRepository extends BaseRepository {
         return getCollection()
                 .whereEqualTo(AdminAccessEntry.OWNER_ID_FIELD, ownerId)
                 .whereEqualTo(AdminAccessEntry.USER_EMAIL_FIELD, email);
-    }
-
-    public Query getAdminsListQuery(List<String> adminsEmails) throws Exception {
-        if (adminsEmails.size() == 0) {
-            throw new Exception();
-        }
-
-        return getCollection().whereIn(AdminAccessEntry.USER_EMAIL_FIELD, adminsEmails);
     }
 }

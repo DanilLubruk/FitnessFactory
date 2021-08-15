@@ -1,4 +1,6 @@
 package com.example.fitnessfactory.ui.viewmodels.lists;
+import android.util.Log;
+
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.dataListeners.GymsListDataListener;
 import com.example.fitnessfactory.data.managers.GymsAccessManager;

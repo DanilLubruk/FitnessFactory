@@ -1,40 +1,22 @@
 package com.example.fitnessfactory.data.repositories;
 
 import android.text.TextUtils;
-import android.util.Log;
 
-import androidx.annotation.Nullable;
-
-import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
-import com.example.fitnessfactory.data.FirestoreCollections;
-import com.example.fitnessfactory.data.events.AdminGymsListListenerEvent;
-import com.example.fitnessfactory.data.events.GymsListDataListenerEvent;
-import com.example.fitnessfactory.data.firestoreCollections.BaseCollection;
 import com.example.fitnessfactory.data.firestoreCollections.OwnerGymsCollection;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Transaction;
 import com.google.firebase.firestore.WriteBatch;
-import com.google.firestore.v1.ListenRequest;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import javax.inject.Inject;
-
-import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 
@@ -60,7 +42,7 @@ public class GymRepository extends BaseRepository {
     }
 
     public Single<Gym> getGymAsync(String id) {
-        return Single.create(emitter -> {
+        return SingleCreate(emitter -> {
             Gym gym = getGym(id);
 
             if (!emitter.isDisposed()) {
@@ -100,17 +82,13 @@ public class GymRepository extends BaseRepository {
                 .concat(ResUtils.getString(R.string.message_error_ununique_id));
     }
 
-    public Query getGymsListQuery() {
-        return getCollection();
-    }
-
     private DocumentReference getGymDocumentReference(String gymId) {
         return getCollection().document(gymId);
     }
 
-    public Single<List<Gym>> getGymsByIds(List<String> gymIds) {
-        return Single.create(emitter -> {
-            List<Gym> gyms = getGymsByIds(emitter, gymIds);
+    public Single<List<Gym>> getGymsByIdsAsync(List<String> gymIds) {
+        return SingleCreate(emitter -> {
+            List<Gym> gyms = getGymsByIds(gymIds);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(gyms);
@@ -118,28 +96,16 @@ public class GymRepository extends BaseRepository {
         });
     }
 
-    private List<Gym> getGymsByIds(SingleEmitter<List<Gym>> emitter, List<String> gymIds) {
-        List<Gym> gyms = new ArrayList<>();
+    private List<Gym> getGymsByIds(List<String> gymIds) throws ExecutionException, InterruptedException {
         if (gymIds.size() == 0) {
-            if (!emitter.isDisposed()) {
-                emitter.onSuccess(gyms);
-            }
-            return gyms;
+            return new ArrayList();
         }
 
-        try {
-            gyms = Tasks.await(getCollection().whereIn(Gym.ID_FIELD, gymIds).get()).toObjects(Gym.class);
-        } catch (InterruptedException e) {
-            reportError(emitter, e);
-        } catch (Exception e) {
-            reportError(emitter, e);
-        }
-
-        return gyms;
+        return Tasks.await(getCollection().whereIn(Gym.ID_FIELD, gymIds).get()).toObjects(Gym.class);
     }
 
     public Single<String> saveAsync(Gym gym) {
-        return Single.create(emitter -> {
+        return SingleCreate(emitter -> {
             String id = save(gym);
 
             if (!emitter.isDisposed()) {

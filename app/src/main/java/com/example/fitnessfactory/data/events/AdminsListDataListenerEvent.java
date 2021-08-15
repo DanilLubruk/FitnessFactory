@@ -4,6 +4,6 @@ import com.example.fitnessfactory.data.models.AppUser;
 
 import java.util.List;
 
-public class AdminsListDataListenerEvent {
+public class AdminsListDataListenerEvent extends BaseEvent {
 
 }

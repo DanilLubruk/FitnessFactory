@@ -1,18 +1,20 @@
 package com.example.fitnessfactory.data.dataListeners;
 
 import com.example.fitnessfactory.FFApp;
+import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.events.AdminsListDataListenerEvent;
 import com.example.fitnessfactory.data.firestoreCollections.AdminAccessCollection;
 import com.example.fitnessfactory.data.models.AdminAccessEntry;
 import com.example.fitnessfactory.data.repositories.AdminsRepository;
+import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.RxUtils;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.core.ListenerRegistrationImpl;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
@@ -33,18 +35,25 @@ public class AdminsListDataListener extends BaseDataListener {
     }
 
     public void setAdminsListListener() {
-        adminsRepository.getAdminsEmailsAsync()
+        addSubscription(adminsRepository.getAdminsEmailsAsync()
                 .subscribeOn(getIOScheduler())
                 .observeOn(getIOScheduler())
                 .flatMap(this::getAdminsListListener)
+                .observeOn(getMainThreadScheduler())
                 .subscribe(
                         dataListener::set,
-                        RxUtils::handleError)
-                .dispose();
+                        RxUtils::handleError));
     }
 
     private Single<ListenerRegistration> getAdminsListListener(List<String> adminsEmails) {
         return Single.create(emitter -> {
+            if (adminsEmails.size() == 0) {
+                if (!emitter.isDisposed()) {
+                    emitter.onSuccess(getEmptyListenerRegistration());
+                }
+                return;
+            }
+
             ListenerRegistration adminsListListener =
                     getAdminsListQuery(adminsEmails)
                             .addSnapshotListener(((value, error) -> {
@@ -61,11 +70,7 @@ public class AdminsListDataListener extends BaseDataListener {
         });
     }
 
-    private Query getAdminsListQuery(List<String> adminsEmails) throws Exception {
-        if (adminsEmails.size() == 0) {
-            throw new Exception();
-        }
-
+    private Query getAdminsListQuery(List<String> adminsEmails) {
         return getCollection().whereIn(AdminAccessEntry.USER_EMAIL_FIELD, adminsEmails);
     }
 }
