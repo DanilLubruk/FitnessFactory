@@ -40,7 +40,7 @@ public class AuthManager extends BaseManager {
                 .subscribeOn(getIOScheduler())
                 .flatMap(email -> {
                     userEmail.set(email);
-                    return userRepository.isRegistered(email);
+                    return userRepository.isUserRegisteredAsync(email);
                 })
                 .observeOn(getIOScheduler())
                 .flatMap(isRegistered ->

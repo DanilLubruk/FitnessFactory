@@ -28,14 +28,14 @@ public class AdminsAccessManager extends BaseManager {
     public Completable createAdmin(String ownerId, String userEmail) {
         AtomicReference<WriteBatch> registerBatch = new AtomicReference<>();
 
-        return accessRepository.isAdminRegisteredAsync(userEmail)
+        return accessRepository.isAdminWithThisEmailRegisteredAsync(userEmail)
                 .flatMap(isRegistered ->
                         isRegistered ?
                                 Single.error(new Exception(ResUtils.getString(R.string.message_admin_is_registered)))
                                 : accessRepository.getRegisterAdminAccessEntryBatchAsync(ownerId, userEmail))
                 .flatMap(writeBatch -> {
                     registerBatch.set(writeBatch);
-                    return adminsRepository.isAdminAddedAsync(userEmail);
+                    return adminsRepository.isAdminWithThisEmailAddedAsync(userEmail);
                 })
                 .flatMap(isAdded ->
                         isAdded ?

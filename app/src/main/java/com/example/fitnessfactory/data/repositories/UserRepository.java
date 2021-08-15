@@ -12,6 +12,7 @@ import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
@@ -91,75 +92,22 @@ public class UserRepository extends BaseRepository {
         return document.toObject(AppUser.class);
     }
 
-    public Single<Boolean> isRegistered(String email) {
+    public Single<Boolean> isUserRegisteredAsync(String email) {
         return SingleCreate(emitter -> {
-            getCollection().whereEqualTo(EMAIL_FILED, email).get()
-                    .addOnSuccessListener(snapshot -> {
-                        if (snapshot == null) {
-                            if (!emitter.isDisposed()) {
-                                emitter.onSuccess(false);
-                            }
-                        }
+            boolean isUserRegistered = isUserRegistered(email);
 
-
-                        List<DocumentSnapshot> documents = snapshot.getDocuments();
-                        boolean isRegistered = documents.size() > 0;
-
-                        if (!emitter.isDisposed()) {
-                            emitter.onSuccess(isRegistered);
-                        }
-                    })
-                    .addOnFailureListener(exception -> {
-                        if (!emitter.isDisposed()) {
-                            emitter.onError(exception);
-                        }
-                    });
-        });
-    }
-
-    public Single<Boolean> saveUserId(String email) {
-        return Single.create(emitter -> {
-            getCollection().whereEqualTo(EMAIL_FILED, email).get()
-                    .addOnSuccessListener(snapshot -> {
-                        saveUserId(snapshot, emitter);
-
-                        if (!emitter.isDisposed()) {
-                            emitter.onSuccess(true);
-                        }
-                    })
-                    .addOnFailureListener(exception -> {
-                        if (!emitter.isDisposed()) {
-                            emitter.onError(exception);
-                        }
-                    });
-        });
-    }
-
-    private void saveUserId(QuerySnapshot snapshot, SingleEmitter<Boolean> emitter) {
-        try {
-            saveUserId(snapshot);
-        } catch (Exception e) {
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(false);
+                emitter.onSuccess(isUserRegistered);
             }
-        }
+        });
     }
 
-    private void saveUserId(QuerySnapshot snapshot) throws Exception {
-        if (snapshot == null) {
-            throw new Exception();
-        }
+    private boolean isUserRegistered(String email) throws ExecutionException, InterruptedException {
+        List<DocumentSnapshot> documentSnapshots =
+                Tasks.await(
+                        getCollection().whereEqualTo(EMAIL_FILED, email).get()).getDocuments();
 
-        List<DocumentSnapshot> documents = snapshot.getDocuments();
-        checkEmailUniqueness(documents);
-
-        DocumentSnapshot userSnapshot = documents.get(0);
-        AppUser user = userSnapshot.toObject(AppUser.class);
-        if (user == null) {
-            throw new Exception();
-        }
-
-        AppPrefs.gymOwnerId().setValue(user.getId());
+        return documentSnapshots.size() > 0;
     }
 
     public Single<List<AppUser>> getUsersByEmailsAsync(List<String> emails) {

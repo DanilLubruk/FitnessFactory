@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
 
 public class AdminsAccessRepository extends BaseRepository {
 
@@ -41,9 +40,9 @@ public class AdminsAccessRepository extends BaseRepository {
         return getFirestore().batch().set(docReference, adminAccessEntry);
     }
 
-    public Single<Boolean> isAdminRegisteredAsync(String email) {
+    public Single<Boolean> isAdminWithThisEmailRegisteredAsync(String email) {
         return SingleCreate(emitter -> {
-            boolean isAdminRegistered = isAdminRegistered(email);
+            boolean isAdminRegistered = isAdminWithThisEmailRegistered(email);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(isAdminRegistered);
@@ -51,11 +50,10 @@ public class AdminsAccessRepository extends BaseRepository {
         });
     }
 
-    private boolean isAdminRegistered(String email) throws ExecutionException, InterruptedException {
+    private boolean isAdminWithThisEmailRegistered(String email) throws ExecutionException, InterruptedException {
         QuerySnapshot snapshot = Tasks.await(getCollection().whereEqualTo(AdminAccessEntry.USER_EMAIL_FIELD, email).get());
-        boolean hasAdminAccessEntryWithThisEmail = snapshot.getDocuments().size() > 0;
 
-        return hasAdminAccessEntryWithThisEmail;
+        return snapshot.getDocuments().size() > 0;
     }
 
     public Single<List<String>> getOwnersByInvitedEmail(AppUser user) {

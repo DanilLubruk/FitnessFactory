@@ -15,7 +15,6 @@ import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
 
 public class AdminsRepository extends BaseRepository {
 
@@ -109,7 +108,7 @@ public class AdminsRepository extends BaseRepository {
     }
 
     private void removeGymFromAdmin(String adminEmail, String gymId) throws Exception {
-        Tasks.await(getAdminDocument(adminEmail).update(Admin.GYMS_ARRAY_FIELD, FieldValue.arrayRemove(gymId)));
+        Tasks.await(getAdminDocumentReference(adminEmail).update(Admin.GYMS_ARRAY_FIELD, FieldValue.arrayRemove(gymId)));
     }
 
     public Completable addGymToAdminAsync(String adminEmail, String gymId) {
@@ -123,7 +122,7 @@ public class AdminsRepository extends BaseRepository {
     }
 
     private void addGymToAdmin(String adminEmail, String gymId) throws Exception {
-        Tasks.await(getAdminDocument(adminEmail).update(Admin.GYMS_ARRAY_FIELD, FieldValue.arrayUnion(gymId)));
+        Tasks.await(getAdminDocumentReference(adminEmail).update(Admin.GYMS_ARRAY_FIELD, FieldValue.arrayUnion(gymId)));
     }
 
     public Single<WriteBatch> getDeleteAdminBatchAsync(WriteBatch writeBatch, String adminEmail) {
@@ -137,10 +136,10 @@ public class AdminsRepository extends BaseRepository {
     }
 
     private WriteBatch getDeleteAdminBatch(WriteBatch writeBatch, String adminEmail) throws Exception {
-        return writeBatch.delete(getAdminDocument(adminEmail));
+        return writeBatch.delete(getAdminDocumentReference(adminEmail));
     }
 
-    private DocumentReference getAdminDocument(String adminEmail) throws Exception {
+    private DocumentReference getAdminDocumentReference(String adminEmail) throws Exception {
         return getAdminSnapshot(adminEmail).getReference();
     }
 
@@ -196,9 +195,9 @@ public class AdminsRepository extends BaseRepository {
         return writeBatch.set(documentReference, admin);
     }
 
-    public Single<Boolean> isAdminAddedAsync(String userEmail) {
+    public Single<Boolean> isAdminWithThisEmailAddedAsync(String userEmail) {
         return SingleCreate(emitter -> {
-            boolean isAdminAdded = isAdminAdded(userEmail);
+            boolean isAdminAdded = isAdminWithThisEmailAdded(userEmail);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(isAdminAdded);
@@ -206,11 +205,9 @@ public class AdminsRepository extends BaseRepository {
         });
     }
 
-    private boolean isAdminAdded(String userEmail) throws ExecutionException, InterruptedException {
+    private boolean isAdminWithThisEmailAdded(String userEmail) throws ExecutionException, InterruptedException {
         List<DocumentSnapshot> admins =
                 Tasks.await(getCollection().whereEqualTo(Admin.USER_EMAIL_FIELD, userEmail).get()).getDocuments();
-        boolean isAdminWithThisEmailAdded = admins.size() > 0;
-
-        return isAdminWithThisEmailAdded;
+        return admins.size() > 0;
     }
 }
