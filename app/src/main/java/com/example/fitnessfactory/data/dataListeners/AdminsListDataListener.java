@@ -1,61 +1,34 @@
 package com.example.fitnessfactory.data.dataListeners;
 
-import com.example.fitnessfactory.FFApp;
-import com.example.fitnessfactory.R;
+import android.util.Log;
 import com.example.fitnessfactory.data.events.AdminsListDataListenerEvent;
-import com.example.fitnessfactory.data.firestoreCollections.AdminAccessCollection;
-import com.example.fitnessfactory.data.models.AdminAccessEntry;
-import com.example.fitnessfactory.data.repositories.AdminsRepository;
-import com.example.fitnessfactory.utils.ResUtils;
+import com.example.fitnessfactory.data.firestoreCollections.OwnerAdminsCollection;
 import com.example.fitnessfactory.utils.RxUtils;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.core.ListenerRegistrationImpl;
-
 import org.greenrobot.eventbus.EventBus;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
 import io.reactivex.Single;
 
-public class AdminsListDataListener extends BaseDataListener {
-
-    @Inject
-    AdminsRepository adminsRepository;
+public class AdminsListDataListener extends BaseDataListener { ;
 
     @Override
     protected String getRoot() {
-        return AdminAccessCollection.getRoot();
-    }
-
-    public AdminsListDataListener() {
-        FFApp.get().getAppComponent().inject(this);
+        return OwnerAdminsCollection.getRoot();
     }
 
     public void setAdminsListListener() {
-        addSubscription(adminsRepository.getAdminsEmailsAsync()
+        addSubscription(getAdminsListListener()
                 .subscribeOn(getIOScheduler())
-                .observeOn(getIOScheduler())
-                .flatMap(this::getAdminsListListener)
                 .observeOn(getMainThreadScheduler())
                 .subscribe(
                         dataListener::set,
                         RxUtils::handleError));
     }
 
-    private Single<ListenerRegistration> getAdminsListListener(List<String> adminsEmails) {
+    private Single<ListenerRegistration> getAdminsListListener() {
         return Single.create(emitter -> {
-            if (adminsEmails.size() == 0) {
-                if (!emitter.isDisposed()) {
-                    emitter.onSuccess(getEmptyListenerRegistration());
-                }
-                return;
-            }
-
             ListenerRegistration adminsListListener =
-                    getAdminsListQuery(adminsEmails)
+                    getAdminsListQuery()
                             .addSnapshotListener(((value, error) -> {
                                 if (error != null) {
                                     reportError(emitter, error);
@@ -70,7 +43,7 @@ public class AdminsListDataListener extends BaseDataListener {
         });
     }
 
-    private Query getAdminsListQuery(List<String> adminsEmails) {
-        return getCollection().whereIn(AdminAccessEntry.USER_EMAIL_FIELD, adminsEmails);
+    private Query getAdminsListQuery() {
+        return getCollection();
     }
 }

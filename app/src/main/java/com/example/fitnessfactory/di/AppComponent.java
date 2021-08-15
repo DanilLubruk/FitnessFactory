@@ -31,7 +31,6 @@ public interface AppComponent {
     void inject(AdminsListTabViewModel adminsListTabViewModel);
     void inject(AdminsAccessManager adminsAccessManager);
     void inject(AdminsDataManager adminsDataManager);
-    void inject(AdminsListDataListener adminsListDataListener);
     void inject(GymsDataManager gymsDataManager);
     void inject(GymsAccessManager gymsAccessManager);
     void inject(AuthManager authManager);

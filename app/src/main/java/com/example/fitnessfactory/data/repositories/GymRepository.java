@@ -98,7 +98,7 @@ public class GymRepository extends BaseRepository {
 
     private List<Gym> getGymsByIds(List<String> gymIds) throws ExecutionException, InterruptedException {
         if (gymIds.size() == 0) {
-            return new ArrayList();
+            return new ArrayList<>();
         }
 
         return Tasks.await(getCollection().whereIn(Gym.ID_FIELD, gymIds).get()).toObjects(Gym.class);
