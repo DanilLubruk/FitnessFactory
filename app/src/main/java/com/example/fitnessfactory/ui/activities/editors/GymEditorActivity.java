@@ -54,10 +54,14 @@ public class GymEditorActivity extends EditorActivity {
         viewModel = new ViewModelProvider(this).get(GymEditorViewModel.class);
         super.initActivity();
         binding.setModel(viewModel);
+
         id = getIntent().getExtras().getString(AppConsts.GYM_ID_EXTRA);
         setTitle(id != null && !StringUtils.isEmpty(id) ? R.string.title_edit_item : R.string.title_add_item);
         viewModel.getGym(id)
                 .observe(this, viewModel::setGym);
+        viewModel.getGymId()
+                .observe(this, gymId -> getIntent().putExtra(AppConsts.GYM_ID_EXTRA, gymId));
+
         pageAdapter = new PersonnelPageAdapter(getSupportFragmentManager(), getLifecycle());
         vpPersonnel.setAdapter(pageAdapter);
         new TabLayoutMediator(tlPersonnel, vpPersonnel,

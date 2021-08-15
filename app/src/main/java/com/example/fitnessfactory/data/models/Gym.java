@@ -37,4 +37,16 @@ public class Gym {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public boolean equals(Gym gym) {
+        return this.getName().equals(gym.getName()) &&
+                this.getAddress().equals(gym.getAddress()) &&
+                this.getId().equals(gym.getId());
+    }
+
+    public void copy(Gym gym) {
+        this.setId(gym.getId());
+        this.setName(gym.getName());
+        this.setAddress(gym.getAddress());
+    }
 }

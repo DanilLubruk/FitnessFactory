@@ -3,6 +3,7 @@ package com.example.fitnessfactory.ui.viewmodels;
 import android.os.Bundle;
 
 import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.managers.GymsAccessManager;
@@ -23,6 +24,7 @@ public class GymEditorViewModel extends EditorViewModel {
 
     private Gym dbGym;
     public ObservableField<Gym> gym = new ObservableField<>();
+    private MutableLiveData<String> gymId = new MutableLiveData<>();
 
     private final String ID_KEY = "ID_KEY";
     private final String NAME_KEY = "NAME_KEY";
@@ -43,14 +45,17 @@ public class GymEditorViewModel extends EditorViewModel {
         return observer;
     }
 
+    public MutableLiveData<String> getGymId() {
+        return gymId;
+    }
+
     public void setGym(Gym gym) {
         if (gym == null) {
             return;
         }
         if (dbGym == null) {
             dbGym = new Gym();
-            dbGym.setName(gym.getName());
-            dbGym.setAddress(gym.getAddress());
+            dbGym.copy(gym);
         }
 
         if (hasHandle()) {
@@ -70,9 +75,7 @@ public class GymEditorViewModel extends EditorViewModel {
         if (gym != null &&
                 gym.getName() != null &&
                 gym.getAddress() != null) {
-            boolean isModified =
-                    !gym.getName().equals(dbGym.getName()) ||
-                    !gym.getAddress().equals(dbGym.getAddress());
+            boolean isModified = !gym.equals(dbGym);
 
             observer.setValue(isModified);
         }
@@ -93,7 +96,9 @@ public class GymEditorViewModel extends EditorViewModel {
         subscribeInIOThread(gymRepository.saveAsync(gym),
                 new SingleData<>(
                         id -> {
-                            this.gym.get().setId(id);
+                            gym.setId(id);
+                            dbGym.copy(gym);
+                            gymId.setValue(id);
                             observer.setValue(true);
                         },
                         throwable -> RxUtils.handleError(observer, throwable)

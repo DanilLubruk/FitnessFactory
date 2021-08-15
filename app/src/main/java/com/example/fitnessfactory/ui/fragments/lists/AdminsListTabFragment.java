@@ -20,6 +20,7 @@ import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.adapters.AdminsListAdapter;
 import com.example.fitnessfactory.ui.fragments.BaseFragment;
+import com.example.fitnessfactory.ui.fragments.EditorTabFragment;
 import com.example.fitnessfactory.ui.viewmodels.lists.AdminsListTabViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
@@ -35,7 +36,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class AdminsListTabFragment extends BaseFragment {
+public class AdminsListTabFragment extends EditorTabFragment {
 
     @BindView(R.id.rvAdmins)
     RecyclerView rvAdmins;
@@ -55,7 +56,7 @@ public class AdminsListTabFragment extends BaseFragment {
 
     private void initComponents() {
         viewModel.setGymData(getBaseActivity().getIntent().getStringExtra(AppConsts.GYM_ID_EXTRA));
-        fabAddAdmin.setOnClickListener(view -> showSelectionActivity());
+        fabAddAdmin.setOnClickListener(view -> tryToShowSelectionActivity());
         GuiUtils.initListView(getBaseActivity(), rvAdmins, true);
         touchListener = new RecyclerTouchListener(getBaseActivity(), rvAdmins);
         rvAdmins.addOnItemTouchListener(touchListener);
@@ -99,9 +100,18 @@ public class AdminsListTabFragment extends BaseFragment {
         viewModel.removeAdminFromGym(admin.getEmail());
     }
 
+    private void tryToShowSelectionActivity() {
+        getBaseActivity().save(isSaved -> {
+            if (isSaved) {
+                showSelectionActivity();
+            }
+        });
+    }
+
     private void showSelectionActivity() {
         Intent intent = new Intent(getBaseActivity(), SelectionActivity.class);
         intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, AppConsts.FRAGMENT_ADMINS_ID);
+        viewModel.setGymData(getBaseActivity().getIntent().getStringExtra(AppConsts.GYM_ID_EXTRA));
 
         startActivityForResult(intent, REQUEST_GYM);
     }

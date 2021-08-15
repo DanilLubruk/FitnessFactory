@@ -95,11 +95,11 @@ public abstract class EditorActivity extends BaseActivity {
 
     private void cancelAndClose() {
         isModified(isModified -> {
-           if (isModified) {
-               askForClose();
-           } else {
-               close();
-           }
+            if (isModified) {
+                askForClose();
+            } else {
+                close();
+            }
         });
     }
 
@@ -129,20 +129,22 @@ public abstract class EditorActivity extends BaseActivity {
     }
 
     private void save() {
-        if (isDataValid()) {
-            save(isSaved -> {
-                if (isSaved) {
-                    close();
-                }
-            });
-        }
+        save(isSaved -> {
+            if (isSaved) {
+                close();
+            }
+        });
     }
 
     protected boolean isDataValid() {
         return true;
     }
 
-    private void save(EditorCallback callback) {
-        getViewModel().save().observe(this, callback::callback);
+    public void save(EditorCallback callback) {
+        if (isDataValid()) {
+            getViewModel().save().observe(this, callback::callback);
+        } else {
+            callback.callback(false);
+        }
     }
 }
