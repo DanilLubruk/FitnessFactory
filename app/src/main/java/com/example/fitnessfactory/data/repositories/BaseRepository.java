@@ -6,7 +6,6 @@ import com.example.fitnessfactory.data.firestoreCollections.CollectionOperator;
 import com.example.fitnessfactory.utils.ResUtils;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;

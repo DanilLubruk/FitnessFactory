@@ -28,7 +28,7 @@ public class AdminsListTabViewModel extends BaseViewModel {
     @Inject
     GymAdminsDataListener gymAdminsDataListener;
 
-    private MutableLiveData<List<AppUser>> admins = new MutableLiveData<>();
+    private final MutableLiveData<List<AppUser>> admins = new MutableLiveData<>();
     private String gymId;
 
     public AdminsListTabViewModel() {

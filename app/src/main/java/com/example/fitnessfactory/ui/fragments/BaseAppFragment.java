@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -24,15 +25,11 @@ import io.reactivex.schedulers.Schedulers;
 
 public abstract class BaseAppFragment<A extends Activity> extends Fragment implements MainFragment {
 
-    private CompositeDisposable disposables = new CompositeDisposable();
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
-    public void closeProgress() {
+    public abstract void closeProgress();
 
-    }
-
-    public void showProgress() {
-
-    }
+    public abstract void showProgress();
 
     protected int getContentViewId() {
         return 0;
@@ -44,7 +41,7 @@ public abstract class BaseAppFragment<A extends Activity> extends Fragment imple
         }
     }
 
-    private void addSubscription(Disposable disposable) {
+    protected void addSubscription(Disposable disposable) {
         disposables.add(disposable);
     }
 
@@ -92,7 +89,7 @@ public abstract class BaseAppFragment<A extends Activity> extends Fragment imple
     public abstract A getBaseActivity();
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
     }
 
@@ -108,11 +105,6 @@ public abstract class BaseAppFragment<A extends Activity> extends Fragment imple
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
     @Override

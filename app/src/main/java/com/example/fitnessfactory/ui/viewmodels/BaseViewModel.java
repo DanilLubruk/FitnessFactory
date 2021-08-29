@@ -1,20 +1,16 @@
 package com.example.fitnessfactory.ui.viewmodels;
 
-import android.app.Notification;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 
 import com.example.fitnessfactory.data.observers.SingleData;
-import com.example.fitnessfactory.data.observers.SingleLiveEvent;
-import com.example.fitnessfactory.utils.GuiUtils;
 
 import java.util.HashMap;
 
 import icepick.Icepick;
 import io.reactivex.Completable;
-import io.reactivex.CompletableObserver;
 import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -26,7 +22,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class BaseViewModel extends ViewModel {
 
-    private CompositeDisposable disposables = new CompositeDisposable();
+    private final CompositeDisposable disposables = new CompositeDisposable();
     private HashMap<String, Object> handle = new HashMap<>();
     private static final String HANDLE = "HANDLE";
     private boolean loading = false;

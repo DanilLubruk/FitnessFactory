@@ -9,7 +9,6 @@ import com.example.fitnessfactory.utils.ResUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
 
 public class GymRepository extends BaseRepository {
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppPrefs;
+import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.security.ObfuscateData;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
@@ -26,22 +27,22 @@ import io.reactivex.SingleEmitter;
 
 public class FirebaseAuthManager {
 
-    private FirebaseAuth mAuth;
+    private final FirebaseAuth mAuth;
     private boolean signInInProcess = false;
 
     public FirebaseAuthManager() {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    public static boolean isLoggedIn() {
-        return FirebaseAuth.getInstance().getCurrentUser() != null;
+    public Single<Boolean> isLoggedIn() {
+        return Single.create(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(mAuth.getCurrentUser() != null);
+            }
+        });
     }
 
-    public static String getCurrentUserName() {
-        return isLoggedIn() ? FirebaseAuth.getInstance().getCurrentUser().getDisplayName() : "";
-    }
-
-    public Single<String> handleSignInResult(Intent data) {
+    public Single<AppUser> handleSignInResult(Intent data) {
         return Single.create(emitter -> {
             GoogleSignInAccount signInAccount = Tasks.await(GoogleSignIn.getSignedInAccountFromIntent(data));
             AuthCredential credential = getCredential(signInAccount);
@@ -58,14 +59,25 @@ public class FirebaseAuthManager {
 
     private void signInWithFirebase(AuthCredential credential,
                                     String email,
-                                    SingleEmitter<String> emitter) {
+                                    SingleEmitter<AppUser> emitter){
         mAuth.signInWithCredential(credential)
                 .addOnSuccessListener((task) -> {
+                    FirebaseUser authUser = task.getUser();
+                    if (authUser == null) {
+                        if (!emitter.isDisposed()) {
+                            emitter.onError(new Exception(getNullUserErrorMessage()));
+                        }
+                        return;
+                    }
 
                     if (!emitter.isDisposed()) {
                         signInInProcess = false;
-                        updateUserEmail(email);
-                        emitter.onSuccess(email);
+                        authUser.updateEmail(email);
+                        //updateUserEmail(email);
+                        AppUser currentUser = new AppUser();
+                        currentUser.setName(authUser.getDisplayName());
+                        currentUser.setEmail(authUser.getEmail());
+                        emitter.onSuccess(currentUser);
                     }
 
                 })
@@ -79,21 +91,17 @@ public class FirebaseAuthManager {
                 });
     }
 
+    private String getNullUserErrorMessage() {
+        return ResUtils.getString(R.string.caption_wrong_auth)
+                .concat(" : ")
+                .concat(ResUtils.getString(R.string.caption_user_null));
+    }
+
     private void updateUserEmail(String email) {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             user.updateEmail(email);
         }
-    }
-
-    public Single<Boolean> isUsersIdSaved() {
-        return Single.create(emitter -> {
-            String userId = AppPrefs.gymOwnerId().getValue();
-            boolean isIdSaved = !StringUtils.isEmpty(userId);
-            if (!emitter.isDisposed()) {
-                emitter.onSuccess(isIdSaved);
-            }
-        });
     }
 
     public Single<Intent> getSignInIntentAsync() {

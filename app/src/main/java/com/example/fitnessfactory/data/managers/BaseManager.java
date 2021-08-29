@@ -1,12 +1,9 @@
 package com.example.fitnessfactory.data.managers;
 
-import com.example.fitnessfactory.data.observers.SingleLiveEvent;
-import com.example.fitnessfactory.utils.GuiUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;
@@ -14,7 +11,6 @@ import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class BaseManager {
@@ -81,16 +77,5 @@ public class BaseManager {
         if (!emitter.isDisposed()) {
             emitter.onError(error);
         }
-    }
-
-    protected void handleError(Throwable throwable) {
-        throwable.printStackTrace();
-        GuiUtils.showMessage(throwable.getLocalizedMessage());
-    }
-
-    protected void handleError(AtomicReference<Boolean> observer, Throwable throwable) {
-        observer.set(false);
-        throwable.printStackTrace();
-        GuiUtils.showMessage(throwable.getLocalizedMessage());
     }
 }

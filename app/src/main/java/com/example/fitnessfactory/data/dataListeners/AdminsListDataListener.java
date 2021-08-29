@@ -1,6 +1,5 @@
 package com.example.fitnessfactory.data.dataListeners;
 
-import android.util.Log;
 import com.example.fitnessfactory.data.events.AdminsListDataListenerEvent;
 import com.example.fitnessfactory.data.firestoreCollections.OwnerAdminsCollection;
 import com.example.fitnessfactory.utils.RxUtils;

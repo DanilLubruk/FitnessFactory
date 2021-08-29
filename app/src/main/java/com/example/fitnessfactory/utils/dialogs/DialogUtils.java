@@ -14,6 +14,7 @@ import com.example.fitnessfactory.ui.activities.BaseActivity;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
+import com.example.fitnessfactory.utils.dialogs.exceptions.DialogCancelledException;
 import com.google.android.material.textfield.TextInputEditText;
 import com.tiromansev.prefswrapper.typedprefs.BooleanPreference;
 
@@ -23,6 +24,7 @@ import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
+import io.reactivex.functions.Cancellable;
 
 public class DialogUtils {
 
@@ -133,7 +135,7 @@ public class DialogUtils {
                     }))
                     .setNegativeButton(cancelCaption, ((dialog, which) -> {
                         if (!emitter.isDisposed()) {
-                            emitter.onSuccess("");
+                            emitter.onError(new DialogCancelledException());
                         }
                     }))
                     .create();
@@ -141,7 +143,7 @@ public class DialogUtils {
 
             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((view) -> {
                 TextInputEditText edtField = dialogView.findViewById(R.id.edtField);
-                String value = edtField.getText().toString();
+                String value = edtField.getText() != null ? edtField.getText().toString() : "";
                 handleInput(value.trim(), alertDialog, emitter);
             });
         });

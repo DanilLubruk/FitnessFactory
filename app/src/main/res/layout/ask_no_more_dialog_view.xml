@@ -15,6 +15,5 @@
         android:id="@+id/cbAskNoMore"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/component_margin"
         android:text="@string/caption_ask_no_more" />
 </LinearLayout>

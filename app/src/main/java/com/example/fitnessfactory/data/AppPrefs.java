@@ -12,13 +12,6 @@ public class AppPrefs {
                 .build();
     }
 
-    public static BooleanPreference isUserOwner() {
-        return BooleanPreference
-                .builder("is_user_owner_pref")
-                .setDefaultValue(false)
-                .build();
-    }
-
     public static StringPreference organisationName() {
         return StringPreference
                 .builder("organisation_name_pref")

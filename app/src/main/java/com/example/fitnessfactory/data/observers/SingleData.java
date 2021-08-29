@@ -5,7 +5,7 @@ import io.reactivex.internal.observers.ConsumerSingleObserver;
 
 public class SingleData<T> {
 
-    private ConsumerSingleObserver<T> observer;
+    private final ConsumerSingleObserver<T> observer;
 
     public SingleData(Consumer<? super T> onSuccess, Consumer<? super Throwable> onError) {
         observer = new ConsumerSingleObserver<>(onSuccess, onError);

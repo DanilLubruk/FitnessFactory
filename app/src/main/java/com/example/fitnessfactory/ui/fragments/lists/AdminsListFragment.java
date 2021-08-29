@@ -3,6 +3,7 @@ package com.example.fitnessfactory.ui.fragments.lists;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,7 +22,6 @@ import com.example.fitnessfactory.ui.viewmodels.lists.AdminListViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.IntentUtils;
 import com.example.fitnessfactory.utils.ResUtils;
-import com.example.fitnessfactory.utils.StringUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
 import com.github.clans.fab.FloatingActionButton;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
@@ -33,6 +33,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import butterknife.BindView;
+import io.reactivex.Single;
 
 public class AdminsListFragment extends BaseFragment {
 
@@ -151,43 +152,30 @@ public class AdminsListFragment extends BaseFragment {
     }
 
     private void showSendEmailInvitationDialog() {
-        subscribeInMainThread(DialogUtils.showOneLineEditDialog(
+        viewModel.registerAdmin(
+                getAskEmailDialog(),
+                getAskToSendInvitationDialog())
+                .observe(this, email -> {
+                    if (!TextUtils.isEmpty(email)) {
+                        sendEmailInvitation(email);
+                    }
+                });
+    }
+
+    private Single<String> getAskEmailDialog() {
+        return DialogUtils.showOneLineEditDialog(
                 getBaseActivity(),
                 ResUtils.getString(R.string.title_invite_admin),
                 ResUtils.getString(R.string.caption_email),
                 ResUtils.getString(R.string.caption_send),
-                ResUtils.getString(R.string.caption_cancel)),
-                new SingleData<>(
-                        email -> {
-                            if (!StringUtils.isEmpty(email)) {
-                                viewModel.registerAdmin(email);
-                                showAskSendInvitationDialog(email);
-                            }
-                        },
-                        throwable -> {
-                            throwable.printStackTrace();
-                            GuiUtils.showMessage(throwable.getLocalizedMessage());
-                        }));
+                ResUtils.getString(R.string.caption_cancel));
     }
 
-    private void showAskSendInvitationDialog(String email) {
-        if (AppPrefs.askForSendingAdminEmailInvite().getValue()) {
-            subscribeInMainThread(DialogUtils.showAskNoMoreDialog(
-                    getBaseActivity(),
-                    ResUtils.getString(R.string.message_send_invitation),
-                    AppPrefs.askForSendingAdminEmailInvite()),
-                    new SingleData<>(
-                            doSend -> {
-                                if (doSend) {
-                                    sendEmailInvitation(email);
-                                }
-                            },
-                            throwable -> {
-                                throwable.printStackTrace();
-                                GuiUtils.showMessage(throwable.getLocalizedMessage());
-                            }
-                    ));
-        }
+    private Single<Boolean> getAskToSendInvitationDialog() {
+        return DialogUtils.showAskNoMoreDialog(
+                getBaseActivity(),
+                ResUtils.getString(R.string.message_send_invitation),
+                AppPrefs.askForSendingAdminEmailInvite());
     }
 
     private void sendEmailInvitation(String email) {
@@ -202,6 +190,14 @@ public class AdminsListFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAdminsListDataListenerEvent(AdminsListDataListenerEvent adminsListDataListenerEvent) {
         viewModel.getAdminsListData();
+    }
+
+    public void closeProgress() {
+
+    }
+
+    public void showProgress() {
+
     }
 
     @Override

@@ -23,8 +23,8 @@ public class GymEditorViewModel extends EditorViewModel {
     GymsAccessManager gymsAccessManager;
 
     private Gym dbGym;
-    public ObservableField<Gym> gym = new ObservableField<>();
-    private MutableLiveData<String> gymId = new MutableLiveData<>();
+    public final ObservableField<Gym> gym = new ObservableField<>();
+    private final MutableLiveData<String> gymId = new MutableLiveData<>();
 
     private final String ID_KEY = "ID_KEY";
     private final String NAME_KEY = "NAME_KEY";

@@ -1,13 +1,12 @@
 package com.example.fitnessfactory.ui.activities;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,7 +39,7 @@ public class BaseActivity extends AppCompatActivity {
 
     protected Unbinder unbinder;
     protected Bundle savedState = null;
-    private CompositeDisposable disposables = new CompositeDisposable();
+    private final CompositeDisposable disposables = new CompositeDisposable();
     private HashMap<Integer, Bundle> customBundles = new HashMap<>();
 
     @Override
@@ -101,7 +100,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
         outState.putSerializable("customBundles", customBundles);
@@ -119,21 +118,6 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void initActivity() {
         unbinder = ButterKnife.bind(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 
     @Override

@@ -3,9 +3,7 @@ package com.example.fitnessfactory.ui.activities.editors;
 import android.os.Bundle;
 
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.fitnessfactory.R;
@@ -66,14 +64,14 @@ public class GymEditorActivity extends EditorActivity {
         vpPersonnel.setAdapter(pageAdapter);
         new TabLayoutMediator(tlPersonnel, vpPersonnel,
                 (tab, position) -> {
-            switch (position) {
-                case 0:
-                    tab.setText(ResUtils.getString(R.string.title_admins));
-                    break;
-                case 1:
-                    tab.setText(ResUtils.getString(R.string.title_coaches));
-                    break;
-            }
+                    switch (position) {
+                        case 0:
+                            tab.setText(ResUtils.getString(R.string.title_admins));
+                            break;
+                        case 1:
+                            tab.setText(ResUtils.getString(R.string.title_coaches));
+                            break;
+                    }
                 }
         ).attach();
     }
@@ -85,8 +83,10 @@ public class GymEditorActivity extends EditorActivity {
 
     @Override
     protected boolean isDataValid() {
-        if (!StringUtils.isEmpty(edtName.getText().toString()) &&
-        !StringUtils.isEmpty(edtAddress.getText().toString())) {
+        if (edtName.getText() != null &&
+                edtAddress.getText() != null &&
+                !StringUtils.isEmpty(edtName.getText().toString()) &&
+                !StringUtils.isEmpty(edtAddress.getText().toString())) {
             return true;
         } else {
             GuiUtils.showMessage(ResUtils.getString(R.string.caption_blank_fields));

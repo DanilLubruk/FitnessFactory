@@ -6,7 +6,7 @@ import java.util.List;
 
 public class GymsListDataListenerEvent extends BaseEvent {
 
-    private List<Gym> gyms;
+    private final List<Gym> gyms;
 
     public GymsListDataListenerEvent(List<Gym> gyms) {
         this.gyms = gyms;

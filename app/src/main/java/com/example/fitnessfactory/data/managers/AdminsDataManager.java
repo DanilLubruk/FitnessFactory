@@ -2,13 +2,10 @@ package com.example.fitnessfactory.data.managers;
 
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.repositories.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.AdminsRepository;
 import com.example.fitnessfactory.data.repositories.UserRepository;
-import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 

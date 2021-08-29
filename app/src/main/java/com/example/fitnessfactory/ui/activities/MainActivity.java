@@ -17,17 +17,12 @@ import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.CurrentUserType;
 import com.example.fitnessfactory.data.observers.SingleData;
-import com.example.fitnessfactory.system.FirebaseAuthManager;
 import com.example.fitnessfactory.ui.fragments.FragmentProvider;
 import com.example.fitnessfactory.ui.viewmodels.MainActivityViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
 

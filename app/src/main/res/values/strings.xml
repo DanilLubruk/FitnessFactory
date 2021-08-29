@@ -52,8 +52,10 @@
     <string name="title_add_item">Add item</string>
     <string name="message_admin_is_registered">Administrator is already registered</string>
     <string name="message_error_no_data">There is no data</string>
+    <string name="message_error_canceled">Canceled</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
+    <string name="caption_user_null">User is not signed in</string>
     <!--authentication-->
 
     <!--development-->

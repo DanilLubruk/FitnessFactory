@@ -1,7 +1,6 @@
 package com.example.fitnessfactory.data.dataListeners;
 
 import com.example.fitnessfactory.data.firestoreCollections.CollectionOperator;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 
@@ -17,8 +16,8 @@ import io.reactivex.schedulers.Schedulers;
 
 public abstract class BaseDataListener extends CollectionOperator {
 
-    private CompositeDisposable disposables = new CompositeDisposable();
-    protected AtomicReference<ListenerRegistration> dataListener = new AtomicReference<>();
+    private final CompositeDisposable disposables = new CompositeDisposable();
+    protected final AtomicReference<ListenerRegistration> dataListener = new AtomicReference<>();
 
     protected FirebaseFirestore getFirestore() {
         return FirebaseFirestore.getInstance();
@@ -59,14 +58,5 @@ public abstract class BaseDataListener extends CollectionOperator {
             dataListener.get().remove();
         }
         unsubscribe();
-    }
-
-    protected ListenerRegistration getEmptyListenerRegistration() {
-        return new ListenerRegistration() {
-            @Override
-            public void remove() {
-
-            }
-        };
     }
 }

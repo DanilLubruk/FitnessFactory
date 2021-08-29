@@ -2,7 +2,6 @@ package com.example.fitnessfactory.data.repositories;
 
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.FirestoreCollections;
-import com.example.fitnessfactory.data.firestoreCollections.BaseCollection;
 import com.example.fitnessfactory.data.models.OrganisationData;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.gms.tasks.Tasks;
@@ -12,9 +11,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Completable;
-import io.reactivex.CompletableEmitter;
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
 
 public class OrganisationInfoRepository extends BaseRepository {
 

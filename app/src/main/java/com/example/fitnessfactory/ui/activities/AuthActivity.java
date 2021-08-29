@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
@@ -20,10 +19,7 @@ import com.example.fitnessfactory.ui.viewmodels.AuthViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.tasks.Task;
 
 import java.util.List;
 
@@ -56,9 +52,11 @@ public class AuthActivity extends BaseActivity {
     @Override
     public void initComponents() {
         super.initComponents();
-        if (FirebaseAuthManager.isLoggedIn()) {
-            showMainActivity();
-        }
+        viewModel.isLoggedIn().observe(this, isLoggedIn -> {
+           if (isLoggedIn) {
+               showMainActivity();
+           }
+        });
         btnSignIn.setOnClickListener(view -> googleSignIn());
         hideToolbar();
     }

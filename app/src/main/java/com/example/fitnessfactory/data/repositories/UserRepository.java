@@ -1,21 +1,16 @@
 package com.example.fitnessfactory.data.repositories;
-
-import com.example.fitnessfactory.data.AppPrefs;
-import com.example.fitnessfactory.data.FirestoreCollections;
 import com.example.fitnessfactory.data.firestoreCollections.UsersCollection;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
 
 import static com.example.fitnessfactory.data.models.AppUser.EMAIL_FILED;
 
@@ -54,12 +49,12 @@ public class UserRepository extends BaseRepository {
 
     private List<AppUser> makeCurrentUserFirstInList(List<AppUser> owners, String currentUserId) {
         for (int i = 0; i < owners.size(); i++) {
-            AppUser appUser = owners.get(i);
-            if (appUser.getId().equals(currentUserId)) {
-                AppUser currentUser = appUser;
+            AppUser currentUser = owners.get(i);
+            if (currentUser.getId().equals(currentUserId)) {
                 AppUser currentFirstUser = owners.get(0);
                 owners.set(0, currentUser);
                 owners.set(i, currentFirstUser);
+                break;
             }
         }
 

@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.ui.viewholders.lists.GymsListViewHolder;
 

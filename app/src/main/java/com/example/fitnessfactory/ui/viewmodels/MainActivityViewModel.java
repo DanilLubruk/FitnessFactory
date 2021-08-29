@@ -5,7 +5,6 @@ import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.data.repositories.OrganisationInfoRepository;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
-import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.RxUtils;
 
 import javax.inject.Inject;

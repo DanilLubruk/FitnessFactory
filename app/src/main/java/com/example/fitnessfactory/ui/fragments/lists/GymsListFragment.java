@@ -3,7 +3,6 @@ package com.example.fitnessfactory.ui.fragments.lists;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,7 +13,6 @@ import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.GymsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleData;
-import com.example.fitnessfactory.ui.activities.editors.AdminEditorActivity;
 import com.example.fitnessfactory.ui.activities.editors.GymEditorActivity;
 import com.example.fitnessfactory.ui.adapters.GymsListAdapter;
 import com.example.fitnessfactory.ui.fragments.BaseFragment;
@@ -151,6 +149,19 @@ public class GymsListFragment extends BaseFragment {
         }
     }
 
+    public void closeProgress() {
+
+    }
+
+    public void showProgress() {
+
+    }
+
+    @Override
+    protected int getContentViewId() {
+        return R.layout.fragment_gyms_list;
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -163,11 +174,5 @@ public class GymsListFragment extends BaseFragment {
         super.onStop();
         EventBus.getDefault().unregister(this);
         viewModel.removeGymsListDataListener();
-    }
-
-
-    @Override
-    protected int getContentViewId() {
-        return R.layout.fragment_gyms_list;
     }
 }

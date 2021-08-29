@@ -14,7 +14,7 @@ import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.RxUtils;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -28,6 +28,16 @@ public class AuthViewModel extends BaseViewModel {
 
     public AuthViewModel() {
         FFApp.get().getAppComponent().inject(this);
+    }
+
+    public SingleLiveEvent<Boolean> isLoggedIn() {
+        SingleLiveEvent<Boolean> observer = new SingleLiveEvent<>();
+
+        subscribeInIOThread(
+                firebaseAuthManager.isLoggedIn(),
+                new SingleData<>(observer::setValue, RxUtils::handleError));
+
+        return observer;
     }
 
     public SingleLiveEvent<Intent> getSignInIntent() {
@@ -76,7 +86,7 @@ public class AuthViewModel extends BaseViewModel {
         throwable.printStackTrace();
         String message = ResUtils.getString(R.string.caption_wrong_auth)
                 .concat(" - ")
-                .concat(throwable.getLocalizedMessage());
+                .concat(throwable.getLocalizedMessage() != null ? throwable.getLocalizedMessage() : "");
         GuiUtils.showMessage(message);
     }
 }

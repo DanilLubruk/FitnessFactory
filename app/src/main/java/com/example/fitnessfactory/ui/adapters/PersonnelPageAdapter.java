@@ -24,7 +24,7 @@ public class PersonnelPageAdapter extends FragmentStateAdapter {
             case 1:
                 return new AdminsListFragment();
             default:
-                return null;
+                return new AdminsListTabFragment();
         }
     }
 

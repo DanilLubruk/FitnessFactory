@@ -2,8 +2,8 @@ package com.example.fitnessfactory.data.models;
 
 public class AdminAccessEntry {
 
-    public static String USER_EMAIL_FIELD = "userEmail";
-    public static String OWNER_ID_FIELD = "ownerId";
+    public static final String USER_EMAIL_FIELD = "userEmail";
+    public static final String OWNER_ID_FIELD = "ownerId";
 
     private String userEmail;
 

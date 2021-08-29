@@ -1,5 +1,4 @@
 package com.example.fitnessfactory.di;
-import com.example.fitnessfactory.data.dataListeners.AdminsListDataListener;
 import com.example.fitnessfactory.data.managers.AdminsAccessManager;
 import com.example.fitnessfactory.data.managers.AdminsDataManager;
 import com.example.fitnessfactory.data.managers.AuthManager;

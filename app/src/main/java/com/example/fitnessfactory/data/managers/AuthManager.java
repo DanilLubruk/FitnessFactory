@@ -33,24 +33,24 @@ public class AuthManager extends BaseManager {
     }
 
     public Single<List<AppUser>> handleSignIn(Intent signInData) {
-        AtomicReference<String> userEmail = new AtomicReference<>();
+        AtomicReference<AppUser> user = new AtomicReference<>();
 
         return authManager.handleSignInResult(signInData)
                 .observeOn(getIOScheduler())
                 .subscribeOn(getIOScheduler())
-                .flatMap(email -> {
-                    userEmail.set(email);
-                    return userRepository.isUserRegisteredAsync(email);
+                .flatMap(authUser -> {
+                    user.set(authUser);
+                    return userRepository.isUserRegisteredAsync(authUser.getEmail());
                 })
                 .observeOn(getIOScheduler())
                 .flatMap(isRegistered ->
                         isRegistered ?
-                                userRepository.getAppUserByEmailAsync(userEmail.get()) :
+                                userRepository.getAppUserByEmailAsync(user.get().getEmail()) :
                                 userRepository.registerUser(
-                                        userEmail.get(),
-                                        FirebaseAuthManager.getCurrentUserName()))
+                                        user.get().getEmail(),
+                                        user.get().getName()))
                 .observeOn(getIOScheduler())
-                .flatMap(user -> adminsAccessRepository.getOwnersByInvitedEmail(user))
+                .flatMap(authUser -> adminsAccessRepository.getOwnersByInvitedEmail(authUser))
                 .observeOn(getIOScheduler())
                 .flatMap(ownersIds -> userRepository.getOwnersByIds(ownersIds))
                 .observeOn(getMainThreadScheduler());

@@ -33,8 +33,8 @@ public class AdminEditorViewModel extends EditorViewModel {
     @Inject
     GymsDataManager gymsDataManager;
 
-    public ObservableField<AppUser> admin = new ObservableField<>();
-    private MutableLiveData<List<Gym>> gyms = new MutableLiveData<>();
+    public final ObservableField<AppUser> admin = new ObservableField<>();
+    private final MutableLiveData<List<Gym>> gyms = new MutableLiveData<>();
 
     public AdminEditorViewModel() {
         FFApp.get().getAppComponent().inject(this);

@@ -3,8 +3,6 @@ package com.example.fitnessfactory.ui.viewholders.lists;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.ui.viewholders.BaseRecyclerViewHolder;

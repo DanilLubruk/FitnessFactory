@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.example.fitnessfactory.ui.activities.BaseActivity;
 
-public class BaseFragment extends BaseAppFragment<BaseActivity> {
+public abstract class BaseFragment extends BaseAppFragment<BaseActivity> {
 
     private BaseActivity activity;
 

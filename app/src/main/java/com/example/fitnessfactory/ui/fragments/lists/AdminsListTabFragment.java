@@ -12,14 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
-import com.example.fitnessfactory.data.events.AdminsListDataListenerEvent;
 import com.example.fitnessfactory.data.events.GymAdminsListListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.adapters.AdminsListAdapter;
-import com.example.fitnessfactory.ui.fragments.BaseFragment;
 import com.example.fitnessfactory.ui.fragments.EditorTabFragment;
 import com.example.fitnessfactory.ui.viewmodels.lists.AdminsListTabViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
@@ -155,6 +152,19 @@ public class AdminsListTabFragment extends EditorTabFragment {
         viewModel.removeGymAdminsListListener();
     }
 
+    public void closeProgress() {
+
+    }
+
+    public void showProgress() {
+
+    }
+
+    @Override
+    protected int getContentViewId() {
+        return R.layout.fragment_admins_list;
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -165,10 +175,5 @@ public class AdminsListTabFragment extends EditorTabFragment {
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-    }
-
-    @Override
-    protected int getContentViewId() {
-        return R.layout.fragment_admins_list;
     }
 }
