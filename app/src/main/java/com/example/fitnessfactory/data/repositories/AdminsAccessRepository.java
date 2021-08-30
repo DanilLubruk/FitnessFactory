@@ -108,6 +108,7 @@ public class AdminsAccessRepository extends BaseRepository {
                 Tasks.await(getAdminQueryByEmail(ownerId, email).get())
                         .getDocuments();
 
+        checkDataEmpty(documents);
         checkEmailUniqueness(documents);
 
         return documents.get(0);

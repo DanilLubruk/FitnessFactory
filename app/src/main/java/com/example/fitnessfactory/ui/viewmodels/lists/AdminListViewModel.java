@@ -73,7 +73,7 @@ public class AdminListViewModel extends BaseViewModel implements DataListListene
     }
 
     public void startDataListener() {
-        adminsListListener.startAdminsListListener();
+        adminsListListener.startDataListener();
     }
 
     public MutableLiveData<List<AppUser>> getAdmins() {

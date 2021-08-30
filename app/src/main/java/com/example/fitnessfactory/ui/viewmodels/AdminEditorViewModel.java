@@ -8,14 +8,14 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.AppPrefs;
-import com.example.fitnessfactory.data.dataListeners.AdminsGymsDataListener;
+import com.example.fitnessfactory.data.dataListeners.AdminGymsListDataListener;
 import com.example.fitnessfactory.data.managers.AdminsAccessManager;
 import com.example.fitnessfactory.data.managers.GymsDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
-import com.example.fitnessfactory.data.repositories.AdminsRepository;
+import com.example.fitnessfactory.data.repositories.OwnerAdminsRepository;
 import com.example.fitnessfactory.utils.RxUtils;
 
 import java.util.List;
@@ -25,11 +25,11 @@ import javax.inject.Inject;
 public class AdminEditorViewModel extends EditorViewModel implements DataListListener<Gym> {
 
     @Inject
-    AdminsRepository adminsRepository;
+    OwnerAdminsRepository ownerAdminsRepository;
     @Inject
     AdminsAccessManager adminsAccessManager;
     @Inject
-    AdminsGymsDataListener adminsGymsDataListener;
+    AdminGymsListDataListener adminGymsListDataListener;
     @Inject
     GymsDataManager gymsDataManager;
 
@@ -56,7 +56,7 @@ public class AdminEditorViewModel extends EditorViewModel implements DataListLis
         }
 
         subscribeInIOThread(
-                adminsRepository.addGymToAdminAsync(admin.getEmail(), gymId),
+                ownerAdminsRepository.addGymToAdminAsync(admin.getEmail(), gymId),
                 RxUtils::handleError);
     }
 
@@ -67,7 +67,7 @@ public class AdminEditorViewModel extends EditorViewModel implements DataListLis
         }
 
         subscribeInIOThread(
-                adminsRepository.removeGymFromAdminAsync(admin.getEmail(), gym.getId()),
+                ownerAdminsRepository.removeGymFromAdminAsync(admin.getEmail(), gym.getId()),
                 RxUtils::handleError);
     }
 
@@ -81,11 +81,11 @@ public class AdminEditorViewModel extends EditorViewModel implements DataListLis
             return;
         }
 
-        adminsGymsDataListener.startAdminsGymsListener(admin.getEmail());
+        adminGymsListDataListener.startDataListener(admin.getEmail());
     }
 
     public void stopDataListener() {
-        adminsGymsDataListener.stopDataListener();
+        adminGymsListDataListener.stopDataListener();
     }
 
     public void getGymsData() {

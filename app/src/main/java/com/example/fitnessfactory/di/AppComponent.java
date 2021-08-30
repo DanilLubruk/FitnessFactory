@@ -2,6 +2,8 @@ package com.example.fitnessfactory.di;
 import com.example.fitnessfactory.data.managers.AdminsAccessManager;
 import com.example.fitnessfactory.data.managers.AdminsDataManager;
 import com.example.fitnessfactory.data.managers.AuthManager;
+import com.example.fitnessfactory.data.managers.CoachesAccessManager;
+import com.example.fitnessfactory.data.managers.CoachesDataManager;
 import com.example.fitnessfactory.data.managers.GymsAccessManager;
 import com.example.fitnessfactory.data.managers.GymsDataManager;
 import com.example.fitnessfactory.ui.viewmodels.AdminEditorViewModel;
@@ -10,6 +12,7 @@ import com.example.fitnessfactory.ui.viewmodels.lists.AdminListViewModel;
 import com.example.fitnessfactory.ui.viewmodels.AuthViewModel;
 import com.example.fitnessfactory.ui.viewmodels.GymEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.lists.AdminsListTabViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.CoachesListViewModel;
 import com.example.fitnessfactory.ui.viewmodels.lists.GymsListViewModel;
 
 import javax.inject.Singleton;
@@ -33,4 +36,7 @@ public interface AppComponent {
     void inject(GymsDataManager gymsDataManager);
     void inject(GymsAccessManager gymsAccessManager);
     void inject(AuthManager authManager);
+    void inject(CoachesDataManager coachesDataManager);
+    void inject(CoachesListViewModel coachesListViewModel);
+    void inject(CoachesAccessManager coachesAccessManager);
 }

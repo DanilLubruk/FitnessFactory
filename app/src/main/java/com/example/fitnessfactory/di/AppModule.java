@@ -1,8 +1,8 @@
 package com.example.fitnessfactory.di;
 
-import com.example.fitnessfactory.data.dataListeners.AdminsGymsDataListener;
+import com.example.fitnessfactory.data.dataListeners.AdminGymsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.AdminsListDataListener;
-import com.example.fitnessfactory.data.dataListeners.GymAdminsDataListener;
+import com.example.fitnessfactory.data.dataListeners.GymAdminsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.GymsListDataListener;
 import com.example.fitnessfactory.data.managers.AdminsAccessManager;
 import com.example.fitnessfactory.data.managers.AdminsDataManager;
@@ -10,8 +10,8 @@ import com.example.fitnessfactory.data.managers.AuthManager;
 import com.example.fitnessfactory.data.managers.GymsAccessManager;
 import com.example.fitnessfactory.data.managers.GymsDataManager;
 import com.example.fitnessfactory.data.repositories.AdminsAccessRepository;
-import com.example.fitnessfactory.data.repositories.AdminsRepository;
-import com.example.fitnessfactory.data.repositories.GymRepository;
+import com.example.fitnessfactory.data.repositories.OwnerAdminsRepository;
+import com.example.fitnessfactory.data.repositories.OwnerGymRepository;
 import com.example.fitnessfactory.data.repositories.OrganisationInfoRepository;
 import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
@@ -38,8 +38,8 @@ public class AppModule {
 
     @Provides
     @AppScope
-    public GymRepository provideGymRepository() {
-        return new GymRepository();
+    public OwnerGymRepository provideGymRepository() {
+        return new OwnerGymRepository();
     }
 
     @Provides
@@ -50,8 +50,8 @@ public class AppModule {
 
     @Provides
     @AppScope
-    public AdminsRepository provideAdminsRepository() {
-        return new AdminsRepository();
+    public OwnerAdminsRepository provideAdminsRepository() {
+        return new OwnerAdminsRepository();
     }
 
     @Provides
@@ -98,8 +98,8 @@ public class AppModule {
 
     @Provides
     @AppScope
-    public AdminsGymsDataListener provideAdminsGymsDataListener() {
-        return new AdminsGymsDataListener();
+    public AdminGymsListDataListener provideAdminsGymsDataListener() {
+        return new AdminGymsListDataListener();
     }
 
     @Provides
@@ -110,7 +110,7 @@ public class AppModule {
 
     @Provides
     @AppScope
-    public GymAdminsDataListener provideGymAdminsDataListener() {
-        return new GymAdminsDataListener();
+    public GymAdminsListDataListener provideGymAdminsDataListener() {
+        return new GymAdminsListDataListener();
     }
 }

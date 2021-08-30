@@ -7,11 +7,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.AppConsts;
-import com.example.fitnessfactory.data.dataListeners.GymAdminsDataListener;
+import com.example.fitnessfactory.data.dataListeners.GymAdminsListDataListener;
 import com.example.fitnessfactory.data.managers.AdminsDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.observers.SingleData;
-import com.example.fitnessfactory.data.repositories.AdminsRepository;
+import com.example.fitnessfactory.data.repositories.OwnerAdminsRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
 import com.example.fitnessfactory.utils.RxUtils;
@@ -23,11 +23,11 @@ import javax.inject.Inject;
 public class AdminsListTabViewModel extends BaseViewModel implements DataListListener<AppUser> {
 
     @Inject
-    AdminsRepository adminsRepository;
+    OwnerAdminsRepository ownerAdminsRepository;
     @Inject
     AdminsDataManager adminsDataManager;
     @Inject
-    GymAdminsDataListener gymAdminsDataListener;
+    GymAdminsListDataListener gymAdminsListDataListener;
 
     private final MutableLiveData<List<AppUser>> admins = new MutableLiveData<>();
     private String gymId;
@@ -45,7 +45,7 @@ public class AdminsListTabViewModel extends BaseViewModel implements DataListLis
             return;
         }
 
-        subscribeInIOThread(adminsRepository.addGymToAdminAsync(adminEmail, gymId));
+        subscribeInIOThread(ownerAdminsRepository.addGymToAdminAsync(adminEmail, gymId));
     }
 
     public void deleteItem(AppUser admin) {
@@ -53,7 +53,7 @@ public class AdminsListTabViewModel extends BaseViewModel implements DataListLis
             return;
         }
 
-        subscribeInIOThread(adminsRepository.removeGymFromAdminAsync(admin.getEmail(), gymId));
+        subscribeInIOThread(ownerAdminsRepository.removeGymFromAdminAsync(admin.getEmail(), gymId));
     }
 
     public void startDataListener() {
@@ -61,11 +61,11 @@ public class AdminsListTabViewModel extends BaseViewModel implements DataListLis
             return;
         }
 
-        gymAdminsDataListener.startGymAdminsDataListener(gymId);
+        gymAdminsListDataListener.startDataListener(gymId);
     }
 
     public void stopDataListener() {
-        gymAdminsDataListener.stopDataListener();
+        gymAdminsListDataListener.stopDataListener();
     }
 
     public void setGymData(String gymId) {

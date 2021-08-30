@@ -8,7 +8,6 @@ import com.example.fitnessfactory.data.events.GymsListDataListenerEvent;
 import com.example.fitnessfactory.data.firestoreCollections.OwnerGymsCollection;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.utils.ResUtils;
-import com.example.fitnessfactory.utils.RxUtils;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 
@@ -25,14 +24,11 @@ public class GymsListDataListener extends BaseDataListener {
         return OwnerGymsCollection.getRoot();
     }
 
-    public void startGymsListListener() {
-        addSubscription(getGymsListListener()
-                .subscribeOn(getIOScheduler())
-                .observeOn(getMainThreadScheduler())
-                .subscribe(dataListener::set, RxUtils::handleError));
+    public void startDataListener() {
+        setListenerRegistration(getDataListener());
     }
 
-    private Single<ListenerRegistration> getGymsListListener() {
+    private Single<ListenerRegistration> getDataListener() {
         return Single.create(emitter -> {
             ListenerRegistration listenerRegistration =
                     getGymsListQuery()
@@ -42,7 +38,7 @@ public class GymsListDataListener extends BaseDataListener {
                                     return;
                                 }
                                 if (value == null) {
-                                    Log.d(AppConsts.DEBUG_TAG, "GymsListDataListener:40 value null");
+                                    Log.d(AppConsts.DEBUG_TAG, "GymsListDataListener: value null");
                                     reportError(emitter, new Exception(ResUtils.getString(R.string.message_error_data_obtain)));
                                     return;
                                 }

@@ -10,7 +10,7 @@ import com.example.fitnessfactory.data.managers.GymsAccessManager;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
-import com.example.fitnessfactory.data.repositories.GymRepository;
+import com.example.fitnessfactory.data.repositories.OwnerGymRepository;
 import com.example.fitnessfactory.utils.RxUtils;
 
 import javax.inject.Inject;
@@ -18,7 +18,7 @@ import javax.inject.Inject;
 public class GymEditorViewModel extends EditorViewModel {
 
     @Inject
-    GymRepository gymRepository;
+    OwnerGymRepository ownerGymRepository;
     @Inject
     GymsAccessManager gymsAccessManager;
 
@@ -37,7 +37,7 @@ public class GymEditorViewModel extends EditorViewModel {
     public SingleLiveEvent<Gym> getGym(String id) {
         SingleLiveEvent<Gym> observer = new SingleLiveEvent<>();
 
-        subscribeInIOThread(gymRepository.getGymAsync(id),
+        subscribeInIOThread(ownerGymRepository.getGymAsync(id),
                 new SingleData<>(
                         observer::setValue,
                         RxUtils::handleError));
@@ -93,7 +93,7 @@ public class GymEditorViewModel extends EditorViewModel {
             return observer;
         }
 
-        subscribeInIOThread(gymRepository.saveAsync(gym),
+        subscribeInIOThread(ownerGymRepository.saveAsync(gym),
                 new SingleData<>(
                         id -> {
                             gym.setId(id);

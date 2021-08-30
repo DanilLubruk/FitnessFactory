@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Single;
 
-public class GymRepository extends BaseRepository {
+public class OwnerGymRepository extends BaseRepository {
 
     @Override
     public String getRoot() {
@@ -69,6 +69,7 @@ public class GymRepository extends BaseRepository {
         QuerySnapshot gymsQuery = Tasks.await(getCollection().whereEqualTo(Gym.ID_FIELD, id).get());
         List<DocumentSnapshot> gymDocs = gymsQuery.getDocuments();
 
+        checkDataEmpty(gymDocs);
         checkUniqueness(gymDocs, getGymsIdUnuniqueErrorMessage());
 
         return gymDocs.get(0);

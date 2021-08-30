@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutionException;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-public class AdminsRepository extends BaseRepository {
+public class OwnerAdminsRepository extends BaseRepository {
 
     @Override
     public String getRoot() {
@@ -147,9 +147,8 @@ public class AdminsRepository extends BaseRepository {
         List<DocumentSnapshot> documentSnapshots =
                 Tasks.await(getCollection().whereEqualTo(Admin.USER_EMAIL_FIELD, adminEmail).get()).getDocuments();
 
-        checkEmailUniqueness(documentSnapshots);
-
         checkDataEmpty(documentSnapshots);
+        checkEmailUniqueness(documentSnapshots);
 
         return documentSnapshots.get(0);
     }

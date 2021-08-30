@@ -2,7 +2,7 @@ package com.example.fitnessfactory.data.managers;
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.repositories.AdminsAccessRepository;
-import com.example.fitnessfactory.data.repositories.AdminsRepository;
+import com.example.fitnessfactory.data.repositories.OwnerAdminsRepository;
 import com.example.fitnessfactory.system.SafeReference;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.google.firebase.firestore.WriteBatch;
@@ -17,7 +17,7 @@ public class AdminsAccessManager extends BaseManager {
     @Inject
     AdminsAccessRepository accessRepository;
     @Inject
-    AdminsRepository adminsRepository;
+    OwnerAdminsRepository ownerAdminsRepository;
 
     public AdminsAccessManager() {
         FFApp.get().getAppComponent().inject(this);
@@ -33,12 +33,12 @@ public class AdminsAccessManager extends BaseManager {
                                 : accessRepository.getRegisterAdminAccessEntryBatchAsync(ownerId, userEmail))
                 .flatMap(writeBatch -> {
                     registerBatch.set(writeBatch);
-                    return adminsRepository.isAdminWithThisEmailAddedAsync(userEmail);
+                    return ownerAdminsRepository.isAdminWithThisEmailAddedAsync(userEmail);
                 })
                 .flatMap(isAdded ->
                         isAdded ?
                                 Single.just(registerBatch.getValue()) :
-                                adminsRepository.getAddAdminBatchAsync(userEmail, registerBatch.getValue()))
+                                ownerAdminsRepository.getAddAdminBatchAsync(userEmail, registerBatch.getValue()))
                 .flatMap(this::commitBatchSingle);
     }
 
@@ -54,6 +54,6 @@ public class AdminsAccessManager extends BaseManager {
 
     private Single<WriteBatch> getDeleteBatch(String ownerId, String adminEmail) {
         return accessRepository.getDeleteAdminAccessEntryBatchAsync(ownerId, adminEmail)
-                .flatMap(writeBatch -> adminsRepository.getDeleteAdminBatchAsync(writeBatch, adminEmail));
+                .flatMap(writeBatch -> ownerAdminsRepository.getDeleteAdminBatchAsync(writeBatch, adminEmail));
     }
 }

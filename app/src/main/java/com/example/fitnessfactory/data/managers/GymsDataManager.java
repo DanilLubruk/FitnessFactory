@@ -2,8 +2,8 @@ package com.example.fitnessfactory.data.managers;
 
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.models.Gym;
-import com.example.fitnessfactory.data.repositories.AdminsRepository;
-import com.example.fitnessfactory.data.repositories.GymRepository;
+import com.example.fitnessfactory.data.repositories.OwnerAdminsRepository;
+import com.example.fitnessfactory.data.repositories.OwnerGymRepository;
 
 import java.util.List;
 
@@ -14,16 +14,16 @@ import io.reactivex.Single;
 public class GymsDataManager extends BaseManager {
 
     @Inject
-    AdminsRepository adminsRepository;
+    OwnerAdminsRepository ownerAdminsRepository;
     @Inject
-    GymRepository gymRepository;
+    OwnerGymRepository ownerGymRepository;
 
     public GymsDataManager() {
         FFApp.get().getAppComponent().inject(this);
     }
 
     public Single<List<Gym>> getAdminsGymsByEmail(String adminEmail) {
-        return adminsRepository.getAdminsGymsEmailAsync(adminEmail)
-                .flatMap(gymRepository::getGymsByIdsAsync);
+        return ownerAdminsRepository.getAdminsGymsEmailAsync(adminEmail)
+                .flatMap(ownerGymRepository::getGymsByIdsAsync);
     }
 }

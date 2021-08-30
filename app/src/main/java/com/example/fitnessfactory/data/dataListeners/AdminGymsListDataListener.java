@@ -3,7 +3,6 @@ package com.example.fitnessfactory.data.dataListeners;
 import com.example.fitnessfactory.data.events.AdminGymsListListenerEvent;
 import com.example.fitnessfactory.data.firestoreCollections.OwnerAdminsCollection;
 import com.example.fitnessfactory.data.models.Admin;
-import com.example.fitnessfactory.utils.RxUtils;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 
@@ -12,27 +11,25 @@ import org.greenrobot.eventbus.EventBus;
 
 import io.reactivex.Single;
 
-public class AdminsGymsDataListener extends BaseDataListener {
+public class AdminGymsListDataListener extends BaseDataListener {
 
     @Override
     protected String getRoot() {
         return OwnerAdminsCollection.getRoot();
     }
 
-    public void startAdminsGymsListener(String adminEmail) {
-        addSubscription(getAdminGymsListListener(adminEmail)
-                .subscribeOn(getIOScheduler())
-                .observeOn(getMainThreadScheduler())
-                .subscribe(dataListener::set, RxUtils::handleError));
+    public void startDataListener(String adminEmail) {
+        setListenerRegistration(getDataListener(adminEmail));
     }
 
-    private Single<ListenerRegistration> getAdminGymsListListener(String adminEmail) {
+    private Single<ListenerRegistration> getDataListener(String adminEmail) {
         return Single.create(emitter -> {
             ListenerRegistration listenerRegistration =
                     getAdminQueryByEmail(adminEmail)
                             .addSnapshotListener(((value, error) -> {
                                 if (error != null) {
                                     reportError(emitter, error);
+                                    return;
                                 }
 
                                 EventBus.getDefault().post(new AdminGymsListListenerEvent());
