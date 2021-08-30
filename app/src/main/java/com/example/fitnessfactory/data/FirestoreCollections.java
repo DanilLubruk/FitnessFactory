@@ -8,7 +8,11 @@ public class FirestoreCollections {
 
     public static final String ADMINS_ACCESS_COLLECTION = "adminsAccess";
 
+    public static final String COACHES_ACCESS_COLLECTION = "coachesAccess";
+
     public static final String ADMINS = "admins";
+
+    public static final String COACHES = "coaches";
 
     public static final String ORGANISATION_DATA = "organisationData";
 }

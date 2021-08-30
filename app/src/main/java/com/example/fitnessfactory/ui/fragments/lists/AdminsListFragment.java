@@ -14,10 +14,9 @@ import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.events.AdminsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.ui.activities.editors.AdminEditorActivity;
 import com.example.fitnessfactory.ui.adapters.AdminsListAdapter;
-import com.example.fitnessfactory.ui.fragments.BaseFragment;
+import com.example.fitnessfactory.ui.fragments.ListListenerFragment;
 import com.example.fitnessfactory.ui.viewmodels.lists.AdminListViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.IntentUtils;
@@ -26,7 +25,6 @@ import com.example.fitnessfactory.utils.dialogs.DialogUtils;
 import com.github.clans.fab.FloatingActionButton;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -35,11 +33,11 @@ import java.util.List;
 import butterknife.BindView;
 import io.reactivex.Single;
 
-public class AdminsListFragment extends BaseFragment {
+public class AdminsListFragment extends ListListenerFragment<AppUser> {
 
-    @BindView(R.id.rvAdmins)
+    @BindView(R.id.rvData)
     RecyclerView rvAdmins;
-    @BindView(R.id.fabAddAdmin)
+    @BindView(R.id.fabAddItem)
     FloatingActionButton fabAddAdmin;
 
     private AdminListViewModel viewModel;
@@ -53,6 +51,11 @@ public class AdminsListFragment extends BaseFragment {
         getBaseActivity().setTitle(selectMode ? R.string.title_select_admins : R.string.title_admins);
         viewModel = new ViewModelProvider(this).get(AdminListViewModel.class);
         initComponents();
+    }
+
+    @Override
+    protected AdminListViewModel getViewModel() {
+        return viewModel;
     }
 
     private void initComponents() {
@@ -114,32 +117,9 @@ public class AdminsListFragment extends BaseFragment {
         startActivity(intent);
     }
 
-    private void askForDelete(AppUser admin) {
-        subscribeInMainThread(
-                DialogUtils.showAskDialog(
-                        getBaseActivity(),
-                        getDeleteMessage(),
-                        ResUtils.getString(R.string.caption_ok),
-                        ResUtils.getString(R.string.caption_cancel)),
-                new SingleData<>(
-                        doDelete -> {
-                            if (doDelete) {
-                                deleteAdmin(admin);
-                            }
-                        },
-                        throwable -> {
-                            throwable.printStackTrace();
-                            GuiUtils.showMessage(throwable.getLocalizedMessage());
-                        }
-                ));
-    }
-
-    private String getDeleteMessage() {
+    @Override
+    protected String getDeleteMessage() {
         return ResUtils.getString(R.string.message_ask_delete_admin);
-    }
-
-    private void deleteAdmin(AppUser admin) {
-        viewModel.deleteAdmin(admin.getEmail());
     }
 
     private void setAdminsData(List<AppUser> admins) {
@@ -198,24 +178,5 @@ public class AdminsListFragment extends BaseFragment {
 
     public void showProgress() {
 
-    }
-
-    @Override
-    public int getContentViewId() {
-        return R.layout.fragment_admins_list;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-        viewModel.startDataListener();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-        viewModel.stopDataListener();
     }
 }

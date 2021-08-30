@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class AdminEditorViewModel extends EditorViewModel implements DataListListener {
+public class AdminEditorViewModel extends EditorViewModel implements DataListListener<Gym> {
 
     @Inject
     AdminsRepository adminsRepository;
@@ -60,14 +60,14 @@ public class AdminEditorViewModel extends EditorViewModel implements DataListLis
                 RxUtils::handleError);
     }
 
-    public void removeGym(String gymId) {
+    public void deleteItem(Gym gym) {
         AppUser admin = this.admin.get();
         if (admin == null) {
             return;
         }
 
         subscribeInIOThread(
-                adminsRepository.removeGymFromAdminAsync(admin.getEmail(), gymId),
+                adminsRepository.removeGymFromAdminAsync(admin.getEmail(), gym.getId()),
                 RxUtils::handleError);
     }
 

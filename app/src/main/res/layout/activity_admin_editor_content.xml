@@ -55,7 +55,7 @@
             android:layout_marginBottom="@dimen/component_margin"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvGyms"
+            android:id="@+id/rvData"
             android:background="@drawable/nested_view_border"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -71,7 +71,7 @@
 
         <com.github.clans.fab.FloatingActionButton
             xmlns:fab="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/fabAddGym"
+            android:id="@+id/fabAddItem"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="bottom|end"

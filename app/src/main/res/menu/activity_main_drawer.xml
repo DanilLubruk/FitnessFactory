@@ -18,6 +18,11 @@
             android:title="@string/title_admins"/>
 
         <item
+            android:id="@+id/nav_coaches"
+            android:checkable="true"
+            android:title="@string/title_coaches"/>
+
+        <item
             android:id="@+id/nav_gyms"
             android:checkable="true"
             android:title="@string/title_gyms" />

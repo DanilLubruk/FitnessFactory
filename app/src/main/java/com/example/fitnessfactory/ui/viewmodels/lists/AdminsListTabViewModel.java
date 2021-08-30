@@ -20,7 +20,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class AdminsListTabViewModel extends BaseViewModel implements DataListListener {
+public class AdminsListTabViewModel extends BaseViewModel implements DataListListener<AppUser> {
 
     @Inject
     AdminsRepository adminsRepository;
@@ -48,12 +48,12 @@ public class AdminsListTabViewModel extends BaseViewModel implements DataListLis
         subscribeInIOThread(adminsRepository.addGymToAdminAsync(adminEmail, gymId));
     }
 
-    public void removeAdminFromGym(String adminEmail) {
+    public void deleteItem(AppUser admin) {
         if (TextUtils.isEmpty(gymId)) {
             return;
         }
 
-        subscribeInIOThread(adminsRepository.removeGymFromAdminAsync(adminEmail, gymId));
+        subscribeInIOThread(adminsRepository.removeGymFromAdminAsync(admin.getEmail(), gymId));
     }
 
     public void startDataListener() {

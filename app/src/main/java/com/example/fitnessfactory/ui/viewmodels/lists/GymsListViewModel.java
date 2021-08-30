@@ -10,7 +10,7 @@ import com.example.fitnessfactory.ui.viewmodels.DataListListener;
 import com.example.fitnessfactory.utils.RxUtils;
 import javax.inject.Inject;
 
-public class GymsListViewModel extends BaseViewModel implements DataListListener {
+public class GymsListViewModel extends BaseViewModel implements DataListListener<Gym> {
 
     @Inject
     GymRepository gymRepository;
@@ -31,7 +31,7 @@ public class GymsListViewModel extends BaseViewModel implements DataListListener
         gymsListDataListener.stopDataListener();
     }
 
-    public void deleteGym(Gym gym) {
+    public void deleteItem(Gym gym) {
         if (gym == null) {
             return;
         }

@@ -31,6 +31,7 @@
     <string name="message_data_modified">Close without saving?</string>
     <string name="message_ask_delete_gym">Delete gym?</string>
     <string name="message_ask_delete_admin">Delete admin?</string>
+    <string name="message_ask_delete_coach">Delete coach?</string>
     <string name="caption_organisation_owner">Organisation owner</string>
     <string name="caption_my_own_gym">My own one</string>
     <string name="caption_personnel">Personnel</string>

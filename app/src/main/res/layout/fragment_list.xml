@@ -12,14 +12,14 @@
         android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvAdmins"
+        android:id="@+id/rvData"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
     <com.github.clans.fab.FloatingActionButton
         xmlns:fab="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/fabAddAdmin"
+        android:id="@+id/fabAddItem"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom|end"

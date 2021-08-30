@@ -22,7 +22,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Single;
 
-public class AdminListViewModel extends BaseViewModel implements DataListListener {
+public class AdminListViewModel extends BaseViewModel implements DataListListener<AppUser> {
 
     @Inject
     AdminsAccessManager adminsAccessManager;
@@ -89,9 +89,9 @@ public class AdminListViewModel extends BaseViewModel implements DataListListene
         adminsListListener.stopDataListener();
     }
 
-    public void deleteAdmin(String email) {
+    public void deleteItem(AppUser admin) {
         subscribeInIOThread(
-                adminsAccessManager.deleteAdminCompletable(AppPrefs.gymOwnerId().getValue(), email),
+                adminsAccessManager.deleteAdminCompletable(AppPrefs.gymOwnerId().getValue(), admin.getEmail()),
                 RxUtils::handleError);
     }
 }

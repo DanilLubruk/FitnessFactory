@@ -34,9 +34,9 @@ import butterknife.BindView;
 
 public class AdminEditorActivity extends EditorActivity {
 
-    @BindView(R.id.rvGyms)
+    @BindView(R.id.rvData)
     RecyclerView rvGyms;
-    @BindView(R.id.fabAddGym)
+    @BindView(R.id.fabAddItem)
     FloatingActionButton fabAddGym;
 
     private AdminEditorViewModel viewModel;
@@ -102,7 +102,7 @@ public class AdminEditorActivity extends EditorActivity {
     }
 
     private void deleteGym(Gym gym) {
-        viewModel.removeGym(gym.getId());
+        viewModel.deleteItem(gym);
     }
 
     private void showSelectionActivity() {
