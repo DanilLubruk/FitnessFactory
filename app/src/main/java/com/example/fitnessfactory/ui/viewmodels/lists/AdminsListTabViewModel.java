@@ -13,13 +13,14 @@ import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.repositories.AdminsRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
+import com.example.fitnessfactory.ui.viewmodels.DataListListener;
 import com.example.fitnessfactory.utils.RxUtils;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class AdminsListTabViewModel extends BaseViewModel {
+public class AdminsListTabViewModel extends BaseViewModel implements DataListListener {
 
     @Inject
     AdminsRepository adminsRepository;
@@ -55,16 +56,16 @@ public class AdminsListTabViewModel extends BaseViewModel {
         subscribeInIOThread(adminsRepository.removeGymFromAdminAsync(adminEmail, gymId));
     }
 
-    public void addGymAdminsListListener() {
+    public void startDataListener() {
         if (TextUtils.isEmpty(gymId)) {
             return;
         }
 
-        gymAdminsDataListener.setGymAdminsDataListener(gymId);
+        gymAdminsDataListener.startGymAdminsDataListener(gymId);
     }
 
-    public void removeGymAdminsListListener() {
-        gymAdminsDataListener.removeDataListener();
+    public void stopDataListener() {
+        gymAdminsDataListener.stopDataListener();
     }
 
     public void setGymData(String gymId) {

@@ -20,8 +20,9 @@
     <string name="caption_cancel">Cancel</string>
     <string name="caption_blank_fields">You need to fill in the blank fields!</string>
     <string name="caption_log_out">Log out</string>
-    <string name="message_error_gyms_data_obtain">Error occurred when obtaining data</string>
-    <string name="message_error_gyms_data_save">Error occurred when saving data</string>
+    <string name="message_error_data_obtain">Error occurred when obtaining data</string>
+    <string name="message_error_data_save">Error occurred when saving data</string>
+    <string name="message_error_data_operate">Error occurred when operating data</string>
     <string name="message_error_gym_null">Gym is null</string>
     <string name="message_error_ununique_id">ID is not unique</string>
     <string name="caption_warning_title">Warning</string>

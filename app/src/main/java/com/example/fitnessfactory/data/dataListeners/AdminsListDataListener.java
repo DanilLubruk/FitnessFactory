@@ -15,7 +15,7 @@ public class AdminsListDataListener extends BaseDataListener { ;
         return OwnerAdminsCollection.getRoot();
     }
 
-    public void setAdminsListListener() {
+    public void startAdminsListListener() {
         addSubscription(getAdminsListListener()
                 .subscribeOn(getIOScheduler())
                 .observeOn(getMainThreadScheduler())

@@ -5,12 +5,12 @@
 
     <RelativeLayout
         android:id="@+id/rowBG"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
         <Button
             android:id="@+id/btnRemove"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:text="@string/caption_remove"
             android:layout_width="wrap_content"
             android:layout_gravity="center"

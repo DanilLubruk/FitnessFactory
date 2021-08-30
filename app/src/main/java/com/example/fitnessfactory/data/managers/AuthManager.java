@@ -8,9 +8,9 @@ import com.example.fitnessfactory.data.repositories.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.OrganisationInfoRepository;
 import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
+import com.example.fitnessfactory.system.SafeReference;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
@@ -33,7 +33,7 @@ public class AuthManager extends BaseManager {
     }
 
     public Single<List<AppUser>> handleSignIn(Intent signInData) {
-        AtomicReference<AppUser> user = new AtomicReference<>();
+        SafeReference<AppUser> user = new SafeReference<>();
 
         return authManager.handleSignInResult(signInData)
                 .observeOn(getIOScheduler())
@@ -45,10 +45,10 @@ public class AuthManager extends BaseManager {
                 .observeOn(getIOScheduler())
                 .flatMap(isRegistered ->
                         isRegistered ?
-                                userRepository.getAppUserByEmailAsync(user.get().getEmail()) :
+                                userRepository.getAppUserByEmailAsync(user.getValue().getEmail()) :
                                 userRepository.registerUser(
-                                        user.get().getEmail(),
-                                        user.get().getName()))
+                                        user.getValue().getEmail(),
+                                        user.getValue().getName()))
                 .observeOn(getIOScheduler())
                 .flatMap(authUser -> adminsAccessRepository.getOwnersByInvitedEmail(authUser))
                 .observeOn(getIOScheduler())

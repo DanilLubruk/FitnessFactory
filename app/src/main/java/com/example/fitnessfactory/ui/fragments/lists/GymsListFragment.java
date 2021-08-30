@@ -166,13 +166,13 @@ public class GymsListFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        viewModel.addGymsListDataListener();
+        viewModel.startDataListener();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-        viewModel.removeGymsListDataListener();
+        viewModel.stopDataListener();
     }
 }

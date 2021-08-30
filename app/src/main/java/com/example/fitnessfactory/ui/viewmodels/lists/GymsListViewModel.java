@@ -6,10 +6,11 @@ import com.example.fitnessfactory.data.managers.GymsAccessManager;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.repositories.GymRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
+import com.example.fitnessfactory.ui.viewmodels.DataListListener;
 import com.example.fitnessfactory.utils.RxUtils;
 import javax.inject.Inject;
 
-public class GymsListViewModel extends BaseViewModel {
+public class GymsListViewModel extends BaseViewModel implements DataListListener {
 
     @Inject
     GymRepository gymRepository;
@@ -22,12 +23,12 @@ public class GymsListViewModel extends BaseViewModel {
         FFApp.get().getAppComponent().inject(this);
     }
 
-    public void addGymsListDataListener() {
-        gymsListDataListener.setGymsListListener();
+    public void startDataListener() {
+        gymsListDataListener.startGymsListListener();
     }
 
-    public void removeGymsListDataListener() {
-        gymsListDataListener.removeDataListener();
+    public void stopDataListener() {
+        gymsListDataListener.stopDataListener();
     }
 
     public void deleteGym(Gym gym) {

@@ -143,13 +143,13 @@ public class AdminsListTabFragment extends EditorTabFragment {
     @Override
     public void onResume() {
         super.onResume();
-        viewModel.addGymAdminsListListener();
+        viewModel.startDataListener();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        viewModel.removeGymAdminsListListener();
+        viewModel.stopDataListener();
     }
 
     public void closeProgress() {

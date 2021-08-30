@@ -17,7 +17,7 @@ public class GymAdminsDataListener extends BaseDataListener {
         return OwnerAdminsCollection.getRoot();
     }
 
-    public void setGymAdminsDataListener(String gymId) {
+    public void startGymAdminsDataListener(String gymId) {
         addSubscription(getGymAdminsListener(gymId)
                 .subscribeOn(getIOScheduler())
                 .observeOn(getMainThreadScheduler())

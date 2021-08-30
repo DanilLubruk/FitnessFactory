@@ -75,7 +75,7 @@ public class GymRepository extends BaseRepository {
     }
 
     private String getGymsIdUnuniqueErrorMessage() {
-        return ResUtils.getString(R.string.message_error_gyms_data_obtain)
+        return ResUtils.getString(R.string.message_error_data_obtain)
                 .concat(" - ")
                 .concat(ResUtils.getString(R.string.message_error_ununique_id));
     }
@@ -122,7 +122,7 @@ public class GymRepository extends BaseRepository {
     }
 
     public String getGymNullErrorMessage() {
-        return ResUtils.getString(R.string.message_error_gyms_data_save)
+        return ResUtils.getString(R.string.message_error_data_save)
                 .concat(" - ")
                 .concat(ResUtils.getString(R.string.message_error_gym_null));
     }

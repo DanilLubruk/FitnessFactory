@@ -14,13 +14,13 @@
         android:scaleType="fitCenter"
         android:padding="@dimen/component_margin"
         app:srcCompat="@mipmap/ic_launcher_round"
-        android:layout_marginLeft="@dimen/component_margin" />
+        android:layout_marginStart="@dimen/component_margin" />
 
     <TextView
         android:id="@+id/tvAppName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:padding="@dimen/activity_horizontal_margin"
         android:text="@string/app_name"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 </LinearLayout>

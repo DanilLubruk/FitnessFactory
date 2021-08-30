@@ -142,14 +142,14 @@ public class AdminEditorActivity extends EditorActivity {
     @Override
     public void onStart() {
         super.onStart();
-        viewModel.addAdminEditorGymsListener();
+        viewModel.startDataListener();
         EventBus.getDefault().register(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        viewModel.removeAdminEditorGymsListener();
+        viewModel.stopDataListener();
         EventBus.getDefault().unregister(this);
     }
 

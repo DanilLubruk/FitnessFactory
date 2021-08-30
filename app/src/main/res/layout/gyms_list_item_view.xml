@@ -5,7 +5,7 @@
 
     <RelativeLayout
         android:id="@+id/rowBG"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
         <Button
@@ -14,10 +14,10 @@
             android:layout_width="wrap_content"
             android:layout_gravity="center"
             android:layout_height="match_parent"
-            android:layout_toLeftOf="@+id/btnDelete"/>
+            android:layout_toStartOf="@+id/btnDelete"/>
         <Button
             android:id="@+id/btnDelete"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:text="@string/caption_delete"
             android:layout_width="wrap_content"
             android:layout_gravity="center"

@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class AdminEditorViewModel extends EditorViewModel {
+public class AdminEditorViewModel extends EditorViewModel implements DataListListener {
 
     @Inject
     AdminsRepository adminsRepository;
@@ -75,17 +75,17 @@ public class AdminEditorViewModel extends EditorViewModel {
         return gyms;
     }
 
-    public void addAdminEditorGymsListener() {
+    public void startDataListener() {
         AppUser admin = this.admin.get();
         if (admin == null) {
             return;
         }
 
-        adminsGymsDataListener.setAdminsGymsListener(admin.getEmail());
+        adminsGymsDataListener.startAdminsGymsListener(admin.getEmail());
     }
 
-    public void removeAdminEditorGymsListener() {
-        adminsGymsDataListener.removeDataListener();
+    public void stopDataListener() {
+        adminsGymsDataListener.stopDataListener();
     }
 
     public void getGymsData() {

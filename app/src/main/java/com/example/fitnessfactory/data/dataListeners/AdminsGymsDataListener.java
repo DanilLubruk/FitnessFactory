@@ -19,7 +19,7 @@ public class AdminsGymsDataListener extends BaseDataListener {
         return OwnerAdminsCollection.getRoot();
     }
 
-    public void setAdminsGymsListener(String adminEmail) {
+    public void startAdminsGymsListener(String adminEmail) {
         addSubscription(getAdminGymsListListener(adminEmail)
                 .subscribeOn(getIOScheduler())
                 .observeOn(getMainThreadScheduler())

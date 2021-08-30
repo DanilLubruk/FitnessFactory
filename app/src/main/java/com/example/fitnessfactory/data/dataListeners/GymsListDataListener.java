@@ -1,7 +1,13 @@
 package com.example.fitnessfactory.data.dataListeners;
+
+import android.util.Log;
+
+import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.GymsListDataListenerEvent;
 import com.example.fitnessfactory.data.firestoreCollections.OwnerGymsCollection;
 import com.example.fitnessfactory.data.models.Gym;
+import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.RxUtils;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
@@ -9,6 +15,7 @@ import com.google.firebase.firestore.Query;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
+
 import io.reactivex.Single;
 
 public class GymsListDataListener extends BaseDataListener {
@@ -18,8 +25,8 @@ public class GymsListDataListener extends BaseDataListener {
         return OwnerGymsCollection.getRoot();
     }
 
-    public void setGymsListListener() {
-       addSubscription(getGymsListListener()
+    public void startGymsListListener() {
+        addSubscription(getGymsListListener()
                 .subscribeOn(getIOScheduler())
                 .observeOn(getMainThreadScheduler())
                 .subscribe(dataListener::set, RxUtils::handleError));
@@ -32,12 +39,16 @@ public class GymsListDataListener extends BaseDataListener {
                             .addSnapshotListener(((value, error) -> {
                                 if (error != null) {
                                     reportError(emitter, error);
+                                    return;
+                                }
+                                if (value == null) {
+                                    Log.d(AppConsts.DEBUG_TAG, "GymsListDataListener:40 value null");
+                                    reportError(emitter, new Exception(ResUtils.getString(R.string.message_error_data_obtain)));
+                                    return;
                                 }
 
-                                if (value != null) {
-                                    List<Gym> gyms = value.toObjects(Gym.class);
-                                    EventBus.getDefault().post(new GymsListDataListenerEvent(gyms));
-                                }
+                                List<Gym> gyms = value.toObjects(Gym.class);
+                                EventBus.getDefault().post(new GymsListDataListenerEvent(gyms));
                             }));
 
             if (!emitter.isDisposed()) {
