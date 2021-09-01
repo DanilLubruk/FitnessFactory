@@ -1,6 +1,7 @@
 package com.example.fitnessfactory.data.managers;
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.repositories.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.OwnerAdminsRepository;
 import com.example.fitnessfactory.system.SafeReference;
@@ -26,7 +27,7 @@ public class AdminsAccessManager extends BaseManager {
     public Single<Boolean> createAdmin(String ownerId, String userEmail) {
         SafeReference<WriteBatch> registerBatch = new SafeReference<>();
 
-        return accessRepository.isAdminWithThisEmailRegisteredAsync(userEmail)
+        return accessRepository.isAdminWithThisEmailRegisteredAsync(ownerId, userEmail)
                 .flatMap(isRegistered ->
                         isRegistered ?
                                 Single.error(new Exception(ResUtils.getString(R.string.message_admin_is_registered)))
@@ -38,7 +39,7 @@ public class AdminsAccessManager extends BaseManager {
                 .flatMap(isAdded ->
                         isAdded ?
                                 Single.just(registerBatch.getValue()) :
-                                ownerAdminsRepository.getAddAdminBatchAsync(userEmail, registerBatch.getValue()))
+                                ownerAdminsRepository.getAddAdminBatchAsync(registerBatch.getValue(), userEmail))
                 .flatMap(this::commitBatchSingle);
     }
 

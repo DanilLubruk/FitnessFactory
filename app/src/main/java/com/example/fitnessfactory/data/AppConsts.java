@@ -18,6 +18,9 @@ public class AppConsts {
     public static final String ADMIN_EMAIL_EXTRA = "ADMIN_EMAIL_EXTRA";
     public static final String FRAGMENT_ID_EXTRA = "FRAGMENT_ID_EXTRA";
     public static final String IS_SELECT_MODE_EXTRA = "IS_SELECT_MODE_EXTRA";
+    public static final String COACH_ID_EXTRA = "COACH_ID_EXTRA";
+    public static final String COACH_NAME_EXTRA = "COACH_NAME_EXTRA";
+    public static final String COACH_EMAIL_EXTRA = "COACH_EMAIL_EXTRA";
 
     public static final String STRING_UNDEFINED_VALUE = "UNDEFINED_VALUE";
     public static final int UNDEFINED_VALUE = -2;

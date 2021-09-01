@@ -132,7 +132,7 @@ public class AdminEditorActivity extends EditorActivity {
 
     private void setData(List<Gym> gyms) {
         if (adapter == null) {
-            adapter = new GymsListAdapter(gyms, R.layout.admins_gyms_list_item_view);
+            adapter = new GymsListAdapter(gyms, R.layout.one_bg_button_list_item_view);
             rvGyms.setAdapter(adapter);
         } else {
             adapter.setGyms(gyms);

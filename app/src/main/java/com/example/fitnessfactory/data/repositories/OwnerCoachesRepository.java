@@ -5,6 +5,7 @@ import com.example.fitnessfactory.data.models.Coach;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
@@ -18,6 +19,38 @@ public class OwnerCoachesRepository extends BaseRepository {
     @Override
     protected String getRoot() {
         return OwnerCoachesCollection.getRoot();
+    }
+
+    public Single<Boolean> isCoachWithThisEmailAddedAsync(String email) {
+        return Single.create(emitter -> {
+            boolean isCoachAdded = isCoachWithThisEmailAdded(email);
+
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(isCoachAdded);
+            }
+        });
+    }
+
+    private boolean isCoachWithThisEmailAdded(String email) throws ExecutionException, InterruptedException {
+        QuerySnapshot querySnapshot = Tasks.await(getCollection().whereEqualTo(Coach.USER_EMAIL_FIELD, email).get());
+
+        return querySnapshot.getDocuments().size() > 0;
+    }
+
+    public Single<WriteBatch> getAddCoachBatchAsync(WriteBatch writeBatch, String email) {
+        return Single.create(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getAddCoachBatch(writeBatch, email));
+            }
+        });
+    }
+
+    private WriteBatch getAddCoachBatch(WriteBatch writeBatch, String email) {
+        DocumentReference document = getCollection().document();
+        Coach coach = new Coach();
+        coach.setUserEmail(email);
+
+        return writeBatch.set(document, coach);
     }
 
     public Single<WriteBatch> getDeleteCoachBatchAsync(WriteBatch writeBatch, String email) {

@@ -116,6 +116,15 @@ public class DialogUtils {
         });
     }
 
+    public static Single<String> getAskEmailDialog(BaseActivity context) {
+        return DialogUtils.showOneLineEditDialog(
+                context,
+                ResUtils.getString(R.string.title_invite_admin),
+                ResUtils.getString(R.string.caption_email),
+                ResUtils.getString(R.string.caption_send),
+                ResUtils.getString(R.string.caption_cancel));
+    }
+
     public static Single<String> showOneLineEditDialog(BaseActivity context,
                                                        String title,
                                                        String hint,

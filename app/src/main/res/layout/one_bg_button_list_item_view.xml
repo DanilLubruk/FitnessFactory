@@ -5,12 +5,12 @@
 
     <RelativeLayout
         android:id="@+id/rowBG"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
         <Button
             android:id="@+id/btnRemove"
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:text="@string/caption_remove"
             android:layout_width="wrap_content"
             android:layout_gravity="center"
@@ -26,7 +26,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tvName"
+            android:id="@+id/tvFirstLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
@@ -34,7 +34,7 @@
             android:gravity="start|center" />
 
         <TextView
-            android:id="@+id/tvEmail"
+            android:id="@+id/tvSecondLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"

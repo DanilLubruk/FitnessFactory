@@ -39,7 +39,9 @@
     <string name="title_invite_admin">Send email invitation</string>
     <string name="caption_send">Send</string>
     <string name="caption_job_offer">Job offer</string>
-    <string name="text_invitation_to_admin">Hello! You\'ve been chosen as one of the admins in our gym! We are waiting for you on our app FitnessFactory! Just log in with your email and enjoy working with our team!</string>
+    <string name="text_invitation_to_personnel">Hello! You\'ve been chosen as one of the %1$s in our gym! We are waiting for you on our app FitnessFactory! Just log in with your email and enjoy working with our team!</string>
+    <string name="caption_admins">admins</string>
+    <string name="caption_coaches">coaches</string>
     <string name="message_error_email_isnt_unique">User\'s email is not unique</string>
     <string name="message_error_sign_in_process">Signing in is in process</string>
     <string name="message_obtaining_organistations">Obtaining your data…</string>
@@ -49,10 +51,13 @@
     <string name="caption_remove">Remove</string>
     <string name="caption_ask_no_more">Ask no more</string>
     <string name="title_question">Question</string>
-    <string name="message_send_invitation">Send email invitation for this admin?</string>
+    <string name="message_send_invitation">Send email invitation for this %1$s?</string>
+    <string name="caption_admin">admin</string>
+    <string name="caption_coach">coach</string>
     <string name="title_edit_item">Edit item</string>
     <string name="title_add_item">Add item</string>
     <string name="message_admin_is_registered">Administrator is already registered</string>
+    <string name="message_coach_is_registered">Coach is already registered</string>
     <string name="message_error_no_data">There is no data</string>
     <string name="message_error_canceled">Canceled</string>
     <!--authentication-->

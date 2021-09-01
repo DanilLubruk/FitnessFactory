@@ -20,7 +20,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView
-            android:id="@+id/tvName"
+            android:id="@+id/tvFirstLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -29,10 +29,10 @@
             android:text="@={model.admin.name}" />
 
         <TextView
-            android:id="@+id/tvEmail"
+            android:id="@+id/tvSecondLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvName"
+            android:layout_below="@+id/tvFirstLine"
             android:layout_marginBottom="@dimen/component_margin"
             android:text="@{model.admin.email}"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
@@ -41,7 +41,7 @@
             android:id="@+id/tvGyms"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvEmail"
+            android:layout_below="@+id/tvSecondLine"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
             android:layout_marginBottom="@dimen/component_margin"
             android:text="@string/title_gyms" />

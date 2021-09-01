@@ -113,7 +113,7 @@ public class AdminsListTabFragment extends ListListenerFragment<AppUser> {
 
     private void setAdminsData(List<AppUser> admins) {
         if (adapter == null) {
-            adapter = new AdminsListAdapter(admins, R.layout.admins_list_tab_view_item);
+            adapter = new AdminsListAdapter(admins, R.layout.one_bg_button_list_item_view);
             rvAdmins.setAdapter(adapter);
         } else {
             adapter.setAdmins(admins);

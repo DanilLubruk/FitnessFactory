@@ -5,10 +5,6 @@ import com.example.fitnessfactory.data.FirestoreCollections;
 public class CoachAccessCollection {
 
     public static String getRoot() {
-        return BaseCollection.getRoot() +
-                "/" +
-                FirestoreCollections.COACHES +
-                "/" +
-                FirestoreCollections.COACHES;
+        return FirestoreCollections.COACHES_ACCESS_COLLECTION;
     }
 }

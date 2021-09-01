@@ -125,7 +125,7 @@ public class GymsListFragment extends ListListenerFragment<Gym> {
 
     private void setGymsData(List<Gym> gyms) {
         if (adapter == null) {
-            adapter = new GymsListAdapter(gyms, R.layout.gyms_list_item_view);
+            adapter = new GymsListAdapter(gyms, R.layout.two_bg_buttons_list_item_view);
             recyclerView.setAdapter(adapter);
         } else {
             adapter.setGyms(gyms);

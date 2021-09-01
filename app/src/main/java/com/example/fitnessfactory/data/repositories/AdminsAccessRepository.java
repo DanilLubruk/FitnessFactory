@@ -34,15 +34,15 @@ public class AdminsAccessRepository extends BaseRepository {
     private WriteBatch getRegisterAdminAccessBatchEntry(String ownerId, String email) {
         DocumentReference docReference = getCollection().document();
         AdminAccessEntry adminAccessEntry = new AdminAccessEntry();
-        adminAccessEntry.setUserEmail(email);
         adminAccessEntry.setOwnerId(ownerId);
+        adminAccessEntry.setUserEmail(email);
 
         return getFirestore().batch().set(docReference, adminAccessEntry);
     }
 
-    public Single<Boolean> isAdminWithThisEmailRegisteredAsync(String email) {
+    public Single<Boolean> isAdminWithThisEmailRegisteredAsync(String ownerId, String email) {
         return SingleCreate(emitter -> {
-            boolean isAdminRegistered = isAdminWithThisEmailRegistered(email);
+            boolean isAdminRegistered = isAdminWithThisEmailRegistered(ownerId, email);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(isAdminRegistered);
@@ -50,8 +50,13 @@ public class AdminsAccessRepository extends BaseRepository {
         });
     }
 
-    private boolean isAdminWithThisEmailRegistered(String email) throws ExecutionException, InterruptedException {
-        QuerySnapshot snapshot = Tasks.await(getCollection().whereEqualTo(AdminAccessEntry.USER_EMAIL_FIELD, email).get());
+    private boolean isAdminWithThisEmailRegistered(String ownerId, String email) throws ExecutionException, InterruptedException {
+        QuerySnapshot snapshot =
+                Tasks.await(
+                getCollection()
+                        .whereEqualTo(AdminAccessEntry.OWNER_ID_FIELD, ownerId)
+                        .whereEqualTo(AdminAccessEntry.USER_EMAIL_FIELD, email)
+                        .get());
 
         return snapshot.getDocuments().size() > 0;
     }

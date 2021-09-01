@@ -178,15 +178,15 @@ public class OwnerAdminsRepository extends BaseRepository {
         return adminsEmails;
     }
 
-    public Single<WriteBatch> getAddAdminBatchAsync(String userEmail, WriteBatch writeBatch) {
+    public Single<WriteBatch> getAddAdminBatchAsync(WriteBatch writeBatch, String userEmail) {
         return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(getAddAdminBatch(userEmail, writeBatch));
+                emitter.onSuccess(getAddAdminBatch(writeBatch, userEmail));
             }
         });
     }
 
-    private WriteBatch getAddAdminBatch(String userEmail, WriteBatch writeBatch) {
+    private WriteBatch getAddAdminBatch(WriteBatch writeBatch, String userEmail) {
         DocumentReference documentReference = getCollection().document();
         Admin admin = new Admin();
         admin.setUserEmail(userEmail);

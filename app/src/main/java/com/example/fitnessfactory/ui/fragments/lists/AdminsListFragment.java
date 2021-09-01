@@ -1,6 +1,7 @@
 package com.example.fitnessfactory.ui.fragments.lists;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -124,7 +125,7 @@ public class AdminsListFragment extends ListListenerFragment<AppUser> {
 
     private void setAdminsData(List<AppUser> admins) {
         if (adapter == null) {
-            adapter = new AdminsListAdapter(admins, R.layout.admins_list_item_view);
+            adapter = new AdminsListAdapter(admins, R.layout.two_bg_buttons_list_item_view);
             rvAdmins.setAdapter(adapter);
         } else {
             adapter.setAdmins(admins);
@@ -133,28 +134,15 @@ public class AdminsListFragment extends ListListenerFragment<AppUser> {
 
     private void showSendEmailInvitationDialog() {
         viewModel.registerAdmin(
-                getAskEmailDialog(),
+                DialogUtils.getAskEmailDialog(getBaseActivity()),
                 getAskToSendInvitationDialog())
-                .observe(this, email -> {
-                    if (!TextUtils.isEmpty(email)) {
-                        sendEmailInvitation(email);
-                    }
-                });
-    }
-
-    private Single<String> getAskEmailDialog() {
-        return DialogUtils.showOneLineEditDialog(
-                getBaseActivity(),
-                ResUtils.getString(R.string.title_invite_admin),
-                ResUtils.getString(R.string.caption_email),
-                ResUtils.getString(R.string.caption_send),
-                ResUtils.getString(R.string.caption_cancel));
+                .observe(this, this::sendEmailInvitation);
     }
 
     private Single<Boolean> getAskToSendInvitationDialog() {
         return DialogUtils.showAskNoMoreDialog(
                 getBaseActivity(),
-                ResUtils.getString(R.string.message_send_invitation),
+                String.format(ResUtils.getString(R.string.message_send_invitation), ResUtils.getString(R.string.caption_admin)),
                 AppPrefs.askForSendingAdminEmailInvite());
     }
 
@@ -162,7 +150,7 @@ public class AdminsListFragment extends ListListenerFragment<AppUser> {
         Intent emailIntent = IntentUtils.getEmailIntent(
                 email,
                 ResUtils.getString(R.string.caption_job_offer),
-                ResUtils.getString(R.string.text_invitation_to_admin));
+                String.format(ResUtils.getString(R.string.text_invitation_to_personnel), ResUtils.getString(R.string.caption_admins)));
 
         startActivity(Intent.createChooser(emailIntent, ResUtils.getString(R.string.title_invite_admin)));
     }
