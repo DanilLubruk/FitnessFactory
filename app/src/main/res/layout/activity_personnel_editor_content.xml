@@ -5,7 +5,7 @@
 
         <variable
             name="model"
-            type="com.example.fitnessfactory.ui.viewmodels.AdminEditorViewModel" />
+            type="com.example.fitnessfactory.ui.viewmodels.PersonnelEditorViewModel" />
     </data>
 
     <RelativeLayout
@@ -20,28 +20,28 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView
-            android:id="@+id/tvFirstLine"
+            android:id="@+id/tvName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
             android:layout_marginBottom="@dimen/component_margin"
-            android:text="@={model.admin.name}" />
+            android:text="@={model.personnel.name}" />
 
         <TextView
-            android:id="@+id/tvSecondLine"
+            android:id="@+id/tvEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvFirstLine"
+            android:layout_below="@+id/tvName"
             android:layout_marginBottom="@dimen/component_margin"
-            android:text="@{model.admin.email}"
+            android:text="@{model.personnel.email}"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
         <TextView
             android:id="@+id/tvGyms"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvSecondLine"
+            android:layout_below="@+id/tvEmail"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
             android:layout_marginBottom="@dimen/component_margin"
             android:text="@string/title_gyms" />

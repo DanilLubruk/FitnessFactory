@@ -11,13 +11,14 @@ import org.greenrobot.eventbus.EventBus;
 
 import io.reactivex.Single;
 
-public class AdminGymsListDataListener extends BaseDataListener {
+public class AdminGymsListDataListener extends BaseDataListener implements DataListenerStringArgument {
 
     @Override
     protected String getRoot() {
         return OwnerAdminsCollection.getRoot();
     }
 
+    @Override
     public void startDataListener(String adminEmail) {
         setListenerRegistration(getDataListener(adminEmail));
     }

@@ -11,9 +11,9 @@ import butterknife.BindView;
 
 public class GymsListViewHolder extends BaseRecyclerViewHolder<Gym> {
 
-    @BindView(R.id.tvFirstLine)
+    @BindView(R.id.tvName)
     TextView tvName;
-    @BindView(R.id.tvSecondLine)
+    @BindView(R.id.tvEmail)
     TextView tvAddress;
 
     public GymsListViewHolder(View itemView) {

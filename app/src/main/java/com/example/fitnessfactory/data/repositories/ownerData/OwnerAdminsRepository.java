@@ -117,33 +117,38 @@ public class OwnerAdminsRepository extends BaseRepository implements OwnerPerson
         return adminsEmails;
     }
 
-    public Single<WriteBatch> getRemoveGymFromAdminBatchAsync(WriteBatch writeBatch, String gymId) {
-        return SingleCreate(emitter -> {
+    @Override
+    public Completable addGymToPersonnel(String adminEmail, String gymId) {
+        return CompletableCreate(emitter -> {
+            addGymToAdmin(adminEmail, gymId);
+
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(getRemoveGymFromAdminBatch(writeBatch, gymId));
+                emitter.onComplete();
             }
         });
     }
 
-    private WriteBatch getRemoveGymFromAdminBatch(WriteBatch writeBatch, String gymId) throws ExecutionException, InterruptedException {
-        for (DocumentSnapshot documentSnapshot : getAdminsListSnapshotsByGymId(gymId)) {
-            writeBatch = writeBatch
-                    .update(
-                            documentSnapshot.getReference(),
-                            Admin.GYMS_ARRAY_FIELD,
-                            FieldValue.arrayRemove(gymId));
-        }
-
-        return writeBatch;
+    private void addGymToAdmin(String adminEmail, String gymId) throws Exception {
+        Tasks.await(getAdminDocumentReference(adminEmail).update(Admin.GYMS_ARRAY_FIELD, FieldValue.arrayUnion(gymId)));
     }
 
-    private List<DocumentSnapshot> getAdminsListSnapshotsByGymId(String gymId) throws ExecutionException, InterruptedException {
-        return Tasks.await(getCollection().whereArrayContains(Admin.GYMS_ARRAY_FIELD, gymId).get()).getDocuments();
+    @Override
+    public Completable removeGymFromPersonnel(String adminEmail, String gymId) {
+        return CompletableCreate(emitter -> {
+            removeGymFromAdmin(adminEmail, gymId);
+
+            if (!emitter.isDisposed()) {
+                emitter.onComplete();
+            }
+        });
     }
 
+    private void removeGymFromAdmin(String adminEmail, String gymId) throws Exception {
+        Tasks.await(getAdminDocumentReference(adminEmail).update(Admin.GYMS_ARRAY_FIELD, FieldValue.arrayRemove(gymId)));
+    }
 
-
-    public Single<List<String>> getAdminsGymsEmailAsync(String adminEmail) {
+    @Override
+    public Single<List<String>> getPersonnelGymsIdsByEmail(String adminEmail) {
         return SingleCreate(emitter -> {
             List<String> gymsIds = getAdminsGymsByEmail(adminEmail);
 
@@ -172,32 +177,28 @@ public class OwnerAdminsRepository extends BaseRepository implements OwnerPerson
         return adminGymsIds;
     }
 
-    public Completable removeGymFromAdminAsync(String adminEmail, String gymId) {
-        return CompletableCreate(emitter -> {
-            removeGymFromAdmin(adminEmail, gymId);
-
+    public Single<WriteBatch> getRemoveGymFromAdminBatchAsync(WriteBatch writeBatch, String gymId) {
+        return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
-                emitter.onComplete();
+                emitter.onSuccess(getRemoveGymFromAdminBatch(writeBatch, gymId));
             }
         });
     }
 
-    private void removeGymFromAdmin(String adminEmail, String gymId) throws Exception {
-        Tasks.await(getAdminDocumentReference(adminEmail).update(Admin.GYMS_ARRAY_FIELD, FieldValue.arrayRemove(gymId)));
+    private WriteBatch getRemoveGymFromAdminBatch(WriteBatch writeBatch, String gymId) throws ExecutionException, InterruptedException {
+        for (DocumentSnapshot documentSnapshot : getAdminsListSnapshotsByGymId(gymId)) {
+            writeBatch = writeBatch
+                    .update(
+                            documentSnapshot.getReference(),
+                            Admin.GYMS_ARRAY_FIELD,
+                            FieldValue.arrayRemove(gymId));
+        }
+
+        return writeBatch;
     }
 
-    public Completable addGymToAdminAsync(String adminEmail, String gymId) {
-        return CompletableCreate(emitter -> {
-            addGymToAdmin(adminEmail, gymId);
-
-            if (!emitter.isDisposed()) {
-                emitter.onComplete();
-            }
-        });
-    }
-
-    private void addGymToAdmin(String adminEmail, String gymId) throws Exception {
-        Tasks.await(getAdminDocumentReference(adminEmail).update(Admin.GYMS_ARRAY_FIELD, FieldValue.arrayUnion(gymId)));
+    private List<DocumentSnapshot> getAdminsListSnapshotsByGymId(String gymId) throws ExecutionException, InterruptedException {
+        return Tasks.await(getCollection().whereArrayContains(Admin.GYMS_ARRAY_FIELD, gymId).get()).getDocuments();
     }
 
     private DocumentReference getAdminDocumentReference(String adminEmail) throws Exception {
@@ -217,6 +218,4 @@ public class OwnerAdminsRepository extends BaseRepository implements OwnerPerson
     public Query getAdminQueryByGymId(String gymId) {
         return getCollection().whereArrayContains(Admin.GYMS_ARRAY_FIELD, gymId);
     }
-
-
 }

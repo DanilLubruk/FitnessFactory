@@ -79,7 +79,7 @@ public class AdminsListTabFragment extends ListListenerFragment<AppUser> {
 
     @Override
     protected String getDeleteMessage() {
-        return ResUtils.getString(R.string.message_ask_remove_admin_from_gym);
+        return ResUtils.getString(R.string.message_ask_remove_personnel_from_gym);
     }
 
     private void tryToShowSelectionActivity() {

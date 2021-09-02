@@ -45,7 +45,7 @@ public class AdminsListTabViewModel extends BaseViewModel implements DataListLis
             return;
         }
 
-        subscribeInIOThread(ownerAdminsRepository.addGymToAdminAsync(adminEmail, gymId));
+        subscribeInIOThread(ownerAdminsRepository.addGymToPersonnel(adminEmail, gymId));
     }
 
     public void deleteItem(AppUser admin) {
@@ -53,7 +53,7 @@ public class AdminsListTabViewModel extends BaseViewModel implements DataListLis
             return;
         }
 
-        subscribeInIOThread(ownerAdminsRepository.removeGymFromAdminAsync(admin.getEmail(), gymId));
+        subscribeInIOThread(ownerAdminsRepository.removeGymFromPersonnel(admin.getEmail(), gymId));
     }
 
     public void startDataListener() {

@@ -9,22 +9,13 @@ import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.events.CoachesListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.ui.fragments.ListListenerFragment;
+import com.example.fitnessfactory.ui.activities.editors.CoachEditorActivity;
 import com.example.fitnessfactory.ui.viewmodels.lists.CoachesListViewModel;
-import com.example.fitnessfactory.utils.GuiUtils;
-import com.example.fitnessfactory.utils.IntentUtils;
 import com.example.fitnessfactory.utils.ResUtils;
-import com.example.fitnessfactory.utils.dialogs.DialogUtils;
-import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 import com.tiromansev.prefswrapper.typedprefs.BooleanPreference;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.List;
-
-import io.reactivex.Single;
-
 public class CoachesListFragment extends PersonnelListFragment {
 
     private CoachesListViewModel viewModel;
@@ -57,23 +48,21 @@ public class CoachesListFragment extends PersonnelListFragment {
 
     @Override
     protected Intent getEditorActivityIntent(AppUser personnel) {
-        /* Intent intent = new Intent(getBaseActivity(), CoachEditorActivity.class);
+        Intent intent = new Intent(getBaseActivity(), CoachEditorActivity.class);
 
-        intent.putExtra(AppConsts.COACH_ID_EXTRA, coach.getId());
-        intent.putExtra(AppConsts.COACH_NAME_EXTRA, coach.getName());
-        intent.putExtra(AppConsts.COACH_EMAIL_EXTRA, coach.getEmail());
+        intent.putExtra(AppConsts.COACH_ID_EXTRA, personnel.getId());
+        intent.putExtra(AppConsts.COACH_NAME_EXTRA, personnel.getName());
+        intent.putExtra(AppConsts.COACH_EMAIL_EXTRA, personnel.getEmail());
 
-        return intent;*/
-        return new Intent();
+        return intent;
     }
 
     @Override
     protected Intent getSendResultIntent(AppUser personnel) {
-        /*Intent result = new Intent();
+        Intent result = new Intent();
         result.putExtra(AppConsts.COACH_EMAIL_EXTRA, personnel.getEmail());
 
-        return result;*/
-        return new Intent();
+        return result;
     }
 
     @Override

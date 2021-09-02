@@ -23,7 +23,7 @@ public class CoachesAccessRepository extends BaseRepository implements Personnel
 
     @Override
     public Single<Boolean> isPersonnelWithThisEmailRegistered(String ownerId, String userEmail) {
-        return Single.create(emitter -> {
+        return SingleCreate(emitter -> {
             boolean isCoachRegistered = isCoachWithThisEmailRegistered(ownerId, userEmail);
 
             if (!emitter.isDisposed()) {
@@ -45,7 +45,7 @@ public class CoachesAccessRepository extends BaseRepository implements Personnel
 
     @Override
     public Single<WriteBatch> getRegisterPersonnelAccessEntryBatch(String ownerId, String userEmail) {
-        return Single.create(emitter -> {
+        return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(getRegisterCoachAccessEntryBatch(ownerId, userEmail));
             }
@@ -63,7 +63,7 @@ public class CoachesAccessRepository extends BaseRepository implements Personnel
 
     @Override
     public Single<WriteBatch> getDeletePersonnelAccessEntryBatch(String ownerId, String email) {
-        return Single.create(emitter -> {
+        return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(getDeleteCoachAccessEntryBatch(ownerId, email));
             }

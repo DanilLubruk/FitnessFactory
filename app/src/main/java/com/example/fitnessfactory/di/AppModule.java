@@ -2,6 +2,7 @@ package com.example.fitnessfactory.di;
 
 import com.example.fitnessfactory.data.dataListeners.AdminGymsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.AdminsListDataListener;
+import com.example.fitnessfactory.data.dataListeners.CoachGymsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.CoachesListDataListener;
 import com.example.fitnessfactory.data.dataListeners.GymAdminsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.GymsListDataListener;
@@ -11,7 +12,6 @@ import com.example.fitnessfactory.data.managers.AuthManager;
 import com.example.fitnessfactory.data.managers.access.CoachesAccessManager;
 import com.example.fitnessfactory.data.managers.data.CoachesDataManager;
 import com.example.fitnessfactory.data.managers.access.GymsAccessManager;
-import com.example.fitnessfactory.data.managers.data.GymsDataManager;
 import com.example.fitnessfactory.data.repositories.access.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.access.CoachesAccessRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
@@ -109,12 +109,6 @@ public class AppModule {
 
     @Provides
     @AppScope
-    public GymsDataManager provideGymsDataManager() {
-        return new GymsDataManager();
-    }
-
-    @Provides
-    @AppScope
     public GymAdminsListDataListener provideGymAdminsDataListener() {
         return new GymAdminsListDataListener();
     }
@@ -147,5 +141,11 @@ public class AppModule {
     @AppScope
     public CoachesDataManager provideCoachesDataManager() {
         return new CoachesDataManager();
+    }
+
+    @Provides
+    @AppScope
+    public CoachGymsListDataListener provideCoachGymsListDataListener() {
+        return new CoachGymsListDataListener();
     }
 }

@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".ui.activities.SelectionActivity">
         </activity>
+        <activity android:name=".ui.activities.editors.CoachEditorActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -10,9 +10,9 @@ import butterknife.BindView;
 
 public class PersonnelListViewHolder extends BaseRecyclerViewHolder<AppUser> {
 
-    @BindView(R.id.tvFirstLine)
+    @BindView(R.id.tvName)
     TextView tvName;
-    @BindView(R.id.tvSecondLine)
+    @BindView(R.id.tvEmail)
     TextView tvEmail;
 
     public PersonnelListViewHolder(View itemView) {

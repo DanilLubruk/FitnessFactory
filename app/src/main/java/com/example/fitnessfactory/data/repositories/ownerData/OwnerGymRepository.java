@@ -27,7 +27,7 @@ public class OwnerGymRepository extends BaseRepository {
     }
 
     public Single<WriteBatch> getDeleteGymBatchAsync(String gymId) {
-        return Single.create(emitter -> {
+        return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(getDeleteGymBatchSync(gymId));
             }
