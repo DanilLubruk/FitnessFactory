@@ -24,7 +24,6 @@ import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
-import io.reactivex.functions.Cancellable;
 
 public class DialogUtils {
 
@@ -119,7 +118,7 @@ public class DialogUtils {
     public static Single<String> getAskEmailDialog(BaseActivity context) {
         return DialogUtils.showOneLineEditDialog(
                 context,
-                ResUtils.getString(R.string.title_invite_admin),
+                ResUtils.getString(R.string.title_invite_personnel),
                 ResUtils.getString(R.string.caption_email),
                 ResUtils.getString(R.string.caption_send),
                 ResUtils.getString(R.string.caption_cancel));

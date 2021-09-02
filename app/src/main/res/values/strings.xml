@@ -7,6 +7,7 @@
     <string name="title_admins">Administrators</string>
     <string name="title_select_admins">Select administrator</string>
     <string name="title_coaches">Coaches</string>
+    <string name="title_select_coach">Select coach</string>
     <string name="navigation_drawer_open">Open menu</string>
     <string name="navigation_drawer_close">Close menu</string>
     <string name="caption_edit">Edit</string>
@@ -36,7 +37,7 @@
     <string name="caption_my_own_gym">My own one</string>
     <string name="caption_personnel">Personnel</string>
     <string name="title_ask_gym_owner">Which gym are you working with?</string>
-    <string name="title_invite_admin">Send email invitation</string>
+    <string name="title_invite_personnel">Send email invitation</string>
     <string name="caption_send">Send</string>
     <string name="caption_job_offer">Job offer</string>
     <string name="text_invitation_to_personnel">Hello! You\'ve been chosen as one of the %1$s in our gym! We are waiting for you on our app FitnessFactory! Just log in with your email and enjoy working with our team!</string>

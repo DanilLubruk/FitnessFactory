@@ -1,11 +1,11 @@
 package com.example.fitnessfactory.di;
-import com.example.fitnessfactory.data.managers.AdminsAccessManager;
-import com.example.fitnessfactory.data.managers.AdminsDataManager;
+import com.example.fitnessfactory.data.managers.access.AdminsAccessManager;
+import com.example.fitnessfactory.data.managers.data.AdminsDataManager;
 import com.example.fitnessfactory.data.managers.AuthManager;
-import com.example.fitnessfactory.data.managers.CoachesAccessManager;
-import com.example.fitnessfactory.data.managers.CoachesDataManager;
-import com.example.fitnessfactory.data.managers.GymsAccessManager;
-import com.example.fitnessfactory.data.managers.GymsDataManager;
+import com.example.fitnessfactory.data.managers.access.CoachesAccessManager;
+import com.example.fitnessfactory.data.managers.data.CoachesDataManager;
+import com.example.fitnessfactory.data.managers.access.GymsAccessManager;
+import com.example.fitnessfactory.data.managers.data.GymsDataManager;
 import com.example.fitnessfactory.ui.viewmodels.AdminEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.MainActivityViewModel;
 import com.example.fitnessfactory.ui.viewmodels.lists.AdminListViewModel;

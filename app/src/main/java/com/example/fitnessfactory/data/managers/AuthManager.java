@@ -4,7 +4,7 @@ import android.content.Intent;
 
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.repositories.AdminsAccessRepository;
+import com.example.fitnessfactory.data.repositories.access.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.OrganisationInfoRepository;
 import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.system.FirebaseAuthManager;

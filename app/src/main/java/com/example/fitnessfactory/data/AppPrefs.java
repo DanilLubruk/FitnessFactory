@@ -33,14 +33,14 @@ public class AppPrefs {
                 .build();
     }
 
-    public static BooleanPreference askForSendingAdminEmailInvite() {
+    public static BooleanPreference askToSendAdminEmailInvite() {
         return BooleanPreference
                 .builder("ask_for_sending_admin_email_invite")
                 .setDefaultValue(true)
                 .build();
     }
 
-    public static BooleanPreference askForSendingCoachEmailInvite() {
+    public static BooleanPreference askToSendCoachEmailInvite() {
         return BooleanPreference
                 .builder("ask_for_sending_coach_email_invite")
                 .setDefaultValue(true)

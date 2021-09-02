@@ -6,11 +6,11 @@ import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fitnessfactory.FFApp;
-import com.example.fitnessfactory.data.managers.GymsAccessManager;
+import com.example.fitnessfactory.data.managers.access.GymsAccessManager;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
-import com.example.fitnessfactory.data.repositories.OwnerGymRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.example.fitnessfactory.utils.RxUtils;
 
 import javax.inject.Inject;

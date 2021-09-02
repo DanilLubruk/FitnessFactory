@@ -9,13 +9,13 @@ import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.dataListeners.AdminGymsListDataListener;
-import com.example.fitnessfactory.data.managers.AdminsAccessManager;
-import com.example.fitnessfactory.data.managers.GymsDataManager;
+import com.example.fitnessfactory.data.managers.access.AdminsAccessManager;
+import com.example.fitnessfactory.data.managers.data.GymsDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
-import com.example.fitnessfactory.data.repositories.OwnerAdminsRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
 import com.example.fitnessfactory.utils.RxUtils;
 
 import java.util.List;
@@ -125,7 +125,7 @@ public class AdminEditorViewModel extends EditorViewModel implements DataListLis
         }
 
         subscribeInIOThread(
-                adminsAccessManager.deleteAdminSingle(AppPrefs.gymOwnerId().getValue(), admin.getEmail()),
+                adminsAccessManager.deletePersonnelSingle(AppPrefs.gymOwnerId().getValue(), admin.getEmail()),
                 new SingleData<>(isDeleted::setValue, throwable -> RxUtils.handleError(isDeleted, throwable)));
 
         return isDeleted;

@@ -7,7 +7,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import io.reactivex.Single;
 
-public class CoachesListDataListener extends BaseDataListener {
+public class CoachesListDataListener extends BaseDataListener implements DataListener {
 
     @Override
     protected String getRoot() {

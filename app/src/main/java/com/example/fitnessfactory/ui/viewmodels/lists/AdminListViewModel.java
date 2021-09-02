@@ -1,28 +1,14 @@
 package com.example.fitnessfactory.ui.viewmodels.lists;
 
-import androidx.lifecycle.MutableLiveData;
-
 import com.example.fitnessfactory.FFApp;
-import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.dataListeners.AdminsListDataListener;
-import com.example.fitnessfactory.data.managers.AdminsAccessManager;
-import com.example.fitnessfactory.data.managers.AdminsDataManager;
-import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.observers.SingleData;
-import com.example.fitnessfactory.data.observers.SingleLiveEvent;
-import com.example.fitnessfactory.system.SafeReference;
-import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
-import com.example.fitnessfactory.ui.viewmodels.DataListListener;
-import com.example.fitnessfactory.utils.RxUtils;
-import com.example.fitnessfactory.utils.dialogs.exceptions.DialogCancelledException;
-
-import java.util.List;
+import com.example.fitnessfactory.data.managers.access.AdminsAccessManager;
+import com.example.fitnessfactory.data.managers.data.AdminsDataManager;
 
 import javax.inject.Inject;
 
-import io.reactivex.Single;
 
-public class AdminListViewModel extends BaseViewModel implements DataListListener<AppUser> {
+public class AdminListViewModel extends PersonnelListViewModel {
 
     @Inject
     AdminsAccessManager adminsAccessManager;
@@ -31,67 +17,22 @@ public class AdminListViewModel extends BaseViewModel implements DataListListene
     @Inject
     AdminsListDataListener adminsListListener;
 
-    private final MutableLiveData<List<AppUser>> admins = new MutableLiveData<>();
-
     public AdminListViewModel() {
         FFApp.get().getAppComponent().inject(this);
     }
 
-    public SingleLiveEvent<String> registerAdmin(Single<String> emailDialog, Single<Boolean> sendInvitationDialog) {
-        SingleLiveEvent<String> observer = new SingleLiveEvent<>();
-        SafeReference<String> adminEmail = new SafeReference<>();
-
-        subscribe(
-                emailDialog
-                        .subscribeOn(getMainThreadScheduler())
-                        .observeOn(getMainThreadScheduler())
-                        .flatMap(email -> {
-                            email = email.toLowerCase();
-                            adminEmail.set(email);
-                            return Single.just(email);
-                        })
-                        .subscribeOn(getIOScheduler())
-                        .observeOn(getIOScheduler())
-                        .flatMap(email -> adminsAccessManager.createAdmin(AppPrefs.gymOwnerId().getValue(), email))
-                        .flatMap(isCreated ->
-                                isCreated ?
-                                        Single.just(AppPrefs.askForSendingAdminEmailInvite().getValue()) :
-                                        Single.just(false))
-                        .subscribeOn(getMainThreadScheduler())
-                        .observeOn(getMainThreadScheduler())
-                        .flatMap(doAsk -> doAsk ? sendInvitationDialog : Single.just(false))
-                        .flatMap(doSendInvitation ->
-                                doSendInvitation ?
-                                        Single.just(adminEmail.getValue()) :
-                                        Single.error(new DialogCancelledException()))
-                        .subscribeOn(getIOScheduler()),
-                new SingleData<>(
-                        observer::setValue,
-                        RxUtils::handleError));
-
-        return observer;
+    @Override
+    protected AdminsAccessManager getAccessManager() {
+        return adminsAccessManager;
     }
 
-    public void startDataListener() {
-        adminsListListener.startDataListener();
+    @Override
+    protected AdminsDataManager getDataManager() {
+        return adminsDataManager;
     }
 
-    public MutableLiveData<List<AppUser>> getAdmins() {
-        return admins;
-    }
-
-    public void getAdminsListData() {
-        subscribeInIOThread(adminsDataManager.getAdminsListAsync(),
-                new SingleData<>(admins::setValue, RxUtils::handleError));
-    }
-
-    public void stopDataListener() {
-        adminsListListener.stopDataListener();
-    }
-
-    public void deleteItem(AppUser admin) {
-        subscribeInIOThread(
-                adminsAccessManager.deleteAdminCompletable(AppPrefs.gymOwnerId().getValue(), admin.getEmail()),
-                RxUtils::handleError);
+    @Override
+    protected AdminsListDataListener getDataListener() {
+        return adminsListListener;
     }
 }

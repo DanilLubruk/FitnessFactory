@@ -1,8 +1,9 @@
-package com.example.fitnessfactory.data.repositories;
+package com.example.fitnessfactory.data.repositories.access;
 
 import com.example.fitnessfactory.data.firestoreCollections.AdminAccessCollection;
 import com.example.fitnessfactory.data.models.AdminAccessEntry;
 import com.example.fitnessfactory.data.models.AppUser;
+import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -16,14 +17,37 @@ import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Single;
 
-public class AdminsAccessRepository extends BaseRepository {
+public class AdminsAccessRepository extends BaseRepository implements PersonnelAccessRepository {
 
     @Override
     public String getRoot() {
         return AdminAccessCollection.getRoot();
     }
 
-    public Single<WriteBatch> getRegisterAdminAccessEntryBatchAsync(String ownerId, String userEmail) {
+    @Override
+    public Single<Boolean> isPersonnelWithThisEmailRegistered(String ownerId, String email) {
+        return SingleCreate(emitter -> {
+            boolean isAdminRegistered = isAdminWithThisEmailRegistered(ownerId, email);
+
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(isAdminRegistered);
+            }
+        });
+    }
+
+    private boolean isAdminWithThisEmailRegistered(String ownerId, String email) throws ExecutionException, InterruptedException {
+        QuerySnapshot snapshot =
+                Tasks.await(
+                        getCollection()
+                                .whereEqualTo(AdminAccessEntry.OWNER_ID_FIELD, ownerId)
+                                .whereEqualTo(AdminAccessEntry.USER_EMAIL_FIELD, email)
+                                .get());
+
+        return snapshot.getDocuments().size() > 0;
+    }
+
+    @Override
+    public Single<WriteBatch> getRegisterPersonnelAccessEntryBatch(String ownerId, String userEmail) {
         return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(getRegisterAdminAccessBatchEntry(ownerId, userEmail));
@@ -40,25 +64,19 @@ public class AdminsAccessRepository extends BaseRepository {
         return getFirestore().batch().set(docReference, adminAccessEntry);
     }
 
-    public Single<Boolean> isAdminWithThisEmailRegisteredAsync(String ownerId, String email) {
+    @Override
+    public Single<WriteBatch> getDeletePersonnelAccessEntryBatch(String ownerId, String email) {
         return SingleCreate(emitter -> {
-            boolean isAdminRegistered = isAdminWithThisEmailRegistered(ownerId, email);
+            WriteBatch writeBatch = getDeleteAdminAccessBatchEntry(ownerId, email);
 
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(isAdminRegistered);
+                emitter.onSuccess(writeBatch);
             }
         });
     }
 
-    private boolean isAdminWithThisEmailRegistered(String ownerId, String email) throws ExecutionException, InterruptedException {
-        QuerySnapshot snapshot =
-                Tasks.await(
-                getCollection()
-                        .whereEqualTo(AdminAccessEntry.OWNER_ID_FIELD, ownerId)
-                        .whereEqualTo(AdminAccessEntry.USER_EMAIL_FIELD, email)
-                        .get());
-
-        return snapshot.getDocuments().size() > 0;
+    private WriteBatch getDeleteAdminAccessBatchEntry(String ownerId, String email) throws Exception {
+        return getFirestore().batch().delete(getAdminDocument(ownerId, email));
     }
 
     public Single<List<String>> getOwnersByInvitedEmail(AppUser user) {
@@ -88,20 +106,6 @@ public class AdminsAccessRepository extends BaseRepository {
                 getCollection()
                         .whereEqualTo(AdminAccessEntry.USER_EMAIL_FIELD, userEmail).get())
                 .toObjects(AdminAccessEntry.class);
-    }
-
-    public Single<WriteBatch> getDeleteAdminAccessEntryBatchAsync(String ownerId, String email) {
-        return SingleCreate(emitter -> {
-            WriteBatch writeBatch = getDeleteAdminAccessBatchEntry(ownerId, email);
-
-            if (!emitter.isDisposed()) {
-                emitter.onSuccess(writeBatch);
-            }
-        });
-    }
-
-    private WriteBatch getDeleteAdminAccessBatchEntry(String ownerId, String email) throws Exception {
-        return getFirestore().batch().delete(getAdminDocument(ownerId, email));
     }
 
     private DocumentReference getAdminDocument(String ownerId, String email) throws Exception {

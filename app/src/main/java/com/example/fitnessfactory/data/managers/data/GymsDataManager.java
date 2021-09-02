@@ -1,9 +1,10 @@
-package com.example.fitnessfactory.data.managers;
+package com.example.fitnessfactory.data.managers.data;
 
 import com.example.fitnessfactory.FFApp;
+import com.example.fitnessfactory.data.managers.BaseManager;
 import com.example.fitnessfactory.data.models.Gym;
-import com.example.fitnessfactory.data.repositories.OwnerAdminsRepository;
-import com.example.fitnessfactory.data.repositories.OwnerGymRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 
 import java.util.List;
 

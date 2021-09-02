@@ -1,10 +1,11 @@
-package com.example.fitnessfactory.data.repositories;
+package com.example.fitnessfactory.data.repositories.ownerData;
 
 import android.text.TextUtils;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.firestoreCollections.OwnerGymsCollection;
 import com.example.fitnessfactory.data.models.Gym;
+import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;

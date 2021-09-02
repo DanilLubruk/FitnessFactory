@@ -1,7 +1,8 @@
-package com.example.fitnessfactory.data.repositories;
+package com.example.fitnessfactory.data.repositories.access;
 
 import com.example.fitnessfactory.data.firestoreCollections.CoachAccessCollection;
 import com.example.fitnessfactory.data.models.CoachAccessEntry;
+import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -13,31 +14,15 @@ import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Single;
 
-public class CoachesAccessRepository extends BaseRepository {
+public class CoachesAccessRepository extends BaseRepository implements PersonnelAccessRepository {
 
     @Override
     protected String getRoot() {
         return CoachAccessCollection.getRoot();
     }
 
-    public Single<WriteBatch> getRegisterCoachAccessEntryBatchAsync(String ownerId, String userEmail) {
-        return Single.create(emitter -> {
-            if (!emitter.isDisposed()) {
-                emitter.onSuccess(getRegisterCoachAccessEntryBatch(ownerId, userEmail));
-            }
-        });
-    }
-
-    private WriteBatch getRegisterCoachAccessEntryBatch(String ownerId, String userEmail) {
-        DocumentReference document = getCollection().document();
-        CoachAccessEntry coachAccessEntry = new CoachAccessEntry();
-        coachAccessEntry.setOwnerId(ownerId);
-        coachAccessEntry.setUserEmail(userEmail);
-
-        return getFirestore().batch().set(document, coachAccessEntry);
-    }
-
-    public Single<Boolean> isCoachWithThisEmailRegisteredAsync(String ownerId, String userEmail) {
+    @Override
+    public Single<Boolean> isPersonnelWithThisEmailRegistered(String ownerId, String userEmail) {
         return Single.create(emitter -> {
             boolean isCoachRegistered = isCoachWithThisEmailRegistered(ownerId, userEmail);
 
@@ -58,7 +43,26 @@ public class CoachesAccessRepository extends BaseRepository {
         return querySnapshot.getDocuments().size() > 0;
     }
 
-    public Single<WriteBatch> getDeleteCoachAccessEntryBatchAsync(String ownerId, String email) {
+    @Override
+    public Single<WriteBatch> getRegisterPersonnelAccessEntryBatch(String ownerId, String userEmail) {
+        return Single.create(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getRegisterCoachAccessEntryBatch(ownerId, userEmail));
+            }
+        });
+    }
+
+    private WriteBatch getRegisterCoachAccessEntryBatch(String ownerId, String userEmail) {
+        DocumentReference document = getCollection().document();
+        CoachAccessEntry coachAccessEntry = new CoachAccessEntry();
+        coachAccessEntry.setOwnerId(ownerId);
+        coachAccessEntry.setUserEmail(userEmail);
+
+        return getFirestore().batch().set(document, coachAccessEntry);
+    }
+
+    @Override
+    public Single<WriteBatch> getDeletePersonnelAccessEntryBatch(String ownerId, String email) {
         return Single.create(emitter -> {
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(getDeleteCoachAccessEntryBatch(ownerId, email));

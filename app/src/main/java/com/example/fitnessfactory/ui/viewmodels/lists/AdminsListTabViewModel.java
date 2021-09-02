@@ -8,10 +8,10 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.dataListeners.GymAdminsListDataListener;
-import com.example.fitnessfactory.data.managers.AdminsDataManager;
+import com.example.fitnessfactory.data.managers.data.AdminsDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.observers.SingleData;
-import com.example.fitnessfactory.data.repositories.OwnerAdminsRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
 import com.example.fitnessfactory.utils.RxUtils;
@@ -78,7 +78,7 @@ public class AdminsListTabViewModel extends BaseViewModel implements DataListLis
         }
 
         subscribeInIOThread(
-                adminsDataManager.getAdminsListByGymIdAsync(gymId),
+                adminsDataManager.getPersonnelListByGymIdAsync(gymId),
                 new SingleData<>(admins::setValue, RxUtils::handleError));
     }
 

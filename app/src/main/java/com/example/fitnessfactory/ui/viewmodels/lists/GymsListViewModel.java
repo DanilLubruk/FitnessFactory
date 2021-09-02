@@ -2,9 +2,9 @@ package com.example.fitnessfactory.ui.viewmodels.lists;
 
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.dataListeners.GymsListDataListener;
-import com.example.fitnessfactory.data.managers.GymsAccessManager;
+import com.example.fitnessfactory.data.managers.access.GymsAccessManager;
 import com.example.fitnessfactory.data.models.Gym;
-import com.example.fitnessfactory.data.repositories.OwnerGymRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
 import com.example.fitnessfactory.utils.RxUtils;

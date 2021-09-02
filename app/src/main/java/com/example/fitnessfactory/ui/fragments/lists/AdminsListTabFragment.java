@@ -16,7 +16,7 @@ import com.example.fitnessfactory.data.events.GymAdminsListListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.activities.editors.EditorActivity;
-import com.example.fitnessfactory.ui.adapters.AdminsListAdapter;
+import com.example.fitnessfactory.ui.adapters.PersonnelListAdapter;
 import com.example.fitnessfactory.ui.fragments.ListListenerFragment;
 import com.example.fitnessfactory.ui.viewmodels.lists.AdminsListTabViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
@@ -38,7 +38,7 @@ public class AdminsListTabFragment extends ListListenerFragment<AppUser> {
     @BindView(R.id.fabAddItem)
     FloatingActionButton fabAddAdmin;
 
-    private AdminsListAdapter adapter;
+    private PersonnelListAdapter adapter;
     private RecyclerTouchListener touchListener;
     private AdminsListTabViewModel viewModel;
 
@@ -64,7 +64,7 @@ public class AdminsListTabFragment extends ListListenerFragment<AppUser> {
         touchListener.setSwipeable(R.id.rowFG, R.id.rowBG, (viewId, position) -> {
             switch (viewId) {
                 case R.id.btnRemove:
-                    AppUser admin = adapter.getAdmin(position);
+                    AppUser admin = adapter.getPersonnel(position);
                     askForDelete(admin);
                     break;
             }
@@ -113,10 +113,10 @@ public class AdminsListTabFragment extends ListListenerFragment<AppUser> {
 
     private void setAdminsData(List<AppUser> admins) {
         if (adapter == null) {
-            adapter = new AdminsListAdapter(admins, R.layout.one_bg_button_list_item_view);
+            adapter = new PersonnelListAdapter(admins, R.layout.one_bg_button_list_item_view);
             rvAdmins.setAdapter(adapter);
         } else {
-            adapter.setAdmins(admins);
+            adapter.setPersonnel(admins);
         }
     }
 

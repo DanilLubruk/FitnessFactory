@@ -1,14 +1,9 @@
 package com.example.fitnessfactory.ui.fragments.lists;
-
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
@@ -16,42 +11,21 @@ import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.events.AdminsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.activities.editors.AdminEditorActivity;
-import com.example.fitnessfactory.ui.adapters.AdminsListAdapter;
-import com.example.fitnessfactory.ui.fragments.ListListenerFragment;
 import com.example.fitnessfactory.ui.viewmodels.lists.AdminListViewModel;
-import com.example.fitnessfactory.utils.GuiUtils;
-import com.example.fitnessfactory.utils.IntentUtils;
 import com.example.fitnessfactory.utils.ResUtils;
-import com.example.fitnessfactory.utils.dialogs.DialogUtils;
-import com.github.clans.fab.FloatingActionButton;
-import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
+import com.tiromansev.prefswrapper.typedprefs.BooleanPreference;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.List;
-
-import butterknife.BindView;
-import io.reactivex.Single;
-
-public class AdminsListFragment extends ListListenerFragment<AppUser> {
-
-    @BindView(R.id.rvData)
-    RecyclerView rvAdmins;
-    @BindView(R.id.fabAddItem)
-    FloatingActionButton fabAddAdmin;
+public class AdminsListFragment extends PersonnelListFragment {
 
     private AdminListViewModel viewModel;
-    private AdminsListAdapter adapter;
-    private RecyclerTouchListener touchListener;
-    private boolean selectMode = false;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        getBaseActivity().setTitle(selectMode ? R.string.title_select_admins : R.string.title_admins);
         viewModel = new ViewModelProvider(this).get(AdminListViewModel.class);
-        initComponents();
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -59,63 +33,48 @@ public class AdminsListFragment extends ListListenerFragment<AppUser> {
         return viewModel;
     }
 
-    private void initComponents() {
-        selectMode = getBaseActivity().getIntent().getBooleanExtra(AppConsts.IS_SELECT_MODE_EXTRA, false);
-        fabAddAdmin.setOnClickListener(view -> showSendEmailInvitationDialog());
-        GuiUtils.initListView(getBaseActivity(), rvAdmins, true);
-        touchListener = new RecyclerTouchListener(getBaseActivity(), rvAdmins);
-        rvAdmins.addOnItemTouchListener(touchListener);
-        touchListener.setSwipeOptionViews(R.id.btnEdit, R.id.btnDelete);
-        touchListener.setSwipeable(R.id.rowFG, R.id.rowBG, (viewId, position) -> {
-            switch (viewId) {
-                case R.id.btnEdit:
-                    AppUser admin = adapter.getAdmin(position);
-                    showEditorActivity(admin);
-                    break;
-                case R.id.btnDelete:
-                    admin = adapter.getAdmin(position);
-                    askForDelete(admin);
-                    break;
-            }
-        });
-        touchListener.setClickable(new RecyclerTouchListener.OnRowClickListener() {
-            @Override
-            public void onRowClicked(int position) {
-                AppUser admin = adapter.getAdmin(position);
-                AdminsListFragment.this.onRowClicked(admin);
-            }
-
-            @Override
-            public void onIndependentViewClicked(int independentViewID, int position) {
-
-            }
-        });
-        viewModel.getAdmins().observe(getViewLifecycleOwner(), this::setAdminsData);
+    @Override
+    protected String getSelectTitle() {
+        return ResUtils.getString(R.string.title_select_admins);
     }
 
-    private void onRowClicked(AppUser admin) {
-        if (selectMode) {
-            sendSelectResult(admin);
-        } else {
-            showEditorActivity(admin);
-        }
+    @Override
+    protected String getTitle() {
+        return ResUtils.getString(R.string.title_admins);
     }
 
-    private void sendSelectResult(AppUser admin) {
-        Intent result = new Intent();
-        result.putExtra(AppConsts.ADMIN_EMAIL_EXTRA, admin.getEmail());
-        getBaseActivity().setResult(Activity.RESULT_OK, result);
-        getBaseActivity().finish();
+    @Override
+    protected BooleanPreference getAskToSendInvitationPrefs() {
+        return AppPrefs.askToSendAdminEmailInvite();
     }
 
-    private void showEditorActivity(AppUser admin) {
+    @Override
+    protected Intent getEditorActivityIntent(AppUser personnel) {
         Intent intent = new Intent(getBaseActivity(), AdminEditorActivity.class);
 
-        intent.putExtra(AppConsts.ADMIN_ID_EXTRA, admin.getId());
-        intent.putExtra(AppConsts.ADMIN_NAME_EXTRA, admin.getName());
-        intent.putExtra(AppConsts.ADMIN_EMAIL_EXTRA, admin.getEmail());
+        intent.putExtra(AppConsts.ADMIN_ID_EXTRA, personnel.getId());
+        intent.putExtra(AppConsts.ADMIN_NAME_EXTRA, personnel.getName());
+        intent.putExtra(AppConsts.ADMIN_EMAIL_EXTRA, personnel.getEmail());
 
-        startActivity(intent);
+        return intent;
+    }
+
+    @Override
+    protected Intent getSendResultIntent(AppUser personnel) {
+        Intent result = new Intent();
+        result.putExtra(AppConsts.ADMIN_EMAIL_EXTRA, personnel.getEmail());
+
+        return result;
+    }
+
+    @Override
+    protected String getSingularPersonnelCaption() {
+        return ResUtils.getString(R.string.caption_admin);
+    }
+
+    @Override
+    protected String getPluralPersonnelCaption() {
+        return ResUtils.getString(R.string.caption_admins);
     }
 
     @Override
@@ -123,47 +82,17 @@ public class AdminsListFragment extends ListListenerFragment<AppUser> {
         return ResUtils.getString(R.string.message_ask_delete_admin);
     }
 
-    private void setAdminsData(List<AppUser> admins) {
-        if (adapter == null) {
-            adapter = new AdminsListAdapter(admins, R.layout.two_bg_buttons_list_item_view);
-            rvAdmins.setAdapter(adapter);
-        } else {
-            adapter.setAdmins(admins);
-        }
-    }
-
-    private void showSendEmailInvitationDialog() {
-        viewModel.registerAdmin(
-                DialogUtils.getAskEmailDialog(getBaseActivity()),
-                getAskToSendInvitationDialog())
-                .observe(this, this::sendEmailInvitation);
-    }
-
-    private Single<Boolean> getAskToSendInvitationDialog() {
-        return DialogUtils.showAskNoMoreDialog(
-                getBaseActivity(),
-                String.format(ResUtils.getString(R.string.message_send_invitation), ResUtils.getString(R.string.caption_admin)),
-                AppPrefs.askForSendingAdminEmailInvite());
-    }
-
-    private void sendEmailInvitation(String email) {
-        Intent emailIntent = IntentUtils.getEmailIntent(
-                email,
-                ResUtils.getString(R.string.caption_job_offer),
-                String.format(ResUtils.getString(R.string.text_invitation_to_personnel), ResUtils.getString(R.string.caption_admins)));
-
-        startActivity(Intent.createChooser(emailIntent, ResUtils.getString(R.string.title_invite_admin)));
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAdminsListDataListenerEvent(AdminsListDataListenerEvent adminsListDataListenerEvent) {
-        viewModel.getAdminsListData();
+        viewModel.getPersonnelListData();
     }
 
+    @Override
     public void closeProgress() {
 
     }
 
+    @Override
     public void showProgress() {
 
     }

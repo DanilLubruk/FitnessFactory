@@ -1,8 +1,9 @@
-package com.example.fitnessfactory.data.managers;
+package com.example.fitnessfactory.data.managers.access;
 
 import com.example.fitnessfactory.FFApp;
-import com.example.fitnessfactory.data.repositories.OwnerAdminsRepository;
-import com.example.fitnessfactory.data.repositories.OwnerGymRepository;
+import com.example.fitnessfactory.data.managers.BaseManager;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.google.firebase.firestore.WriteBatch;
 
 import javax.inject.Inject;

@@ -7,7 +7,7 @@ import com.google.firebase.firestore.Query;
 import org.greenrobot.eventbus.EventBus;
 import io.reactivex.Single;
 
-public class AdminsListDataListener extends BaseDataListener { ;
+public class AdminsListDataListener extends BaseDataListener implements DataListener {
 
     @Override
     protected String getRoot() {
