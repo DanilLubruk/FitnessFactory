@@ -22,10 +22,8 @@ public class AdminsListFragment extends PersonnelListFragment {
 
     private AdminListViewModel viewModel;
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    protected void defineViewModel() {
         viewModel = new ViewModelProvider(this).get(AdminListViewModel.class);
-        super.onActivityCreated(savedInstanceState);
     }
 
     @Override

@@ -41,6 +41,7 @@ public abstract class PersonnelListFragment extends ListListenerFragment<AppUser
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getBaseActivity().setTitle(selectMode ? getSelectTitle() : getTitle());
+        defineViewModel();
         initComponents();
     }
 
@@ -60,6 +61,8 @@ public abstract class PersonnelListFragment extends ListListenerFragment<AppUser
     protected abstract String getSingularPersonnelCaption();
 
     protected abstract String getPluralPersonnelCaption();
+
+    protected abstract void defineViewModel();
 
     private void initComponents() {
         selectMode = getBaseActivity().getIntent().getBooleanExtra(AppConsts.IS_SELECT_MODE_EXTRA, false);

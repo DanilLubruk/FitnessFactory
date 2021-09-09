@@ -12,6 +12,7 @@ import com.example.fitnessfactory.ui.viewmodels.lists.AdminListViewModel;
 import com.example.fitnessfactory.ui.viewmodels.AuthViewModel;
 import com.example.fitnessfactory.ui.viewmodels.GymEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.lists.AdminsListTabViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.CoachesListTabViewModel;
 import com.example.fitnessfactory.ui.viewmodels.lists.CoachesListViewModel;
 import com.example.fitnessfactory.ui.viewmodels.lists.GymsListViewModel;
 
@@ -39,4 +40,5 @@ public interface AppComponent {
     void inject(CoachesListViewModel coachesListViewModel);
     void inject(CoachesAccessManager coachesAccessManager);
     void inject(CoachEditorViewModel coachEditorViewModel);
+    void inject(CoachesListTabViewModel coachesListTabViewModel);
 }

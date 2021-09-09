@@ -1,4 +1,5 @@
 package com.example.fitnessfactory.ui.fragments.lists;
+
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -16,14 +17,13 @@ import com.tiromansev.prefswrapper.typedprefs.BooleanPreference;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
 public class CoachesListFragment extends PersonnelListFragment {
 
     private CoachesListViewModel viewModel;
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    protected void defineViewModel() {
         viewModel = new ViewModelProvider(this).get(CoachesListViewModel.class);
-        super.onActivityCreated(savedInstanceState);
     }
 
     @Override

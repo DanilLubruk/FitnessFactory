@@ -5,6 +5,7 @@ import com.example.fitnessfactory.data.dataListeners.AdminsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.CoachGymsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.CoachesListDataListener;
 import com.example.fitnessfactory.data.dataListeners.GymAdminsListDataListener;
+import com.example.fitnessfactory.data.dataListeners.GymCoachesListDataListener;
 import com.example.fitnessfactory.data.dataListeners.GymsListDataListener;
 import com.example.fitnessfactory.data.managers.access.AdminsAccessManager;
 import com.example.fitnessfactory.data.managers.data.AdminsDataManager;
@@ -147,5 +148,11 @@ public class AppModule {
     @AppScope
     public CoachGymsListDataListener provideCoachGymsListDataListener() {
         return new CoachGymsListDataListener();
+    }
+
+    @Provides
+    @AppScope
+    public GymCoachesListDataListener provideGymCoachesListDataListener() {
+        return new GymCoachesListDataListener();
     }
 }
