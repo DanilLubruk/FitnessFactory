@@ -17,4 +17,12 @@ public class OrganisationData {
     public void setName(String name) {
         this.name = name;
     }
+
+    public boolean equals(OrganisationData organisationData) {
+        return this.getName().equals(organisationData.getName());
+    }
+
+    public void copy(OrganisationData organisationData) {
+        this.setName(organisationData.getName());
+    }
 }

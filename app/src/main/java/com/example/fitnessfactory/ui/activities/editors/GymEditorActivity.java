@@ -37,11 +37,6 @@ public class GymEditorActivity extends EditorActivity {
     private PersonnelPageAdapter pageAdapter;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     protected GymEditorViewModel getViewModel() {
         return viewModel;
     }

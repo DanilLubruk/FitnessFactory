@@ -27,6 +27,10 @@
             android:checkable="true"
             android:title="@string/title_gyms" />
 
+        <item
+            android:id="@+id/nav_organisation"
+            android:checkable="true"
+            android:title="@string/title_organisation" />
     </group>
 
 </menu>

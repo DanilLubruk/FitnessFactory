@@ -61,6 +61,7 @@
     <string name="message_coach_is_registered">Coach is already registered</string>
     <string name="message_error_no_data">There is no data</string>
     <string name="message_error_canceled">Canceled</string>
+    <string name="title_organisation">Company info</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <string name="caption_user_null">User is not signed in</string>

@@ -57,7 +57,6 @@ public class GymEditorViewModel extends EditorViewModel {
             dbGym = new Gym();
             dbGym.copy(gym);
         }
-
         if (hasHandle()) {
             setHandleState(gym);
             setDbGymState();

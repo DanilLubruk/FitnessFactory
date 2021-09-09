@@ -16,7 +16,7 @@ import com.example.fitnessfactory.utils.dialogs.DialogUtils;
 public abstract class EditorActivity extends BaseActivity {
 
     protected final int MENU_SAVE = 21;
-    private final int MENU_DELETE = 22;
+    protected final int MENU_DELETE = 22;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

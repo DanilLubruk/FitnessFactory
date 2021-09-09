@@ -2,6 +2,7 @@ package com.example.fitnessfactory.data.repositories;
 
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.FirestoreCollections;
+import com.example.fitnessfactory.data.firestoreCollections.BaseCollection;
 import com.example.fitnessfactory.data.models.OrganisationData;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.gms.tasks.Tasks;
@@ -14,6 +15,40 @@ import io.reactivex.Completable;
 import io.reactivex.Single;
 
 public class OrganisationInfoRepository extends BaseRepository {
+
+    public Single<Boolean> saveOrganisationInfoAsync(OrganisationData organisationData) {
+        return SingleCreate(emitter -> {
+            boolean isDeleted = saveOrganisationInfo(organisationData);
+
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(isDeleted);
+            }
+        });
+    }
+
+    private boolean saveOrganisationInfo(OrganisationData organisationData) throws ExecutionException, InterruptedException {
+        Tasks.await(
+                getCollection().document(
+                        FirestoreCollections.ORGANISATION_DATA)
+                        .set(organisationData));
+
+        return true;
+    }
+
+    public Single<OrganisationData> getOrganisationDataAsync() {
+        return SingleCreate(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getOrganisationData());
+            }
+        });
+    }
+
+    private OrganisationData getOrganisationData() throws ExecutionException, InterruptedException {
+        return Tasks.await(
+                getCollection().document(
+                        FirestoreCollections.ORGANISATION_DATA).get())
+                .toObject(OrganisationData.class);
+    }
 
     public Single<String> getOrganisationNameAsync() {
         return SingleCreate(emitter -> {

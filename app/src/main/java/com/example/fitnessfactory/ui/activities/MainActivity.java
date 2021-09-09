@@ -17,6 +17,7 @@ import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.CurrentUserType;
 import com.example.fitnessfactory.data.observers.SingleData;
+import com.example.fitnessfactory.ui.activities.editors.OrganisationInfoEditorActivity;
 import com.example.fitnessfactory.ui.fragments.FragmentProvider;
 import com.example.fitnessfactory.ui.viewmodels.MainActivityViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
@@ -127,6 +128,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_coaches:
                 openCoachesPage();
                 break;
+            case R.id.nav_organisation:
+                openOrganisationPage();
+                break;
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -151,6 +155,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void openCoachesPage() {
         FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_COACHES_ID);
         setMenuChecked(R.id.nav_coaches);
+    }
+
+    private void openOrganisationPage() {
+        Intent intent = new Intent(this, OrganisationInfoEditorActivity.class);
+        startActivity(intent);
     }
 
     private void setMenuChecked(int menuId) {

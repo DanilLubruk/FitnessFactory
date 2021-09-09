@@ -27,6 +27,8 @@
         </activity>
         <activity android:name=".ui.activities.editors.CoachEditorActivity">
         </activity>
+        <activity android:name=".ui.activities.editors.OrganisationInfoEditorActivity">
+        </activity>
     </application>
 
 </manifest>

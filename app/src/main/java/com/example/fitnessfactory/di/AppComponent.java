@@ -8,6 +8,7 @@ import com.example.fitnessfactory.data.managers.access.GymsAccessManager;
 import com.example.fitnessfactory.ui.viewmodels.AdminEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.CoachEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.MainActivityViewModel;
+import com.example.fitnessfactory.ui.viewmodels.OrganisationInfoViewModel;
 import com.example.fitnessfactory.ui.viewmodels.lists.AdminListViewModel;
 import com.example.fitnessfactory.ui.viewmodels.AuthViewModel;
 import com.example.fitnessfactory.ui.viewmodels.GymEditorViewModel;
@@ -41,4 +42,5 @@ public interface AppComponent {
     void inject(CoachesAccessManager coachesAccessManager);
     void inject(CoachEditorViewModel coachEditorViewModel);
     void inject(CoachesListTabViewModel coachesListTabViewModel);
+    void inject(OrganisationInfoViewModel organisationInfoViewModel);
 }
