@@ -36,9 +36,7 @@ public class BaseManager {
     private void commitBatch(CompletableEmitter emitter, WriteBatch writeBatch) {
         try {
             Tasks.await(writeBatch.commit());
-        } catch (ExecutionException e) {
-            reportError(emitter, e);
-        } catch (InterruptedException e) {
+        } catch (ExecutionException | InterruptedException e) {
             reportError(emitter, e);
         }
     }
@@ -58,9 +56,7 @@ public class BaseManager {
         try {
             Tasks.await(writeBatch.commit());
             isCommitted = true;
-        } catch (ExecutionException e) {
-            reportError(emitter, e);
-        } catch (InterruptedException e) {
+        } catch (ExecutionException | InterruptedException e) {
             reportError(emitter, e);
         }
 
