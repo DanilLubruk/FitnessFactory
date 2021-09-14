@@ -37,7 +37,7 @@ public class AppModule {
     }
 
     @Provides
-    @Singleton
+    @AppScope
     public FirebaseAuthManager provideFirebaseAuthManager() {
         return new FirebaseAuthManager();
     }

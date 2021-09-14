@@ -7,7 +7,7 @@ public class TestFFApp extends FFApp {
     @Override
     public TestAppComponent getAppComponent() {
         if (testAppComponent == null) {
-
+            initAppComponent();
         }
         return testAppComponent;
     }
@@ -19,6 +19,9 @@ public class TestFFApp extends FFApp {
     @Override
     public void initAppComponent() {
         super.initAppComponent();
-
+        testAppComponent =
+                DaggerTestAppComponent
+                .builder()
+                .build();
     }
 }
