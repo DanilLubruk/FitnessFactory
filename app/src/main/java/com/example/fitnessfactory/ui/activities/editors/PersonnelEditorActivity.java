@@ -26,13 +26,9 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-import butterknife.BindView;
-
 public abstract class PersonnelEditorActivity extends EditorActivity {
 
-    @BindView(R.id.rvData)
     RecyclerView rvGyms;
-    @BindView(R.id.fabAddItem)
     FloatingActionButton fabAddGym;
 
     private ActivityPersonnelEditorBinding binding;
@@ -144,5 +140,11 @@ public abstract class PersonnelEditorActivity extends EditorActivity {
         menu.removeItem(MENU_SAVE);
 
         return isCreated;
+    }
+
+    @Override
+    protected void bindViews() {
+        rvGyms = findViewById(R.id.rvData);
+        fabAddGym = findViewById(R.id.fabAddItem);
     }
 }

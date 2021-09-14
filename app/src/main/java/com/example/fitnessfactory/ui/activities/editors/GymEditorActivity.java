@@ -18,17 +18,11 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.android.material.textfield.TextInputEditText;
 
-import butterknife.BindView;
-
 public class GymEditorActivity extends EditorActivity {
 
-    @BindView(R.id.edtName)
     TextInputEditText edtName;
-    @BindView(R.id.edtAddress)
     TextInputEditText edtAddress;
-    @BindView(R.id.vpPersonnel)
     ViewPager2 vpPersonnel;
-    @BindView(R.id.tlPersonnel)
     TabLayout tlPersonnel;
 
     private String id;
@@ -99,5 +93,14 @@ public class GymEditorActivity extends EditorActivity {
     public void onRestoreInstanceState(Bundle savedState) {
         super.onRestoreInstanceState(savedState);
         viewModel.restoreState(savedState);
+    }
+
+    @Override
+    protected void bindViews() {
+        super.bindViews();
+        edtName = findViewById(R.id.edtName);
+        edtAddress = findViewById(R.id.edtAddress);
+        vpPersonnel = findViewById(R.id.vpPersonnel);
+        tlPersonnel = findViewById(R.id.tlPersonnel);
     }
 }

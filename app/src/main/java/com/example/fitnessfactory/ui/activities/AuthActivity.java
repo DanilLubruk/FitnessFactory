@@ -21,19 +21,12 @@ import com.google.android.gms.common.SignInButton;
 
 import java.util.List;
 
-import butterknife.BindView;
-
 public class AuthActivity extends BaseActivity {
 
-    @BindView(R.id.btnSignIn)
     SignInButton btnSignIn;
-    @BindView(R.id.pkProgress)
     ProgressBar pkProgress;
-    @BindView(R.id.tvAppName)
     TextView tvAppName;
-    @BindView(R.id.imgLogo)
     ImageView imgLogo;
-    @BindView(R.id.tvLoadStatus)
     TextView tvLoadStatus;
 
     private final int RC_SIGN_IN = 1;
@@ -159,5 +152,15 @@ public class AuthActivity extends BaseActivity {
 
     private void setObtainingDataText() {
         tvLoadStatus.setText(ResUtils.getString(R.string.message_obtaining_organistations));
+    }
+
+    @Override
+    protected void bindViews() {
+        super.bindViews();
+        btnSignIn = findViewById(R.id.btnSignIn);
+        pkProgress = findViewById(R.id.pkProgress);
+        tvAppName = findViewById(R.id.tvAppName);
+        imgLogo = findViewById(R.id.imgLogo);
+        tvLoadStatus = findViewById(R.id.tvLoadStatus);
     }
 }

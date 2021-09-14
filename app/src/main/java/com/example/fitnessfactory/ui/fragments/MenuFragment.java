@@ -1,6 +1,7 @@
 package com.example.fitnessfactory.ui.fragments;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -9,11 +10,8 @@ import com.example.fitnessfactory.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import butterknife.BindView;
-
 public class MenuFragment extends BaseFragment {
 
-    @BindView(R.id.tvGreeting)
     TextView tvGreeting;
 
     @Override
@@ -37,5 +35,10 @@ public class MenuFragment extends BaseFragment {
     @Override
     protected int getContentViewId() {
         return R.layout.fragment_main_menu;
+    }
+
+    @Override
+    protected void bindView(View itemView) {
+        tvGreeting = itemView.findViewById(R.id.tvGreeting);
     }
 }

@@ -6,13 +6,9 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.viewholders.BaseRecyclerViewHolder;
 
-import butterknife.BindView;
-
 public class PersonnelListViewHolder extends BaseRecyclerViewHolder<AppUser> {
 
-    @BindView(R.id.tvName)
     TextView tvName;
-    @BindView(R.id.tvEmail)
     TextView tvEmail;
 
     public PersonnelListViewHolder(View itemView) {
@@ -23,5 +19,11 @@ public class PersonnelListViewHolder extends BaseRecyclerViewHolder<AppUser> {
     public void setData(AppUser user) {
         tvName.setText(user.getName());
         tvEmail.setText(user.getEmail());
+    }
+
+    @Override
+    protected void bindView(View itemView) {
+        tvName = itemView.findViewById(R.id.tvName);
+        tvEmail = itemView.findViewById(R.id.tvEmail);
     }
 }

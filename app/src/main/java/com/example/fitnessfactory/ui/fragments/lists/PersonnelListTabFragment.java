@@ -5,6 +5,7 @@ import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,13 +25,9 @@ import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 
 import java.util.List;
 
-import butterknife.BindView;
-
 public abstract class PersonnelListTabFragment extends ListListenerFragment<AppUser>  {
 
-    @BindView(R.id.rvData)
     RecyclerView rvPersonnel;
-    @BindView(R.id.fabAddItem)
     FloatingActionButton fabAddPersonnel;
 
     private PersonnelListAdapter adapter;
@@ -128,5 +125,11 @@ public abstract class PersonnelListTabFragment extends ListListenerFragment<AppU
 
     public void showProgress() {
 
+    }
+
+    @Override
+    protected void bindView(View itemView) {
+        rvPersonnel = itemView.findViewById(R.id.rvData);
+        fabAddPersonnel = itemView.findViewById(R.id.fabAddItem);
     }
 }

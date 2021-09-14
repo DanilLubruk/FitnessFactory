@@ -11,11 +11,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.ui.activities.MainActivity;
 
-import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -30,6 +28,8 @@ public abstract class BaseAppFragment<A extends Activity> extends Fragment imple
     public abstract void closeProgress();
 
     public abstract void showProgress();
+
+    protected abstract void bindView(View itemView);
 
     protected int getContentViewId() {
         return 0;
@@ -82,7 +82,7 @@ public abstract class BaseAppFragment<A extends Activity> extends Fragment imple
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(getContentViewId(), container, false);
-        ButterKnife.bind(this, view);
+        bindView(view);
         return view;
     }
 

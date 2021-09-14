@@ -3,6 +3,7 @@ package com.example.fitnessfactory.ui.fragments.lists;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -12,31 +13,23 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.GymsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.Gym;
-import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.ui.activities.editors.GymEditorActivity;
 import com.example.fitnessfactory.ui.adapters.GymsListAdapter;
-import com.example.fitnessfactory.ui.fragments.BaseFragment;
 import com.example.fitnessfactory.ui.fragments.ListListenerFragment;
 import com.example.fitnessfactory.ui.viewmodels.lists.GymsListViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
-import com.example.fitnessfactory.utils.dialogs.DialogUtils;
 import com.github.clans.fab.FloatingActionButton;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
-import butterknife.BindView;
-
 public class GymsListFragment extends ListListenerFragment<Gym> {
 
-    @BindView(R.id.rvData)
     RecyclerView recyclerView;
-    @BindView(R.id.fabAddItem)
     FloatingActionButton fabAddGym;
 
     private GymsListViewModel viewModel;
@@ -138,5 +131,11 @@ public class GymsListFragment extends ListListenerFragment<Gym> {
 
     public void showProgress() {
 
+    }
+
+    @Override
+    protected void bindView(View itemView) {
+        recyclerView = itemView.findViewById(R.id.rvData);
+        fabAddGym = itemView.findViewById(R.id.fabAddItem);
     }
 }

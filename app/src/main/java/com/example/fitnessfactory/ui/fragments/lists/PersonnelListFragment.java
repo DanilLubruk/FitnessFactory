@@ -3,6 +3,7 @@ package com.example.fitnessfactory.ui.fragments.lists;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,15 +23,11 @@ import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 import com.tiromansev.prefswrapper.typedprefs.BooleanPreference;
 
 import java.util.List;
-
-import butterknife.BindView;
 import io.reactivex.Single;
 
 public abstract class PersonnelListFragment extends ListListenerFragment<AppUser> {
 
-    @BindView(R.id.rvData)
     RecyclerView rvPersonnel;
-    @BindView(R.id.fabAddItem)
     FloatingActionButton fabAddPersonnel;
 
     private PersonnelListAdapter adapter;
@@ -149,5 +146,11 @@ public abstract class PersonnelListFragment extends ListListenerFragment<AppUser
                 String.format(ResUtils.getString(R.string.text_invitation_to_personnel), getPluralPersonnelCaption()));
 
         startActivity(Intent.createChooser(emailIntent, ResUtils.getString(R.string.title_invite_personnel)));
+    }
+
+    @Override
+    protected void bindView(View itemView) {
+        rvPersonnel = itemView.findViewById(R.id.rvData);
+        fabAddPersonnel = itemView.findViewById(R.id.fabAddItem);
     }
 }

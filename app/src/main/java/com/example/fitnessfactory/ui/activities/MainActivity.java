@@ -25,15 +25,10 @@ import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
 import com.google.android.material.navigation.NavigationView;
 
-import butterknife.BindView;
-
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    @BindView(R.id.drawer)
     DrawerLayout drawer;
-    @BindView(R.id.navView)
     NavigationView navigationView;
-    @BindView(R.id.btnLogOut)
     Button btnLogOut;
 
     private MainActivityViewModel viewModel;
@@ -175,5 +170,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onRestoreInstanceState(Bundle savedState) {
         super.onRestoreInstanceState(savedState);
+    }
+
+    @Override
+    protected void bindViews() {
+        super.bindViews();
+        drawer = findViewById(R.id.drawer);
+        navigationView = findViewById(R.id.navView);
+        btnLogOut = findViewById(R.id.btnLogOut);
     }
 }

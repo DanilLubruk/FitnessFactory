@@ -16,10 +16,6 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.observers.SingleData;
 
 import java.util.HashMap;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import icepick.Icepick;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -34,10 +30,8 @@ import io.reactivex.schedulers.Schedulers;
 @SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    protected Unbinder unbinder;
     protected Bundle savedState = null;
     private final CompositeDisposable disposables = new CompositeDisposable();
     private HashMap<Integer, Bundle> customBundles = new HashMap<>();
@@ -51,6 +45,10 @@ public class BaseActivity extends AppCompatActivity {
         initToolbar();
         initComponents();
         disableAutofill();
+    }
+
+    protected void bindViews() {
+        toolbar = findViewById(R.id.toolbar);
     }
 
     public Toolbar getToolbar() {
@@ -75,12 +73,6 @@ public class BaseActivity extends AppCompatActivity {
 
     private void addSubscription(Disposable disposable) {
         disposables.add(disposable);
-    }
-
-    protected void unBind() {
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
     }
 
     protected void initToolbar() {
@@ -117,7 +109,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void initActivity() {
-        unbinder = ButterKnife.bind(this);
+        bindViews();
     }
 
     @Override
@@ -139,7 +131,6 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        unBind();
         unsubscribe();
         super.onDestroy();
     }
