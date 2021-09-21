@@ -144,6 +144,7 @@ public abstract class PersonnelEditorActivity extends EditorActivity {
 
     @Override
     protected void bindViews() {
+        super.bindViews();
         rvGyms = findViewById(R.id.rvData);
         fabAddGym = findViewById(R.id.fabAddItem);
     }

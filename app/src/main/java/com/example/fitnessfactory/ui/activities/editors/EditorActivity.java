@@ -147,4 +147,9 @@ public abstract class EditorActivity extends BaseActivity {
             callback.callback(false);
         }
     }
+
+    @Override
+    protected void bindViews() {
+        super.bindViews();
+    }
 }
