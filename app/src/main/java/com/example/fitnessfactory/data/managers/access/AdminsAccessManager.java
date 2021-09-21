@@ -1,20 +1,22 @@
 package com.example.fitnessfactory.data.managers.access;
-import com.example.fitnessfactory.FFApp;
+
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.repositories.access.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
 import com.example.fitnessfactory.utils.ResUtils;
 
 import javax.inject.Inject;
+
 public class AdminsAccessManager extends PersonnelAccessManager {
 
-    @Inject
     AdminsAccessRepository accessRepository;
-    @Inject
     OwnerAdminsRepository ownerAdminsRepository;
 
-    public AdminsAccessManager() {
-        FFApp.get().getAppComponent().inject(this);
+    @Inject
+    public AdminsAccessManager(AdminsAccessRepository accessRepository,
+                               OwnerAdminsRepository ownerAdminsRepository) {
+        this.accessRepository = accessRepository;
+        this.ownerAdminsRepository = ownerAdminsRepository;
     }
 
     @Override

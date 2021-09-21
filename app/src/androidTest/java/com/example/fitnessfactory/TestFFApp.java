@@ -1,27 +1,29 @@
 package com.example.fitnessfactory;
 
-public class TestFFApp extends FFApp {
+import android.app.Application;
 
-    private TestAppComponent testAppComponent;
+public class TestFFApp extends Application {
+
+    private static TestAppComponent testAppComponent;
 
     @Override
-    public TestAppComponent getAppComponent() {
+    public void onCreate() {
+        super.onCreate();
+    }
+
+    public static TestAppComponent getTestAppComponent() {
         if (testAppComponent == null) {
             initAppComponent();
         }
+
         return testAppComponent;
     }
 
-    public static TestFFApp get() {
-        return (TestFFApp) FFApp.get();
-    }
-
-    @Override
-    public void initAppComponent() {
-        super.initAppComponent();
+    private static void initAppComponent() {
         testAppComponent =
                 DaggerTestAppComponent
-                .builder()
-                .build();
+                        .builder()
+                        .testAppModule(new TestAppModule())
+                        .build();
     }
 }

@@ -62,8 +62,9 @@ public class AppModule {
 
     @Provides
     @AppScope
-    public AdminsAccessManager provideAdminsAccessManager() {
-        return new AdminsAccessManager();
+    public AdminsAccessManager provideAdminsAccessManager(AdminsAccessRepository accessRepository,
+                                                          OwnerAdminsRepository ownerAdminsRepository) {
+        return new AdminsAccessManager(accessRepository, ownerAdminsRepository);
     }
 
     @Provides
