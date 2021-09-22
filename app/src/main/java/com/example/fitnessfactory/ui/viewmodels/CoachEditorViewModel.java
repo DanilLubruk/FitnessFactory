@@ -2,45 +2,24 @@ package com.example.fitnessfactory.ui.viewmodels;
 
 import android.content.Intent;
 
-import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.AppConsts;
-import com.example.fitnessfactory.data.dataListeners.CoachGymsListDataListener;
-import com.example.fitnessfactory.data.managers.access.CoachesAccessManager;
-import com.example.fitnessfactory.data.managers.data.CoachesDataManager;
+import com.example.fitnessfactory.data.dataListeners.DataListenerStringArgument;
+import com.example.fitnessfactory.data.managers.access.PersonnelAccessManager;
+import com.example.fitnessfactory.data.managers.data.PersonnelDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
 
 import javax.inject.Inject;
 
 public class CoachEditorViewModel extends PersonnelEditorViewModel {
 
     @Inject
-    OwnerCoachesRepository ownerCoachesRepository;
-    @Inject
-    CoachesAccessManager coachesAccessManager;
-    @Inject
-    CoachesDataManager coachesDataManager;
-    @Inject
-    CoachGymsListDataListener coachGymsListDataListener;
-
-    public CoachEditorViewModel() {
-        FFApp.get().getAppComponent().inject(this);
-    }
-
-    protected OwnerCoachesRepository getOwnerRepository() {
-        return ownerCoachesRepository;
-    }
-
-    protected CoachesAccessManager getAccessManager() {
-        return coachesAccessManager;
-    }
-
-    protected CoachesDataManager getDataManager() {
-        return coachesDataManager;
-    }
-
-    protected CoachGymsListDataListener getDataListener() {
-        return coachGymsListDataListener;
+    public CoachEditorViewModel(OwnerPersonnelRepository ownerRepository,
+                                PersonnelAccessManager accessManager,
+                                PersonnelDataManager dataManager,
+                                DataListenerStringArgument dataListener) {
+        super(ownerRepository, accessManager, dataManager, dataListener);
+        //FFApp.get().getAppComponent().inject(this);
     }
 
     protected AppUser getPersonnelFromData(Intent personnelData) {

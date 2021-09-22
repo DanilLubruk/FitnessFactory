@@ -135,8 +135,9 @@ public class AppModule {
 
     @Provides
     @AppScope
-    public CoachesAccessManager provideCoachesAccessManager() {
-        return new CoachesAccessManager();
+    public CoachesAccessManager provideCoachesAccessManager(CoachesAccessRepository coachesAccessRepository,
+                                                            OwnerCoachesRepository ownerCoachesRepository) {
+        return new CoachesAccessManager(coachesAccessRepository, ownerCoachesRepository);
     }
 
     @Provides

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.events.CoachGymsListListenerEvent;
 import com.example.fitnessfactory.ui.viewmodels.CoachEditorViewModel;
+import com.example.fitnessfactory.ui.viewmodels.factories.CoachEditorViewModelFactory;
 import com.example.fitnessfactory.utils.ResUtils;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -31,7 +32,7 @@ public class CoachEditorActivity extends PersonnelEditorActivity {
 
     @Override
     public void initActivity() {
-        viewModel = new ViewModelProvider(this).get(CoachEditorViewModel.class);
+        viewModel = new ViewModelProvider(this, new CoachEditorViewModelFactory()).get(CoachEditorViewModel.class);
         super.initActivity();
     }
 

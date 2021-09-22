@@ -1,48 +1,24 @@
 package com.example.fitnessfactory.ui.viewmodels;
 
 import android.content.Intent;
-import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.AppConsts;
-import com.example.fitnessfactory.data.dataListeners.AdminGymsListDataListener;
-import com.example.fitnessfactory.data.managers.access.AdminsAccessManager;
-import com.example.fitnessfactory.data.managers.data.AdminsDataManager;
+import com.example.fitnessfactory.data.dataListeners.DataListenerStringArgument;
+import com.example.fitnessfactory.data.managers.access.PersonnelAccessManager;
+import com.example.fitnessfactory.data.managers.data.PersonnelDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
+
 import javax.inject.Inject;
 
 public class AdminEditorViewModel extends PersonnelEditorViewModel {
 
     @Inject
-    OwnerAdminsRepository ownerAdminsRepository;
-    @Inject
-    AdminsAccessManager adminsAccessManager;
-    @Inject
-    AdminsDataManager adminsDataManager;
-    @Inject
-    AdminGymsListDataListener adminGymsListDataListener;
-
-    public AdminEditorViewModel() {
-        FFApp.get().getAppComponent().inject(this);
-    }
-
-    @Override
-    protected OwnerAdminsRepository getOwnerRepository() {
-        return ownerAdminsRepository;
-    }
-
-    @Override
-    protected AdminsAccessManager getAccessManager() {
-        return adminsAccessManager;
-    }
-
-    @Override
-    protected AdminsDataManager getDataManager() {
-        return adminsDataManager;
-    }
-
-    @Override
-    protected AdminGymsListDataListener getDataListener() {
-        return adminGymsListDataListener;
+    public AdminEditorViewModel(OwnerPersonnelRepository ownerRepository,
+                                PersonnelAccessManager accessManager,
+                                PersonnelDataManager dataManager,
+                                DataListenerStringArgument dataListener) {
+        super(ownerRepository, accessManager, dataManager, dataListener);
+        //FFApp.get().getAppComponent().inject(this);
     }
 
     @Override

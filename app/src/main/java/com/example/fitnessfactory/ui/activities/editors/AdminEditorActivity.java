@@ -1,8 +1,10 @@
 package com.example.fitnessfactory.ui.activities.editors;
+
 import androidx.lifecycle.ViewModelProvider;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.events.AdminGymsListListenerEvent;
 import com.example.fitnessfactory.ui.viewmodels.AdminEditorViewModel;
+import com.example.fitnessfactory.ui.viewmodels.factories.AdminEditorViewModelFactory;
 import com.example.fitnessfactory.utils.ResUtils;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -28,7 +30,7 @@ public class AdminEditorActivity extends PersonnelEditorActivity {
 
     @Override
     public void initActivity() {
-        viewModel = new ViewModelProvider(this).get(AdminEditorViewModel.class);
+        viewModel = new ViewModelProvider(this, new AdminEditorViewModelFactory()).get(AdminEditorViewModel.class);
         super.initActivity();
     }
 

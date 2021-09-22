@@ -11,9 +11,23 @@ import io.reactivex.Single;
 
 public abstract class PersonnelAccessManager extends BaseManager {
 
-    protected abstract PersonnelAccessRepository getAccessRepository();
+    protected PersonnelAccessRepository accessRepository;
 
-    protected abstract OwnerPersonnelRepository getOwnerRepository();
+    protected OwnerPersonnelRepository ownerRepository;
+
+    public PersonnelAccessManager(PersonnelAccessRepository accessRepository,
+                                  OwnerPersonnelRepository ownerRepository) {
+        this.accessRepository = accessRepository;
+        this.ownerRepository = ownerRepository;
+    }
+
+    protected PersonnelAccessRepository getAccessRepository() {
+        return accessRepository;
+    }
+
+    protected OwnerPersonnelRepository getOwnerRepository() {
+        return ownerRepository;
+    }
 
     protected abstract String getAlreadyRegisteredMessage();
 

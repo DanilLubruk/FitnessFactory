@@ -22,13 +22,39 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
     public final ObservableField<AppUser> personnel = new ObservableField<>();
     private final MutableLiveData<List<Gym>> gyms = new MutableLiveData<>();
 
-    protected abstract OwnerPersonnelRepository getOwnerRepository();
+    protected OwnerPersonnelRepository ownerRepository;
 
-    protected abstract PersonnelAccessManager getAccessManager();
+    protected PersonnelAccessManager accessManager;
 
-    protected abstract PersonnelDataManager getDataManager();
+    protected PersonnelDataManager dataManager;
 
-    protected abstract DataListenerStringArgument getDataListener();
+    protected DataListenerStringArgument dataListener;
+
+    public PersonnelEditorViewModel(OwnerPersonnelRepository ownerRepository,
+                                    PersonnelAccessManager accessManager,
+                                    PersonnelDataManager dataManager,
+                                    DataListenerStringArgument dataListener) {
+        this.ownerRepository = ownerRepository;
+        this.accessManager = accessManager;
+        this.dataManager = dataManager;
+        this.dataListener = dataListener;
+    }
+
+    protected OwnerPersonnelRepository getOwnerRepository() {
+        return ownerRepository;
+    }
+
+    protected PersonnelAccessManager getAccessManager() {
+        return accessManager;
+    }
+
+    protected PersonnelDataManager getDataManager() {
+        return dataManager;
+    }
+
+    protected DataListenerStringArgument getDataListener() {
+        return dataListener;
+    }
 
     protected abstract AppUser getPersonnelFromData(Intent personnelData);
 
