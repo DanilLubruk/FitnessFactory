@@ -142,7 +142,9 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
 
         subscribeInIOThread(
                 getAccessManager().deletePersonnelSingle(AppPrefs.gymOwnerId().getValue(), admin.getEmail()),
-                new SingleData<>(isDeleted::setValue, throwable -> RxUtils.handleError(isDeleted, throwable)));
+                new SingleData<>(
+                        isDeleted::setValue,
+                        throwable -> RxUtils.handleError(isDeleted, throwable)));
 
         return isDeleted;
     }

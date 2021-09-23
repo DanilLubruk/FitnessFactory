@@ -48,7 +48,7 @@
     <string name="message_obtaining_organistations">Obtaining your data…</string>
     <string name="message_singing_you_in">Signing you in…</string>
     <string name="title_ask_org_name">Enter your organisation\'s name</string>
-    <string name="message_ask_remove_personnel_from_gym">Remove %1$s from this gym?</string>
+    <string name="message_ask_remove_personnel_from_gym">Remove gym from this %1$s?</string>
     <string name="caption_remove">Remove</string>
     <string name="caption_ask_no_more">Ask no more</string>
     <string name="title_question">Question</string>

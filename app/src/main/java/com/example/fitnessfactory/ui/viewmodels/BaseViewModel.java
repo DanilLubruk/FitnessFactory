@@ -26,6 +26,8 @@ public class BaseViewModel extends ViewModel {
     private HashMap<String, Object> handle = new HashMap<>();
     private static final String HANDLE = "HANDLE";
     private boolean loading = false;
+    private Scheduler ioScheduler = Schedulers.io();;
+    private Scheduler mainScheduler = AndroidSchedulers.mainThread();
 
     @Override
     protected void onCleared() {
@@ -116,11 +118,19 @@ public class BaseViewModel extends ViewModel {
     }
 
     protected Scheduler getMainThreadScheduler() {
-        return AndroidSchedulers.mainThread();
+        return mainScheduler;
+    }
+
+    public void setMainScheduler(Scheduler mainScheduler) {
+        this.mainScheduler = mainScheduler;
     }
 
     protected Scheduler getIOScheduler() {
-        return Schedulers.io();
+        return ioScheduler;
+    }
+
+    public void setIoScheduler(Scheduler ioScheduler) {
+        this.ioScheduler = ioScheduler;
     }
 
     public void saveState(Bundle outState) {

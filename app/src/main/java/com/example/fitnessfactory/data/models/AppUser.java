@@ -37,4 +37,30 @@ public class AppUser {
     public void setName(String name) {
         this.name = name;
     }
+
+    public static AppUser.Builder builder() {
+        return new AppUser().new Builder();
+    }
+
+    public class Builder {
+
+        public Builder setId(String id) {
+            AppUser.this.setId(id);
+            return this;
+        }
+
+        public Builder setName(String name) {
+            AppUser.this.setName(name);
+            return this;
+        }
+
+        public Builder setEmail(String email) {
+            AppUser.this.setEmail(email);
+            return this;
+        }
+
+        public AppUser build() {
+            return AppUser.this;
+        }
+    }
 }

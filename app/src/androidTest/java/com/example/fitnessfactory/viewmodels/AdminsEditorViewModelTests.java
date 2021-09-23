@@ -2,6 +2,8 @@ package com.example.fitnessfactory.viewmodels;
 
 import android.content.Intent;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.dataListeners.DataListenerStringArgument;
 import com.example.fitnessfactory.data.managers.access.PersonnelAccessManager;
@@ -11,6 +13,9 @@ import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepo
 import com.example.fitnessfactory.ui.viewmodels.AdminEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.PersonnelEditorViewModel;
 
+import org.junit.runner.RunWith;
+
+@RunWith(AndroidJUnit4.class)
 public class AdminsEditorViewModelTests extends PersonnelEditorViewModelTests {
 
     @Override

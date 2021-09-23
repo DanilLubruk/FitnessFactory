@@ -49,4 +49,30 @@ public class Gym {
         this.setName(gym.getName());
         this.setAddress(gym.getAddress());
     }
+
+    public static Gym.Builder builder() {
+        return new Gym().new Builder();
+    }
+
+    public class Builder {
+
+        public Builder setId(String gymId) {
+            Gym.this.setId(gymId);
+            return this;
+        }
+
+        public Builder setName(String name) {
+            Gym.this.setName(name);
+            return this;
+        }
+
+        public Builder setAddress(String address) {
+            Gym.this.setAddress(address);
+            return this;
+        }
+
+        public Gym build() {
+            return Gym.this;
+        }
+    }
 }
