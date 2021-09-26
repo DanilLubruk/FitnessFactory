@@ -8,9 +8,12 @@ import com.example.fitnessfactory.data.managers.access.PersonnelAccessManager;
 import com.example.fitnessfactory.data.managers.data.PersonnelDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Gym;
+import com.example.fitnessfactory.data.repositories.UserRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
 import com.example.fitnessfactory.ui.viewmodels.PersonnelEditorViewModel;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +22,6 @@ import org.mockito.Mockito;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -33,19 +35,18 @@ import io.reactivex.Single;
 @RunWith(AndroidJUnit4.class)
 public abstract class PersonnelEditorViewModelTests extends BaseTests {
 
-    protected OwnerPersonnelRepository ownerRepository;
-    protected PersonnelAccessManager accessManager;
-    protected PersonnelDataManager dataManager;
-    protected DataListenerStringArgument dataListener;
+    protected UserRepository userRepository = Mockito.mock(UserRepository.class);
+
+    protected OwnerGymRepository gymRepository = Mockito.mock(OwnerGymRepository.class);
 
     protected PersonnelEditorViewModel personnelEditorViewModel;
 
     protected String ownerId = "ownerId";
 
     protected AppUser personnel;
-    protected String userId = "userId";
-    protected String userName = "userName";
-    protected String userEmail = "userEmail";
+    protected String userId = "userId4";
+    protected String userName = "User4";
+    protected String userEmail = "userEmail4";
 
     protected Gym gym;
     protected String gymId = "gymId";
@@ -55,11 +56,7 @@ public abstract class PersonnelEditorViewModelTests extends BaseTests {
     @Before
     public void setup() {
         super.setup();
-        ownerRepository = Mockito.mock(OwnerPersonnelRepository.class);
-        accessManager = Mockito.mock(PersonnelAccessManager.class);
-        dataManager = Mockito.mock(PersonnelDataManager.class);
-        dataListener = Mockito.mock(DataListenerStringArgument.class);
-        personnelEditorViewModel = getViewModel(ownerRepository, accessManager, dataManager, dataListener);
+        personnelEditorViewModel = getViewModel();
         personnelEditorViewModel.setIoScheduler(testScheduler);
         personnelEditorViewModel.setMainScheduler(testScheduler);
 
@@ -74,33 +71,22 @@ public abstract class PersonnelEditorViewModelTests extends BaseTests {
         gym.setAddress(gymAddress);
     }
 
-    protected abstract PersonnelEditorViewModel getViewModel(OwnerPersonnelRepository ownerRepository,
-                                                             PersonnelAccessManager accessManager,
-                                                             PersonnelDataManager dataManager,
-                                                             DataListenerStringArgument dataListener);
+    protected abstract OwnerPersonnelRepository getOwnerRepository();
+
+    protected abstract PersonnelAccessManager getAccessManager();
+
+    protected abstract PersonnelDataManager getDataManager();
+
+    protected abstract DataListenerStringArgument getDataListener();
+
+    protected abstract PersonnelEditorViewModel getViewModel();
 
     protected abstract Intent getDataIntent(AppUser appUser);
 
     @Test
     public void initViewModelTest() {
-        Mockito.when(dataManager.getPersonnelGymsByEmail(Mockito.anyString()))
-                .thenAnswer(invocation -> {
-                   String emailArgument = invocation.getArgument(0);
-
-                   if (emailArgument.equals(userEmail)) {
-                       return Single.just(getGymsList());
-                   } else {
-                       return Single.just(new ArrayList<Gym>());
-                   }
-                });
-
         personnelEditorViewModel.getGymsData();
-        Mockito.verify(dataManager, Mockito.times(0))
-                .getPersonnelGymsByEmail(userEmail);
-        personnelEditorViewModel.getGyms().observeForever(gyms -> {
-            assertNull(gyms);
-        });
-
+        personnelEditorViewModel.getGyms().observeForever(Assert::assertNull);
 
         personnelEditorViewModel.setPersonnelData(getDataIntent(personnel));
         AppUser viewModelPersonnel = personnelEditorViewModel.personnel.get();
@@ -112,67 +98,63 @@ public abstract class PersonnelEditorViewModelTests extends BaseTests {
 
         personnelEditorViewModel.startDataListener();
 
-        Mockito.verify(dataListener).startDataListener(userEmail);
+        Mockito.verify(getDataListener()).startDataListener(userEmail);
 
         personnelEditorViewModel.getGymsData();
-        Mockito.verify(dataManager).getPersonnelGymsByEmail(userEmail);
         personnelEditorViewModel.getGyms().observeForever(gyms -> {
             assertNotNull(gyms);
-            assertEquals(3, gyms.size());
 
-            for (int i = 0; i < gyms.size(); i++) {
-                Gym gym = gyms.get(0);
+            assertEquals(2, gyms.size());
+            assertEquals("gymId2", gyms.get(0).getId());
+            assertEquals("gymName2", gyms.get(0).getName());
+            assertEquals("gymAddress2", gyms.get(0).getAddress());
 
-                int gymNumber = i + 1;
-                assertEquals("id" + gymNumber, gym.getId());
-                assertEquals("Name" + gymNumber, gym.getName());
-                assertEquals("Address" + gymNumber, gym.getAddress());
-            }
+            assertEquals("gymId3", gyms.get(1).getId());
+            assertEquals("gymName3", gyms.get(1).getName());
+            assertEquals("gymAddress3", gyms.get(1).getAddress());
         });
-
 
         personnel.setEmail("notTheRightEmail");
         personnelEditorViewModel.setPersonnelData(getDataIntent(personnel));
 
         personnelEditorViewModel.getGymsData();
-        Mockito.verify(dataManager).getPersonnelGymsByEmail("notTheRightEmail");
         personnelEditorViewModel.getGyms().observeForever(gyms -> {
             assertNotNull(gyms);
             assertEquals(0, gyms.size());
         });
 
         personnelEditorViewModel.stopDataListener();
-        Mockito.verify(dataListener).stopDataListener();
+        Mockito.verify(getDataListener()).stopDataListener();
     }
 
     @Test
     public void addGymTest() {
-        Mockito.when(ownerRepository.addGymToPersonnel(Mockito.anyString(), Mockito.anyString()))
+        Mockito.when(getOwnerRepository().addGymToPersonnel(Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(Completable.complete());
 
         personnelEditorViewModel.addGym(gym.getId());
-        Mockito.verify(ownerRepository, Mockito.times(0))
+        Mockito.verify(getOwnerRepository(), Mockito.times(0))
                 .addGymToPersonnel(userEmail, gymId);
 
         personnelEditorViewModel.setPersonnelData(getDataIntent(personnel));
 
         personnelEditorViewModel.addGym(gym.getId());
-        Mockito.verify(ownerRepository).addGymToPersonnel(userEmail, gymId);
+        Mockito.verify(getOwnerRepository()).addGymToPersonnel(userEmail, gymId);
     }
 
     @Test
     public void deleteGymTest() {
-        Mockito.when(ownerRepository.removeGymFromPersonnel(Mockito.anyString(), Mockito.anyString()))
+        Mockito.when(getOwnerRepository().removeGymFromPersonnel(Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(Completable.complete());
 
         personnelEditorViewModel.deleteItem(gym);
-        Mockito.verify(ownerRepository, Mockito.times(0))
+        Mockito.verify(getOwnerRepository(), Mockito.times(0))
                 .removeGymFromPersonnel(userEmail, gymId);
 
         personnelEditorViewModel.setPersonnelData(getDataIntent(personnel));
 
         personnelEditorViewModel.deleteItem(gym);
-        Mockito.verify(ownerRepository)
+        Mockito.verify(getOwnerRepository())
                 .removeGymFromPersonnel(userEmail, gymId);
     }
 
@@ -190,12 +172,11 @@ public abstract class PersonnelEditorViewModelTests extends BaseTests {
 
     @Test
     public void deletePersonnelTest() {
-        boolean isDeleted = getOrAwaitValue(personnelEditorViewModel.delete());
-        assertFalse(isDeleted);
+        personnelEditorViewModel.delete().observeForever(Assert::assertFalse);
 
         personnelEditorViewModel.setPersonnelData(getDataIntent(personnel));
 
-        Mockito.when(accessManager.deletePersonnelSingle(Mockito.anyString(), Mockito.anyString()))
+        Mockito.when(getAccessManager().deletePersonnelSingle(Mockito.anyString(), Mockito.anyString()))
                 .thenAnswer(invocation -> {
                    String ownerIdArg = invocation.getArgument(0);
                    String emailArg = invocation.getArgument(1);
@@ -207,35 +188,11 @@ public abstract class PersonnelEditorViewModelTests extends BaseTests {
                    }
                 });
 
-        isDeleted = getOrAwaitValue(personnelEditorViewModel.delete());
-        assertTrue(isDeleted);
+        personnelEditorViewModel.delete().observeForever(Assert::assertTrue);
 
         personnel.setEmail("notTheRightEmail");
         personnelEditorViewModel.setPersonnelData(getDataIntent(personnel));
 
-        isDeleted = getOrAwaitValue(personnelEditorViewModel.delete());
-        assertFalse(isDeleted);
-    }
-
-    private List<Gym> getGymsList() {
-        return new ArrayList<Gym>() {{
-            add(Gym.builder()
-                    .setId("id1")
-                    .setName("Name1")
-                    .setAddress("Address1")
-                    .build());
-
-            add(Gym.builder()
-                    .setId("id2")
-                    .setName("Name2")
-                    .setAddress("Address2")
-                    .build());
-
-            add(Gym.builder()
-                    .setId("id3")
-                    .setName("Name3")
-                    .setAddress("Address3")
-                    .build());
-        }};
+        personnelEditorViewModel.delete().observeForever(Assert::assertFalse);
     }
 }

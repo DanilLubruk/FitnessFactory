@@ -3,23 +3,22 @@ package com.example.fitnessfactory.ui.viewmodels;
 import android.content.Intent;
 
 import com.example.fitnessfactory.data.AppConsts;
-import com.example.fitnessfactory.data.dataListeners.DataListenerStringArgument;
-import com.example.fitnessfactory.data.managers.access.PersonnelAccessManager;
-import com.example.fitnessfactory.data.managers.data.PersonnelDataManager;
+import com.example.fitnessfactory.data.dataListeners.CoachGymsListDataListener;
+import com.example.fitnessfactory.data.managers.access.CoachesAccessManager;
+import com.example.fitnessfactory.data.managers.data.CoachesDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
 
 import javax.inject.Inject;
 
 public class CoachEditorViewModel extends PersonnelEditorViewModel {
 
     @Inject
-    public CoachEditorViewModel(OwnerPersonnelRepository ownerRepository,
-                                PersonnelAccessManager accessManager,
-                                PersonnelDataManager dataManager,
-                                DataListenerStringArgument dataListener) {
+    public CoachEditorViewModel(OwnerCoachesRepository ownerRepository,
+                                CoachesAccessManager accessManager,
+                                CoachesDataManager dataManager,
+                                CoachGymsListDataListener dataListener) {
         super(ownerRepository, accessManager, dataManager, dataListener);
-        //FFApp.get().getAppComponent().inject(this);
     }
 
     protected AppUser getPersonnelFromData(Intent personnelData) {

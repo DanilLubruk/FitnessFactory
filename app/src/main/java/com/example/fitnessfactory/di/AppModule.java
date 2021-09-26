@@ -69,8 +69,10 @@ public class AppModule {
 
     @Provides
     @AppScope
-    public AdminsDataManager provideAdminsDataManager() {
-        return new AdminsDataManager();
+    public AdminsDataManager provideAdminsDataManager(OwnerAdminsRepository ownerRepository,
+                                                      UserRepository userRepository,
+                                                      OwnerGymRepository gymRepository) {
+        return new AdminsDataManager(ownerRepository, userRepository, gymRepository);
     }
 
     @Provides
@@ -142,8 +144,10 @@ public class AppModule {
 
     @Provides
     @AppScope
-    public CoachesDataManager provideCoachesDataManager() {
-        return new CoachesDataManager();
+    public CoachesDataManager provideCoachesDataManager(OwnerCoachesRepository ownerRepository,
+                                                        UserRepository userRepository,
+                                                        OwnerGymRepository gymRepository) {
+        return new CoachesDataManager(ownerRepository, userRepository, gymRepository);
     }
 
     @Provides

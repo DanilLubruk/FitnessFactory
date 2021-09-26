@@ -2,23 +2,22 @@ package com.example.fitnessfactory.ui.viewmodels;
 
 import android.content.Intent;
 import com.example.fitnessfactory.data.AppConsts;
-import com.example.fitnessfactory.data.dataListeners.DataListenerStringArgument;
-import com.example.fitnessfactory.data.managers.access.PersonnelAccessManager;
-import com.example.fitnessfactory.data.managers.data.PersonnelDataManager;
+import com.example.fitnessfactory.data.dataListeners.AdminGymsListDataListener;
+import com.example.fitnessfactory.data.managers.access.AdminsAccessManager;
+import com.example.fitnessfactory.data.managers.data.AdminsDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
 
 import javax.inject.Inject;
 
 public class AdminEditorViewModel extends PersonnelEditorViewModel {
 
     @Inject
-    public AdminEditorViewModel(OwnerPersonnelRepository ownerRepository,
-                                PersonnelAccessManager accessManager,
-                                PersonnelDataManager dataManager,
-                                DataListenerStringArgument dataListener) {
+    public AdminEditorViewModel(OwnerAdminsRepository ownerRepository,
+                                AdminsAccessManager accessManager,
+                                AdminsDataManager dataManager,
+                                AdminGymsListDataListener dataListener) {
         super(ownerRepository, accessManager, dataManager, dataListener);
-        //FFApp.get().getAppComponent().inject(this);
     }
 
     @Override

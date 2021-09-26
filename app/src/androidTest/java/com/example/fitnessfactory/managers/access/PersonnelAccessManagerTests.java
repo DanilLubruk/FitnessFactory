@@ -1,4 +1,4 @@
-package com.example.fitnessfactory.managers;
+package com.example.fitnessfactory.managers.access;
 
 import com.example.fitnessfactory.BaseTests;
 import com.example.fitnessfactory.R;
@@ -20,9 +20,6 @@ import static org.junit.Assert.assertEquals;
 
 public abstract class PersonnelAccessManagerTests extends BaseTests {
 
-    protected PersonnelAccessRepository accessRepository;
-    protected OwnerPersonnelRepository ownersRepository;
-
     protected PersonnelAccessManager personnelAccessManager;
 
     String ownerId = "ownerId1";
@@ -31,14 +28,14 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
     @Before
     public void setup() {
         super.setup();
-        //TestFFApp.getTestAppComponent().inject(this);
-        accessRepository = Mockito.mock(PersonnelAccessRepository.class);
-        ownersRepository = Mockito.mock(OwnerPersonnelRepository.class);
-        personnelAccessManager = instantiateAccessManager(accessRepository, ownersRepository);
+        personnelAccessManager = instantiateAccessManager();
     }
 
-    protected abstract PersonnelAccessManager instantiateAccessManager(PersonnelAccessRepository personnelAccessRepository,
-                                                                       OwnerPersonnelRepository ownersRepository);
+    protected abstract PersonnelAccessManager instantiateAccessManager();
+
+    protected abstract PersonnelAccessRepository getAccessRepository();
+
+    protected abstract OwnerPersonnelRepository getOwnersRepository();
 
     @Test
     public void tryRegisterRegisteredPersonnelTest() {
@@ -53,13 +50,24 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
 
     @Test
     public void tryRegisterAddedPersonnelTest() {
+        Mockito.when(getOwnersRepository().isPersonnelWithThisEmailAdded(Mockito.anyString()))
+                .thenAnswer(invocation -> {
+                    String email = invocation.getArgument(0);
+
+                    if (email.equals("userEmail5")) {
+                        return Single.just(true);
+                    } else {
+                        return Single.just(false);
+                    }
+                });
+
         TestObserver<Boolean> subscriber =
                 subscribe(personnelAccessManager.createPersonnel(ownerId, "userEmail5"));
 
-        Mockito.verify(accessRepository)
+        Mockito.verify(getAccessRepository())
                 .getRegisterPersonnelAccessEntryBatch(ownerId, "userEmail5");
 
-        Mockito.verify(ownersRepository, Mockito.times(0))
+        Mockito.verify(getOwnersRepository(), Mockito.times(0))
                 .getAddPersonnelBatch(Mockito.any(), Mockito.any());
 
         subscriber.assertNoErrors();
@@ -74,10 +82,10 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
         TestObserver<Boolean> subscriber =
                 subscribe(personnelAccessManager.createPersonnel(ownerId, "userEmail6"));
 
-        Mockito.verify(accessRepository)
+        Mockito.verify(getAccessRepository())
                 .getRegisterPersonnelAccessEntryBatch(ownerId, "userEmail6");
 
-        Mockito.verify(ownersRepository).getAddPersonnelBatch(Mockito.any(), Mockito.eq("userEmail6"));
+        Mockito.verify(getOwnersRepository()).getAddPersonnelBatch(Mockito.any(), Mockito.eq("userEmail6"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -115,7 +123,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
     private void setDeletePersonnelMocks() {
         WriteBatch writeBatch = FirebaseFirestore.getInstance().batch();
 
-        Mockito.when(accessRepository
+        Mockito.when(getAccessRepository()
                 .getDeletePersonnelAccessEntryBatch(Mockito.anyString(), Mockito.anyString()))
                 .thenAnswer(invocation -> {
                     String id = invocation.getArgument(0);
@@ -128,7 +136,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
                     }
                 });
 
-        Mockito.when(ownersRepository
+        Mockito.when(getOwnersRepository()
                 .getDeletePersonnelBatch(Mockito.any(), Mockito.anyString()))
                 .thenAnswer(invocation -> {
                     WriteBatch argumentWriteBatch = invocation.getArgument(0);
