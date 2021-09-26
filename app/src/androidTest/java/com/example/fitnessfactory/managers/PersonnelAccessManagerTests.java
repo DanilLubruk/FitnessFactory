@@ -25,8 +25,8 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
 
     protected PersonnelAccessManager personnelAccessManager;
 
-    String ownerId = "testOwner1Id";
-    String adminEmail = "myadmin@gmail.com";
+    String ownerId = "ownerId1";
+    String personnelEmail = "userEmail1";
 
     @Before
     public void setup() {
@@ -42,22 +42,8 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
 
     @Test
     public void tryRegisterRegisteredPersonnelTest() {
-        Mockito.when(
-                accessRepository
-                        .isPersonnelWithThisEmailRegistered(Mockito.anyString(), Mockito.anyString()))
-                .thenAnswer(invocation -> {
-                    String id = invocation.getArgument(0);
-                    String email = invocation.getArgument(1);
-
-                    if (id.equals(ownerId) && email.equals(adminEmail)) {
-                        return Single.just(true);
-                    } else {
-                        return Single.just(false);
-                    }
-                });
-
         TestObserver<Boolean> subscriber =
-                subscribe(personnelAccessManager.createPersonnel(ownerId, adminEmail));
+                subscribe(personnelAccessManager.createPersonnel(ownerId, personnelEmail));
 
         subscriber.assertError(Exception.class);
         subscriber.assertNotComplete();
@@ -67,39 +53,11 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
 
     @Test
     public void tryRegisterAddedPersonnelTest() {
-        Mockito.when(
-                accessRepository
-                        .isPersonnelWithThisEmailRegistered(Mockito.anyString(), Mockito.anyString()))
-                .thenAnswer(invocation -> {
-                    String id = invocation.getArgument(0);
-                    String email = invocation.getArgument(1);
-
-                    if (id.equals(ownerId) && email.equals(adminEmail)) {
-                        return Single.just(false);
-                    } else {
-                        return Single.just(true);
-                    }
-                });
-
-        Mockito.when(accessRepository.getRegisterPersonnelAccessEntryBatch(Mockito.anyString(), Mockito.anyString()))
-                .thenReturn(Single.just(FirebaseFirestore.getInstance().batch()));
-
-        Mockito.when(ownersRepository.isPersonnelWithThisEmailAdded(Mockito.anyString()))
-                .thenAnswer(invocation -> {
-                   String email = invocation.getArgument(0);
-
-                   if (email.equals(adminEmail)) {
-                       return Single.just(true);
-                   } else {
-                       return Single.just(false);
-                   }
-                });
-
         TestObserver<Boolean> subscriber =
-                subscribe(personnelAccessManager.createPersonnel(ownerId, adminEmail));
+                subscribe(personnelAccessManager.createPersonnel(ownerId, "userEmail5"));
 
         Mockito.verify(accessRepository)
-                .getRegisterPersonnelAccessEntryBatch(ownerId, adminEmail);
+                .getRegisterPersonnelAccessEntryBatch(ownerId, "userEmail5");
 
         Mockito.verify(ownersRepository, Mockito.times(0))
                 .getAddPersonnelBatch(Mockito.any(), Mockito.any());
@@ -113,46 +71,13 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
 
     @Test
     public void registerPersonnelTest() {
-        Mockito.when(
-                accessRepository
-                        .isPersonnelWithThisEmailRegistered(Mockito.anyString(), Mockito.anyString()))
-                .thenAnswer(invocation -> {
-                    String id = invocation.getArgument(0);
-                    String email = invocation.getArgument(1);
-
-                    if (id.equals(ownerId) && email.equals(adminEmail)) {
-                        return Single.just(false);
-                    } else {
-                        return Single.just(true);
-                    }
-                });
-
-        Mockito.when(accessRepository
-                .getRegisterPersonnelAccessEntryBatch(Mockito.anyString(), Mockito.anyString()))
-                .thenReturn(Single.just(FirebaseFirestore.getInstance().batch()));
-
-        Mockito.when(ownersRepository.isPersonnelWithThisEmailAdded(Mockito.anyString()))
-                .thenAnswer(invocation -> {
-                    String email = invocation.getArgument(0);
-
-                    if (email.equals(adminEmail)) {
-                        return Single.just(false);
-                    } else {
-                        return Single.just(true);
-                    }
-                });
-
-        Mockito.when(ownersRepository
-                .getAddPersonnelBatch(Mockito.any(), Mockito.anyString()))
-                .thenReturn(Single.just(FirebaseFirestore.getInstance().batch()));
-
         TestObserver<Boolean> subscriber =
-                subscribe(personnelAccessManager.createPersonnel(ownerId, adminEmail));
+                subscribe(personnelAccessManager.createPersonnel(ownerId, "userEmail6"));
 
         Mockito.verify(accessRepository)
-                .getRegisterPersonnelAccessEntryBatch(ownerId, adminEmail);
+                .getRegisterPersonnelAccessEntryBatch(ownerId, "userEmail6");
 
-        Mockito.verify(ownersRepository).getAddPersonnelBatch(Mockito.any(), Mockito.eq(adminEmail));
+        Mockito.verify(ownersRepository).getAddPersonnelBatch(Mockito.any(), Mockito.eq("userEmail6"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -166,7 +91,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
         setDeletePersonnelMocks();
 
         TestObserver<Boolean> subscriber =
-                subscribe(personnelAccessManager.deletePersonnelSingle(ownerId, adminEmail));
+                subscribe(personnelAccessManager.deletePersonnelSingle(ownerId, personnelEmail));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -180,7 +105,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
         setDeletePersonnelMocks();
 
         TestObserver<Boolean> subscriber =
-                subscribe(personnelAccessManager.deletePersonnelSingle("ownerId", adminEmail));
+                subscribe(personnelAccessManager.deletePersonnelSingle("ownerId", personnelEmail));
 
         subscriber.assertError(Exception.class);
         subscriber.assertNotComplete();
@@ -196,7 +121,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
                     String id = invocation.getArgument(0);
                     String email = invocation.getArgument(1);
 
-                    if (id.equals(ownerId) && email.equals(adminEmail)) {
+                    if (id.equals(ownerId) && email.equals(personnelEmail)) {
                         return Single.just(writeBatch);
                     } else {
                         return Single.error(new Exception());
@@ -209,7 +134,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
                     WriteBatch argumentWriteBatch = invocation.getArgument(0);
                     String email = invocation.getArgument(1);
 
-                    if (argumentWriteBatch.equals(writeBatch) && email.equals(adminEmail)) {
+                    if (argumentWriteBatch.equals(writeBatch) && email.equals(personnelEmail)) {
                         return Single.just(writeBatch);
                     } else {
                         return Single.error(new Exception());

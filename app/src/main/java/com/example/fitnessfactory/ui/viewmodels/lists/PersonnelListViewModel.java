@@ -21,13 +21,33 @@ import io.reactivex.Single;
 
 public abstract class PersonnelListViewModel extends BaseViewModel implements DataListListener<AppUser>  {
 
-    protected abstract PersonnelAccessManager getAccessManager();
+    private PersonnelAccessManager accessManager;
 
-    protected abstract PersonnelDataManager getDataManager();
+    private PersonnelDataManager dataManager;
 
-    protected abstract DataListener getDataListener();
+    private DataListener dataListener;
 
     private final MutableLiveData<List<AppUser>> personnel = new MutableLiveData<>();
+
+    public PersonnelListViewModel(PersonnelAccessManager accessManager,
+                                  PersonnelDataManager dataManager,
+                                  DataListener dataListener) {
+        this.accessManager = accessManager;
+        this.dataManager = dataManager;
+        this.dataListener = dataListener;
+    }
+
+    protected PersonnelAccessManager getAccessManager() {
+        return accessManager;
+    }
+
+    protected PersonnelDataManager getDataManager() {
+        return dataManager;
+    }
+
+    protected DataListener getDataListener() {
+        return dataListener;
+    }
 
     public SingleLiveEvent<String> registerPersonnel(Single<String> emailDialog,
                                                      Single<Boolean> sendInvitationDialog,

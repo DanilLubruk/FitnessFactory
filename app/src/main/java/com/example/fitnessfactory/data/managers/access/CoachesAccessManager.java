@@ -1,8 +1,8 @@
 package com.example.fitnessfactory.data.managers.access;
 
 import com.example.fitnessfactory.R;
-import com.example.fitnessfactory.data.repositories.access.PersonnelAccessRepository;
-import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
+import com.example.fitnessfactory.data.repositories.access.CoachesAccessRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
 import com.example.fitnessfactory.utils.ResUtils;
 
 import javax.inject.Inject;
@@ -10,8 +10,8 @@ import javax.inject.Inject;
 public class CoachesAccessManager extends PersonnelAccessManager {
 
     @Inject
-    public CoachesAccessManager(PersonnelAccessRepository accessRepository,
-                                OwnerPersonnelRepository ownerRepository) {
+    public CoachesAccessManager(CoachesAccessRepository accessRepository,
+                                OwnerCoachesRepository ownerRepository) {
         super(accessRepository, ownerRepository);
     }
 

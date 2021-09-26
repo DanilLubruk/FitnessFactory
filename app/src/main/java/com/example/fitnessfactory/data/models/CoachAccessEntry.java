@@ -28,4 +28,25 @@ public class CoachAccessEntry {
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
+
+    public static CoachAccessEntry.Builder builder() {
+        return new CoachAccessEntry().new Builder();
+    }
+
+    public class Builder {
+
+        public Builder setUserEmail(String userEmail) {
+            CoachAccessEntry.this.setUserEmail(userEmail);
+            return this;
+        }
+
+        public Builder setOwnerId(String ownerId) {
+            CoachAccessEntry.this.setOwnerId(ownerId);
+            return this;
+        }
+
+        public CoachAccessEntry build() {
+            return CoachAccessEntry.this;
+        }
+    }
 }

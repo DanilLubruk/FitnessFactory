@@ -97,8 +97,10 @@ public abstract class PersonnelEditorViewModelTests extends BaseTests {
         personnelEditorViewModel.getGymsData();
         Mockito.verify(dataManager, Mockito.times(0))
                 .getPersonnelGymsByEmail(userEmail);
-        /*List<Gym> gyms = getOrAwaitValue(personnelEditorViewModel.getGyms());
-        assertNull(gyms);*/
+        personnelEditorViewModel.getGyms().observeForever(gyms -> {
+            assertNull(gyms);
+        });
+
 
         personnelEditorViewModel.setPersonnelData(getDataIntent(personnel));
         AppUser viewModelPersonnel = personnelEditorViewModel.personnel.get();
@@ -114,27 +116,33 @@ public abstract class PersonnelEditorViewModelTests extends BaseTests {
 
         personnelEditorViewModel.getGymsData();
         Mockito.verify(dataManager).getPersonnelGymsByEmail(userEmail);
-        List<Gym> gyms = getOrAwaitValue(personnelEditorViewModel.getGyms());
-        assertNotNull(gyms);
-        assertEquals(3, gyms.size());
+        personnelEditorViewModel.getGyms().observeForever(gyms -> {
+            assertNotNull(gyms);
+            assertEquals(3, gyms.size());
 
-        for (int i = 0; i < gyms.size(); i++) {
-            Gym gym = gyms.get(0);
+            for (int i = 0; i < gyms.size(); i++) {
+                Gym gym = gyms.get(0);
 
-            int gymNumber = i + 1;
-            assertEquals("id" + gymNumber, gym.getId());
-            assertEquals("Name" + gymNumber, gym.getName());
-            assertEquals("Address" + gymNumber, gym.getAddress());
-        }
+                int gymNumber = i + 1;
+                assertEquals("id" + gymNumber, gym.getId());
+                assertEquals("Name" + gymNumber, gym.getName());
+                assertEquals("Address" + gymNumber, gym.getAddress());
+            }
+        });
+
 
         personnel.setEmail("notTheRightEmail");
         personnelEditorViewModel.setPersonnelData(getDataIntent(personnel));
 
         personnelEditorViewModel.getGymsData();
         Mockito.verify(dataManager).getPersonnelGymsByEmail("notTheRightEmail");
-        gyms = getOrAwaitValue(personnelEditorViewModel.getGyms());
-        assertNotNull(gyms);
-        assertEquals(0, gyms.size());
+        personnelEditorViewModel.getGyms().observeForever(gyms -> {
+            assertNotNull(gyms);
+            assertEquals(0, gyms.size());
+        });
+
+        personnelEditorViewModel.stopDataListener();
+        Mockito.verify(dataListener).stopDataListener();
     }
 
     @Test

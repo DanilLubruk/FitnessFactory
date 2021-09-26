@@ -29,4 +29,25 @@ public class Coach {
     public void setGymsIds(List<String> gymsIds) {
         this.gymsIds = gymsIds;
     }
+
+    public static Coach.Builder builder() {
+        return new Coach().new Builder();
+    }
+
+    public class Builder {
+
+        public Builder setUserEmail(String userEmail) {
+            Coach.this.setUserEmail(userEmail);
+            return this;
+        }
+
+        public Builder setGymsIds(List<String> gymsIds) {
+            Coach.this.setGymsIds(gymsIds);
+            return this;
+        }
+
+        public Coach build() {
+            return Coach.this;
+        }
+    }
 }

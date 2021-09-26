@@ -28,4 +28,25 @@ public class AdminAccessEntry {
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
+
+    public static AdminAccessEntry.Builder builder() {
+        return new AdminAccessEntry().new Builder();
+    }
+
+    public class Builder {
+
+        public Builder setUserEmail(String userEmail) {
+            AdminAccessEntry.this.userEmail = userEmail;
+            return this;
+        }
+
+        public Builder setOwnerId(String ownerId) {
+            AdminAccessEntry.this.ownerId = ownerId;
+            return this;
+        }
+
+        public AdminAccessEntry build() {
+            return AdminAccessEntry.this;
+        }
+    }
 }

@@ -6,6 +6,7 @@ import com.example.fitnessfactory.data.managers.access.CoachesAccessManager;
 import com.example.fitnessfactory.data.managers.access.PersonnelAccessManager;
 import com.example.fitnessfactory.data.repositories.access.PersonnelAccessRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
+import com.example.fitnessfactory.mockHelpers.CoachesAccessManagerMocker;
 
 import org.junit.runner.RunWith;
 
@@ -15,6 +16,6 @@ public class CoachesAccessManagerTests extends PersonnelAccessManagerTests {
     @Override
     protected PersonnelAccessManager instantiateAccessManager(PersonnelAccessRepository personnelAccessRepository,
                                                               OwnerPersonnelRepository ownersRepository) {
-        return new CoachesAccessManager(personnelAccessRepository, ownersRepository);
+        return CoachesAccessManagerMocker.createMock(personnelAccessRepository, ownersRepository);
     }
 }

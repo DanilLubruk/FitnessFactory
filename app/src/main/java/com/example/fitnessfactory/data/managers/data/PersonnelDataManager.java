@@ -13,11 +13,31 @@ import io.reactivex.Single;
 
 public abstract class PersonnelDataManager extends BaseManager {
 
-    protected abstract OwnerPersonnelRepository getOwnerRepository();
+    private OwnerPersonnelRepository ownerRepository;
 
-    protected abstract UserRepository getUserRepository();
+    private UserRepository userRepository;
 
-    protected abstract OwnerGymRepository getGymRepository();
+    private OwnerGymRepository gymRepository;
+
+    public PersonnelDataManager(OwnerPersonnelRepository ownerRepository,
+                                UserRepository userRepository,
+                                OwnerGymRepository gymRepository) {
+        this.ownerRepository = ownerRepository;
+        this.userRepository = userRepository;
+        this.gymRepository = gymRepository;
+    }
+
+    protected OwnerPersonnelRepository getOwnerRepository() {
+        return ownerRepository;
+    }
+
+    protected UserRepository getUserRepository() {
+        return userRepository;
+    }
+
+    protected OwnerGymRepository getGymRepository() {
+        return gymRepository;
+    }
 
     public Single<List<AppUser>> getPersonnelListAsync() {
         return getOwnerRepository().getPersonnelEmails()
