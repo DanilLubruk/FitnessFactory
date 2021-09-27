@@ -1,14 +1,15 @@
-package com.example.fitnessfactory.mockHelpers.mockers;
+package com.example.fitnessfactory.mockHelpers.mockers.data;
 
-import com.example.fitnessfactory.data.managers.data.CoachesDataManager;
+import com.example.fitnessfactory.data.managers.data.PersonnelDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.models.Coach;
 import com.example.fitnessfactory.data.models.Gym;
+import com.example.fitnessfactory.data.models.Personnel;
+import com.example.fitnessfactory.data.models.PersonnelAccessEntry;
 import com.example.fitnessfactory.data.repositories.UserRepository;
-import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
-import com.example.fitnessfactory.mockHelpers.mockdata.CoachesDataProvider;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
 import com.example.fitnessfactory.mockHelpers.mockdata.GymsDataProvider;
+import com.example.fitnessfactory.mockHelpers.mockdata.PersonnelDataProvider;
 import com.example.fitnessfactory.mockHelpers.mockdata.UsersDataProvider;
 
 import org.mockito.Mockito;
@@ -18,20 +19,20 @@ import java.util.List;
 
 import io.reactivex.Single;
 
-public class CoachesDataManagerMocker {
+abstract class PersonnelDataManagerMocker {
 
-    public static CoachesDataManager createMock(OwnerCoachesRepository ownerRepository,
-                                                UserRepository userRepository,
-                                                OwnerGymRepository ownerGymRepository) {
-        CoachesDataManager dataManager =
-                new CoachesDataManager(ownerRepository, userRepository, ownerGymRepository);
-
+    static <P extends Personnel,
+            PE extends PersonnelAccessEntry>
+    void setupMock(PersonnelDataProvider<P, PE> dataProvider,
+                   OwnerPersonnelRepository ownerRepository,
+                   UserRepository userRepository,
+                   OwnerGymRepository ownerGymRepository) {
         Mockito.when(ownerRepository.getPersonnelEmails())
                 .thenAnswer(invocation -> {
                     List<String> emails = new ArrayList<>();
 
-                    for (Coach coach : CoachesDataProvider.getCoaches()) {
-                        emails.add(coach.getUserEmail());
+                    for (P personnel : dataProvider.getPersonnel()) {
+                        emails.add(personnel.getUserEmail());
                     }
 
                     return Single.just(emails);
@@ -56,10 +57,10 @@ public class CoachesDataManagerMocker {
                     String gymId = invocation.getArgument(0);
                     List<String> emails = new ArrayList<>();
 
-                    for (Coach coach : CoachesDataProvider.getCoaches()) {
-                        if (coach.getGymsIds() != null &&
-                                coach.getGymsIds().contains(gymId)) {
-                            emails.add(coach.getUserEmail());
+                    for (P personnel : dataProvider.getPersonnel()) {
+                        if (personnel.getGymsIds() != null &&
+                                personnel.getGymsIds().contains(gymId)) {
+                            emails.add(personnel.getUserEmail());
                         }
                     }
 
@@ -70,9 +71,9 @@ public class CoachesDataManagerMocker {
                 .thenAnswer(invocation -> {
                     String personnelEmail = invocation.getArgument(0);
 
-                    for (Coach coach : CoachesDataProvider.getCoaches()) {
-                        if (coach.getUserEmail().equals(personnelEmail)) {
-                            return Single.just(coach.getGymsIds());
+                    for (P personnel : dataProvider.getPersonnel()) {
+                        if (personnel.getUserEmail().equals(personnelEmail)) {
+                            return Single.just(personnel.getGymsIds());
                         }
                     }
 
@@ -92,7 +93,5 @@ public class CoachesDataManagerMocker {
 
                     return Single.just(gyms);
                 });
-
-        return dataManager;
     }
 }

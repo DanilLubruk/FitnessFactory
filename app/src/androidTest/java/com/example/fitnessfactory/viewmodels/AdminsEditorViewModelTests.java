@@ -12,18 +12,15 @@ import com.example.fitnessfactory.data.managers.access.PersonnelAccessManager;
 import com.example.fitnessfactory.data.managers.data.AdminsDataManager;
 import com.example.fitnessfactory.data.managers.data.PersonnelDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.data.repositories.access.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
-import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
-import com.example.fitnessfactory.mockHelpers.mockers.AdminsAccessManagerMocker;
-import com.example.fitnessfactory.mockHelpers.mockers.AdminsDataManagerMocker;
+import com.example.fitnessfactory.mockHelpers.mockers.access.AdminsAccessManagerMocker;
+import com.example.fitnessfactory.mockHelpers.mockers.data.AdminsDataManagerMocker;
 import com.example.fitnessfactory.ui.viewmodels.AdminEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.PersonnelEditorViewModel;
 
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 @RunWith(AndroidJUnit4.class)

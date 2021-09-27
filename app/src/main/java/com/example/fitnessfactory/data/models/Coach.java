@@ -2,7 +2,7 @@ package com.example.fitnessfactory.data.models;
 
 import java.util.List;
 
-public class Coach {
+public class Coach implements Personnel {
 
     public static final String USER_EMAIL_FIELD = "userEmail";
     public static final String GYMS_ARRAY_FIELD = "gymsIds";

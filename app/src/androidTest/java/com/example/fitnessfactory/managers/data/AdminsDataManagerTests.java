@@ -3,7 +3,7 @@ package com.example.fitnessfactory.managers.data;
 import com.example.fitnessfactory.data.managers.data.PersonnelDataManager;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
-import com.example.fitnessfactory.mockHelpers.mockers.AdminsDataManagerMocker;
+import com.example.fitnessfactory.mockHelpers.mockers.data.AdminsDataManagerMocker;
 
 import org.mockito.Mockito;
 

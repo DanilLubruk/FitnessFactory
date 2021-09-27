@@ -1,23 +1,23 @@
-package com.example.fitnessfactory.mockHelpers.mockers;
+package com.example.fitnessfactory.mockHelpers.mockers.access;
 
-import com.example.fitnessfactory.data.managers.access.CoachesAccessManager;
-import com.example.fitnessfactory.data.models.Coach;
-import com.example.fitnessfactory.data.models.CoachAccessEntry;
-import com.example.fitnessfactory.data.repositories.access.CoachesAccessRepository;
-import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
-import com.example.fitnessfactory.mockHelpers.mockdata.CoachesDataProvider;
+import com.example.fitnessfactory.data.models.Personnel;
+import com.example.fitnessfactory.data.models.PersonnelAccessEntry;
+import com.example.fitnessfactory.data.repositories.access.PersonnelAccessRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
+import com.example.fitnessfactory.mockHelpers.mockdata.PersonnelDataProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.mockito.Mockito;
+
 import io.reactivex.Single;
 
-public class CoachesAccessManagerMocker {
+abstract class PersonnelAccessManagerMocker {
 
-    public static CoachesAccessManager createMock(CoachesAccessRepository accessRepository,
-                                                    OwnerCoachesRepository ownersRepository) {
-        CoachesAccessManager coachesAccessManager =
-                new CoachesAccessManager(accessRepository, ownersRepository);
-
+    static <P extends Personnel,
+            PE extends PersonnelAccessEntry>
+    void setupMock(PersonnelDataProvider<P, PE> dataProvider,
+                   PersonnelAccessRepository accessRepository,
+                   OwnerPersonnelRepository ownersRepository) {
         Mockito.when(
                 accessRepository
                         .isPersonnelWithThisEmailRegistered(Mockito.anyString(), Mockito.anyString()))
@@ -25,9 +25,9 @@ public class CoachesAccessManagerMocker {
                     String id = invocation.getArgument(0);
                     String email = invocation.getArgument(1);
 
-                    for (CoachAccessEntry coachEntry : CoachesDataProvider.getCoachesEntries()) {
-                        if (id.equals(coachEntry.getOwnerId()) &&
-                                email.equals(coachEntry.getUserEmail())) {
+                    for (PE accessEntry : dataProvider.getAccessEntries()) {
+                        if (id.equals(accessEntry.getOwnerId()) &&
+                                email.equals(accessEntry.getUserEmail())) {
                             return Single.just(true);
                         }
                     }
@@ -47,8 +47,8 @@ public class CoachesAccessManagerMocker {
                 .thenAnswer(invocation -> {
                     String email = invocation.getArgument(0);
 
-                    for (Coach coach : CoachesDataProvider.getCoaches()) {
-                        if (email.equals(coach.getUserEmail())) {
+                    for (P personnel : dataProvider.getPersonnel()) {
+                        if (email.equals(personnel.getUserEmail())) {
                             return Single.just(true);
                         }
                     }
@@ -61,7 +61,5 @@ public class CoachesAccessManagerMocker {
 
         Mockito.when(accessRepository.getDeletePersonnelAccessEntryBatch(Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(Single.just(FirebaseFirestore.getInstance().batch()));
-
-        return coachesAccessManager;
     }
 }

@@ -15,8 +15,8 @@ import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.repositories.access.CoachesAccessRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
-import com.example.fitnessfactory.mockHelpers.mockers.CoachesAccessManagerMocker;
-import com.example.fitnessfactory.mockHelpers.mockers.CoachesDataManagerMocker;
+import com.example.fitnessfactory.mockHelpers.mockers.access.CoachesAccessManagerMocker;
+import com.example.fitnessfactory.mockHelpers.mockers.data.CoachesDataManagerMocker;
 import com.example.fitnessfactory.ui.viewmodels.CoachEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.PersonnelEditorViewModel;
 

@@ -4,7 +4,7 @@ import android.os.Build;
 
 import java.util.List;
 
-public class Admin {
+public class Admin implements Personnel {
 
     public static final String USER_EMAIL_FIELD = "userEmail";
     public static final String GYMS_ARRAY_FIELD = "gymsIds";

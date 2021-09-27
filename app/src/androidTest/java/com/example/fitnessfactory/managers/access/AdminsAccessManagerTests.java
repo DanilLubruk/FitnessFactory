@@ -7,7 +7,7 @@ import com.example.fitnessfactory.data.repositories.access.AdminsAccessRepositor
 import com.example.fitnessfactory.data.repositories.access.PersonnelAccessRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
-import com.example.fitnessfactory.mockHelpers.mockers.AdminsAccessManagerMocker;
+import com.example.fitnessfactory.mockHelpers.mockers.access.AdminsAccessManagerMocker;
 
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
