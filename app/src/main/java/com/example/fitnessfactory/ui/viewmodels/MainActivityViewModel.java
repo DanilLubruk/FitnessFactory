@@ -26,7 +26,7 @@ public class MainActivityViewModel extends BaseViewModel {
         subscribeInIOThread(authManager.signOutSingle(),
                 new SingleData<>(
                         observer::setValue,
-                        throwable -> RxUtils.handleError(observer, throwable)));
+                        throwable -> getErrorHandler().handleError(observer, throwable)));
 
         return observer;
     }
@@ -34,6 +34,6 @@ public class MainActivityViewModel extends BaseViewModel {
     public void setOrganisationName(String organisationName) {
         subscribeInIOThread(
                 organisationInfoRepository.setOrganisationNameAsync(organisationName),
-                RxUtils::handleError);
+                getErrorHandler()::handleError);
     }
 }

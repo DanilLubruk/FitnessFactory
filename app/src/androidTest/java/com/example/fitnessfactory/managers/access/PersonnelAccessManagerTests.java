@@ -23,7 +23,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
     protected PersonnelAccessManager personnelAccessManager;
 
     String ownerId = "ownerId1";
-    String personnelEmail = "userEmail1";
+    String personnelEmail = "useremail1";
 
     @Before
     public void setup() {
@@ -54,7 +54,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
                 .thenAnswer(invocation -> {
                     String email = invocation.getArgument(0);
 
-                    if (email.equals("userEmail5")) {
+                    if (email.equals("useremail5")) {
                         return Single.just(true);
                     } else {
                         return Single.just(false);
@@ -62,10 +62,10 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
                 });
 
         TestObserver<Boolean> subscriber =
-                subscribe(personnelAccessManager.createPersonnel(ownerId, "userEmail5"));
+                subscribe(personnelAccessManager.createPersonnel(ownerId, "useremail5"));
 
         Mockito.verify(getAccessRepository())
-                .getRegisterPersonnelAccessEntryBatch(ownerId, "userEmail5");
+                .getRegisterPersonnelAccessEntryBatch(ownerId, "useremail5");
 
         Mockito.verify(getOwnersRepository(), Mockito.times(0))
                 .getAddPersonnelBatch(Mockito.any(), Mockito.any());
@@ -80,12 +80,12 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
     @Test
     public void registerPersonnelTest() {
         TestObserver<Boolean> subscriber =
-                subscribe(personnelAccessManager.createPersonnel(ownerId, "userEmail6"));
+                subscribe(personnelAccessManager.createPersonnel(ownerId, "useremail6"));
 
         Mockito.verify(getAccessRepository())
-                .getRegisterPersonnelAccessEntryBatch(ownerId, "userEmail6");
+                .getRegisterPersonnelAccessEntryBatch(ownerId, "useremail6");
 
-        Mockito.verify(getOwnersRepository()).getAddPersonnelBatch(Mockito.any(), Mockito.eq("userEmail6"));
+        Mockito.verify(getOwnersRepository()).getAddPersonnelBatch(Mockito.any(), Mockito.eq("useremail6"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();

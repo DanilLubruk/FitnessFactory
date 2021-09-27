@@ -6,6 +6,8 @@ import android.util.Log;
 import androidx.lifecycle.ViewModel;
 
 import com.example.fitnessfactory.data.observers.SingleData;
+import com.example.fitnessfactory.utils.RxErrorsHandler;
+import com.example.fitnessfactory.utils.RxUtils;
 
 import java.util.HashMap;
 
@@ -26,6 +28,7 @@ public class BaseViewModel extends ViewModel {
     private HashMap<String, Object> handle = new HashMap<>();
     private static final String HANDLE = "HANDLE";
     private boolean loading = false;
+    private RxErrorsHandler rxErrorsHandler = new RxUtils();
     private Scheduler ioScheduler = Schedulers.io();;
     private Scheduler mainScheduler = AndroidSchedulers.mainThread();
 
@@ -131,6 +134,14 @@ public class BaseViewModel extends ViewModel {
 
     public void setIoScheduler(Scheduler ioScheduler) {
         this.ioScheduler = ioScheduler;
+    }
+
+    public void setRxErrorsHandler(RxErrorsHandler rxErrorsHandler) {
+        this.rxErrorsHandler = rxErrorsHandler;
+    }
+
+    protected RxErrorsHandler getErrorHandler() {
+        return rxErrorsHandler;
     }
 
     public void saveState(Bundle outState) {

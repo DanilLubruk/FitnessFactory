@@ -34,7 +34,7 @@ public class OrganisationInfoViewModel extends EditorViewModel {
                 organisationInfoRepository.getOrganisationDataAsync(),
                 new SingleData<>(
                         observer::setValue,
-                        RxUtils::handleError));
+                        getErrorHandler()::handleError));
 
         return observer;
     }
@@ -83,7 +83,7 @@ public class OrganisationInfoViewModel extends EditorViewModel {
                 organisationInfoRepository.saveOrganisationInfoAsync(organisationData),
                 new SingleData<>(
                         observer::setValue,
-                        throwable -> RxUtils.handleError(observer, throwable)));
+                        throwable -> getErrorHandler().handleError(observer, throwable)));
 
         return observer;
     }

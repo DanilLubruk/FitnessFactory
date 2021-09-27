@@ -1,6 +1,5 @@
 package com.example.fitnessfactory.mockHelpers.mockers.data;
 
-import com.example.fitnessfactory.data.managers.data.PersonnelDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.models.Personnel;
@@ -9,7 +8,7 @@ import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
 import com.example.fitnessfactory.mockHelpers.mockdata.GymsDataProvider;
-import com.example.fitnessfactory.mockHelpers.mockdata.PersonnelDataProvider;
+import com.example.fitnessfactory.mockHelpers.mockdata.personnel.PersonnelDataProvider;
 import com.example.fitnessfactory.mockHelpers.mockdata.UsersDataProvider;
 
 import org.mockito.Mockito;

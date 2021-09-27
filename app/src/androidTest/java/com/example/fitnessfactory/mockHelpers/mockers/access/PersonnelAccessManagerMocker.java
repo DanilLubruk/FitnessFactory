@@ -4,7 +4,7 @@ import com.example.fitnessfactory.data.models.Personnel;
 import com.example.fitnessfactory.data.models.PersonnelAccessEntry;
 import com.example.fitnessfactory.data.repositories.access.PersonnelAccessRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
-import com.example.fitnessfactory.mockHelpers.mockdata.PersonnelDataProvider;
+import com.example.fitnessfactory.mockHelpers.mockdata.personnel.PersonnelDataProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.mockito.Mockito;

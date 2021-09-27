@@ -13,6 +13,5 @@ public class AdminListViewModel extends PersonnelListViewModel {
                               AdminsDataManager dataManager,
                               AdminsListDataListener dataListener) {
         super(accessManager, dataManager, dataListener);
-        //FFApp.get().getAppComponent().inject(this);
     }
 }

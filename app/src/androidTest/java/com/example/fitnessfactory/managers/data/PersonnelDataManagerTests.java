@@ -60,7 +60,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
 
             assertEquals("userId" + userNumber, user.getId());
             assertEquals("User" + userNumber, user.getName());
-            assertEquals("userEmail" + userNumber, user.getEmail());
+            assertEquals("useremail" + userNumber, user.getEmail());
         }
     }
 
@@ -77,11 +77,11 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
         assertEquals(2, users.size());
         assertEquals("userId1", users.get(0).getId());
         assertEquals("User1", users.get(0).getName());
-        assertEquals("userEmail1", users.get(0).getEmail());
+        assertEquals("useremail1", users.get(0).getEmail());
 
         assertEquals("userId2", users.get(1).getId());
         assertEquals("User2", users.get(1).getName());
-        assertEquals("userEmail2", users.get(1).getEmail());
+        assertEquals("useremail2", users.get(1).getEmail());
 
         subscriber = subscribe(dataManager.getPersonnelListByGymIdAsync("gymId2"));
 
@@ -93,11 +93,11 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
         assertEquals(2, users.size());
         assertEquals("userId3", users.get(0).getId());
         assertEquals("User3", users.get(0).getName());
-        assertEquals("userEmail3", users.get(0).getEmail());
+        assertEquals("useremail3", users.get(0).getEmail());
 
         assertEquals("userId4", users.get(1).getId());
         assertEquals("User4", users.get(1).getName());
-        assertEquals("userEmail4", users.get(1).getEmail());
+        assertEquals("useremail4", users.get(1).getEmail());
 
         subscriber = subscribe(dataManager.getPersonnelListByGymIdAsync("gymId3"));
 
@@ -109,7 +109,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
         assertEquals(1, users.size());
         assertEquals("userId4", users.get(0).getId());
         assertEquals("User4", users.get(0).getName());
-        assertEquals("userEmail4", users.get(0).getEmail());
+        assertEquals("useremail4", users.get(0).getEmail());
 
         subscriber = subscribe(dataManager.getPersonnelListByGymIdAsync("gymId4"));
 
@@ -124,7 +124,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
     @Test
     public void getGymsByPersonnelEmailTests() {
         TestObserver<List<Gym>> subscriber =
-                subscribe(dataManager.getPersonnelGymsByEmail("userEmail1"));
+                subscribe(dataManager.getPersonnelGymsByEmail("useremail1"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -136,7 +136,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
         assertEquals("gymName1", gyms.get(0).getName());
         assertEquals("gymAddress1", gyms.get(0).getAddress());
 
-        subscriber = subscribe(dataManager.getPersonnelGymsByEmail("userEmail2"));
+        subscriber = subscribe(dataManager.getPersonnelGymsByEmail("useremail2"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -148,7 +148,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
         assertEquals("gymName1", gyms.get(0).getName());
         assertEquals("gymAddress1", gyms.get(0).getAddress());
 
-        subscriber = subscribe(dataManager.getPersonnelGymsByEmail("userEmail3"));
+        subscriber = subscribe(dataManager.getPersonnelGymsByEmail("useremail3"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -160,7 +160,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
         assertEquals("gymName2", gyms.get(0).getName());
         assertEquals("gymAddress2", gyms.get(0).getAddress());
 
-        subscriber = subscribe(dataManager.getPersonnelGymsByEmail("userEmail4"));
+        subscriber = subscribe(dataManager.getPersonnelGymsByEmail("useremail4"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();

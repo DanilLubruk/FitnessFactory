@@ -1,4 +1,4 @@
-package com.example.fitnessfactory.mockHelpers.mockdata;
+package com.example.fitnessfactory.mockHelpers.mockdata.personnel;
 
 import com.example.fitnessfactory.data.models.Personnel;
 import com.example.fitnessfactory.data.models.PersonnelAccessEntry;
@@ -29,36 +29,36 @@ public abstract class PersonnelDataProvider<P extends Personnel, PE extends Pers
 
     private void initData() {
         accessEntries = new ArrayList<PE>() {{
-            add(createPersonnelAccessEntry("userEmail1", "ownerId1"));
-            add(createPersonnelAccessEntry("userEmail2", "ownerId1"));
-            add(createPersonnelAccessEntry("userEmail3", "ownerId1"));
-            add(createPersonnelAccessEntry("userEmail4", "ownerId1"));
-            add(createPersonnelAccessEntry("userEmail1", "ownerId2"));
-            add(createPersonnelAccessEntry("userEmail5", "ownerId2"));
+            add(createPersonnelAccessEntry("useremail1", "ownerId1"));
+            add(createPersonnelAccessEntry("useremail2", "ownerId1"));
+            add(createPersonnelAccessEntry("useremail3", "ownerId1"));
+            add(createPersonnelAccessEntry("useremail4", "ownerId1"));
+            add(createPersonnelAccessEntry("useremail1", "ownerId2"));
+            add(createPersonnelAccessEntry("useremail5", "ownerId2"));
 
         }};
 
         personnel = new ArrayList<P>() {{
             add(createPersonnel(
-                    "userEmail1",
+                    "useremail1",
                     new ArrayList<String>(){{
                 add("gymId1");
             }}));
 
             add(createPersonnel(
-                    "userEmail2",
+                    "useremail2",
                     new ArrayList<String>(){{
                         add("gymId1");
                     }}));
 
             add(createPersonnel(
-                    "userEmail3",
+                    "useremail3",
                     new ArrayList<String>(){{
                         add("gymId2");
                     }}));
 
             add(createPersonnel(
-                    "userEmail4",
+                    "useremail4",
                     new ArrayList<String>(){{
                         add("gymId2");
                         add("gymId3");

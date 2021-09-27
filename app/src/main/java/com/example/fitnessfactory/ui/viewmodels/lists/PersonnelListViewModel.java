@@ -66,7 +66,11 @@ public abstract class PersonnelListViewModel extends BaseViewModel implements Da
                         })
                         .subscribeOn(getIOScheduler())
                         .observeOn(getIOScheduler())
-                        .flatMap(email -> getAccessManager().createPersonnel(AppPrefs.gymOwnerId().getValue(), email))
+                        .flatMap(email ->
+                                getAccessManager()
+                                        .createPersonnel(
+                                                AppPrefs.gymOwnerId().getValue(),
+                                                email))
                         .flatMap(isCreated ->
                                 isCreated ?
                                         Single.just(askForSendingInvite) :
@@ -81,7 +85,7 @@ public abstract class PersonnelListViewModel extends BaseViewModel implements Da
                         .subscribeOn(getIOScheduler()),
                 new SingleData<>(
                         observer::setValue,
-                        RxUtils::handleError));
+                        getErrorHandler()::handleError));
 
         return observer;
     }
@@ -92,7 +96,7 @@ public abstract class PersonnelListViewModel extends BaseViewModel implements Da
 
     public void getPersonnelListData() {
         subscribeInIOThread(getDataManager().getPersonnelListAsync(),
-                new SingleData<>(personnel::setValue, RxUtils::handleError));
+                new SingleData<>(personnel::setValue, getErrorHandler()::handleError));
     }
 
     @Override
@@ -107,7 +111,10 @@ public abstract class PersonnelListViewModel extends BaseViewModel implements Da
 
     public void deleteItem(AppUser personnel) {
         subscribeInIOThread(
-                getAccessManager().deletePersonnelCompletable(AppPrefs.gymOwnerId().getValue(), personnel.getEmail()),
-                RxUtils::handleError);
+                getAccessManager()
+                        .deletePersonnelCompletable(
+                                AppPrefs.gymOwnerId().getValue(),
+                                personnel.getEmail()),
+                getErrorHandler()::handleError);
     }
 }

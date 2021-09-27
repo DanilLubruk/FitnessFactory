@@ -72,7 +72,7 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
 
         subscribeInIOThread(
                 getOwnerRepository().addGymToPersonnel(personnel.getEmail(), gymId),
-                RxUtils::handleError);
+                getErrorHandler()::handleError);
     }
 
     @Override
@@ -84,7 +84,7 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
 
         subscribeInIOThread(
                 getOwnerRepository().removeGymFromPersonnel(personnel.getEmail(), gym.getId()),
-                RxUtils::handleError);
+                getErrorHandler()::handleError);
     }
 
     public MutableLiveData<List<Gym>> getGyms() {
@@ -111,7 +111,7 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
         }
 
         subscribeInIOThread(getDataManager().getPersonnelGymsByEmail(personnel.getEmail()),
-                new SingleData<>(gyms::setValue, RxUtils::handleError));
+                new SingleData<>(gyms::setValue, getErrorHandler()::handleError));
     }
 
     @Override
@@ -144,7 +144,7 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
                 getAccessManager().deletePersonnelSingle(AppPrefs.gymOwnerId().getValue(), admin.getEmail()),
                 new SingleData<>(
                         isDeleted::setValue,
-                        throwable -> RxUtils.handleError(isDeleted, throwable)));
+                        throwable -> getErrorHandler().handleError(isDeleted, throwable)));
 
         return isDeleted;
     }

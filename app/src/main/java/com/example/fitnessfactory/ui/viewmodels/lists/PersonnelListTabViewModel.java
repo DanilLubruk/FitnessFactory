@@ -71,7 +71,7 @@ public abstract class PersonnelListTabViewModel extends BaseViewModel implements
 
         subscribeInIOThread(
                 getDataManager().getPersonnelListByGymIdAsync(gymId),
-                new SingleData<>(personnel::setValue, RxUtils::handleError));
+                new SingleData<>(personnel::setValue, getErrorHandler()::handleError));
     }
 
     @Override

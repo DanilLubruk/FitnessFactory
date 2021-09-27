@@ -46,7 +46,7 @@ public abstract class PersonnelEditorViewModelTests extends BaseTests {
     protected AppUser personnel;
     protected String userId = "userId4";
     protected String userName = "User4";
-    protected String userEmail = "userEmail4";
+    protected String userEmail = "useremail4";
 
     protected Gym gym;
     protected String gymId = "gymId";

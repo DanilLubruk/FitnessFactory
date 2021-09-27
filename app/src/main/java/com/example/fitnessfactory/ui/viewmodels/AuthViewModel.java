@@ -35,7 +35,7 @@ public class AuthViewModel extends BaseViewModel {
 
         subscribeInIOThread(
                 firebaseAuthManager.isLoggedIn(),
-                new SingleData<>(observer::setValue, RxUtils::handleError));
+                new SingleData<>(observer::setValue, getErrorHandler()::handleError));
 
         return observer;
     }
@@ -46,14 +46,14 @@ public class AuthViewModel extends BaseViewModel {
         subscribeInIOThread(firebaseAuthManager.getSignInIntentAsync(),
                 new SingleData<>(
                         observer::setValue,
-                        RxUtils::handleError));
+                        getErrorHandler()::handleError));
 
         return observer;
     }
 
     public void interruptSignIn() {
         subscribeInIOThread(firebaseAuthManager.interruptSignInAsync(),
-                RxUtils::handleError);
+                getErrorHandler()::handleError);
     }
 
     public SingleLiveEvent<List<AppUser>> handleSignIn(Intent authData) {
@@ -68,7 +68,7 @@ public class AuthViewModel extends BaseViewModel {
     }
 
     public void signOut() {
-        subscribeInIOThread(firebaseAuthManager.signOutCompletable(), RxUtils::handleError);
+        subscribeInIOThread(firebaseAuthManager.signOutCompletable(), getErrorHandler()::handleError);
     }
 
     public SingleLiveEvent<Boolean> checkOrganisationName() {
@@ -76,7 +76,7 @@ public class AuthViewModel extends BaseViewModel {
 
         subscribe(authManager.checkOrganisationName(),
                 () -> observer.setValue(true),
-                throwable -> RxUtils.handleError(observer, throwable));
+                throwable -> getErrorHandler().handleError(observer, throwable));
 
         return observer;
     }

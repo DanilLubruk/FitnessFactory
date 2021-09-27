@@ -4,7 +4,7 @@ import com.example.fitnessfactory.data.managers.data.CoachesDataManager;
 import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
-import com.example.fitnessfactory.mockHelpers.mockdata.CoachesDataProvider;
+import com.example.fitnessfactory.mockHelpers.mockdata.personnel.CoachesDataProvider;
 
 public class CoachesDataManagerMocker {
 

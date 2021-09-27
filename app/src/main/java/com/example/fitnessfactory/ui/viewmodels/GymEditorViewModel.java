@@ -40,7 +40,7 @@ public class GymEditorViewModel extends EditorViewModel {
         subscribeInIOThread(ownerGymRepository.getGymAsync(id),
                 new SingleData<>(
                         observer::setValue,
-                        RxUtils::handleError));
+                        getErrorHandler()::handleError));
 
         return observer;
     }
@@ -100,7 +100,7 @@ public class GymEditorViewModel extends EditorViewModel {
                             gymId.setValue(id);
                             observer.setValue(true);
                         },
-                        throwable -> RxUtils.handleError(observer, throwable)
+                        throwable -> getErrorHandler().handleError(observer, throwable)
                 ));
 
         return observer;
@@ -117,7 +117,7 @@ public class GymEditorViewModel extends EditorViewModel {
         }
 
         subscribeInIOThread(gymsAccessManager.deleteGymSingle(gym.getId()),
-                new SingleData<>(observer::setValue, RxUtils::handleError));
+                new SingleData<>(observer::setValue, getErrorHandler()::handleError));
 
         return observer;
     }

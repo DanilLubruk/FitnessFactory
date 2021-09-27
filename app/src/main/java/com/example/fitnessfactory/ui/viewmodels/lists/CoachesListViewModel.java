@@ -13,6 +13,5 @@ public class CoachesListViewModel extends PersonnelListViewModel {
                                 CoachesDataManager dataManager,
                                 CoachesListDataListener dataListener) {
         super(accessManager, dataManager, dataListener);
-        //FFApp.get().getAppComponent().inject(this);
     }
 }

@@ -5,6 +5,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
+import com.example.fitnessfactory.data.AppPrefs;
+
 import org.junit.Before;
 import org.junit.Rule;
 

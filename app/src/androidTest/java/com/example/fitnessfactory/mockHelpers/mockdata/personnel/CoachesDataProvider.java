@@ -1,4 +1,4 @@
-package com.example.fitnessfactory.mockHelpers.mockdata;
+package com.example.fitnessfactory.mockHelpers.mockdata.personnel;
 
 import com.example.fitnessfactory.data.models.Coach;
 import com.example.fitnessfactory.data.models.CoachAccessEntry;
