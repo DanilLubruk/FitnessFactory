@@ -13,8 +13,6 @@ import javax.inject.Inject;
 public class GymsListViewModel extends BaseViewModel implements DataListListener<Gym> {
 
     @Inject
-    OwnerGymRepository ownerGymRepository;
-    @Inject
     GymsAccessManager gymsAccessManager;
     @Inject
     GymsListDataListener gymsListDataListener;

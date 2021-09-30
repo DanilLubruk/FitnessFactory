@@ -123,7 +123,7 @@ public class OwnerGymRepository extends BaseRepository {
         return isNewInstance ? insert(gym) : update(gym);
     }
 
-    public String getGymNullErrorMessage() {
+    private String getGymNullErrorMessage() {
         return ResUtils.getString(R.string.message_error_data_save)
                 .concat(" - ")
                 .concat(ResUtils.getString(R.string.message_error_gym_null));

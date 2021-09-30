@@ -185,7 +185,8 @@ public class OwnerAdminsRepository extends BaseRepository implements OwnerPerson
         });
     }
 
-    private WriteBatch getRemoveGymFromAdminBatch(WriteBatch writeBatch, String gymId) throws ExecutionException, InterruptedException {
+    private WriteBatch getRemoveGymFromAdminBatch(WriteBatch writeBatch, String gymId)
+            throws ExecutionException, InterruptedException {
         for (DocumentSnapshot documentSnapshot : getAdminsListSnapshotsByGymId(gymId)) {
             writeBatch = writeBatch
                     .update(

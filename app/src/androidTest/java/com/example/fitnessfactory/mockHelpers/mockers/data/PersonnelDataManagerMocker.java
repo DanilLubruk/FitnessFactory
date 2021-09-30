@@ -24,8 +24,7 @@ abstract class PersonnelDataManagerMocker {
             PE extends PersonnelAccessEntry>
     void setupMock(PersonnelDataProvider<P, PE> dataProvider,
                    OwnerPersonnelRepository ownerRepository,
-                   UserRepository userRepository,
-                   OwnerGymRepository ownerGymRepository) {
+                   UserRepository userRepository) {
         Mockito.when(ownerRepository.getPersonnelEmails())
                 .thenAnswer(invocation -> {
                     List<String> emails = new ArrayList<>();
@@ -77,20 +76,6 @@ abstract class PersonnelDataManagerMocker {
                     }
 
                     return Single.just(new ArrayList<String>());
-                });
-
-        Mockito.when(ownerGymRepository.getGymsByIdsAsync(Mockito.anyList()))
-                .thenAnswer(invocation -> {
-                    List<String> gymsIds = invocation.getArgument(0);
-                    List<Gym> gyms = new ArrayList<>();
-
-                    for (Gym gym : GymsDataProvider.getGyms()) {
-                        if (gymsIds.contains(gym.getId())) {
-                            gyms.add(gym);
-                        }
-                    }
-
-                    return Single.just(gyms);
                 });
     }
 }

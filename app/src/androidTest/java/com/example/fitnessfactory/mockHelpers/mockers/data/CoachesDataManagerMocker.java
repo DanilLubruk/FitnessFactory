@@ -5,6 +5,7 @@ import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.example.fitnessfactory.mockHelpers.mockdata.personnel.CoachesDataProvider;
+import com.example.fitnessfactory.mockHelpers.mockers.OwnerGymRepositoryMocker;
 
 public class CoachesDataManagerMocker {
 
@@ -12,13 +13,15 @@ public class CoachesDataManagerMocker {
                                                 UserRepository userRepository,
                                                 OwnerGymRepository ownerGymRepository) {
         CoachesDataManager dataManager =
-                new CoachesDataManager(ownerRepository, userRepository, ownerGymRepository);
+                new CoachesDataManager(
+                        ownerRepository,
+                        userRepository,
+                        OwnerGymRepositoryMocker.createMocker(ownerGymRepository));
 
         PersonnelDataManagerMocker.setupMock(
                 new CoachesDataProvider(),
                 ownerRepository,
-                userRepository,
-                ownerGymRepository);
+                userRepository);
 
         return dataManager;
     }

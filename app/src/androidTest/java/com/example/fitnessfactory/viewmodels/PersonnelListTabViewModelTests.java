@@ -10,7 +10,6 @@ import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
 import com.example.fitnessfactory.ui.viewmodels.lists.PersonnelListTabViewModel;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;

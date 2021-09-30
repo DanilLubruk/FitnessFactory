@@ -30,7 +30,6 @@ public interface AppComponent {
     void inject(GymEditorViewModel gymEditorViewModel);
     void inject(AdminsListViewModelFactory adminsListViewModelFactory);
     void inject(MainActivityViewModel mainActivityViewModel);
-    void inject(GymsAccessManager gymsAccessManager);
     void inject(AuthManager authManager);
     void inject(CoachesListViewModelFactory coachesListViewModelFactory);
     void inject(OrganisationInfoViewModel organisationInfoViewModel);

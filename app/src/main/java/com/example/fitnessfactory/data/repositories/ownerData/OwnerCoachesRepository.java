@@ -194,5 +194,29 @@ public class OwnerCoachesRepository extends BaseRepository implements OwnerPerso
         return documentSnapshots.get(0).getReference();
     }
 
+    public Single<WriteBatch> getRemoveGymFromCoachBatchAsync(WriteBatch writeBatch, String gymId) {
+        return SingleCreate(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getRemoveGymFromCoachBatch(writeBatch, gymId));
+            }
+        });
+    }
 
+    private WriteBatch getRemoveGymFromCoachBatch(WriteBatch writeBatch, String gymId)
+            throws ExecutionException, InterruptedException {
+        for (DocumentSnapshot documentSnapshot : getCoachesListSnapshotsByGymId(gymId)) {
+            writeBatch = writeBatch
+                    .update(
+                            documentSnapshot.getReference(),
+                            Coach.GYMS_ARRAY_FIELD,
+                            FieldValue.arrayRemove(gymId));
+        }
+
+        return writeBatch;
+    }
+
+    private List<DocumentSnapshot> getCoachesListSnapshotsByGymId(String gymId)
+            throws ExecutionException, InterruptedException {
+        return Tasks.await(getCollection().whereArrayContains(Coach.GYMS_ARRAY_FIELD, gymId).get()).getDocuments();
+    }
 }

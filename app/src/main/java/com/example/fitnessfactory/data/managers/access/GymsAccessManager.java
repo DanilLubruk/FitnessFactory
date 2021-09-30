@@ -3,6 +3,7 @@ package com.example.fitnessfactory.data.managers.access;
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.managers.BaseManager;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.google.firebase.firestore.WriteBatch;
 
@@ -13,13 +14,17 @@ import io.reactivex.Single;
 
 public class GymsAccessManager extends BaseManager {
 
-    @Inject
-    OwnerGymRepository ownerGymRepository;
-    @Inject
-    OwnerAdminsRepository ownerAdminsRepository;
+    private OwnerGymRepository ownerGymRepository;
+    private OwnerAdminsRepository ownerAdminsRepository;
+    private OwnerCoachesRepository ownerCoachesRepository;
 
-    public GymsAccessManager() {
-        FFApp.get().getAppComponent().inject(this);
+    @Inject
+    public GymsAccessManager(OwnerGymRepository ownerGymRepository,
+                             OwnerAdminsRepository ownerAdminsRepository,
+                             OwnerCoachesRepository ownerCoachesRepository) {
+        this.ownerGymRepository = ownerGymRepository;
+        this.ownerAdminsRepository = ownerAdminsRepository;
+        this.ownerCoachesRepository = ownerCoachesRepository;
     }
 
     public Single<Boolean> deleteGymSingle(String gymId) {
@@ -35,6 +40,8 @@ public class GymsAccessManager extends BaseManager {
     private Single<WriteBatch> getDeleteBatch(String gymId) {
         return ownerGymRepository.getDeleteGymBatchAsync(gymId)
                 .flatMap(deleteBatch ->
-                        ownerAdminsRepository.getRemoveGymFromAdminBatchAsync(deleteBatch, gymId));
+                        ownerAdminsRepository.getRemoveGymFromAdminBatchAsync(deleteBatch, gymId))
+                .flatMap(deleteBatch ->
+                        ownerCoachesRepository.getRemoveGymFromCoachBatchAsync(deleteBatch, gymId));
     }
 }
