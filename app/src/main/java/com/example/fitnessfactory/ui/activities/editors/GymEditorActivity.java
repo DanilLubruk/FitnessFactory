@@ -11,6 +11,7 @@ import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.databinding.ActivityGymEditorBinding;
 import com.example.fitnessfactory.ui.adapters.PersonnelPageAdapter;
 import com.example.fitnessfactory.ui.viewmodels.editors.GymEditorViewModel;
+import com.example.fitnessfactory.ui.viewmodels.factories.GymEditorViewModelFactory;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
@@ -38,7 +39,7 @@ public class GymEditorActivity extends EditorActivity {
     @Override
     public void initActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_gym_editor);
-        viewModel = new ViewModelProvider(this).get(GymEditorViewModel.class);
+        viewModel = new ViewModelProvider(this, new GymEditorViewModelFactory()).get(GymEditorViewModel.class);
         super.initActivity();
         binding.setModel(viewModel);
 

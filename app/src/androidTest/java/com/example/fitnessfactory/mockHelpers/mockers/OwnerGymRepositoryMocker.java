@@ -4,6 +4,7 @@ import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.example.fitnessfactory.mockHelpers.mockdata.GymsDataProvider;
 
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
@@ -48,6 +49,13 @@ public class OwnerGymRepositoryMocker {
                     }
 
                     return Single.just(gyms);
+                });
+
+        Mockito.when(ownerGymRepository.saveAsync(Mockito.any()))
+                .thenAnswer(invocation -> {
+                   Gym gym = invocation.getArgument(0);
+
+                   return Single.just(gym.getId());
                 });
 
         return ownerGymRepository;

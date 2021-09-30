@@ -5,6 +5,7 @@ import com.example.fitnessfactory.data.managers.access.GymsAccessManager;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
+import com.example.fitnessfactory.mockHelpers.mockers.OwnerGymRepositoryMocker;
 import com.example.fitnessfactory.mockHelpers.mockers.access.GymAccessManagerMocker;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
@@ -20,7 +21,8 @@ import io.reactivex.observers.TestObserver;
 
 public class GymAccessManagerTests extends BaseTests {
 
-    private OwnerGymRepository ownerGymRepository = Mockito.mock(OwnerGymRepository.class);
+    private OwnerGymRepository mockedOwnerGymRepository =
+            OwnerGymRepositoryMocker.createMocker(Mockito.mock(OwnerGymRepository.class));
 
     private OwnerAdminsRepository ownerAdminsRepository = Mockito.mock(OwnerAdminsRepository.class);
 
@@ -34,7 +36,7 @@ public class GymAccessManagerTests extends BaseTests {
         accessManager =
                 GymAccessManagerMocker
                         .createMocker(
-                                ownerGymRepository,
+                                mockedOwnerGymRepository,
                                 ownerAdminsRepository,
                                 ownerCoachesRepository);
     }
@@ -43,7 +45,7 @@ public class GymAccessManagerTests extends BaseTests {
     public void deleteGymTest() {
         WriteBatch writeBatch = FirebaseFirestore.getInstance().batch();
 
-        Mockito.when(ownerGymRepository.getDeleteGymBatchAsync(Mockito.anyString()))
+        Mockito.when(mockedOwnerGymRepository.getDeleteGymBatchAsync(Mockito.anyString()))
                 .thenReturn(Single.just(writeBatch));
 
         Mockito.when(ownerAdminsRepository.getRemoveGymFromAdminBatchAsync(Mockito.any(), Mockito.anyString()))
@@ -77,7 +79,7 @@ public class GymAccessManagerTests extends BaseTests {
         assertTrue(isDeleted);
         subscriber.dispose();
 
-        Mockito.verify(ownerGymRepository).getDeleteGymBatchAsync("gymId2");
+        Mockito.verify(mockedOwnerGymRepository).getDeleteGymBatchAsync("gymId2");
         Mockito.verify(ownerAdminsRepository).getRemoveGymFromAdminBatchAsync(writeBatch, "gymId2");
         Mockito.verify(ownerCoachesRepository).getRemoveGymFromCoachBatchAsync(writeBatch, "gymId2");
     }

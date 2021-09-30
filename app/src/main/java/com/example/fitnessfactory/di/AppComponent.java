@@ -11,6 +11,7 @@ import com.example.fitnessfactory.ui.viewmodels.factories.CoachesListTabViewMode
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachesListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.AuthViewModel;
 import com.example.fitnessfactory.ui.viewmodels.editors.GymEditorViewModel;
+import com.example.fitnessfactory.ui.viewmodels.factories.GymEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.GymsListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.GymsListViewModel;
 
@@ -24,7 +25,6 @@ import dagger.Component;
 public interface AppComponent {
 
     void inject(AuthViewModel authViewModel);
-    void inject(GymEditorViewModel gymEditorViewModel);
     void inject(AdminsListViewModelFactory adminsListViewModelFactory);
     void inject(MainActivityViewModel mainActivityViewModel);
     void inject(AuthManager authManager);
@@ -35,4 +35,5 @@ public interface AppComponent {
     void inject(AdminsListTabViewModelFactory adminsListTabViewModelFactory);
     void inject(CoachesListTabViewModelFactory coachesListTabViewModelFactory);
     void inject(GymsListViewModelFactory gymsListViewModelFactory);
+    void inject(GymEditorViewModelFactory gymEditorViewModelFactory);
 }

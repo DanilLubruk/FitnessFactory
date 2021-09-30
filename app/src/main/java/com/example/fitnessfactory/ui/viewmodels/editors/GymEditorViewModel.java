@@ -16,9 +16,7 @@ import javax.inject.Inject;
 
 public class GymEditorViewModel extends EditorViewModel {
 
-    @Inject
     OwnerGymRepository ownerGymRepository;
-    @Inject
     GymsAccessManager gymsAccessManager;
 
     private Gym dbGym;
@@ -29,14 +27,17 @@ public class GymEditorViewModel extends EditorViewModel {
     private final String NAME_KEY = "NAME_KEY";
     private final String ADDRESS_KEY = "ADDRESS_KEY";
 
-    public GymEditorViewModel() {
-        FFApp.get().getAppComponent().inject(this);
+    @Inject
+    public GymEditorViewModel(OwnerGymRepository ownerGymRepository,
+                              GymsAccessManager gymsAccessManager) {
+        this.ownerGymRepository = ownerGymRepository;
+        this.gymsAccessManager = gymsAccessManager;
     }
 
-    public SingleLiveEvent<Gym> getGym(String id) {
+    public SingleLiveEvent<Gym> getGym(String gymId) {
         SingleLiveEvent<Gym> observer = new SingleLiveEvent<>();
 
-        subscribeInIOThread(ownerGymRepository.getGymAsync(id),
+        subscribeInIOThread(ownerGymRepository.getGymAsync(gymId),
                 new SingleData<>(
                         observer::setValue,
                         getErrorHandler()::handleError));

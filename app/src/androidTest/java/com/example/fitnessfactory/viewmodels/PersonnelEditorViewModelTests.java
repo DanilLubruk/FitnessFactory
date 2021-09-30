@@ -3,11 +3,13 @@ package com.example.fitnessfactory.viewmodels;
 import android.content.Intent;
 
 import com.example.fitnessfactory.BaseTests;
+import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.dataListeners.DataListenerStringArgument;
 import com.example.fitnessfactory.data.managers.access.PersonnelAccessManager;
 import com.example.fitnessfactory.data.managers.data.PersonnelDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Gym;
+import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
@@ -174,33 +176,28 @@ public abstract class PersonnelEditorViewModelTests extends BaseTests {
 
     @Test
     public void deletePersonnelTest() {
-        Mockito.when(getAccessManager().deletePersonnelSingle(Mockito.anyString(), Mockito.anyString()))
-                .thenAnswer(invocation -> {
-                    String ownerIdArg = invocation.getArgument(0);
-                    String emailArg = invocation.getArgument(1);
+        AppPrefs.gymOwnerId().setValue(ownerId);
 
-                    if (ownerIdArg.equals(ownerId) && emailArg.equals(userEmail)) {
-                        return Single.just(true);
-                    } else {
-                        return Single.just(false);
-                    }
-                });
-
-        boolean isDeleted = getOrAwaitValue(personnelEditorViewModel.delete());
+        SingleLiveEvent<Boolean> deleteResult = personnelEditorViewModel.delete();
         testScheduler.triggerActions();
+        boolean isDeleted = getOrAwaitValue(deleteResult);
         assertFalse(isDeleted);
 
         personnelEditorViewModel.setPersonnelData(getDataIntent(personnel));
 
-        isDeleted = getOrAwaitValue(personnelEditorViewModel.delete());
+        deleteResult = personnelEditorViewModel.delete();
         testScheduler.triggerActions();
+        isDeleted = getOrAwaitValue(deleteResult);
         assertTrue(isDeleted);
 
         personnel.setEmail("notTheRightEmail");
         personnelEditorViewModel.setPersonnelData(getDataIntent(personnel));
 
-        isDeleted = getOrAwaitValue(personnelEditorViewModel.delete());
+        deleteResult = personnelEditorViewModel.delete();
         testScheduler.triggerActions();
+        isDeleted = getOrAwaitValue(deleteResult);
         assertFalse(isDeleted);
+
+        AppPrefs.gymOwnerId().resetToDefaultValue();
     }
 }

@@ -8,6 +8,7 @@ import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
+import com.example.fitnessfactory.mockHelpers.mockers.OwnerGymRepositoryMocker;
 import com.example.fitnessfactory.mockHelpers.mockers.access.GymAccessManagerMocker;
 import com.example.fitnessfactory.ui.viewmodels.lists.GymsListViewModel;
 
@@ -21,7 +22,8 @@ import static org.junit.Assert.assertTrue;
 
 public class GymsListViewModelTests extends BaseTests {
 
-    private OwnerGymRepository ownerGymRepository = Mockito.mock(OwnerGymRepository.class);
+    private OwnerGymRepository mockedOwnerGymRepository =
+            OwnerGymRepositoryMocker.createMocker(Mockito.mock(OwnerGymRepository.class));
 
     private OwnerAdminsRepository ownerAdminsRepository = Mockito.mock(OwnerAdminsRepository.class);
 
@@ -39,7 +41,7 @@ public class GymsListViewModelTests extends BaseTests {
         gymsAccessManager =
                 GymAccessManagerMocker
                         .createMocker(
-                                ownerGymRepository,
+                                mockedOwnerGymRepository,
                                 ownerAdminsRepository,
                                 ownerCoachesRepository);
 
@@ -64,7 +66,8 @@ public class GymsListViewModelTests extends BaseTests {
     public void deleteGymTest() {
         viewModel.deleteItem(null);
         testScheduler.triggerActions();
-        Mockito.verify(ownerGymRepository, Mockito.times(0)).getDeleteGymBatchAsync(Mockito.anyString());
+        Mockito.verify(mockedOwnerGymRepository, Mockito.times(0))
+                .getDeleteGymBatchAsync(Mockito.anyString());
         Mockito.verify(ownerAdminsRepository, Mockito.times(0))
                 .getRemoveGymFromAdminBatchAsync(Mockito.any(), Mockito.anyString());
         Mockito.verify(ownerCoachesRepository, Mockito.times(0))
@@ -76,7 +79,8 @@ public class GymsListViewModelTests extends BaseTests {
                         .build());
         testScheduler.triggerActions();
 
-        Mockito.verify(ownerGymRepository).getDeleteGymBatchAsync("gymId2");
+        Mockito.verify(mockedOwnerGymRepository)
+                .getDeleteGymBatchAsync("gymId2");
         Mockito.verify(ownerAdminsRepository)
                 .getRemoveGymFromAdminBatchAsync(Mockito.any(), Mockito.eq("gymId2"));
         Mockito.verify(ownerCoachesRepository)

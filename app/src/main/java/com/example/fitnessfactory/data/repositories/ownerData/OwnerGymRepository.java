@@ -40,9 +40,9 @@ public class OwnerGymRepository extends BaseRepository {
         return getFirestore().batch().delete(documentReference);
     }
 
-    public Single<Gym> getGymAsync(String id) {
+    public Single<Gym> getGymAsync(String gymId) {
         return SingleCreate(emitter -> {
-            Gym gym = getGym(id);
+            Gym gym = getGym(gymId);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(gym);
@@ -50,15 +50,15 @@ public class OwnerGymRepository extends BaseRepository {
         });
     }
 
-    private Gym getGym(String id) throws Exception {
+    private Gym getGym(String gymId) throws Exception {
         Gym gym = new Gym();
-        if (TextUtils.isEmpty(id)) {
+        if (TextUtils.isEmpty(gymId)) {
             return gym;
         }
 
         DocumentSnapshot gymDoc;
         try {
-            gymDoc = getGymDocSnapshot(id);
+            gymDoc = getGymDocSnapshot(gymId);
         } catch (InterruptedException e) {
             return gym;
         }
@@ -66,8 +66,8 @@ public class OwnerGymRepository extends BaseRepository {
         return gymDoc.toObject(Gym.class);
     }
 
-    private DocumentSnapshot getGymDocSnapshot(String id) throws Exception {
-        QuerySnapshot gymsQuery = Tasks.await(getCollection().whereEqualTo(Gym.ID_FIELD, id).get());
+    private DocumentSnapshot getGymDocSnapshot(String gymId) throws Exception {
+        QuerySnapshot gymsQuery = Tasks.await(getCollection().whereEqualTo(Gym.ID_FIELD, gymId).get());
         List<DocumentSnapshot> gymDocs = gymsQuery.getDocuments();
 
         checkDataEmpty(gymDocs);
@@ -106,10 +106,10 @@ public class OwnerGymRepository extends BaseRepository {
 
     public Single<String> saveAsync(Gym gym) {
         return SingleCreate(emitter -> {
-            String id = save(gym);
+            String gymId = save(gym);
 
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(id);
+                emitter.onSuccess(gymId);
             }
         });
     }
