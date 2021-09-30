@@ -14,6 +14,7 @@ import com.example.fitnessfactory.data.repositories.access.PersonnelAccessReposi
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
 import com.example.fitnessfactory.ui.viewmodels.lists.PersonnelListViewModel;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -22,6 +23,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+
+import java.util.List;
 
 import io.reactivex.Single;
 
@@ -107,20 +110,20 @@ public abstract class PersonnelListViewModelTests extends BaseTests {
         Mockito.verify(getDataListener()).startDataListener();
 
         personnelListViewModel.getPersonnelListData();
-        personnelListViewModel.getPersonnel()
-                .observeForever(personnelList -> {
-                    assertNotNull(personnelList);
-                    assertEquals(4, personnelList.size());
+        testScheduler.triggerActions();
+        List<AppUser> personnelList = getOrAwaitValue(personnelListViewModel.getPersonnel());
 
-                    for (int i = 0; i < personnelList.size(); i++) {
-                        AppUser appUser = personnelList.get(i);
-                        int userNumber = i + 1;
+        assertNotNull(personnelList);
+        assertEquals(4, personnelList.size());
 
-                        assertEquals("userId" + userNumber, appUser.getId());
-                        assertEquals("User" + userNumber, appUser.getName());
-                        assertEquals("useremail" + userNumber, appUser.getEmail());
-                    }
-                });
+        for (int i = 0; i < personnelList.size(); i++) {
+            AppUser appUser = personnelList.get(i);
+            int userNumber = i + 1;
+
+            assertEquals("userId" + userNumber, appUser.getId());
+            assertEquals("User" + userNumber, appUser.getName());
+            assertEquals("useremail" + userNumber, appUser.getEmail());
+        }
 
         personnelListViewModel.stopDataListener();
         Mockito.verify(getDataListener()).stopDataListener();

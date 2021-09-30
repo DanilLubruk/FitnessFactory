@@ -46,6 +46,7 @@ public abstract class PersonnelListTabViewModel extends BaseViewModel implements
     }
 
     private final MutableLiveData<List<AppUser>> personnel = new MutableLiveData<>();
+
     private String gymId;
 
     public MutableLiveData<List<AppUser>> getPersonnel() {

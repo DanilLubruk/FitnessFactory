@@ -12,6 +12,7 @@ import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
 import com.example.fitnessfactory.ui.viewmodels.PersonnelEditorViewModel;
+import com.google.android.gms.tasks.Task;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,12 +23,15 @@ import org.mockito.Mockito;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import androidx.lifecycle.LiveData;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Delayed;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -86,7 +90,8 @@ public abstract class PersonnelEditorViewModelTests extends BaseTests {
     @Test
     public void initViewModelTest() {
         personnelEditorViewModel.getGymsData();
-        personnelEditorViewModel.getGyms().observeForever(Assert::assertNull);
+        testScheduler.triggerActions();
+        checkLiveDataNotSet(personnelEditorViewModel.getGyms());
 
         personnelEditorViewModel.setPersonnelData(getDataIntent(personnel));
         AppUser viewModelPersonnel = personnelEditorViewModel.personnel.get();
@@ -101,27 +106,29 @@ public abstract class PersonnelEditorViewModelTests extends BaseTests {
         Mockito.verify(getDataListener()).startDataListener(userEmail);
 
         personnelEditorViewModel.getGymsData();
-        personnelEditorViewModel.getGyms().observeForever(gyms -> {
-            assertNotNull(gyms);
+        testScheduler.triggerActions();
+        List<Gym> gyms = getOrAwaitValue(personnelEditorViewModel.getGyms());
 
-            assertEquals(2, gyms.size());
-            assertEquals("gymId2", gyms.get(0).getId());
-            assertEquals("gymName2", gyms.get(0).getName());
-            assertEquals("gymAddress2", gyms.get(0).getAddress());
+        assertNotNull(gyms);
 
-            assertEquals("gymId3", gyms.get(1).getId());
-            assertEquals("gymName3", gyms.get(1).getName());
-            assertEquals("gymAddress3", gyms.get(1).getAddress());
-        });
+        assertEquals(2, gyms.size());
+        assertEquals("gymId2", gyms.get(0).getId());
+        assertEquals("gymName2", gyms.get(0).getName());
+        assertEquals("gymAddress2", gyms.get(0).getAddress());
+
+        assertEquals("gymId3", gyms.get(1).getId());
+        assertEquals("gymName3", gyms.get(1).getName());
+        assertEquals("gymAddress3", gyms.get(1).getAddress());
 
         personnel.setEmail("notTheRightEmail");
         personnelEditorViewModel.setPersonnelData(getDataIntent(personnel));
 
         personnelEditorViewModel.getGymsData();
-        personnelEditorViewModel.getGyms().observeForever(gyms -> {
-            assertNotNull(gyms);
-            assertEquals(0, gyms.size());
-        });
+        testScheduler.triggerActions();
+        gyms = getOrAwaitValue(personnelEditorViewModel.getGyms());
+
+        assertNotNull(gyms);
+        assertEquals(0, gyms.size());
 
         personnelEditorViewModel.stopDataListener();
         Mockito.verify(getDataListener()).stopDataListener();
@@ -172,27 +179,33 @@ public abstract class PersonnelEditorViewModelTests extends BaseTests {
 
     @Test
     public void deletePersonnelTest() {
-        personnelEditorViewModel.delete().observeForever(Assert::assertFalse);
+        Mockito.when(getAccessManager().deletePersonnelSingle(Mockito.anyString(), Mockito.anyString()))
+                .thenAnswer(invocation -> {
+                    String ownerIdArg = invocation.getArgument(0);
+                    String emailArg = invocation.getArgument(1);
+
+                    if (ownerIdArg.equals(ownerId) && emailArg.equals(userEmail)) {
+                        return Single.just(true);
+                    } else {
+                        return Single.just(false);
+                    }
+                });
+
+        boolean isDeleted = getOrAwaitValue(personnelEditorViewModel.delete());
+        testScheduler.triggerActions();
+        assertFalse(isDeleted);
 
         personnelEditorViewModel.setPersonnelData(getDataIntent(personnel));
 
-        Mockito.when(getAccessManager().deletePersonnelSingle(Mockito.anyString(), Mockito.anyString()))
-                .thenAnswer(invocation -> {
-                   String ownerIdArg = invocation.getArgument(0);
-                   String emailArg = invocation.getArgument(1);
-
-                   if (ownerIdArg.equals(ownerId) && emailArg.equals(userEmail)) {
-                       return Single.just(true);
-                   } else {
-                       return Single.just(false);
-                   }
-                });
-
-        personnelEditorViewModel.delete().observeForever(Assert::assertTrue);
+        isDeleted = getOrAwaitValue(personnelEditorViewModel.delete());
+        testScheduler.triggerActions();
+        assertTrue(isDeleted);
 
         personnel.setEmail("notTheRightEmail");
         personnelEditorViewModel.setPersonnelData(getDataIntent(personnel));
 
-        personnelEditorViewModel.delete().observeForever(Assert::assertFalse);
+        isDeleted = getOrAwaitValue(personnelEditorViewModel.delete());
+        testScheduler.triggerActions();
+        assertFalse(isDeleted);
     }
 }

@@ -1,5 +1,7 @@
 package com.example.fitnessfactory;
 
+import static org.junit.Assert.fail;
+
 import androidx.annotation.Nullable;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
@@ -38,6 +40,16 @@ public class BaseTests {
         testScheduler.triggerActions();
 
         return subscriber;
+    }
+
+    protected <T> void checkLiveDataNotSet(LiveData<T> liveData) {
+        try {
+            getOrAwaitValue(liveData);
+            //no value should be emitted, 'cause viewmodel is blank
+            fail();
+        } catch (RuntimeException exception) {
+            //if the value not emitted, exception is thrown
+        }
     }
 
     protected <T> T getOrAwaitValue(final LiveData<T> liveData) {
