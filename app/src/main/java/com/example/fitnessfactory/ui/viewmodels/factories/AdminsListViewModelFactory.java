@@ -15,11 +15,7 @@ import javax.inject.Inject;
 public class AdminsListViewModelFactory implements ViewModelProvider.Factory {
 
     @Inject
-    AdminsAccessManager accessManager;
-    @Inject
-    AdminsDataManager dataManager;
-    @Inject
-    AdminsListDataListener dataListener;
+    AdminListViewModel viewModel;
 
     public AdminsListViewModelFactory() {
         FFApp.get().getAppComponent().inject(this);
@@ -28,6 +24,6 @@ public class AdminsListViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new AdminListViewModel(accessManager, dataManager, dataListener);
+        return (T) viewModel;
     }
 }

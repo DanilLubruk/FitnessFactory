@@ -16,13 +16,7 @@ import javax.inject.Inject;
 public class CoachEditorViewModelFactory implements ViewModelProvider.Factory {
 
     @Inject
-    OwnerCoachesRepository ownerCoachesRepository;
-    @Inject
-    CoachesAccessManager coachesAccessManager;
-    @Inject
-    CoachesDataManager coachesDataManager;
-    @Inject
-    CoachGymsListDataListener coachGymsListDataListener;
+    CoachEditorViewModel viewModel;
 
     public CoachEditorViewModelFactory() {
         FFApp.get().getAppComponent().inject(this);
@@ -31,10 +25,6 @@ public class CoachEditorViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new CoachEditorViewModel(
-                ownerCoachesRepository,
-                coachesAccessManager,
-                coachesDataManager,
-                coachGymsListDataListener);
+        return (T) viewModel;
     }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.GymCoachesListListenerEvent;
+import com.example.fitnessfactory.ui.viewmodels.factories.CoachesListTabViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.CoachesListTabViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 
@@ -17,7 +18,7 @@ public class CoachesListTabFragment extends PersonnelListTabFragment {
 
     @Override
     protected void defineViewModel() {
-        viewModel = new ViewModelProvider(this).get(CoachesListTabViewModel.class);
+        viewModel = new ViewModelProvider(this, new CoachesListTabViewModelFactory()).get(CoachesListTabViewModel.class);
     }
 
     @Override

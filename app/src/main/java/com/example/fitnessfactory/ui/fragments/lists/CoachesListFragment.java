@@ -11,6 +11,7 @@ import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.events.CoachesListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.activities.editors.CoachEditorActivity;
+import com.example.fitnessfactory.ui.viewmodels.factories.CoachesListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.CoachesListViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.tiromansev.prefswrapper.typedprefs.BooleanPreference;
@@ -23,7 +24,7 @@ public class CoachesListFragment extends PersonnelListFragment {
     private CoachesListViewModel viewModel;
 
     protected void defineViewModel() {
-        viewModel = new ViewModelProvider(this).get(CoachesListViewModel.class);
+        viewModel = new ViewModelProvider(this, new CoachesListViewModelFactory()).get(CoachesListViewModel.class);
     }
 
     @Override

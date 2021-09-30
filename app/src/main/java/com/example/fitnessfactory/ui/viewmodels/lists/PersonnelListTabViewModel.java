@@ -19,11 +19,31 @@ import java.util.List;
 
 public abstract class PersonnelListTabViewModel extends BaseViewModel implements DataListListener<AppUser> {
 
-    protected abstract OwnerPersonnelRepository getOwnerRepository();
+    private OwnerPersonnelRepository ownerRepository;
 
-    protected abstract PersonnelDataManager getDataManager();
+    private PersonnelDataManager dataManager;
 
-    protected abstract DataListenerStringArgument getDataListener();
+    private DataListenerStringArgument dataListener;
+
+    public PersonnelListTabViewModel(OwnerPersonnelRepository ownerRepository,
+                                     PersonnelDataManager dataManager,
+                                     DataListenerStringArgument dataListener) {
+        this.ownerRepository = ownerRepository;
+        this.dataManager = dataManager;
+        this.dataListener = dataListener;
+    }
+
+    protected OwnerPersonnelRepository getOwnerRepository() {
+        return ownerRepository;
+    }
+
+    protected PersonnelDataManager getDataManager() {
+        return dataManager;
+    }
+
+    protected DataListenerStringArgument getDataListener() {
+        return dataListener;
+    }
 
     private final MutableLiveData<List<AppUser>> personnel = new MutableLiveData<>();
     private String gymId;

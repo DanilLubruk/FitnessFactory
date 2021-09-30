@@ -11,6 +11,7 @@ import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.events.AdminsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.activities.editors.AdminEditorActivity;
+import com.example.fitnessfactory.ui.viewmodels.factories.AdminsListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.AdminListViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.tiromansev.prefswrapper.typedprefs.BooleanPreference;
@@ -23,7 +24,7 @@ public class AdminsListFragment extends PersonnelListFragment {
     private AdminListViewModel viewModel;
 
     protected void defineViewModel() {
-        viewModel = new ViewModelProvider(this).get(AdminListViewModel.class);
+        viewModel = new ViewModelProvider(this, new AdminsListViewModelFactory()).get(AdminListViewModel.class);
     }
 
     @Override
