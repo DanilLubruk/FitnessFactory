@@ -5,7 +5,7 @@
 
         <variable
             name="model"
-            type="com.example.fitnessfactory.ui.viewmodels.PersonnelEditorViewModel" />
+            type="com.example.fitnessfactory.ui.viewmodels.editors.PersonnelEditorViewModel" />
     </data>
 
     <RelativeLayout

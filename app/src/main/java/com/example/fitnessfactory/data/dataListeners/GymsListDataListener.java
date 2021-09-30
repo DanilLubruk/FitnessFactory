@@ -53,7 +53,7 @@ public class GymsListDataListener extends BaseDataListener {
         });
     }
 
-    public Query getGymsListQuery() {
+    private Query getGymsListQuery() {
         return getCollection();
     }
 }

@@ -1,24 +1,22 @@
 package com.example.fitnessfactory.ui.viewmodels.lists;
 
-import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.dataListeners.GymsListDataListener;
 import com.example.fitnessfactory.data.managers.access.GymsAccessManager;
 import com.example.fitnessfactory.data.models.Gym;
-import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
-import com.example.fitnessfactory.utils.RxUtils;
 import javax.inject.Inject;
 
 public class GymsListViewModel extends BaseViewModel implements DataListListener<Gym> {
 
-    @Inject
-    GymsAccessManager gymsAccessManager;
-    @Inject
-    GymsListDataListener gymsListDataListener;
+    private GymsAccessManager gymsAccessManager;
+    private GymsListDataListener gymsListDataListener;
 
-    public GymsListViewModel() {
-        FFApp.get().getAppComponent().inject(this);
+    @Inject
+    public GymsListViewModel(GymsAccessManager gymsAccessManager,
+                             GymsListDataListener gymsListDataListener) {
+        this.gymsAccessManager = gymsAccessManager;
+        this.gymsListDataListener = gymsListDataListener;
     }
 
     public void startDataListener() {

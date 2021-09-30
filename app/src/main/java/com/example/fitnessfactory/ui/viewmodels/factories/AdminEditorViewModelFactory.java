@@ -5,11 +5,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.FFApp;
-import com.example.fitnessfactory.data.dataListeners.AdminGymsListDataListener;
-import com.example.fitnessfactory.data.managers.access.AdminsAccessManager;
-import com.example.fitnessfactory.data.managers.data.AdminsDataManager;
-import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
-import com.example.fitnessfactory.ui.viewmodels.AdminEditorViewModel;
+import com.example.fitnessfactory.ui.viewmodels.editors.AdminEditorViewModel;
 
 import javax.inject.Inject;
 

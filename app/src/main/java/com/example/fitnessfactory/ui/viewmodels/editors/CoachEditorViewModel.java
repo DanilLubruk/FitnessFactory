@@ -1,4 +1,4 @@
-package com.example.fitnessfactory.ui.viewmodels;
+package com.example.fitnessfactory.ui.viewmodels.editors;
 
 import android.content.Intent;
 

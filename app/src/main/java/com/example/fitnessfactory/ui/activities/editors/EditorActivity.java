@@ -8,7 +8,7 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.callbacks.EditorCallback;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.ui.activities.BaseActivity;
-import com.example.fitnessfactory.ui.viewmodels.EditorViewModel;
+import com.example.fitnessfactory.ui.viewmodels.editors.EditorViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;

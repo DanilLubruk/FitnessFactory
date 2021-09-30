@@ -16,6 +16,7 @@ import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.ui.activities.editors.GymEditorActivity;
 import com.example.fitnessfactory.ui.adapters.GymsListAdapter;
 import com.example.fitnessfactory.ui.fragments.ListListenerFragment;
+import com.example.fitnessfactory.ui.viewmodels.factories.GymsListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.GymsListViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
@@ -40,7 +41,7 @@ public class GymsListFragment extends ListListenerFragment<Gym> {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(GymsListViewModel.class);
+        viewModel = new ViewModelProvider(this, new GymsListViewModelFactory()).get(GymsListViewModel.class);
         initComponents();
         getBaseActivity().setTitle(selectMode ? R.string.title_select_gyms : R.string.title_gyms);
     }

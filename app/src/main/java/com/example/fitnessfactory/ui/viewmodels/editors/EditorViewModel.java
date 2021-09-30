@@ -1,6 +1,7 @@
-package com.example.fitnessfactory.ui.viewmodels;
+package com.example.fitnessfactory.ui.viewmodels.editors;
 
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
+import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 
 public abstract class EditorViewModel extends BaseViewModel {
 

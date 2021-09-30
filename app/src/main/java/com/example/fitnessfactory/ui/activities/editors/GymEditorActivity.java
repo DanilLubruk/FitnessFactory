@@ -10,7 +10,7 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.databinding.ActivityGymEditorBinding;
 import com.example.fitnessfactory.ui.adapters.PersonnelPageAdapter;
-import com.example.fitnessfactory.ui.viewmodels.GymEditorViewModel;
+import com.example.fitnessfactory.ui.viewmodels.editors.GymEditorViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;

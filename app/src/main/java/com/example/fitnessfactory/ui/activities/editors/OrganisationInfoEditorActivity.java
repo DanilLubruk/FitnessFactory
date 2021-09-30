@@ -4,8 +4,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.databinding.ActivityOrganisationInfoEditorBinding;
-import com.example.fitnessfactory.ui.viewmodels.EditorViewModel;
-import com.example.fitnessfactory.ui.viewmodels.OrganisationInfoViewModel;
+import com.example.fitnessfactory.ui.viewmodels.editors.EditorViewModel;
+import com.example.fitnessfactory.ui.viewmodels.editors.OrganisationInfoViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 
 public class OrganisationInfoEditorActivity extends EditorActivity {

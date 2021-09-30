@@ -17,8 +17,8 @@ import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesReposi
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
 import com.example.fitnessfactory.mockHelpers.mockers.access.CoachesAccessManagerMocker;
 import com.example.fitnessfactory.mockHelpers.mockers.data.CoachesDataManagerMocker;
-import com.example.fitnessfactory.ui.viewmodels.CoachEditorViewModel;
-import com.example.fitnessfactory.ui.viewmodels.PersonnelEditorViewModel;
+import com.example.fitnessfactory.ui.viewmodels.editors.CoachEditorViewModel;
+import com.example.fitnessfactory.ui.viewmodels.editors.PersonnelEditorViewModel;
 
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;

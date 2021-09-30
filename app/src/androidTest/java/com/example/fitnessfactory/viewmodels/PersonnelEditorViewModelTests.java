@@ -11,7 +11,7 @@ import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
-import com.example.fitnessfactory.ui.viewmodels.PersonnelEditorViewModel;
+import com.example.fitnessfactory.ui.viewmodels.editors.PersonnelEditorViewModel;
 
 import org.junit.Before;
 import org.junit.Test;

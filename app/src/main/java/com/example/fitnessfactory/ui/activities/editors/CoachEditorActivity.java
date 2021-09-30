@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.events.CoachGymsListListenerEvent;
-import com.example.fitnessfactory.ui.viewmodels.CoachEditorViewModel;
+import com.example.fitnessfactory.ui.viewmodels.editors.CoachEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachEditorViewModelFactory;
 import com.example.fitnessfactory.utils.ResUtils;
 

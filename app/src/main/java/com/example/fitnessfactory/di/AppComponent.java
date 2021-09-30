@@ -1,9 +1,8 @@
 package com.example.fitnessfactory.di;
 
 import com.example.fitnessfactory.data.managers.AuthManager;
-import com.example.fitnessfactory.data.managers.access.GymsAccessManager;
 import com.example.fitnessfactory.ui.viewmodels.MainActivityViewModel;
-import com.example.fitnessfactory.ui.viewmodels.OrganisationInfoViewModel;
+import com.example.fitnessfactory.ui.viewmodels.editors.OrganisationInfoViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.AdminEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.AdminsListTabViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.AdminsListViewModelFactory;
@@ -11,9 +10,8 @@ import com.example.fitnessfactory.ui.viewmodels.factories.CoachEditorViewModelFa
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachesListTabViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachesListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.AuthViewModel;
-import com.example.fitnessfactory.ui.viewmodels.GymEditorViewModel;
-import com.example.fitnessfactory.ui.viewmodels.lists.AdminsListTabViewModel;
-import com.example.fitnessfactory.ui.viewmodels.lists.CoachesListTabViewModel;
+import com.example.fitnessfactory.ui.viewmodels.editors.GymEditorViewModel;
+import com.example.fitnessfactory.ui.viewmodels.factories.GymsListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.GymsListViewModel;
 
 import javax.inject.Singleton;
@@ -26,7 +24,6 @@ import dagger.Component;
 public interface AppComponent {
 
     void inject(AuthViewModel authViewModel);
-    void inject(GymsListViewModel gymsListViewModel);
     void inject(GymEditorViewModel gymEditorViewModel);
     void inject(AdminsListViewModelFactory adminsListViewModelFactory);
     void inject(MainActivityViewModel mainActivityViewModel);
@@ -37,4 +34,5 @@ public interface AppComponent {
     void inject(AdminEditorViewModelFactory adminEditorViewModelFactory);
     void inject(AdminsListTabViewModelFactory adminsListTabViewModelFactory);
     void inject(CoachesListTabViewModelFactory coachesListTabViewModelFactory);
+    void inject(GymsListViewModelFactory gymsListViewModelFactory);
 }

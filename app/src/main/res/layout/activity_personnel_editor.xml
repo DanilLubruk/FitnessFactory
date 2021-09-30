@@ -4,7 +4,7 @@
 
         <variable
             name="model"
-            type="com.example.fitnessfactory.ui.viewmodels.PersonnelEditorViewModel" />
+            type="com.example.fitnessfactory.ui.viewmodels.editors.PersonnelEditorViewModel" />
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

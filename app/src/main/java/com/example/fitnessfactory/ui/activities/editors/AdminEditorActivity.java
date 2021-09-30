@@ -3,7 +3,7 @@ package com.example.fitnessfactory.ui.activities.editors;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.events.AdminGymsListListenerEvent;
-import com.example.fitnessfactory.ui.viewmodels.AdminEditorViewModel;
+import com.example.fitnessfactory.ui.viewmodels.editors.AdminEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.AdminEditorViewModelFactory;
 import com.example.fitnessfactory.utils.ResUtils;
 import org.greenrobot.eventbus.Subscribe;

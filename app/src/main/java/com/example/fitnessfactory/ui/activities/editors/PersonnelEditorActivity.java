@@ -15,7 +15,7 @@ import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.databinding.ActivityPersonnelEditorBinding;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.adapters.GymsListAdapter;
-import com.example.fitnessfactory.ui.viewmodels.PersonnelEditorViewModel;
+import com.example.fitnessfactory.ui.viewmodels.editors.PersonnelEditorViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;

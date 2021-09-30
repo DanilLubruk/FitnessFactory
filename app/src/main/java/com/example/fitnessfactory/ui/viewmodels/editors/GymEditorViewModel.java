@@ -1,4 +1,4 @@
-package com.example.fitnessfactory.ui.viewmodels;
+package com.example.fitnessfactory.ui.viewmodels.editors;
 
 import android.os.Bundle;
 
@@ -11,7 +11,6 @@ import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
-import com.example.fitnessfactory.utils.RxUtils;
 
 import javax.inject.Inject;
 
