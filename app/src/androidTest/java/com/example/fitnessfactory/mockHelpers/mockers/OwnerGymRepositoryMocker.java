@@ -1,10 +1,11 @@
 package com.example.fitnessfactory.mockHelpers.mockers;
 
+import android.text.TextUtils;
+
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.example.fitnessfactory.mockHelpers.mockdata.GymsDataProvider;
 
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class OwnerGymRepositoryMocker {
                     }
 
                     if (gyms.size() == 0) {
-                        return Single.error(new Exception("Empty gym data. Check the mocker"));
+                        gyms.add(new Gym());
                     }
 
                     if (gyms.size() > 1) {
@@ -55,7 +56,14 @@ public class OwnerGymRepositoryMocker {
                 .thenAnswer(invocation -> {
                    Gym gym = invocation.getArgument(0);
 
-                   return Single.just(gym.getId());
+                   if (gym != null) {
+                       if (TextUtils.isEmpty(gym.getId())) {
+                           gym.setId("newGymId");
+                       }
+                       return Single.just(gym.getId());
+                   } else {
+                       return Single.error(new Exception("Gym null error"));
+                   }
                 });
 
         return ownerGymRepository;

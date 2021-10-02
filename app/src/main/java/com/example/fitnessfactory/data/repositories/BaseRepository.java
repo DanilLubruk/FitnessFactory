@@ -31,7 +31,8 @@ public abstract class BaseRepository extends CollectionOperator {
                 singleSubscriber.onSubscribe(emitter);
             } catch (InterruptedException exception) {
                 reportError(emitter, exception);
-            } catch (Exception exception) {
+            }
+            catch (Exception exception) {
                 reportError(emitter, exception);
             }
         });

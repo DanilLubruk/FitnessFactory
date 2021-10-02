@@ -11,7 +11,9 @@ public class Gym {
     private String address;
 
     public Gym() {
-
+        id = "";
+        name = "";
+        address = "";
     }
 
     public String getId() {
