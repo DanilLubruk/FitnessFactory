@@ -5,9 +5,9 @@ import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 
+import com.example.fitnessfactory.data.managers.RxManager;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.utils.RxErrorsHandler;
-import com.example.fitnessfactory.utils.RxUtils;
 
 import java.util.HashMap;
 
@@ -15,22 +15,15 @@ import icepick.Icepick;
 import io.reactivex.Completable;
 import io.reactivex.Scheduler;
 import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 public class BaseViewModel extends ViewModel {
 
-    private final CompositeDisposable disposables = new CompositeDisposable();
     private HashMap<String, Object> handle = new HashMap<>();
     private static final String HANDLE = "HANDLE";
     private boolean loading = false;
-    private RxErrorsHandler rxErrorsHandler = new RxUtils();
-    private Scheduler ioScheduler = Schedulers.io();;
-    private Scheduler mainScheduler = AndroidSchedulers.mainThread();
+    private final RxManager rxManager = new RxManager();
 
     @Override
     protected void onCleared() {
@@ -60,88 +53,60 @@ public class BaseViewModel extends ViewModel {
     }
 
     private void unsubscribe() {
-        if (!disposables.isDisposed()) {
-            disposables.dispose();
-        }
+        rxManager.unsubscribe();
     }
 
-    private void addSubscription(Disposable disposable) {
-        disposables.add(disposable);
+    public Scheduler getMainThreadScheduler() {
+        return rxManager.getMainThreadScheduler();
     }
 
-    protected <T> void subscribe(Single<T> subscriber, SingleData<T> observer) {
-        addSubscription(subscriber
-                .subscribe(observer.getObserver()::onSuccess, observer.getObserver()::onError));
+    public Scheduler getIOScheduler() {
+        return rxManager.getIOScheduler();
     }
 
-    protected <T> void subscribeInIOThread(Completable subscriber,
-                                           Action onComplete,
-                                           Consumer<? super Throwable> onError) {
-        addSubscription(subscriber
-                .subscribeOn(getIOScheduler())
-                .observeOn(getMainThreadScheduler())
-                .subscribe(onComplete, onError));
+    public void setMainThreadScheduler(Scheduler mainScheduler) {
+        rxManager.setMainThreadScheduler(mainScheduler);
     }
 
-    protected <T> void subscribe(Completable subscriber,
-                                 Action onComplete,
-                                 Consumer<? super Throwable> onError) {
-        addSubscription(subscriber
-                .subscribe(onComplete, onError));
-    }
-
-    protected <T> void subscribeInIOThread(Completable subscriber,
-                                           Consumer<? super Throwable> onError) {
-        addSubscription(subscriber
-                .subscribeOn(getIOScheduler())
-                .observeOn(getMainThreadScheduler())
-                .subscribe(() -> {
-                }, onError));
-    }
-
-    protected <T> void subscribeInIOThread(Completable subscriber) {
-        addSubscription(subscriber
-                .subscribeOn(getIOScheduler())
-                .observeOn(getMainThreadScheduler())
-                .subscribe());
-    }
-
-    protected <T> void subscribeInIOThread(Single<T> subscriber, SingleData<T> observer) {
-        addSubscription(subscriber
-                .subscribeOn(getIOScheduler())
-                .observeOn(getMainThreadScheduler())
-                .subscribe(observer.getObserver()::onSuccess, observer.getObserver()::onError));
-    }
-
-    protected <T> void subscribeInMainThread(Single<T> subscriber, SingleData<T> observer) {
-        addSubscription(subscriber
-                .subscribeOn(getMainThreadScheduler())
-                .observeOn(getMainThreadScheduler())
-                .subscribe(observer.getObserver()::onSuccess, observer.getObserver()::onError));
-    }
-
-    protected Scheduler getMainThreadScheduler() {
-        return mainScheduler;
-    }
-
-    public void setMainScheduler(Scheduler mainScheduler) {
-        this.mainScheduler = mainScheduler;
-    }
-
-    protected Scheduler getIOScheduler() {
-        return ioScheduler;
-    }
-
-    public void setIoScheduler(Scheduler ioScheduler) {
-        this.ioScheduler = ioScheduler;
+    public void setIOScheduler(Scheduler ioScheduler) {
+        rxManager.setIOScheduler(ioScheduler);
     }
 
     public void setRxErrorsHandler(RxErrorsHandler rxErrorsHandler) {
-        this.rxErrorsHandler = rxErrorsHandler;
+        rxManager.setRxErrorsHandler(rxErrorsHandler);
     }
 
-    protected RxErrorsHandler getErrorHandler() {
-        return rxErrorsHandler;
+    public <T> void subscribeInIOThread(Completable subscriber,
+                                        Action onComplete,
+                                        Consumer<? super Throwable> onError) {
+        rxManager.subscribeInIOThread(subscriber, onComplete, onError);
+    }
+
+    public <T> void subscribeInIOThread(Single<T> subscriber, SingleData<T> observer) {
+        rxManager.subscribeInIOThread(subscriber, observer);
+    }
+
+    public <T> void subscribeInIOThread(Completable subscriber,
+                                        Consumer<? super Throwable> onError) {
+        rxManager.subscribeInIOThread(subscriber, onError);
+    }
+
+    public <T> void subscribe(Single<T> subscriber, SingleData<T> observer) {
+        rxManager.subscribe(subscriber, observer);
+    }
+
+    public <T> void subscribe(Completable subscriber,
+                              Action onComplete,
+                              Consumer<? super Throwable> onError) {
+        rxManager.subscribe(subscriber, onComplete, onError);
+    }
+
+    public <T> void subscribeInIOThread(Completable subscriber) {
+        rxManager.subscribeInIOThread(subscriber);
+    }
+
+    public RxErrorsHandler getErrorHandler() {
+        return rxManager.getErrorHandler();
     }
 
     public void saveState(Bundle outState) {

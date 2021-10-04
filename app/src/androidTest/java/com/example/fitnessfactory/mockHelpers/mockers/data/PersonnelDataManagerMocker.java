@@ -1,15 +1,11 @@
 package com.example.fitnessfactory.mockHelpers.mockers.data;
 
-import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.models.Personnel;
 import com.example.fitnessfactory.data.models.PersonnelAccessEntry;
 import com.example.fitnessfactory.data.repositories.UserRepository;
-import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
-import com.example.fitnessfactory.mockHelpers.mockdata.GymsDataProvider;
 import com.example.fitnessfactory.mockHelpers.mockdata.personnel.PersonnelDataProvider;
-import com.example.fitnessfactory.mockHelpers.mockdata.UsersDataProvider;
+import com.example.fitnessfactory.mockHelpers.mockers.UserRepositoryMocker;
 
 import org.mockito.Mockito;
 
@@ -36,19 +32,7 @@ abstract class PersonnelDataManagerMocker {
                     return Single.just(emails);
                 });
 
-        Mockito.when(userRepository.getUsersByEmailsAsync(Mockito.anyList()))
-                .thenAnswer(invocation -> {
-                    List<String> emails = invocation.getArgument(0);
-                    List<AppUser> users = new ArrayList<>();
-
-                    for (AppUser appUser : UsersDataProvider.getUsers()) {
-                        if (emails.contains(appUser.getEmail())) {
-                            users.add(appUser);
-                        }
-                    }
-
-                    return Single.just(users);
-                });
+        userRepository = UserRepositoryMocker.createMocker(userRepository);
 
         Mockito.when(ownerRepository.getPersonnelEmailsByGymId(Mockito.anyString()))
                 .thenAnswer(invocation -> {

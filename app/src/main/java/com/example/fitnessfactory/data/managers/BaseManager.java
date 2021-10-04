@@ -15,12 +15,22 @@ import io.reactivex.schedulers.Schedulers;
 
 public class BaseManager {
 
+    private final RxManager rxManager = new RxManager();
+
     protected Scheduler getMainThreadScheduler() {
-        return AndroidSchedulers.mainThread();
+        return rxManager.getMainThreadScheduler();
     }
 
     protected Scheduler getIOScheduler() {
-        return Schedulers.io();
+        return rxManager.getIOScheduler();
+    }
+
+    public void setMainThreadScheduler(Scheduler mainThreadScheduler) {
+        rxManager.setMainThreadScheduler(mainThreadScheduler);
+    }
+
+    public void setIOScheduler(Scheduler ioScheduler) {
+        rxManager.setIOScheduler(ioScheduler);
     }
 
     protected Completable commitBatchCompletable(WriteBatch writeBatch) {

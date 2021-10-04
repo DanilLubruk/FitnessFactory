@@ -42,8 +42,8 @@ public abstract class PersonnelListTabViewModelTests extends BaseTests {
     public void setup() {
         super.setup();
         viewModel = initViewModel();
-        viewModel.setIoScheduler(testScheduler);
-        viewModel.setMainScheduler(testScheduler);
+        viewModel.setIOScheduler(testScheduler);
+        viewModel.setMainThreadScheduler(testScheduler);
         viewModel.setRxErrorsHandler(new TestRxUtils());
     }
 

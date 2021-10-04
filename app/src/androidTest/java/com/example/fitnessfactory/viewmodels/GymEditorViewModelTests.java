@@ -61,8 +61,8 @@ public class GymEditorViewModelTests extends BaseTests {
                                             GymsAccessManager gymsAccessManager,
                                             Scheduler scheduler) {
         GymEditorViewModel viewModel = new GymEditorViewModel(mockedOwnerGymRepository, gymsAccessManager);
-        viewModel.setIoScheduler(scheduler);
-        viewModel.setMainScheduler(scheduler);
+        viewModel.setIOScheduler(scheduler);
+        viewModel.setMainThreadScheduler(scheduler);
         viewModel.setRxErrorsHandler(new TestRxUtils());
 
         return viewModel;

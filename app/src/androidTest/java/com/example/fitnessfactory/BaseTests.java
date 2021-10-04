@@ -7,14 +7,13 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
-import com.example.fitnessfactory.data.AppPrefs;
-
 import org.junit.Before;
 import org.junit.Rule;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.observers.TestObserver;
 import io.reactivex.schedulers.TestScheduler;
@@ -31,12 +30,25 @@ public class BaseTests {
         testScheduler = new TestScheduler();
     }
 
-    protected <T> TestObserver<T> subscribe(Single<T> observable) {
-        TestObserver<T> subscriber = new TestObserver<>();
-        observable
+    protected <T> TestObserver<T> subscribeInTestThread(Single<T> observable) {
+        TestObserver<T> subscriber = observable
                 .subscribeOn(testScheduler)
                 .observeOn(testScheduler)
-                .subscribe(subscriber);
+                .test();
+        testScheduler.triggerActions();
+
+        return subscriber;
+    }
+
+    protected <T> TestObserver<T> subscribe(Single<T> observable) {
+        TestObserver<T> subscriber = observable.test();
+        testScheduler.triggerActions();
+
+        return subscriber;
+    }
+
+    protected TestObserver<Void> subscribe(Completable completable) {
+        TestObserver<Void> subscriber = completable.test();
         testScheduler.triggerActions();
 
         return subscriber;
@@ -45,10 +57,10 @@ public class BaseTests {
     protected <T> void checkLiveDataNotSet(LiveData<T> liveData) {
         try {
             getOrAwaitValue(liveData);
-            //no value should be emitted, 'cause viewmodel is blank
+            //no value should be emitted, 'cause the viewmodel is blank
             fail();
         } catch (RuntimeException exception) {
-            //if the value not emitted, exception is thrown
+            //if the value not emitted, an exception is thrown
         }
     }
 

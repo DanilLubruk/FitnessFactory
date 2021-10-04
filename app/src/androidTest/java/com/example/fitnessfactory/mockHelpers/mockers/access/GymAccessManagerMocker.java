@@ -13,16 +13,16 @@ import io.reactivex.Single;
 
 public class GymAccessManagerMocker {
 
-    public static GymsAccessManager createMocker(OwnerGymRepository mockedOwnerGymRepository,
+    public static GymsAccessManager createMocker(OwnerGymRepository ownerGymRepository,
                                                  OwnerAdminsRepository ownerAdminsRepository,
                                                  OwnerCoachesRepository ownerCoachesRepository) {
         GymsAccessManager accessManager =
                 new GymsAccessManager(
-                        mockedOwnerGymRepository,
+                        OwnerGymRepositoryMocker.createMocker(ownerGymRepository),
                         ownerAdminsRepository,
                         ownerCoachesRepository);
 
-        Mockito.when(mockedOwnerGymRepository.getDeleteGymBatchAsync(Mockito.anyString()))
+        Mockito.when(ownerGymRepository.getDeleteGymBatchAsync(Mockito.anyString()))
                 .thenReturn(Single.just(FirebaseFirestore.getInstance().batch()));
 
         Mockito.when(ownerAdminsRepository.getRemoveGymFromAdminBatchAsync(Mockito.any(), Mockito.anyString()))

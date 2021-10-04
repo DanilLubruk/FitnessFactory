@@ -41,8 +41,8 @@ public abstract class PersonnelListViewModelTests extends BaseTests {
     public void setup() {
         super.setup();
         personnelListViewModel = initViewModel();
-        personnelListViewModel.setIoScheduler(testScheduler);
-        personnelListViewModel.setMainScheduler(testScheduler);
+        personnelListViewModel.setIOScheduler(testScheduler);
+        personnelListViewModel.setMainThreadScheduler(testScheduler);
         personnelListViewModel.setRxErrorsHandler(new TestRxUtils());
     }
 

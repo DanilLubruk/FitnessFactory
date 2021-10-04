@@ -55,7 +55,8 @@ public class AuthManager extends BaseManager {
                 .observeOn(getIOScheduler())
                 .flatMap(authUser -> adminsAccessRepository.getOwnersByInvitedEmail(authUser))
                 .observeOn(getIOScheduler())
-                .flatMap(ownersIds -> userRepository.getOwnersByIds(ownersIds))
+                .flatMap(ownersIds ->
+                        userRepository.getOwnersByIds(ownersIds, ownersIds.get(0)))
                 .observeOn(getMainThreadScheduler());
     }
 

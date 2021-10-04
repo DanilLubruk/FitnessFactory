@@ -31,7 +31,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Single;
 
 @RunWith(AndroidJUnit4.class)
 public abstract class PersonnelEditorViewModelTests extends BaseTests {
@@ -58,8 +57,8 @@ public abstract class PersonnelEditorViewModelTests extends BaseTests {
     public void setup() {
         super.setup();
         personnelEditorViewModel = getViewModel();
-        personnelEditorViewModel.setIoScheduler(testScheduler);
-        personnelEditorViewModel.setMainScheduler(testScheduler);
+        personnelEditorViewModel.setIOScheduler(testScheduler);
+        personnelEditorViewModel.setMainThreadScheduler(testScheduler);
 
         personnel = new AppUser();
         personnel.setId(userId);

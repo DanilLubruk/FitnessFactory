@@ -40,7 +40,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
     @Test
     public void tryRegisterRegisteredPersonnelTest() {
         TestObserver<Boolean> subscriber =
-                subscribe(personnelAccessManager.createPersonnel(ownerId, personnelEmail));
+                subscribeInTestThread(personnelAccessManager.createPersonnel(ownerId, personnelEmail));
 
         subscriber.assertError(Exception.class);
         subscriber.assertNotComplete();
@@ -62,7 +62,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
                 });
 
         TestObserver<Boolean> subscriber =
-                subscribe(personnelAccessManager.createPersonnel(ownerId, "useremail5"));
+                subscribeInTestThread(personnelAccessManager.createPersonnel(ownerId, "useremail5"));
 
         Mockito.verify(getAccessRepository())
                 .getRegisterPersonnelAccessEntryBatch(ownerId, "useremail5");
@@ -80,7 +80,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
     @Test
     public void registerPersonnelTest() {
         TestObserver<Boolean> subscriber =
-                subscribe(personnelAccessManager.createPersonnel(ownerId, "useremail6"));
+                subscribeInTestThread(personnelAccessManager.createPersonnel(ownerId, "useremail6"));
 
         Mockito.verify(getAccessRepository())
                 .getRegisterPersonnelAccessEntryBatch(ownerId, "useremail6");
@@ -99,7 +99,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
         setDeletePersonnelMocks();
 
         TestObserver<Boolean> subscriber =
-                subscribe(personnelAccessManager.deletePersonnelSingle(ownerId, personnelEmail));
+                subscribeInTestThread(personnelAccessManager.deletePersonnelSingle(ownerId, personnelEmail));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -113,7 +113,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
         setDeletePersonnelMocks();
 
         TestObserver<Boolean> subscriber =
-                subscribe(personnelAccessManager.deletePersonnelSingle("ownerId", personnelEmail));
+                subscribeInTestThread(personnelAccessManager.deletePersonnelSingle("ownerId", personnelEmail));
 
         subscriber.assertError(Exception.class);
         subscriber.assertNotComplete();

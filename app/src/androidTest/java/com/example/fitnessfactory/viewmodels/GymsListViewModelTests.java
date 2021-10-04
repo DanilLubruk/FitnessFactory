@@ -46,8 +46,8 @@ public class GymsListViewModelTests extends BaseTests {
                                 ownerCoachesRepository);
 
         viewModel = new GymsListViewModel(gymsAccessManager, gymsListDataListener);
-        viewModel.setIoScheduler(testScheduler);
-        viewModel.setMainScheduler(testScheduler);
+        viewModel.setIOScheduler(testScheduler);
+        viewModel.setMainThreadScheduler(testScheduler);
         viewModel.setRxErrorsHandler(new TestRxUtils());
     }
 

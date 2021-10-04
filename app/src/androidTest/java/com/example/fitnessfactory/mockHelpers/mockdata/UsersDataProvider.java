@@ -7,20 +7,28 @@ import java.util.List;
 
 public class UsersDataProvider {
 
-    private static List<AppUser> users;
+    private List<AppUser> users;
 
-    public static List<AppUser> getUsers() {
+    public UsersDataProvider() {
+        initData();
+    }
+
+    public List<AppUser> getUsers() {
         return users;
     }
 
-    static {
+    public void addUser(AppUser appUser) {
+        users.add(appUser);
+    }
+
+    private void initData() {
         users = new ArrayList<AppUser>() {{
-           add(AppUser
-                   .builder()
-                   .setId("userId1")
-                   .setName("User1")
-                   .setEmail("useremail1")
-                   .build());
+            add(AppUser
+                    .builder()
+                    .setId("userId1")
+                    .setName("User1")
+                    .setEmail("useremail1")
+                    .build());
 
             add(AppUser
                     .builder()

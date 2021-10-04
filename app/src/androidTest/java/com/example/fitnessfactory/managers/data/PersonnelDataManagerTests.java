@@ -46,7 +46,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
 
     @Test
     public void getPersonnelUsersListTest() {
-        TestObserver<List<AppUser>> subscriber = subscribe(dataManager.getPersonnelListAsync());
+        TestObserver<List<AppUser>> subscriber = subscribeInTestThread(dataManager.getPersonnelListAsync());
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -67,7 +67,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
     @Test
     public void getPersonnelListByGymIdTest() {
         TestObserver<List<AppUser>> subscriber =
-                subscribe(dataManager.getPersonnelListByGymIdAsync("gymId1"));
+                subscribeInTestThread(dataManager.getPersonnelListByGymIdAsync("gymId1"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -83,7 +83,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
         assertEquals("User2", users.get(1).getName());
         assertEquals("useremail2", users.get(1).getEmail());
 
-        subscriber = subscribe(dataManager.getPersonnelListByGymIdAsync("gymId2"));
+        subscriber = subscribeInTestThread(dataManager.getPersonnelListByGymIdAsync("gymId2"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -99,7 +99,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
         assertEquals("User4", users.get(1).getName());
         assertEquals("useremail4", users.get(1).getEmail());
 
-        subscriber = subscribe(dataManager.getPersonnelListByGymIdAsync("gymId3"));
+        subscriber = subscribeInTestThread(dataManager.getPersonnelListByGymIdAsync("gymId3"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -111,7 +111,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
         assertEquals("User4", users.get(0).getName());
         assertEquals("useremail4", users.get(0).getEmail());
 
-        subscriber = subscribe(dataManager.getPersonnelListByGymIdAsync("gymId4"));
+        subscriber = subscribeInTestThread(dataManager.getPersonnelListByGymIdAsync("gymId4"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -124,7 +124,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
     @Test
     public void getGymsByPersonnelEmailTests() {
         TestObserver<List<Gym>> subscriber =
-                subscribe(dataManager.getPersonnelGymsByEmail("useremail1"));
+                subscribeInTestThread(dataManager.getPersonnelGymsByEmail("useremail1"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -136,7 +136,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
         assertEquals("gymName1", gyms.get(0).getName());
         assertEquals("gymAddress1", gyms.get(0).getAddress());
 
-        subscriber = subscribe(dataManager.getPersonnelGymsByEmail("useremail2"));
+        subscriber = subscribeInTestThread(dataManager.getPersonnelGymsByEmail("useremail2"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -148,7 +148,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
         assertEquals("gymName1", gyms.get(0).getName());
         assertEquals("gymAddress1", gyms.get(0).getAddress());
 
-        subscriber = subscribe(dataManager.getPersonnelGymsByEmail("useremail3"));
+        subscriber = subscribeInTestThread(dataManager.getPersonnelGymsByEmail("useremail3"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -160,7 +160,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
         assertEquals("gymName2", gyms.get(0).getName());
         assertEquals("gymAddress2", gyms.get(0).getAddress());
 
-        subscriber = subscribe(dataManager.getPersonnelGymsByEmail("useremail4"));
+        subscriber = subscribeInTestThread(dataManager.getPersonnelGymsByEmail("useremail4"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();

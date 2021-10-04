@@ -71,7 +71,7 @@ public class GymAccessManagerTests extends BaseTests {
                 });
 
         TestObserver<Boolean> subscriber =
-                subscribe(accessManager.deleteGymSingle("gymId2"));
+                subscribeInTestThread(accessManager.deleteGymSingle("gymId2"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();

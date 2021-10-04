@@ -25,7 +25,6 @@ public class AuthViewModel extends BaseViewModel {
     @Inject
     FirebaseAuthManager firebaseAuthManager;
 
-
     public AuthViewModel() {
         FFApp.get().getAppComponent().inject(this);
     }

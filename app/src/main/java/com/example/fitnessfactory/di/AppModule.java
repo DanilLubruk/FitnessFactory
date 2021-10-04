@@ -103,8 +103,11 @@ public class AppModule {
 
     @Provides
     @AppScope
-    public AuthManager provideAuthManager() {
-        return new AuthManager();
+    public AuthManager provideAuthManager(UserRepository userRepository,
+                                          AdminsAccessRepository adminsAccessRepository,
+                                          FirebaseAuthManager authManager,
+                                          OrganisationInfoRepository organisationInfoRepository) {
+        return new AuthManager(userRepository, adminsAccessRepository, authManager, organisationInfoRepository);
     }
 
     @Provides

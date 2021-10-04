@@ -1,6 +1,7 @@
 package com.example.fitnessfactory.data.repositories;
 import com.example.fitnessfactory.data.firestoreCollections.UsersCollection;
 import com.example.fitnessfactory.data.models.AppUser;
+import com.example.fitnessfactory.utils.UsersUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -36,29 +37,15 @@ public class UserRepository extends BaseRepository {
         });
     }
 
-    public Single<List<AppUser>> getOwnersByIds(List<String> ownerIds) {
+    public Single<List<AppUser>> getOwnersByIds(List<String> ownerIds, String currentUserId) {
         return SingleCreate(emitter -> {
             List<AppUser> owners = getAppUsersById(ownerIds);
-            owners = makeCurrentUserFirstInList(owners, ownerIds.get(0));
+            owners = UsersUtils.makeCurrentUserFirstInList(owners, currentUserId);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(owners);
             }
         });
-    }
-
-    private List<AppUser> makeCurrentUserFirstInList(List<AppUser> owners, String currentUserId) {
-        for (int i = 0; i < owners.size(); i++) {
-            AppUser currentUser = owners.get(i);
-            if (currentUser.getId().equals(currentUserId)) {
-                AppUser currentFirstUser = owners.get(0);
-                owners.set(0, currentUser);
-                owners.set(i, currentFirstUser);
-                break;
-            }
-        }
-
-        return owners;
     }
 
     private List<AppUser> getAppUsersById(List<String> ownerIds) throws Exception {
@@ -82,6 +69,7 @@ public class UserRepository extends BaseRepository {
         List<DocumentSnapshot> documents = querySnapshot.getDocuments();
 
         checkEmailUniqueness(documents);
+        checkDataEmpty(documents);
 
         DocumentSnapshot document = documents.get(0);
         return document.toObject(AppUser.class);
