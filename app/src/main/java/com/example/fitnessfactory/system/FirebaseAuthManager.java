@@ -73,7 +73,6 @@ public class FirebaseAuthManager {
                     if (!emitter.isDisposed()) {
                         signInInProcess = false;
                         authUser.updateEmail(email);
-                        //updateUserEmail(email);
                         AppUser currentUser = new AppUser();
                         currentUser.setName(authUser.getDisplayName());
                         currentUser.setEmail(authUser.getEmail());

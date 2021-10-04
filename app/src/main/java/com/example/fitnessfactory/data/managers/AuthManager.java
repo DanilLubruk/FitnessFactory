@@ -19,17 +19,20 @@ import io.reactivex.Single;
 
 public class AuthManager extends BaseManager {
 
-    @Inject
     UserRepository userRepository;
-    @Inject
     AdminsAccessRepository adminsAccessRepository;
-    @Inject
     FirebaseAuthManager authManager;
-    @Inject
     OrganisationInfoRepository organisationInfoRepository;
 
-    public AuthManager() {
-        FFApp.get().getAppComponent().inject(this);
+    @Inject
+    public AuthManager(UserRepository userRepository,
+                       AdminsAccessRepository adminsAccessRepository,
+                       FirebaseAuthManager authManager,
+                       OrganisationInfoRepository organisationInfoRepository) {
+        this.userRepository = userRepository;
+        this.adminsAccessRepository = adminsAccessRepository;
+        this.authManager = authManager;
+        this.organisationInfoRepository = organisationInfoRepository;
     }
 
     public Single<List<AppUser>> handleSignIn(Intent signInData) {

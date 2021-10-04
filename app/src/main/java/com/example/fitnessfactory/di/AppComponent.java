@@ -27,7 +27,6 @@ public interface AppComponent {
     void inject(AuthViewModel authViewModel);
     void inject(AdminsListViewModelFactory adminsListViewModelFactory);
     void inject(MainActivityViewModel mainActivityViewModel);
-    void inject(AuthManager authManager);
     void inject(CoachesListViewModelFactory coachesListViewModelFactory);
     void inject(OrganisationInfoViewModel organisationInfoViewModel);
     void inject(CoachEditorViewModelFactory coachEditorViewModelFactory);
