@@ -6,32 +6,28 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.models.AppUser;
+import com.example.fitnessfactory.ui.adapters.ListAdapter;
 import com.example.fitnessfactory.ui.adapters.PersonnelListAdapter;
-import com.example.fitnessfactory.ui.fragments.ListListenerFragment;
+import com.example.fitnessfactory.ui.viewholders.BaseRecyclerViewHolder;
+import com.example.fitnessfactory.ui.viewholders.lists.PersonnelListViewHolder;
 import com.example.fitnessfactory.ui.viewmodels.lists.PersonnelListViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.IntentUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
-import com.github.clans.fab.FloatingActionButton;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 import com.tiromansev.prefswrapper.typedprefs.BooleanPreference;
 
 import java.util.List;
 import io.reactivex.Single;
 
-public abstract class PersonnelListFragment extends ListListenerFragment<AppUser> {
+public abstract class PersonnelListFragment
+        extends ListListenerFragment<AppUser, PersonnelListViewHolder, PersonnelListAdapter> {
 
-    RecyclerView rvPersonnel;
-    FloatingActionButton fabAddPersonnel;
-
-    private PersonnelListAdapter adapter;
-    private RecyclerTouchListener touchListener;
     private boolean selectMode = false;
 
     @Override
@@ -61,41 +57,15 @@ public abstract class PersonnelListFragment extends ListListenerFragment<AppUser
 
     protected abstract void defineViewModel();
 
-    private void initComponents() {
+    @Override
+    protected void initComponents() {
+        super.initComponents();
         selectMode = getBaseActivity().getIntent().getBooleanExtra(AppConsts.IS_SELECT_MODE_EXTRA, false);
-        fabAddPersonnel.setOnClickListener(view -> showSendEmailInvitationDialog());
-        GuiUtils.initListView(getBaseActivity(), rvPersonnel, true);
-        touchListener = new RecyclerTouchListener(getBaseActivity(), rvPersonnel);
-        rvPersonnel.addOnItemTouchListener(touchListener);
-        touchListener.setSwipeOptionViews(R.id.btnEdit, R.id.btnDelete);
-        touchListener.setSwipeable(R.id.rowFG, R.id.rowBG, (viewId, position) -> {
-            switch (viewId) {
-                case R.id.btnEdit:
-                    AppUser personnel = adapter.getPersonnel(position);
-                    showEditorActivity(personnel);
-                    break;
-                case R.id.btnDelete:
-                    personnel = adapter.getPersonnel(position);
-                    askForDelete(personnel);
-                    break;
-            }
-        });
-        touchListener.setClickable(new RecyclerTouchListener.OnRowClickListener() {
-            @Override
-            public void onRowClicked(int position) {
-                AppUser personnel = adapter.getPersonnel(position);
-                PersonnelListFragment.this.onRowClicked(personnel);
-            }
-
-            @Override
-            public void onIndependentViewClicked(int independentViewID, int position) {
-
-            }
-        });
-        getViewModel().getPersonnel().observe(getViewLifecycleOwner(), this::setPersonnelData);
+        fabAddItem.setOnClickListener(view -> showSendEmailInvitationDialog());
+        getViewModel().getPersonnel().observe(getViewLifecycleOwner(), this::setListData);
     }
 
-    private void onRowClicked(AppUser personnel) {
+    protected void onRowClicked(AppUser personnel) {
         if (selectMode) {
             sendSelectResult(personnel);
         } else {
@@ -109,19 +79,11 @@ public abstract class PersonnelListFragment extends ListListenerFragment<AppUser
         getBaseActivity().finish();
     }
 
-    private void showEditorActivity(AppUser personnel) {
+    @Override
+    protected void showEditorActivity(AppUser personnel) {
         Intent intent = getEditorActivityIntent(personnel);
 
         startActivity(intent);
-    }
-
-    private void setPersonnelData(List<AppUser> personnel) {
-        if (adapter == null) {
-            adapter = new PersonnelListAdapter(personnel, R.layout.two_bg_buttons_list_item_view);
-            rvPersonnel.setAdapter(adapter);
-        } else {
-            adapter.setPersonnel(personnel);
-        }
     }
 
     private void showSendEmailInvitationDialog() {
@@ -149,8 +111,17 @@ public abstract class PersonnelListFragment extends ListListenerFragment<AppUser
     }
 
     @Override
+    protected PersonnelListAdapter createNewAdapter(List<AppUser> listData) {
+        return new PersonnelListAdapter(listData, R.layout.two_bg_buttons_list_item_view);
+    }
+
+    @Override
+    protected AppUser getNewItem() {
+        return new AppUser();
+    }
+
+    @Override
     protected void bindView(View itemView) {
-        rvPersonnel = itemView.findViewById(R.id.rvData);
-        fabAddPersonnel = itemView.findViewById(R.id.fabAddItem);
+        super.bindView(itemView);
     }
 }

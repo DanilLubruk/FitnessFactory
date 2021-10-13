@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
@@ -16,22 +15,14 @@ import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.activities.editors.EditorActivity;
 import com.example.fitnessfactory.ui.adapters.PersonnelListAdapter;
-import com.example.fitnessfactory.ui.fragments.ListListenerFragment;
+import com.example.fitnessfactory.ui.viewholders.lists.PersonnelListViewHolder;
 import com.example.fitnessfactory.ui.viewmodels.lists.PersonnelListTabViewModel;
-import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
-import com.github.clans.fab.FloatingActionButton;
-import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 
 import java.util.List;
 
-public abstract class PersonnelListTabFragment extends ListListenerFragment<AppUser>  {
-
-    RecyclerView rvPersonnel;
-    FloatingActionButton fabAddPersonnel;
-
-    private PersonnelListAdapter adapter;
-    private RecyclerTouchListener touchListener;
+public abstract class PersonnelListTabFragment
+        extends ListListenerFragment<AppUser, PersonnelListViewHolder, PersonnelListAdapter>  {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -51,22 +42,19 @@ public abstract class PersonnelListTabFragment extends ListListenerFragment<AppU
 
     protected abstract String getPersonnelEmailExtraKey();
 
-    private void initComponents() {
+    protected void initComponents() {
+        super.initComponents();
         getViewModel().refreshGymData(getBaseActivity().getIntent().getStringExtra(AppConsts.GYM_ID_EXTRA));
-        fabAddPersonnel.setOnClickListener(view -> tryToShowSelectionActivity());
-        GuiUtils.initListView(getBaseActivity(), rvPersonnel, true);
-        touchListener = new RecyclerTouchListener(getBaseActivity(), rvPersonnel);
-        rvPersonnel.addOnItemTouchListener(touchListener);
+        fabAddItem.setOnClickListener(view -> tryToShowSelectionActivity());
         touchListener.setSwipeOptionViews(R.id.btnRemove);
         touchListener.setSwipeable(R.id.rowFG, R.id.rowBG, (viewId, position) -> {
             switch (viewId) {
                 case R.id.btnRemove:
-                    AppUser personnel = adapter.getPersonnel(position);
-                    askForDelete(personnel);
+                    askForDelete(adapter.getItem(position));
                     break;
             }
         });
-        getViewModel().getPersonnel().observe(getViewLifecycleOwner(), this::setPersonnelData);
+        getViewModel().getPersonnel().observe(getViewLifecycleOwner(), this::setListData);
     }
 
     @Override
@@ -85,12 +73,12 @@ public abstract class PersonnelListTabFragment extends ListListenerFragment<AppU
         getBaseActivity().save(isSaved -> {
             if (isSaved) {
                 getViewModel().refreshGymData(getBaseActivity().getIntent().getStringExtra(AppConsts.GYM_ID_EXTRA));
-                showSelectionActivity();
+                onRowClicked();
             }
         });
     }
 
-    private void showSelectionActivity() {
+    protected void onRowClicked() {
         Intent intent = new Intent(getBaseActivity(), SelectionActivity.class);
         intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, getSelectionFragmentId());
 
@@ -110,13 +98,24 @@ public abstract class PersonnelListTabFragment extends ListListenerFragment<AppU
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void setPersonnelData(List<AppUser> personnel) {
-        if (adapter == null) {
-            adapter = new PersonnelListAdapter(personnel, R.layout.one_bg_button_list_item_view);
-            rvPersonnel.setAdapter(adapter);
-        } else {
-            adapter.setPersonnel(personnel);
-        }
+    @Override
+    protected PersonnelListAdapter createNewAdapter(List<AppUser> listData) {
+        return new PersonnelListAdapter(listData, R.layout.two_bg_buttons_list_item_view);
+    }
+
+    @Override
+    protected AppUser getNewItem() {
+        return new AppUser();
+    }
+
+    @Override
+    protected void onRowClicked(AppUser appUser) {
+
+    }
+
+    @Override
+    protected void showEditorActivity(AppUser item) {
+
     }
 
     public void closeProgress() {
@@ -129,7 +128,6 @@ public abstract class PersonnelListTabFragment extends ListListenerFragment<AppU
 
     @Override
     protected void bindView(View itemView) {
-        rvPersonnel = itemView.findViewById(R.id.rvData);
-        fabAddPersonnel = itemView.findViewById(R.id.fabAddItem);
+        super.bindView(itemView);
     }
 }

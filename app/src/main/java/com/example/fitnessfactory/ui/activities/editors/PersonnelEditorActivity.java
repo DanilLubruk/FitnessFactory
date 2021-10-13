@@ -59,7 +59,7 @@ public abstract class PersonnelEditorActivity extends EditorActivity {
         touchListener.setSwipeable(R.id.rowFG, R.id.rowBG, (viewId, position) -> {
             switch (viewId) {
                 case R.id.btnRemove:
-                    Gym gym = adapter.getGym(position);
+                    Gym gym = adapter.getItem(position);
                     askForDeleteGym(gym);
                     break;
             }
@@ -116,7 +116,7 @@ public abstract class PersonnelEditorActivity extends EditorActivity {
             adapter = new GymsListAdapter(gyms, R.layout.one_bg_button_list_item_view);
             rvGyms.setAdapter(adapter);
         } else {
-            adapter.setGyms(gyms);
+            adapter.setListData(gyms);
         }
     }
 

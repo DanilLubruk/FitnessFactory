@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.GymAdminsListListenerEvent;
+import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.viewmodels.factories.AdminsListTabViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.AdminsListTabViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
