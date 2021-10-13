@@ -15,6 +15,7 @@ import icepick.Icepick;
 import io.reactivex.Completable;
 import io.reactivex.Scheduler;
 import io.reactivex.Single;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
@@ -103,6 +104,10 @@ public class BaseViewModel extends ViewModel {
 
     public <T> void subscribeInIOThread(Completable subscriber) {
         rxManager.subscribeInIOThread(subscriber);
+    }
+
+    public void addSubscription(Disposable disposable) {
+        rxManager.addSubscription(disposable);
     }
 
     public RxErrorsHandler getErrorHandler() {

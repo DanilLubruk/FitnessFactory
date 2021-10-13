@@ -49,9 +49,9 @@ public class DialogUtils {
         });
     }
 
-    public static Completable showAskOwnerDialog(BaseActivity context,
-                                                 List<AppUser> gymOwners) {
-        return Completable.create(emitter -> {
+    public static Single<Integer> showAskOwnerDialog(BaseActivity context,
+                                                     List<AppUser> gymOwners) {
+        return Single.create(emitter -> {
             String[] userTypes = new String[gymOwners.size()];
             int myOwnGymIdx = 0;
             userTypes[myOwnGymIdx] = ResUtils.getString(R.string.caption_my_own_gym);
@@ -72,18 +72,21 @@ public class DialogUtils {
 
     private static void handlePickedOwnerOption(int option,
                                                 List<AppUser> gymOwners,
-                                                CompletableEmitter emitter) {
+                                                SingleEmitter<Integer> emitter) {
         String ownerId = gymOwners.get(option).getId();
         AppPrefs.gymOwnerId().setValue(ownerId);
 
         boolean isOptionMyOwnGym = option == 0;
-        AppPrefs.currentUserType().setValue(
+        /*AppPrefs.currentUserType().setValue(
                 isOptionMyOwnGym ?
                         CurrentUserType.CURRENT_USER_OWNER :
-                        CurrentUserType.CURRENT_USER_STAFF);
+                        CurrentUserType.CURRENT_USER_STAFF);*/
 
         if (!emitter.isDisposed()) {
-            emitter.onComplete();
+            emitter.onSuccess(
+                    isOptionMyOwnGym ?
+                    CurrentUserType.CURRENT_USER_OWNER :
+                    CurrentUserType.CURRENT_USER_STAFF);
         }
     }
 

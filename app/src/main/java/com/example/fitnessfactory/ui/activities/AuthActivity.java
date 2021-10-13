@@ -12,8 +12,12 @@ import android.widget.TextView;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.beans.UsersList;
+import com.example.fitnessfactory.data.callbacks.UsersListCallback;
 import com.example.fitnessfactory.data.models.AppUser;
+import com.example.fitnessfactory.data.observers.SingleDialogEvent;
 import com.example.fitnessfactory.ui.viewmodels.AuthViewModel;
+import com.example.fitnessfactory.ui.viewmodels.factories.AuthViewModelFactory;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
@@ -36,7 +40,7 @@ public class AuthActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setFullScreen();
         setContentView(R.layout.activity_auth);
-        viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+        viewModel = new ViewModelProvider(this, new AuthViewModelFactory()).get(AuthViewModel.class);
         super.onCreate(savedInstanceState);
     }
 
@@ -89,17 +93,28 @@ public class AuthActivity extends BaseActivity {
 
     private void handleSignIn(Intent data) {
         setObtainingDataText();
-        viewModel.handleSignIn(data)
+        SingleDialogEvent<Integer, List<AppUser>> dialogEvent =
+                new SingleDialogEvent<>(this, DialogUtils::showAskOwnerDialog);
+        viewModel.signInUser(data, dialogEvent)
+                .observe(this, isRegistered -> {
+            if (isRegistered) {
+                closeProgress();
+                showMainActivity();
+            } else {
+                signInFailed();
+            }
+        });
+        /*viewModel.handleSignIn(data)
                 .observe(this, owners -> {
                     if (owners != null) {
                         showAskUserTypeDialog(owners);
                     } else {
                         signInFailed();
                     }
-                });
+                });*/
     }
 
-    private void showAskUserTypeDialog(List<AppUser> gymOwners) {
+    /*private void showAskUserTypeDialog(List<AppUser> gymOwners) {
         subscribeInMainThread(DialogUtils.showAskOwnerDialog(this, gymOwners),
                 this::checkOrganisationName,
                 throwable -> {
@@ -114,7 +129,7 @@ public class AuthActivity extends BaseActivity {
             closeProgress();
             showMainActivity();
         });
-    }
+    }*/
 
     private void signInFailed() {
         closeProgress();
