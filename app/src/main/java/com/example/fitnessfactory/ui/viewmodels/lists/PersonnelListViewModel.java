@@ -110,6 +110,10 @@ public abstract class PersonnelListViewModel extends BaseViewModel implements Da
     }
 
     public void deleteItem(AppUser personnel) {
+        if (personnel == null) {
+            return;
+        }
+
         subscribeInIOThread(
                 getAccessManager()
                         .deletePersonnelCompletable(

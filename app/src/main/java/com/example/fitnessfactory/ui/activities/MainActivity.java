@@ -114,14 +114,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_home:
                 openMainPage();
                 break;
-            case R.id.nav_gyms:
-                openGymsPage();
-                break;
             case R.id.nav_admins:
                 openAdminsPage();
                 break;
             case R.id.nav_coaches:
                 openCoachesPage();
+                break;
+            case R.id.nav_gyms:
+                openGymsPage();
+                break;
+            case R.id.nav_clients:
+                openClientsPage();
                 break;
             case R.id.nav_organisation:
                 openOrganisationPage();
@@ -137,11 +140,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         setMenuChecked(R.id.nav_home);
     }
 
-    private void openGymsPage() {
-        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_GYMS_ID);
-        setMenuChecked(R.id.nav_gyms);
-    }
-
     private void openAdminsPage() {
         FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_ADMINS_ID);
         setMenuChecked(R.id.nav_admins);
@@ -150,6 +148,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void openCoachesPage() {
         FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_COACHES_ID);
         setMenuChecked(R.id.nav_coaches);
+    }
+
+    private void openGymsPage() {
+        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_GYMS_ID);
+        setMenuChecked(R.id.nav_gyms);
+    }
+
+    private void openClientsPage() {
+        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_CLIENTS_ID);
+        setMenuChecked(R.id.nav_clients);
     }
 
     private void openOrganisationPage() {

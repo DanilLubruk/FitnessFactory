@@ -28,6 +28,11 @@
             android:title="@string/title_gyms" />
 
         <item
+            android:id="@+id/nav_clients"
+            android:checkable="true"
+            android:title="@string/title_clients" />
+
+        <item
             android:id="@+id/nav_organisation"
             android:checkable="true"
             android:title="@string/title_organisation" />

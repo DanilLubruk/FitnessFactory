@@ -113,14 +113,7 @@ public class AdminsAccessRepository extends BaseRepository implements PersonnelA
     }
 
     private DocumentSnapshot getAdminSnapshot(String ownerId, String email) throws Exception {
-        List<DocumentSnapshot> documents =
-                Tasks.await(getAdminQueryByEmail(ownerId, email).get())
-                        .getDocuments();
-
-        checkDataEmpty(documents);
-        checkEmailUniqueness(documents);
-
-        return documents.get(0);
+        return getUniqueUserEntitySnapshot(getAdminQueryByEmail(ownerId, email));
     }
 
     public Query getAdminQueryByEmail(String ownerId, String email) {

@@ -68,13 +68,7 @@ public class OwnerGymRepository extends BaseRepository {
     }
 
     private DocumentSnapshot getGymDocSnapshot(String gymId) throws Exception {
-        QuerySnapshot gymsQuery = Tasks.await(getCollection().whereEqualTo(Gym.ID_FIELD, gymId).get());
-        List<DocumentSnapshot> gymDocs = gymsQuery.getDocuments();
-
-        checkDataEmpty(gymDocs);
-        checkUniqueness(gymDocs, getGymsIdUnuniqueErrorMessage());
-
-        return gymDocs.get(0);
+        return getUniqueEntitySnapshot(getCollection().whereEqualTo(Gym.ID_FIELD, gymId), getGymsIdUnuniqueErrorMessage());
     }
 
     private String getGymsIdUnuniqueErrorMessage() {

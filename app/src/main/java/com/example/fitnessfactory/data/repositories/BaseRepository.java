@@ -4,6 +4,10 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.firestoreCollections.BaseCollection;
 import com.example.fitnessfactory.data.firestoreCollections.CollectionOperator;
 import com.example.fitnessfactory.utils.ResUtils;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 
 import java.util.List;
 
@@ -77,6 +81,33 @@ public abstract class BaseRepository extends CollectionOperator {
         if (isFieldNotUnique) {
             throw new Exception(errorMessage);
         }
+    }
+
+    protected <T> T getUniqueUserEntity(Query query, Class<T> clazz) throws Exception {
+        return getUniqueEntity(query, clazz, ResUtils.getString(R.string.message_error_email_isnt_unique));
+    }
+
+    protected DocumentReference getUniqueUserEntityReference(Query query) throws Exception {
+        return getUniqueEntityReference(query, ResUtils.getString(R.string.message_error_email_isnt_unique));
+    }
+
+    protected DocumentSnapshot getUniqueUserEntitySnapshot(Query query) throws Exception {
+        return getUniqueEntitySnapshot(query, ResUtils.getString(R.string.message_error_email_isnt_unique));
+    }
+
+    protected <T> T getUniqueEntity(Query query, Class<T> clazz, String notUniqueMessage) throws Exception {
+        return getUniqueEntitySnapshot(query, notUniqueMessage).toObject(clazz);
+    }
+    protected DocumentReference getUniqueEntityReference(Query query, String notUniqueMessage) throws Exception {
+        return getUniqueEntitySnapshot(query, notUniqueMessage).getReference();
+    }
+    protected DocumentSnapshot getUniqueEntitySnapshot(Query query, String notUniqueMessage) throws Exception {
+        List<DocumentSnapshot> documentSnapshots = Tasks.await(query.get()).getDocuments();
+
+        checkDataEmpty(documentSnapshots);
+        checkUniqueness(documentSnapshots, notUniqueMessage);
+
+        return documentSnapshots.get(0);
     }
 
     protected <T> void reportError(SingleEmitter<T> emitter, Exception error) {

@@ -65,14 +65,7 @@ public class UserRepository extends BaseRepository {
     }
 
     private AppUser getAppUserByEmail(String email) throws Exception {
-        QuerySnapshot querySnapshot = Tasks.await(getCollection().whereEqualTo(EMAIL_FILED, email).get());
-        List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-
-        checkEmailUniqueness(documents);
-        checkDataEmpty(documents);
-
-        DocumentSnapshot document = documents.get(0);
-        return document.toObject(AppUser.class);
+        return getUniqueUserEntity(getCollection().whereEqualTo(EMAIL_FILED, email), AppUser.class);
     }
 
     public Single<Boolean> isUserRegisteredAsync(String email) {

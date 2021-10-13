@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.ui.fragments.lists.AdminsListFragment;
+import com.example.fitnessfactory.ui.fragments.lists.ClientsListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.CoachesListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.GymsListFragment;
 
@@ -22,10 +23,6 @@ public class FragmentProvider {
                 curFragment = new MenuFragment();
                 fragmentName = AppConsts.FRAGMENT_HOME_NAME;
                 break;
-            case AppConsts.FRAGMENT_GYMS_ID:
-                curFragment = new GymsListFragment();
-                fragmentName = AppConsts.FRAGMENT_GYMS_NAME;
-                break;
             case AppConsts.FRAGMENT_ADMINS_ID:
                 curFragment = new AdminsListFragment();
                 fragmentName = AppConsts.FRAGMENT_ADMINS_NAME;
@@ -33,6 +30,14 @@ public class FragmentProvider {
             case AppConsts.FRAGMENT_COACHES_ID:
                 curFragment = new CoachesListFragment();
                 fragmentName = AppConsts.FRAGMENT_COACHES_NAME;
+                break;
+            case AppConsts.FRAGMENT_GYMS_ID:
+                curFragment = new GymsListFragment();
+                fragmentName = AppConsts.FRAGMENT_GYMS_NAME;
+                break;
+            case AppConsts.FRAGMENT_CLIENTS_ID:
+                curFragment = new ClientsListFragment();
+                fragmentName = AppConsts.FRAGMENT_CLIENTS_NAME;
                 break;
         }
 

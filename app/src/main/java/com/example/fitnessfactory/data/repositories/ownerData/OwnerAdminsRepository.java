@@ -207,13 +207,7 @@ public class OwnerAdminsRepository extends BaseRepository implements OwnerPerson
     }
 
     private DocumentSnapshot getAdminSnapshot(String adminEmail) throws Exception {
-        List<DocumentSnapshot> documentSnapshots =
-                Tasks.await(getCollection().whereEqualTo(Admin.USER_EMAIL_FIELD, adminEmail).get()).getDocuments();
-
-        checkDataEmpty(documentSnapshots);
-        checkEmailUniqueness(documentSnapshots);
-
-        return documentSnapshots.get(0);
+        return getUniqueUserEntitySnapshot(getCollection().whereEqualTo(Admin.USER_EMAIL_FIELD, adminEmail));
     }
 
     public Query getAdminQueryByGymId(String gymId) {

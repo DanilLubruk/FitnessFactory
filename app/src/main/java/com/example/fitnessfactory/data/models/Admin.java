@@ -1,7 +1,5 @@
 package com.example.fitnessfactory.data.models;
 
-import android.os.Build;
-
 import java.util.List;
 
 public class Admin implements Personnel {

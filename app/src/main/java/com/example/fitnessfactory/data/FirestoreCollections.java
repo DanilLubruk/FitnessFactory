@@ -15,4 +15,6 @@ public class FirestoreCollections {
     public static final String COACHES = "coaches";
 
     public static final String ORGANISATION_DATA = "organisationData";
+
+    public static final String CLIENTS_COLLECTION = "clients";
 }

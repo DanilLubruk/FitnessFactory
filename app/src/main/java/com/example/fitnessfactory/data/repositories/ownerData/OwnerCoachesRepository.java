@@ -1,7 +1,6 @@
 package com.example.fitnessfactory.data.repositories.ownerData;
 
 import com.example.fitnessfactory.data.firestoreCollections.OwnerCoachesCollection;
-import com.example.fitnessfactory.data.models.Admin;
 import com.example.fitnessfactory.data.models.Coach;
 import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.google.android.gms.tasks.Tasks;
@@ -182,16 +181,7 @@ public class OwnerCoachesRepository extends BaseRepository implements OwnerPerso
     }
 
     private DocumentReference getCoachDocReference(String email) throws Exception {
-        List<DocumentSnapshot> documentSnapshots =
-                Tasks.await(
-                        getCollection().whereEqualTo(Coach.USER_EMAIL_FIELD, email)
-                                .get())
-                        .getDocuments();
-
-        checkDataEmpty(documentSnapshots);
-        checkEmailUniqueness(documentSnapshots);
-
-        return documentSnapshots.get(0).getReference();
+        return getUniqueUserEntityReference(getCollection().whereEqualTo(Coach.USER_EMAIL_FIELD, email));
     }
 
     public Single<WriteBatch> getRemoveGymFromCoachBatchAsync(WriteBatch writeBatch, String gymId) {
