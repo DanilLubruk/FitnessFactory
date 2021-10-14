@@ -104,32 +104,7 @@ public class AuthActivity extends BaseActivity {
                 signInFailed();
             }
         });
-        /*viewModel.handleSignIn(data)
-                .observe(this, owners -> {
-                    if (owners != null) {
-                        showAskUserTypeDialog(owners);
-                    } else {
-                        signInFailed();
-                    }
-                });*/
     }
-
-    /*private void showAskUserTypeDialog(List<AppUser> gymOwners) {
-        subscribeInMainThread(DialogUtils.showAskOwnerDialog(this, gymOwners),
-                this::checkOrganisationName,
-                throwable -> {
-                    signInFailed();
-                    throwable.printStackTrace();
-                    GuiUtils.showMessage(throwable.getLocalizedMessage());
-                });
-    }
-
-    private void checkOrganisationName() {
-        viewModel.checkOrganisationName().observe(this, isChecked -> {
-            closeProgress();
-            showMainActivity();
-        });
-    }*/
 
     private void signInFailed() {
         closeProgress();

@@ -45,8 +45,7 @@ public class GymEditorActivity extends EditorActivity {
 
         id = getIntent().getExtras().getString(AppConsts.GYM_ID_EXTRA);
         setTitle(id != null && !StringUtils.isEmpty(id) ? R.string.title_edit_item : R.string.title_add_item);
-        viewModel.getGym(id)
-                .observe(this, viewModel::setGym);
+        viewModel.getGymData(id);
         viewModel.getGymId()
                 .observe(this, gymId -> getIntent().putExtra(AppConsts.GYM_ID_EXTRA, gymId));
 
@@ -73,15 +72,8 @@ public class GymEditorActivity extends EditorActivity {
 
     @Override
     protected boolean isDataValid() {
-        if (edtName.getText() != null &&
-                edtAddress.getText() != null &&
-                !StringUtils.isEmpty(edtName.getText().toString()) &&
-                !StringUtils.isEmpty(edtAddress.getText().toString())) {
-            return true;
-        } else {
-            GuiUtils.showMessage(ResUtils.getString(R.string.caption_blank_fields));
-            return false;
-        }
+        return !StringUtils.isEmpty(edtName.getText())
+                && !StringUtils.isEmpty(edtAddress.getText());
     }
 
     @Override

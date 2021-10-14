@@ -4,8 +4,12 @@ import android.text.TextUtils;
 
 public class StringUtils {
 
+    public static boolean isEmpty(CharSequence string) {
+        return string != null && isEmpty(string.toString());
+    }
+
     public static boolean isEmpty(String string) {
-        return TextUtils.isEmpty(string.trim());
+        return string != null && TextUtils.isEmpty(string.trim());
     }
 
     public static String getEmptyString () {

@@ -7,11 +7,14 @@ import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fitnessfactory.FFApp;
+import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.managers.access.GymsAccessManager;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
+import com.example.fitnessfactory.utils.GuiUtils;
+import com.example.fitnessfactory.utils.ResUtils;
 
 import javax.inject.Inject;
 
@@ -35,22 +38,18 @@ public class GymEditorViewModel extends EditorViewModel {
         this.gymsAccessManager = gymsAccessManager;
     }
 
-    public SingleLiveEvent<Gym> getGym(String gymId) {
-        SingleLiveEvent<Gym> observer = new SingleLiveEvent<>();
-
+    public void getGymData(String gymId) {
         subscribeInIOThread(ownerGymRepository.getGymAsync(gymId),
                 new SingleData<>(
-                        observer::setValue,
+                        this::setGym,
                         getErrorHandler()::handleError));
-
-        return observer;
     }
 
     public MutableLiveData<String> getGymId() {
         return gymId;
     }
 
-    public void setGym(Gym gym) {
+    private void setGym(Gym gym) {
         if (gym == null) {
             return;
         }
@@ -89,8 +88,7 @@ public class GymEditorViewModel extends EditorViewModel {
 
         Gym gym = this.gym.get();
         if (gym == null) {
-            observer.setValue(false);
-            return observer;
+            return handleItemNullError(observer);
         }
 
         subscribeInIOThread(ownerGymRepository.saveAsync(gym),
@@ -105,6 +103,13 @@ public class GymEditorViewModel extends EditorViewModel {
                 ));
 
         return observer;
+    }
+
+    @Override
+    protected String getItemNullMessage() {
+        return ResUtils.getString(R.string.message_error_data_save)
+                .concat(" - ")
+                .concat(ResUtils.getString(R.string.message_error_gym_null));
     }
 
     @Override

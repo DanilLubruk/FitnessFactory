@@ -77,7 +77,7 @@ public class GymEditorViewModelTests extends BaseTests {
         Gym viewModelGym = viewModel.gym.get();
         assertNull(viewModelGym);
 
-        SingleLiveEvent<Gym> gymData = viewModel.getGym("gymId2");
+        SingleLiveEvent<Gym> gymData = viewModel.getGymData("gymId2");
         testScheduler.triggerActions();
         Gym gym = getOrAwaitValue(gymData);
         assertNotNull(gym);
@@ -136,7 +136,7 @@ public class GymEditorViewModelTests extends BaseTests {
         boolean isSaved = getOrAwaitValue(viewModel.save());
         assertFalse(isSaved);
 
-        SingleLiveEvent<Gym> gymData = viewModel.getGym("gymId6");
+        SingleLiveEvent<Gym> gymData = viewModel.getGymData("gymId6");
         testScheduler.triggerActions();
         Gym gym = getOrAwaitValue(gymData);
         assertNotNull(gym);
@@ -235,7 +235,7 @@ public class GymEditorViewModelTests extends BaseTests {
 
         viewModel.restoreState(state);
 
-        SingleLiveEvent<Gym> gymData = viewModel.getGym("gymId2");
+        SingleLiveEvent<Gym> gymData = viewModel.getGymData("gymId2");
         testScheduler.triggerActions();
         Gym gym = getOrAwaitValue(gymData);
         assertNotNull(gym);

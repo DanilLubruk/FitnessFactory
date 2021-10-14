@@ -27,11 +27,7 @@ public abstract class PersonnelListTabFragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        defineViewModel();
-        initComponents();
     }
-
-    protected abstract void defineViewModel();
 
     @Override
     protected abstract PersonnelListTabViewModel getViewModel();
@@ -73,12 +69,12 @@ public abstract class PersonnelListTabFragment
         getBaseActivity().save(isSaved -> {
             if (isSaved) {
                 getViewModel().refreshGymData(getBaseActivity().getIntent().getStringExtra(AppConsts.GYM_ID_EXTRA));
-                onRowClicked();
+                onListRowClicked();
             }
         });
     }
 
-    protected void onRowClicked() {
+    protected void onListRowClicked() {
         Intent intent = new Intent(getBaseActivity(), SelectionActivity.class);
         intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, getSelectionFragmentId());
 
@@ -109,7 +105,7 @@ public abstract class PersonnelListTabFragment
     }
 
     @Override
-    protected void onRowClicked(AppUser appUser) {
+    protected void onListRowClicked(AppUser appUser) {
 
     }
 
@@ -124,6 +120,11 @@ public abstract class PersonnelListTabFragment
 
     public void showProgress() {
 
+    }
+
+    @Override
+    protected String getTitle() {
+        return getBaseActivity().getTitle().toString();
     }
 
     @Override

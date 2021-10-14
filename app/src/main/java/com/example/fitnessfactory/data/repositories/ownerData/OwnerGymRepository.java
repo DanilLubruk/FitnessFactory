@@ -52,23 +52,14 @@ public class OwnerGymRepository extends BaseRepository {
     }
 
     private Gym getGym(String gymId) throws Exception {
-        Gym gym = new Gym();
         if (TextUtils.isEmpty(gymId)) {
-            return gym;
+            return new Gym();
         }
 
-        DocumentSnapshot gymDoc;
-        try {
-            gymDoc = getGymDocSnapshot(gymId);
-        } catch (InterruptedException e) {
-            return gym;
-        }
-
-        return gymDoc.toObject(Gym.class);
-    }
-
-    private DocumentSnapshot getGymDocSnapshot(String gymId) throws Exception {
-        return getUniqueEntitySnapshot(getCollection().whereEqualTo(Gym.ID_FIELD, gymId), getGymsIdUnuniqueErrorMessage());
+        return getUniqueEntity(
+                getCollection().whereEqualTo(Gym.ID_FIELD, gymId),
+                Gym.class,
+                getGymsIdUnuniqueErrorMessage());
     }
 
     private String getGymsIdUnuniqueErrorMessage() {
@@ -113,9 +104,24 @@ public class OwnerGymRepository extends BaseRepository {
         if (gym == null) {
             throw new Exception(getGymNullErrorMessage());
         }
-        boolean isNewInstance = TextUtils.isEmpty(gym.getId());
 
-        return isNewInstance ? insert(gym) : update(gym);
+        return isNewGym(gym.getId()) ? insert(gym) : update(gym);
+    }
+
+    private boolean isNewGym(String gymId) throws Exception {
+        int gymsNumber = getGymsNumberWithThatId(gymId);
+
+        return gymsNumber == 0;
+    }
+
+    private int getGymsNumberWithThatId(String gymId) throws Exception {
+        List<Gym> gyms =
+                Tasks.await(
+                getCollection().whereEqualTo(Gym.ID_FIELD, gymId).get())
+                .toObjects(Gym.class);
+        checkUniqueness(gyms, getGymsIdUnuniqueErrorMessage());
+
+        return gyms.size();
     }
 
     private String getGymNullErrorMessage() {

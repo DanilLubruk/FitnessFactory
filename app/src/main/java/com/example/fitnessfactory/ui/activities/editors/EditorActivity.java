@@ -11,7 +11,9 @@ import com.example.fitnessfactory.ui.activities.BaseActivity;
 import com.example.fitnessfactory.ui.viewmodels.editors.EditorViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
+import com.example.fitnessfactory.utils.StringUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
+import com.google.android.material.textfield.TextInputEditText;
 
 public abstract class EditorActivity extends BaseActivity {
 
@@ -140,8 +142,17 @@ public abstract class EditorActivity extends BaseActivity {
         return true;
     }
 
-    public void save(EditorCallback callback) {
+    protected boolean checkScreenDataValidity() {
         if (isDataValid()) {
+            return true;
+        } else {
+            GuiUtils.showMessage(ResUtils.getString(R.string.caption_blank_fields));
+            return false;
+        }
+    }
+
+    public void save(EditorCallback callback) {
+        if (checkScreenDataValidity()) {
             getViewModel().save().observe(this, callback::callback);
         } else {
             callback.callback(false);

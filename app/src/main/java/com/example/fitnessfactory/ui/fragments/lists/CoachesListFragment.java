@@ -26,6 +26,7 @@ public class CoachesListFragment extends PersonnelListFragment {
 
     private CoachesListViewModel viewModel;
 
+    @Override
     protected void defineViewModel() {
         viewModel = new ViewModelProvider(this, new CoachesListViewModelFactory()).get(CoachesListViewModel.class);
     }
@@ -41,7 +42,7 @@ public class CoachesListFragment extends PersonnelListFragment {
     }
 
     @Override
-    protected String getTitle() {
+    protected String getEditTitle() {
         return ResUtils.getString(R.string.title_coaches);
     }
 

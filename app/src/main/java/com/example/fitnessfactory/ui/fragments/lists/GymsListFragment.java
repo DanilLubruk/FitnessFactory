@@ -35,8 +35,18 @@ public class GymsListFragment extends ListListenerFragment<Gym, GymsListViewHold
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    protected String getTitle() {
+        return selectMode ?
+                ResUtils.getString(R.string.title_select_gyms)
+                : ResUtils.getString(R.string.title_gyms);
+    }
+
+    @Override
+    protected void defineViewModel() {
         viewModel = new ViewModelProvider(this, new GymsListViewModelFactory()).get(GymsListViewModel.class);
-        getBaseActivity().setTitle(selectMode ? R.string.title_select_gyms : R.string.title_gyms);
     }
 
     @Override
@@ -50,7 +60,6 @@ public class GymsListFragment extends ListListenerFragment<Gym, GymsListViewHold
         if (getBaseActivity().getIntent().hasExtra(AppConsts.IS_SELECT_MODE_EXTRA)) {
             selectMode = getBaseActivity().getIntent().getBooleanExtra(AppConsts.IS_SELECT_MODE_EXTRA, false);
         }
-        super.initComponents();
     }
 
     @Override
@@ -64,7 +73,7 @@ public class GymsListFragment extends ListListenerFragment<Gym, GymsListViewHold
     }
 
     @Override
-    protected void onRowClicked(Gym gym) {
+    protected void onListRowClicked(Gym gym) {
         if (selectMode) {
             sendSelectResult(gym);
         } else {

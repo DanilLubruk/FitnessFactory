@@ -10,16 +10,12 @@ import androidx.annotation.Nullable;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.ui.adapters.ListAdapter;
 import com.example.fitnessfactory.ui.adapters.PersonnelListAdapter;
-import com.example.fitnessfactory.ui.viewholders.BaseRecyclerViewHolder;
 import com.example.fitnessfactory.ui.viewholders.lists.PersonnelListViewHolder;
 import com.example.fitnessfactory.ui.viewmodels.lists.PersonnelListViewModel;
-import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.IntentUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
-import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 import com.tiromansev.prefswrapper.typedprefs.BooleanPreference;
 
 import java.util.List;
@@ -33,9 +29,11 @@ public abstract class PersonnelListFragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getBaseActivity().setTitle(selectMode ? getSelectTitle() : getTitle());
-        defineViewModel();
-        initComponents();
+    }
+
+    @Override
+    protected String getTitle() {
+        return selectMode ? getSelectTitle() : getEditTitle();
     }
 
     @Override
@@ -43,7 +41,7 @@ public abstract class PersonnelListFragment
 
     protected abstract String getSelectTitle();
 
-    protected abstract String getTitle();
+    protected abstract String getEditTitle();
 
     protected abstract BooleanPreference getAskToSendInvitationPrefs();
 
@@ -55,8 +53,6 @@ public abstract class PersonnelListFragment
 
     protected abstract String getPluralPersonnelCaption();
 
-    protected abstract void defineViewModel();
-
     @Override
     protected void initComponents() {
         super.initComponents();
@@ -65,7 +61,7 @@ public abstract class PersonnelListFragment
         getViewModel().getPersonnel().observe(getViewLifecycleOwner(), this::setListData);
     }
 
-    protected void onRowClicked(AppUser personnel) {
+    protected void onListRowClicked(AppUser personnel) {
         if (selectMode) {
             sendSelectResult(personnel);
         } else {

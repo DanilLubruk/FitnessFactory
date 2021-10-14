@@ -25,6 +25,7 @@
     <string name="message_error_data_save">Error occurred when saving data</string>
     <string name="message_error_data_operate">Error occurred when operating data</string>
     <string name="message_error_gym_null">Gym is null</string>
+    <string name="message_error_client_null">Client is null</string>
     <string name="message_error_ununique_id">ID is not unique</string>
     <string name="caption_warning_title">Warning</string>
     <string name="caption_no_button">No</string>
@@ -33,6 +34,7 @@
     <string name="message_ask_delete_gym">Delete gym?</string>
     <string name="message_ask_delete_admin">Delete admin?</string>
     <string name="message_ask_delete_coach">Delete coach?</string>
+    <string name="message_ask_delete_client">Delete client?</string>
     <string name="caption_organisation_owner">Organisation owner</string>
     <string name="caption_my_own_gym">My own one</string>
     <string name="caption_personnel">Personnel</string>

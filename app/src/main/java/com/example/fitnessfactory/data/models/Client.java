@@ -2,8 +2,8 @@ package com.example.fitnessfactory.data.models;
 
 public class Client {
 
-    public static final String NAME_FIELD = "NAME";
-    public static final String EMAIL_FIELD = "EMAIL";
+    public static final String NAME_FIELD = "name";
+    public static final String EMAIL_FIELD = "email";
 
     private String name;
     private String email;
@@ -26,6 +26,16 @@ public class Client {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void copy(Client client) {
+        this.setName(client.getName());
+        this.setEmail(client.getEmail());
+    }
+
+    public boolean equals(Client client) {
+        return this.getName().equals(client.getName()) &&
+                this.getEmail().equals(client.getEmail());
     }
 
     public Client.Builder builder() {

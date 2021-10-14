@@ -14,6 +14,7 @@ import com.example.fitnessfactory.ui.viewholders.lists.ClientsListViewHolder;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
 import com.example.fitnessfactory.ui.viewmodels.factories.ClientsListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.ClientsListViewModel;
+import com.example.fitnessfactory.utils.ResUtils;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -27,8 +28,11 @@ public class ClientsListFragment extends ListListenerFragment<Client, ClientsLis
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = new ViewModelProvider(this, new ClientsListViewModelFactory()).get(ClientsListViewModel.class);
-        getBaseActivity().setTitle(R.string.title_clients);
+    }
+
+    @Override
+    protected String getTitle() {
+        return ResUtils.getString(R.string.title_clients);
     }
 
     @Override
@@ -37,7 +41,12 @@ public class ClientsListFragment extends ListListenerFragment<Client, ClientsLis
     }
 
     @Override
-    protected void onRowClicked(Client client) {
+    protected void defineViewModel() {
+        viewModel = new ViewModelProvider(this, new ClientsListViewModelFactory()).get(ClientsListViewModel.class);
+    }
+
+    @Override
+    protected void onListRowClicked(Client client) {
 
     }
 
@@ -78,6 +87,6 @@ public class ClientsListFragment extends ListListenerFragment<Client, ClientsLis
 
     @Override
     protected String getDeleteMessage() {
-        return null;
+        return ResUtils.getString(R.string.message_ask_delete_client);
     }
 }

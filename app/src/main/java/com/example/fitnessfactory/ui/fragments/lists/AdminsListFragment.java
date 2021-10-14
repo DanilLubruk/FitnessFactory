@@ -38,7 +38,7 @@ public class AdminsListFragment extends PersonnelListFragment {
     }
 
     @Override
-    protected String getTitle() {
+    protected String getEditTitle() {
         return ResUtils.getString(R.string.title_admins);
     }
 

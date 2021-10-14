@@ -4,20 +4,14 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitnessfactory.R;
-import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleData;
-import com.example.fitnessfactory.ui.adapters.GymsListAdapter;
 import com.example.fitnessfactory.ui.adapters.ListAdapter;
 import com.example.fitnessfactory.ui.fragments.BaseFragment;
-import com.example.fitnessfactory.ui.fragments.lists.GymsListFragment;
 import com.example.fitnessfactory.ui.viewholders.BaseRecyclerViewHolder;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
-import com.example.fitnessfactory.ui.viewmodels.factories.ClientsListViewModelFactory;
-import com.example.fitnessfactory.ui.viewmodels.lists.ClientsListViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
@@ -42,6 +36,8 @@ public abstract class ListListenerFragment<
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        getBaseActivity().setTitle(getTitle());
+        defineViewModel();
         super.onActivityCreated(savedInstanceState);
         initComponents();
     }
@@ -65,7 +61,7 @@ public abstract class ListListenerFragment<
         touchListener.setClickable(new RecyclerTouchListener.OnRowClickListener() {
             @Override
             public void onRowClicked(int position) {
-                ListListenerFragment.this.onRowClicked(adapter.getItem(position));
+                onListRowClicked(adapter.getItem(position));
             }
 
             @Override
@@ -84,9 +80,13 @@ public abstract class ListListenerFragment<
         }
     }
 
+    protected abstract String getTitle();
+
+    protected abstract void defineViewModel();
+
     protected abstract AdapterType createNewAdapter(List<ItemType> listData);
 
-    protected abstract void onRowClicked(ItemType itemType);
+    protected abstract void onListRowClicked(ItemType itemType);
 
     protected abstract void showEditorActivity(ItemType item);
 
