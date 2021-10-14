@@ -26,6 +26,9 @@
     <string name="message_error_data_operate">Error occurred when operating data</string>
     <string name="message_error_gym_null">Gym is null</string>
     <string name="message_error_client_null">Client is null</string>
+    <string name="message_error_admin_null">Admin is null</string>
+    <string name="message_error_coach_null">Coach is null</string>
+    <string name="message_error_org_data_null">Organisation data is null</string>
     <string name="message_error_ununique_id">ID is not unique</string>
     <string name="caption_warning_title">Warning</string>
     <string name="caption_no_button">No</string>
@@ -65,6 +68,7 @@
     <string name="message_error_canceled">Canceled</string>
     <string name="title_organisation">Company info</string>
     <string name="title_clients">Clients</string>
+    <string name="message_error_data_delete">Error occurred when deleting data</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <string name="caption_user_null">User is not signed in</string>

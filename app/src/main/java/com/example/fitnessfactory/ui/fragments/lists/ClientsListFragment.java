@@ -1,5 +1,6 @@
 package com.example.fitnessfactory.ui.fragments.lists;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -7,8 +8,10 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.ClientsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.Client;
+import com.example.fitnessfactory.ui.activities.editors.ClientEditorActivity;
 import com.example.fitnessfactory.ui.adapters.ClientsListAdapter;
 import com.example.fitnessfactory.ui.viewholders.lists.ClientsListViewHolder;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
@@ -47,12 +50,14 @@ public class ClientsListFragment extends ListListenerFragment<Client, ClientsLis
 
     @Override
     protected void onListRowClicked(Client client) {
-
+        showEditorActivity(client);
     }
 
     @Override
     protected void showEditorActivity(Client item) {
-
+        Intent intent = new Intent(getBaseActivity(), ClientEditorActivity.class);
+        intent.putExtra(AppConsts.CLIENT_EMAIL_EXTRA, item.getEmail());
+        startActivity(intent);
     }
 
     @Override

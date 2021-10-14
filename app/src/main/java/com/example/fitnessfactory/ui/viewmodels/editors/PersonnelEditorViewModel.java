@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
+
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.dataListeners.DataListenerStringArgument;
 import com.example.fitnessfactory.data.managers.access.PersonnelAccessManager;
@@ -14,6 +15,7 @@ import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
+import com.example.fitnessfactory.utils.GuiUtils;
 
 import java.util.List;
 
@@ -67,6 +69,7 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
     public void addGym(String gymId) {
         AppUser personnel = this.personnel.get();
         if (personnel == null) {
+            handleItemObtainingNullError();
             return;
         }
 
@@ -79,6 +82,7 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
     public void deleteItem(Gym gym) {
         AppUser personnel = this.personnel.get();
         if (personnel == null) {
+            handleItemDeletingNullError();
             return;
         }
 
@@ -94,6 +98,7 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
     public void startDataListener() {
         AppUser personnel = this.personnel.get();
         if (personnel == null) {
+            handleItemObtainingNullError();
             return;
         }
 
@@ -107,6 +112,7 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
     public void getGymsData() {
         AppUser personnel = this.personnel.get();
         if (personnel == null) {
+            handleItemObtainingNullError();
             return;
         }
 
@@ -136,8 +142,7 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
 
         AppUser admin = this.personnel.get();
         if (admin == null) {
-            isDeleted.setValue(false);
-            return isDeleted;
+            return handleItemDeletingNullError(isDeleted);
         }
 
         subscribeInIOThread(

@@ -32,6 +32,7 @@ public class ClientEditorViewModel extends EditorViewModel {
 
     private void setClient(Client client) {
         if (client == null) {
+            handleItemObtainingNullError();
             return;
         }
         if (dbClient == null) {
@@ -41,6 +42,8 @@ public class ClientEditorViewModel extends EditorViewModel {
         if (hasHandle()) {
             //restoreState - db and data;
         }
+
+        this.client.set(client);
     }
 
     @Override
@@ -66,7 +69,7 @@ public class ClientEditorViewModel extends EditorViewModel {
 
         Client client = this.client.get();
         if (client == null) {
-            return handleItemNullError(isSaved);
+            return handleItemSavingNullError(isSaved);
         }
 
         subscribeInIOThread(
@@ -81,9 +84,9 @@ public class ClientEditorViewModel extends EditorViewModel {
         return isSaved;
     }
 
-    protected String getItemNullMessage() {
-        return ResUtils.getString(R.string.message_error_data_save)
-                .concat(" - ")
+    @Override
+    protected String getItemNullClause() {
+        return getErrorMessageBreak()
                 .concat(ResUtils.getString(R.string.message_error_client_null));
     }
 

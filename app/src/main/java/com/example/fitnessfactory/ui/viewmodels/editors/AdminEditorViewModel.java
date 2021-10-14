@@ -1,12 +1,15 @@
 package com.example.fitnessfactory.ui.viewmodels.editors;
 
 import android.content.Intent;
+
+import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.dataListeners.AdminGymsListDataListener;
 import com.example.fitnessfactory.data.managers.access.AdminsAccessManager;
 import com.example.fitnessfactory.data.managers.data.AdminsDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
+import com.example.fitnessfactory.utils.ResUtils;
 
 import javax.inject.Inject;
 
@@ -28,5 +31,11 @@ public class AdminEditorViewModel extends PersonnelEditorViewModel {
         admin.setEmail(personnelData.getStringExtra(AppConsts.ADMIN_EMAIL_EXTRA));
 
         return admin;
+    }
+
+    @Override
+    protected String getItemNullClause() {
+        return getErrorMessageBreak()
+                .concat(ResUtils.getString(R.string.message_error_admin_null));
     }
 }

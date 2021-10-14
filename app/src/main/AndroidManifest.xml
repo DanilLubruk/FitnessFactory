@@ -29,6 +29,8 @@
         </activity>
         <activity android:name=".ui.activities.editors.OrganisationInfoEditorActivity">
         </activity>
+        <activity android:name=".ui.activities.editors.ClientEditorActivity">
+        </activity>
     </application>
 
 </manifest>

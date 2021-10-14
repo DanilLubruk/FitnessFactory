@@ -138,9 +138,7 @@ public abstract class EditorActivity extends BaseActivity {
         });
     }
 
-    protected boolean isDataValid() {
-        return true;
-    }
+    protected abstract boolean isDataValid();
 
     protected boolean checkScreenDataValidity() {
         if (isDataValid()) {

@@ -5,10 +5,12 @@ import android.os.Bundle;
 import androidx.databinding.ObservableField;
 
 import com.example.fitnessfactory.FFApp;
+import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.models.OrganisationData;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.data.repositories.OrganisationInfoRepository;
+import com.example.fitnessfactory.utils.ResUtils;
 
 import javax.inject.Inject;
 
@@ -40,6 +42,7 @@ public class OrganisationInfoViewModel extends EditorViewModel {
 
     public void setData(OrganisationData organisationData) {
         if (organisationData == null) {
+            handleItemObtainingNullError();
             return;
         }
         if (dbOrganisationData == null) {
@@ -74,8 +77,7 @@ public class OrganisationInfoViewModel extends EditorViewModel {
 
         OrganisationData organisationData = organisation.get();
         if (organisationData == null) {
-            observer.setValue(false);
-            return observer;
+            return handleItemSavingNullError(observer);
         }
 
         subscribeInIOThread(
@@ -93,6 +95,12 @@ public class OrganisationInfoViewModel extends EditorViewModel {
         observer.setValue(true);
 
         return observer;
+    }
+
+    @Override
+    protected String getItemNullClause() {
+        return getErrorMessageBreak()
+                .concat(ResUtils.getString(R.string.message_error_org_data_null));
     }
 
     @Override
@@ -124,6 +132,7 @@ public class OrganisationInfoViewModel extends EditorViewModel {
 
     private void setHandleState(OrganisationData organisationData) {
         if (organisationData == null) {
+            handleItemObtainingNullError();
             return;
         }
         organisationData.setName((String) getHandle().get(NAME_KEY));

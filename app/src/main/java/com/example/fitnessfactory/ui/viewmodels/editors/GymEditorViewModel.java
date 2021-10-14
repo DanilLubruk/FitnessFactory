@@ -1,19 +1,16 @@
 package com.example.fitnessfactory.ui.viewmodels.editors;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.managers.access.GymsAccessManager;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
-import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 
 import javax.inject.Inject;
@@ -51,6 +48,7 @@ public class GymEditorViewModel extends EditorViewModel {
 
     private void setGym(Gym gym) {
         if (gym == null) {
+            handleItemObtainingNullError();
             return;
         }
         if (dbGym == null) {
@@ -88,7 +86,7 @@ public class GymEditorViewModel extends EditorViewModel {
 
         Gym gym = this.gym.get();
         if (gym == null) {
-            return handleItemNullError(observer);
+            return handleItemSavingNullError(observer);
         }
 
         subscribeInIOThread(ownerGymRepository.saveAsync(gym),
@@ -106,9 +104,8 @@ public class GymEditorViewModel extends EditorViewModel {
     }
 
     @Override
-    protected String getItemNullMessage() {
-        return ResUtils.getString(R.string.message_error_data_save)
-                .concat(" - ")
+    protected String getItemNullClause() {
+        return getErrorMessageBreak()
                 .concat(ResUtils.getString(R.string.message_error_gym_null));
     }
 
@@ -118,8 +115,7 @@ public class GymEditorViewModel extends EditorViewModel {
 
         Gym gym = this.gym.get();
         if (gym == null) {
-            observer.setValue(false);
-            return observer;
+            return handleItemDeletingNullError(observer);
         }
 
         subscribeInIOThread(gymsAccessManager.deleteGymSingle(gym.getId()),
@@ -161,6 +157,7 @@ public class GymEditorViewModel extends EditorViewModel {
 
     private void setHandleState(Gym gym) {
         if (gym == null) {
+            handleItemObtainingNullError();
             return;
         }
         gym.setId((String) getHandle().get(ID_KEY));

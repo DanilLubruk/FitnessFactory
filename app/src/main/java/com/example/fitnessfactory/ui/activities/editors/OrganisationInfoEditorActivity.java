@@ -7,8 +7,12 @@ import com.example.fitnessfactory.databinding.ActivityOrganisationInfoEditorBind
 import com.example.fitnessfactory.ui.viewmodels.editors.EditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.editors.OrganisationInfoViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
+import com.example.fitnessfactory.utils.StringUtils;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class OrganisationInfoEditorActivity extends EditorActivity {
+
+    private TextInputEditText edtOrgName;
 
     private OrganisationInfoViewModel viewModel;
     private ActivityOrganisationInfoEditorBinding binding;
@@ -34,10 +38,21 @@ public class OrganisationInfoEditorActivity extends EditorActivity {
     }
 
     @Override
+    protected boolean isDataValid() {
+        return !StringUtils.isEmpty(edtOrgName.getText());
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean isCreated = super.onCreateOptionsMenu(menu);
         menu.removeItem(MENU_DELETE);
 
         return isCreated;
+    }
+
+    @Override
+    protected void bindViews() {
+        super.bindViews();
+        edtOrgName = findViewById(R.id.edtName);
     }
 }

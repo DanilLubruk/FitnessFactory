@@ -50,6 +50,11 @@ public abstract class PersonnelEditorActivity extends EditorActivity {
     }
 
     @Override
+    protected boolean isDataValid() {
+        return true;
+    }
+
+    @Override
     public void initComponents() {
         fabAddGym.setOnClickListener(view -> showSelectionActivity());
         GuiUtils.initListView(this, rvGyms, true);
