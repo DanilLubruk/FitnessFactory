@@ -24,9 +24,9 @@ public class GymEditorViewModel extends EditorViewModel {
     public final ObservableField<Gym> gym = new ObservableField<>();
     private final MutableLiveData<String> gymId = new MutableLiveData<>();
 
-    private final String DB_ID_KEY = "ID_KEY";
-    private final String DB_NAME_KEY = "NAME_KEY";
-    private final String DB_ADDRESS_KEY = "ADDRESS_KEY";
+    private final String DB_ID_KEY = "DB_ID_KEY";
+    private final String DB_NAME_KEY = "DB_NAME_KEY";
+    private final String DB_ADDRESS_KEY = "DB_ADDRESS_KEY";
 
     @Inject
     public GymEditorViewModel(OwnerGymRepository ownerGymRepository,
@@ -69,9 +69,7 @@ public class GymEditorViewModel extends EditorViewModel {
         observer.setValue(false);
 
         Gym gym = this.gym.get();
-        if (gym != null &&
-                gym.getName() != null &&
-                gym.getAddress() != null) {
+        if (Gym.isNotNull(gym)) {
             boolean isModified = !gym.equals(dbGym);
 
             observer.setValue(isModified);

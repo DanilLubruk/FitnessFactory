@@ -18,6 +18,10 @@ public class OrganisationData {
         this.name = name;
     }
 
+    public static boolean isNotNull(OrganisationData organisationData) {
+        return organisationData != null && organisationData.getName() != null;
+    }
+
     public boolean equals(OrganisationData organisationData) {
         return this.getName().equals(organisationData.getName());
     }

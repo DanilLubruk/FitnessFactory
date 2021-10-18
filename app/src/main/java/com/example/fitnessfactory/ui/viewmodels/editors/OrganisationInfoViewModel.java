@@ -63,7 +63,7 @@ public class OrganisationInfoViewModel extends EditorViewModel {
         observer.setValue(false);
 
         OrganisationData organisationData = organisation.get();
-        if (organisationData != null && organisationData.getName() != null) {
+        if (OrganisationData.isNotNull(organisationData)) {
             boolean isModified = !organisationData.equals(dbOrganisationData);
             observer.setValue(isModified);
         }

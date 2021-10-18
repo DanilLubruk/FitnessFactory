@@ -59,9 +59,7 @@ public class ClientEditorViewModel extends EditorViewModel {
         observer.setValue(false);
 
         Client client = this.client.get();
-        if (client != null &&
-                client.getName() != null &&
-                client.getEmail() != null) {
+        if (Client.isNotNull(client)) {
             boolean isModified = !client.equals(dbClient);
 
             observer.setValue(isModified);

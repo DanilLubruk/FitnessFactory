@@ -1,7 +1,5 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
-import android.os.Bundle;
-
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 

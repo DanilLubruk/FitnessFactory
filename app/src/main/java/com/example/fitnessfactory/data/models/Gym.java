@@ -40,10 +40,17 @@ public class Gym {
         this.address = address;
     }
 
+    public static boolean isNotNull(Gym gym) {
+        return gym != null
+                && gym.getId() != null
+                && gym.getName() != null
+                && gym.getAddress() != null;
+    }
+
     public boolean equals(Gym gym) {
-        return this.getName().equals(gym.getName()) &&
-                this.getAddress().equals(gym.getAddress()) &&
-                this.getId().equals(gym.getId());
+        return this.getId().equals(gym.getId()) &&
+                this.getName().equals(gym.getName()) &&
+                this.getAddress().equals(gym.getAddress());
     }
 
     public void copy(Gym gym) {

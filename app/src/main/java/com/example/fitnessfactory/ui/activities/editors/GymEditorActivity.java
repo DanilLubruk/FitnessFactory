@@ -23,7 +23,6 @@ public class GymEditorActivity extends EditorActivity {
     ViewPager2 vpPersonnel;
     TabLayout tlPersonnel;
 
-    private String id;
     private GymEditorViewModel viewModel;
     private ActivityGymEditorBinding binding;
     private PersonnelPageAdapter pageAdapter;
@@ -40,11 +39,10 @@ public class GymEditorActivity extends EditorActivity {
         super.initActivity();
         binding.setModel(viewModel);
 
-        id = getIntent().getExtras().getString(AppConsts.GYM_ID_EXTRA);
-        setTitle(id != null && !StringUtils.isEmpty(id) ? R.string.title_edit_item : R.string.title_add_item);
-        viewModel.getGymData(id);
-        viewModel.getGymId()
-                .observe(this, gymId -> getIntent().putExtra(AppConsts.GYM_ID_EXTRA, gymId));
+        String gymId = getIntent().getExtras().getString(AppConsts.GYM_ID_EXTRA);
+        setTitle(gymId != null && !StringUtils.isEmpty(gymId) ? R.string.title_edit_item : R.string.title_add_item);
+        viewModel.getGymData(gymId);
+        subscribeForGymIdChangesForTabs();
 
         pageAdapter = new PersonnelPageAdapter(getSupportFragmentManager(), getLifecycle());
         vpPersonnel.setAdapter(pageAdapter);
@@ -60,6 +58,11 @@ public class GymEditorActivity extends EditorActivity {
                     }
                 }
         ).attach();
+    }
+
+    private void subscribeForGymIdChangesForTabs() {
+        viewModel.getGymId()
+                .observe(this, gymId -> getIntent().putExtra(AppConsts.GYM_ID_EXTRA, gymId));
     }
 
     @Override

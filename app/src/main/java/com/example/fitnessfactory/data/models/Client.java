@@ -38,6 +38,13 @@ public class Client {
         this.email = email;
     }
 
+    public static boolean isNotNull(Client client) {
+        return client != null
+                && client.getId() != null
+                && client.getName() != null
+                && client.getEmail() != null;
+    }
+
     public void copy(Client client) {
         this.setId(client.getId());
         this.setName(client.getName());
