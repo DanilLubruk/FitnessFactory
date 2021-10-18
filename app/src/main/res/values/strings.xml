@@ -69,6 +69,8 @@
     <string name="title_organisation">Company info</string>
     <string name="title_clients">Clients</string>
     <string name="message_error_data_delete">Error occurred when deleting data</string>
+    <string name="message_email_occupied">Email is already occupied</string>
+    <string name="message_client_not_unique">Client id is not unique</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <string name="caption_user_null">User is not signed in</string>

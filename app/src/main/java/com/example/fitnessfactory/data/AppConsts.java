@@ -23,6 +23,7 @@ public class AppConsts {
     public static final String COACH_ID_EXTRA = "COACH_ID_EXTRA";
     public static final String COACH_NAME_EXTRA = "COACH_NAME_EXTRA";
     public static final String COACH_EMAIL_EXTRA = "COACH_EMAIL_EXTRA";
+    public static final String CLIENT_ID_EXTRA = "CLIENT_ID_EXTRA";
     public static final String CLIENT_NAME_EXTRA = "CLIENT_NAME_EXTRA";
     public static final String CLIENT_EMAIL_EXTRA = "CLIENT_EMAIL_EXTRA";
 

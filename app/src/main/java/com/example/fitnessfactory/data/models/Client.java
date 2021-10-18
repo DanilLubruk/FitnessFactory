@@ -2,14 +2,24 @@ package com.example.fitnessfactory.data.models;
 
 public class Client {
 
+    public static final String ID_FIELD = "id";
     public static final String NAME_FIELD = "name";
     public static final String EMAIL_FIELD = "email";
 
+    private String id;
     private String name;
     private String email;
 
     public Client() {
 
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -34,8 +44,9 @@ public class Client {
     }
 
     public boolean equals(Client client) {
-        return this.getName().equals(client.getName()) &&
-                this.getEmail().equals(client.getEmail());
+        return this.getId().equals(client.getId())
+                && this.getName().equals(client.getName())
+                && this.getEmail().equals(client.getEmail());
     }
 
     public Client.Builder builder() {
@@ -43,6 +54,11 @@ public class Client {
     }
 
     public class Builder {
+
+        public Builder setId(String id) {
+            Client.this.setId(id);
+            return this;
+        }
 
         public Builder setName(String name) {
             Client.this.setName(name);

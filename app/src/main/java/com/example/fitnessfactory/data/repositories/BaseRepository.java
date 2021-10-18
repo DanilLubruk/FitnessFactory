@@ -1,6 +1,9 @@
 package com.example.fitnessfactory.data.repositories;
 
+import android.util.Log;
+
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.firestoreCollections.BaseCollection;
 import com.example.fitnessfactory.data.firestoreCollections.CollectionOperator;
 import com.example.fitnessfactory.utils.ResUtils;
@@ -68,31 +71,33 @@ public abstract class BaseRepository extends CollectionOperator {
 
     protected <T> void checkDataEmpty(List<T> entities) throws Exception {
         if (entities.isEmpty()) {
+            Log.d(AppConsts.DEBUG_TAG, "Base repository.checkDataEmpty(): Empty data obtaining attempt");
             throw new Exception(ResUtils.getString(R.string.message_error_no_data));
         }
     }
 
     protected <T> void checkEmailUniqueness(List<T> entities) throws Exception {
-        checkUniqueness(entities, ResUtils.getString(R.string.message_error_email_isnt_unique));
+        checkUniqueness(entities, getUserEmailNotUniqueMessage());
     }
 
     protected <T> void checkUniqueness(List<T> entities, String errorMessage) throws Exception {
         boolean isFieldNotUnique = entities.size() > 1;
         if (isFieldNotUnique) {
+            Log.d(AppConsts.DEBUG_TAG, "Base repository.checkUniqueness(): Entity uniqueness check failed");
             throw new Exception(errorMessage);
         }
     }
 
     protected <T> T getUniqueUserEntity(Query query, Class<T> clazz) throws Exception {
-        return getUniqueEntity(query, clazz, ResUtils.getString(R.string.message_error_email_isnt_unique));
+        return getUniqueEntity(query, clazz, getUserEmailNotUniqueMessage());
     }
 
     protected DocumentReference getUniqueUserEntityReference(Query query) throws Exception {
-        return getUniqueEntityReference(query, ResUtils.getString(R.string.message_error_email_isnt_unique));
+        return getUniqueEntityReference(query, getUserEmailNotUniqueMessage());
     }
 
     protected DocumentSnapshot getUniqueUserEntitySnapshot(Query query) throws Exception {
-        return getUniqueEntitySnapshot(query, ResUtils.getString(R.string.message_error_email_isnt_unique));
+        return getUniqueEntitySnapshot(query, getUserEmailNotUniqueMessage());
     }
 
     protected <T> T getUniqueEntity(Query query, Class<T> clazz, String notUniqueMessage) throws Exception {
@@ -101,6 +106,7 @@ public abstract class BaseRepository extends CollectionOperator {
     protected DocumentReference getUniqueEntityReference(Query query, String notUniqueMessage) throws Exception {
         return getUniqueEntitySnapshot(query, notUniqueMessage).getReference();
     }
+
     protected DocumentSnapshot getUniqueEntitySnapshot(Query query, String notUniqueMessage) throws Exception {
         List<DocumentSnapshot> documentSnapshots = Tasks.await(query.get()).getDocuments();
 
@@ -108,6 +114,10 @@ public abstract class BaseRepository extends CollectionOperator {
         checkUniqueness(documentSnapshots, notUniqueMessage);
 
         return documentSnapshots.get(0);
+    }
+
+    private String getUserEmailNotUniqueMessage() {
+        return ResUtils.getString(R.string.message_error_email_isnt_unique);
     }
 
     protected <T> void reportError(SingleEmitter<T> emitter, Exception error) {

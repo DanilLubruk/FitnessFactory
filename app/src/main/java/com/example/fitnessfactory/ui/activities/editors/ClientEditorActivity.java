@@ -1,7 +1,5 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
-import android.widget.TextView;
-
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -9,7 +7,6 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.databinding.ActivityClientEditorBinding;
 import com.example.fitnessfactory.ui.viewmodels.editors.ClientEditorViewModel;
-import com.example.fitnessfactory.ui.viewmodels.editors.EditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.ClientEditorViewModelFactory;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
@@ -20,7 +17,7 @@ public class ClientEditorActivity extends EditorActivity {
     private TextInputEditText edtName;
     private TextInputEditText edtEmail;
 
-    private String clientEmail;
+    private String clientId;
     private ClientEditorViewModel viewModel;
     private ActivityClientEditorBinding binding;
 
@@ -30,8 +27,8 @@ public class ClientEditorActivity extends EditorActivity {
         viewModel = new ViewModelProvider(this, new ClientEditorViewModelFactory()).get(ClientEditorViewModel.class);
         super.initActivity();
         binding.setModel(viewModel);
-        clientEmail = getIntent().getExtras().getString(AppConsts.CLIENT_EMAIL_EXTRA);
-        getViewModel().getClientData(clientEmail);
+        clientId = getIntent().getExtras().getString(AppConsts.CLIENT_ID_EXTRA);
+        getViewModel().getClientData(clientId);
     }
 
     @Override

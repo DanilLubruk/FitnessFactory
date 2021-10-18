@@ -1,17 +1,16 @@
 package com.example.fitnessfactory.data.repositories.ownerData;
 
-import android.text.TextUtils;
-
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.firestoreCollections.ClientsCollection;
 import com.example.fitnessfactory.data.models.Client;
 import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.example.fitnessfactory.utils.ResUtils;
+import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.Query;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -37,18 +36,28 @@ public class ClientsRepository extends BaseRepository {
         if (client == null) {
             throw new Exception(getClientNullMessage());
         }
+        boolean isNewClient = StringUtils.isEmpty(client.getId());
 
-        return isNewClient(client.getEmail()) ? insert(client) : update(client);
+        return isNewClient ? insert(client) : update(client);
     }
 
-    private boolean insert(Client client) throws ExecutionException, InterruptedException {
+    private boolean insert(Client client) throws Exception {
+        if (isNewClientsEmailAvailable(client)) {
+            throw new Exception(ResUtils.getString(R.string.message_email_occupied));
+        }
+
         DocumentReference documentReference = getCollection().document();
+        client.setId(documentReference.getId());
         Tasks.await(documentReference.set(client));
 
         return true;
     }
 
     private boolean update(Client client) throws Exception {
+        if (isExistingClientsEmailAvailable(client)) {
+            throw new Exception(ResUtils.getString(R.string.message_email_occupied));
+        }
+
         DocumentReference documentReference =
                 getUniqueUserEntityReference(
                         getCollection().whereEqualTo(Client.EMAIL_FIELD,
@@ -59,16 +68,37 @@ public class ClientsRepository extends BaseRepository {
         return true;
     }
 
-    private boolean isNewClient(String clientEmail) throws Exception {
-        int clientsWithEmail = getClientsNumberWithThisEmail(clientEmail);
+    private boolean isNewClientsEmailAvailable(Client client) throws Exception {
+        int clientsWithEmail = getClientsWithEmailAmount(client.getEmail());
 
         return clientsWithEmail == 0;
     }
 
-    private int getClientsNumberWithThisEmail(String clientEmail) throws Exception {
+    private boolean isExistingClientsEmailAvailable(Client client) throws Exception {
+        int clientsWithEmail = getClientsWithEmailAmount(client.getId(), client.getEmail());
+
+        return clientsWithEmail == 0;
+    }
+
+    private int getClientsWithEmailAmount(String clientId, String clientEmail) throws Exception {
+        return getClientsAmount(
+                ClientsRepository.newBuilder()
+                        .whereIdNotEquals(clientId)
+                        .whereEmailEquals(clientEmail)
+                        .build());
+    }
+
+    private int getClientsWithEmailAmount(String clientEmail) throws Exception {
+        return getClientsAmount(
+                        ClientsRepository.newBuilder()
+                                .whereEmailEquals(clientEmail)
+                                .build());
+    }
+
+    private int getClientsAmount(Query query) throws Exception {
         List<Client> clients =
                 Tasks.await(
-                getCollection().whereEqualTo(Client.EMAIL_FIELD, clientEmail).get())
+                query.get())
                 .toObjects(Client.class);
         checkEmailUniqueness(clients);
 
@@ -81,9 +111,9 @@ public class ClientsRepository extends BaseRepository {
                 .concat(ResUtils.getString(R.string.message_error_client_null));
     }
 
-    public Single<Client> getClientAsync(String clientEmail) {
+    public Single<Client> getClientAsync(String clientId) {
         return SingleCreate(emitter -> {
-            Client client = getClient(clientEmail);
+            Client client = getClient(clientId);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(client);
@@ -91,13 +121,13 @@ public class ClientsRepository extends BaseRepository {
         });
     }
 
-    private Client getClient(String clientEmail) throws Exception {
-        if (TextUtils.isEmpty(clientEmail)) {
+    private Client getClient(String clientId) throws Exception {
+        if (StringUtils.isEmpty(clientId)) {
             return new Client();
         }
 
         return getUniqueUserEntity(
-                getCollection().whereEqualTo(Client.EMAIL_FIELD, clientEmail),
+                getCollection().whereEqualTo(Client.ID_FIELD, clientId),
                 Client.class);
     }
 
@@ -122,10 +152,34 @@ public class ClientsRepository extends BaseRepository {
     }
 
     private boolean deleteClient(Client client) throws Exception {
-        Tasks.await(getUniqueUserEntityReference(
-                getCollection().whereEqualTo(Client.EMAIL_FIELD, client.getEmail()))
+        Tasks.await(getUniqueEntityReference(
+                getCollection().whereEqualTo(Client.ID_FIELD, client.getId()),
+                ResUtils.getString(R.string.message_client_not_unique))
                 .delete());
 
         return true;
+    }
+
+    public static ClientsRepository.QueryBuilder newBuilder() {
+        return new ClientsRepository().new QueryBuilder();
+    }
+
+    public class QueryBuilder {
+
+        private Query query = getCollection();
+
+        public QueryBuilder whereIdNotEquals(String clientId) {
+            query = query.whereNotEqualTo(Client.ID_FIELD, clientId);
+            return this;
+        }
+
+        public QueryBuilder whereEmailEquals(String clientEmail) {
+            query = query.whereEqualTo(Client.EMAIL_FIELD, clientEmail);
+            return this;
+        }
+
+        public Query build() {
+            return query;
+        }
     }
 }

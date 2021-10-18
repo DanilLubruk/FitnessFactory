@@ -5,14 +5,18 @@ import android.text.TextUtils;
 public class StringUtils {
 
     public static boolean isEmpty(CharSequence string) {
-        return string != null && isEmpty(string.toString());
+        if (string == null) {
+            return true;
+        }
+
+        return isEmpty(string.toString());
     }
 
     public static boolean isEmpty(String string) {
-        return string != null && TextUtils.isEmpty(string.trim());
-    }
+        if (string == null) {
+            return true;
+        }
 
-    public static String getEmptyString () {
-        return "";
+        return TextUtils.isEmpty(string.trim());
     }
 }

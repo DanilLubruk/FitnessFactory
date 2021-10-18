@@ -56,7 +56,7 @@ public class ClientsListFragment extends ListListenerFragment<Client, ClientsLis
     @Override
     protected void showEditorActivity(Client item) {
         Intent intent = new Intent(getBaseActivity(), ClientEditorActivity.class);
-        intent.putExtra(AppConsts.CLIENT_EMAIL_EXTRA, item.getEmail());
+        intent.putExtra(AppConsts.CLIENT_ID_EXTRA, item.getId());
         startActivity(intent);
     }
 

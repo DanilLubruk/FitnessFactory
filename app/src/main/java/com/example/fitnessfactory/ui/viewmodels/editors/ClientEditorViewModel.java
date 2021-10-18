@@ -22,9 +22,9 @@ public class ClientEditorViewModel extends EditorViewModel {
         this.clientsRepository = clientsRepository;
     }
 
-    public void getClientData(String clientEmail) {
+    public void getClientData(String clientId) {
         subscribeInIOThread(
-                clientsRepository.getClientAsync(clientEmail),
+                clientsRepository.getClientAsync(clientId),
                 new SingleData<>(
                         this::setClient,
                         getErrorHandler()::handleError));
