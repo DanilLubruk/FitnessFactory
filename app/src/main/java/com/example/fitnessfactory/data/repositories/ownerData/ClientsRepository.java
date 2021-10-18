@@ -142,7 +142,7 @@ public class ClientsRepository extends BaseRepository {
 
     private DocumentSnapshot getUniqueClientSnapshot(String clientId) throws Exception {
         return getUniqueEntitySnapshot(
-                getCollection().whereEqualTo(Client.ID_FIELD, clientId),
+                newQuery().whereIdEquals(clientId).build(),
                 getClientNotUniqueMessage());
     }
 
@@ -161,6 +161,11 @@ public class ClientsRepository extends BaseRepository {
     private class QueryBuilder {
 
         private Query query = getCollection();
+
+        public QueryBuilder whereIdEquals(String clientId) {
+            query = query.whereEqualTo(Client.ID_FIELD, clientId);
+            return this;
+        }
 
         public QueryBuilder whereIdNotEquals(String clientId) {
             query = query.whereNotEqualTo(Client.ID_FIELD, clientId);

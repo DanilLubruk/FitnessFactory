@@ -5,6 +5,7 @@ import com.example.fitnessfactory.utils.UsersUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class UserRepository extends BaseRepository {
     }
 
     private List<AppUser> getAppUsersById(List<String> ownerIds) throws Exception {
-        QuerySnapshot querySnapshot = Tasks.await(getCollection().whereIn(AppUser.ID_FIELD, ownerIds).get());
+        QuerySnapshot querySnapshot = Tasks.await(newQuery().whereIdIn(ownerIds).build().get());
 
         return querySnapshot.toObjects(AppUser.class);
     }
@@ -65,7 +66,7 @@ public class UserRepository extends BaseRepository {
     }
 
     private AppUser getAppUserByEmail(String email) throws Exception {
-        return getUniqueUserEntity(getCollection().whereEqualTo(EMAIL_FILED, email), AppUser.class);
+        return getUniqueUserEntity(newQuery().whereEmailEquals(email).build(), AppUser.class);
     }
 
     public Single<Boolean> isUserRegisteredAsync(String email) {
@@ -79,7 +80,7 @@ public class UserRepository extends BaseRepository {
     }
 
     private boolean isUserRegistered(String email) throws ExecutionException, InterruptedException {
-        int usersAmount = getEntitiesAmount(getCollection().whereEqualTo(EMAIL_FILED, email));
+        int usersAmount = getEntitiesAmount(newQuery().whereEmailEquals(email).build());
 
         return usersAmount > 0;
     }
@@ -98,8 +99,36 @@ public class UserRepository extends BaseRepository {
         if (emails.size() == 0) {
             return new ArrayList<>();
         }
-        QuerySnapshot adminsQuery = Tasks.await(getCollection().whereIn(EMAIL_FILED, emails).get());
+        QuerySnapshot adminsQuery = Tasks.await(newQuery().whereEmailIn(emails).build().get());
 
         return adminsQuery.toObjects(AppUser.class);
+    }
+
+    private UserRepository.QueryBuilder newQuery() {
+        return new UserRepository().new QueryBuilder();
+    }
+
+    private class QueryBuilder {
+
+        Query query = getCollection();
+
+        public QueryBuilder whereEmailEquals(String userEmail) {
+            query = query.whereEqualTo(EMAIL_FILED, userEmail);
+            return this;
+        }
+
+        public QueryBuilder whereEmailIn(List<String> usersEmails) {
+            query = query.whereIn(EMAIL_FILED, usersEmails);
+            return this;
+        }
+
+        public QueryBuilder whereIdIn(List<String> ownerIds) {
+            query = query.whereIn(AppUser.ID_FIELD, ownerIds);
+            return this;
+        }
+
+        public Query build() {
+            return query;
+        }
     }
 }
