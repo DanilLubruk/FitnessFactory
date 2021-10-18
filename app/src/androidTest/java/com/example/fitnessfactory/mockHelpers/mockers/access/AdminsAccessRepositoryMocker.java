@@ -1,6 +1,5 @@
 package com.example.fitnessfactory.mockHelpers.mockers.access;
 
-import com.example.fitnessfactory.data.models.AdminAccessEntry;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.repositories.access.AdminsAccessRepository;
 import com.example.fitnessfactory.mockHelpers.mockdata.personnel.AdminsDataProvider;

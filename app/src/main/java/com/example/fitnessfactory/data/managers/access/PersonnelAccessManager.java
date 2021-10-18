@@ -34,11 +34,11 @@ public abstract class PersonnelAccessManager extends BaseManager {
     public Single<Boolean> createPersonnel(String ownerId, String userEmail) {
         SafeReference<WriteBatch> registerBatch = new SafeReference<>();
 
-        return getAccessRepository().isPersonnelWithThisEmailRegistered(ownerId, userEmail)
+        return getAccessRepository().isPersonnelWithThisEmailRegisteredAsync(ownerId, userEmail)
                 .flatMap(isRegistered ->
                         isRegistered ?
                                 Single.error(new Exception(getAlreadyRegisteredMessage()))
-                                : getAccessRepository().getRegisterPersonnelAccessEntryBatch(ownerId, userEmail))
+                                : getAccessRepository().getRegisterPersonnelAccessEntryBatchAsync(ownerId, userEmail))
                 .flatMap(writeBatch -> {
                     registerBatch.set(writeBatch);
                     return getOwnerRepository().isPersonnelWithThisEmailAdded(userEmail);
@@ -61,7 +61,7 @@ public abstract class PersonnelAccessManager extends BaseManager {
     }
 
     private Single<WriteBatch> getDeleteBatch(String ownerId, String personnelEmail) {
-        return getAccessRepository().getDeletePersonnelAccessEntryBatch(ownerId, personnelEmail)
+        return getAccessRepository().getDeletePersonnelAccessEntryBatchAsync(ownerId, personnelEmail)
                 .flatMap(writeBatch -> getOwnerRepository().getDeletePersonnelBatch(writeBatch, personnelEmail));
     }
 }

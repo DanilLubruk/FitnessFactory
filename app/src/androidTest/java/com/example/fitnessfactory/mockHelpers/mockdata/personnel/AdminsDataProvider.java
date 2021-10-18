@@ -1,7 +1,7 @@
 package com.example.fitnessfactory.mockHelpers.mockdata.personnel;
 
 import com.example.fitnessfactory.data.models.Admin;
-import com.example.fitnessfactory.data.models.AdminAccessEntry;
+
 import java.util.List;
 
 public class AdminsDataProvider extends PersonnelDataProvider<Admin, AdminAccessEntry> {

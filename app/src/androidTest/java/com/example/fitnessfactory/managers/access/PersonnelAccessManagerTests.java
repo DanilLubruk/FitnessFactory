@@ -65,7 +65,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
                 subscribeInTestThread(personnelAccessManager.createPersonnel(ownerId, "useremail5"));
 
         Mockito.verify(getAccessRepository())
-                .getRegisterPersonnelAccessEntryBatch(ownerId, "useremail5");
+                .getRegisterPersonnelAccessEntryBatchAsync(ownerId, "useremail5");
 
         Mockito.verify(getOwnersRepository(), Mockito.times(0))
                 .getAddPersonnelBatch(Mockito.any(), Mockito.any());
@@ -83,7 +83,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
                 subscribeInTestThread(personnelAccessManager.createPersonnel(ownerId, "useremail6"));
 
         Mockito.verify(getAccessRepository())
-                .getRegisterPersonnelAccessEntryBatch(ownerId, "useremail6");
+                .getRegisterPersonnelAccessEntryBatchAsync(ownerId, "useremail6");
 
         Mockito.verify(getOwnersRepository()).getAddPersonnelBatch(Mockito.any(), Mockito.eq("useremail6"));
 
@@ -124,7 +124,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
         WriteBatch writeBatch = FirebaseFirestore.getInstance().batch();
 
         Mockito.when(getAccessRepository()
-                .getDeletePersonnelAccessEntryBatch(Mockito.anyString(), Mockito.anyString()))
+                .getDeletePersonnelAccessEntryBatchAsync(Mockito.anyString(), Mockito.anyString()))
                 .thenAnswer(invocation -> {
                     String id = invocation.getArgument(0);
                     String email = invocation.getArgument(1);

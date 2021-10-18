@@ -68,10 +68,10 @@ public abstract class PersonnelListViewModelTests extends BaseTests {
         testScheduler.triggerActions();
 
         Mockito.verify(getAccessRepository())
-                .isPersonnelWithThisEmailRegistered("ownerId1", "useremail1");
+                .isPersonnelWithThisEmailRegisteredAsync("ownerId1", "useremail1");
 
         Mockito.verify(getAccessRepository(), Mockito.times(0))
-                .getRegisterPersonnelAccessEntryBatch(Mockito.any(), Mockito.anyString());
+                .getRegisterPersonnelAccessEntryBatchAsync(Mockito.any(), Mockito.anyString());
 
         AppPrefs.gymOwnerId().resetToDefaultValue();
     }
@@ -86,10 +86,10 @@ public abstract class PersonnelListViewModelTests extends BaseTests {
         testScheduler.triggerActions();
 
         Mockito.verify(getAccessRepository())
-                .isPersonnelWithThisEmailRegistered("ownerId1", "useremail5");
+                .isPersonnelWithThisEmailRegisteredAsync("ownerId1", "useremail5");
 
         Mockito.verify(getAccessRepository())
-                .getRegisterPersonnelAccessEntryBatch("ownerId1", "useremail5");
+                .getRegisterPersonnelAccessEntryBatchAsync("ownerId1", "useremail5");
 
         Mockito.verify(getOwnerRepository()).isPersonnelWithThisEmailAdded("useremail5");
 
@@ -144,7 +144,7 @@ public abstract class PersonnelListViewModelTests extends BaseTests {
         testScheduler.triggerActions();
 
         Mockito.verify(getAccessRepository())
-                .getDeletePersonnelAccessEntryBatch(
+                .getDeletePersonnelAccessEntryBatchAsync(
                         "ownerId1",
                         "useremail3");
         Mockito.verify(getOwnerRepository())
