@@ -39,6 +39,7 @@ public class Client {
     }
 
     public void copy(Client client) {
+        this.setId(client.getId());
         this.setName(client.getName());
         this.setEmail(client.getEmail());
     }

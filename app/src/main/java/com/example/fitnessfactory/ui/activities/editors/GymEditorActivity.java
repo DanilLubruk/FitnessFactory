@@ -77,18 +77,6 @@ public class GymEditorActivity extends EditorActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedState) {
-        super.onSaveInstanceState(savedState);
-        viewModel.saveState(savedState);
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedState) {
-        super.onRestoreInstanceState(savedState);
-        viewModel.restoreState(savedState);
-    }
-
-    @Override
     protected void bindViews() {
         super.bindViews();
         edtName = findViewById(R.id.edtName);

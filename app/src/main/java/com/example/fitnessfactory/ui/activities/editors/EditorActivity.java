@@ -161,4 +161,16 @@ public abstract class EditorActivity extends BaseActivity {
     protected void bindViews() {
         super.bindViews();
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedState) {
+        super.onSaveInstanceState(savedState);
+        getViewModel().saveState(savedState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedState) {
+        super.onRestoreInstanceState(savedState);
+        getViewModel().restoreState(savedState);
+    }
 }

@@ -24,9 +24,9 @@ public class GymEditorViewModel extends EditorViewModel {
     public final ObservableField<Gym> gym = new ObservableField<>();
     private final MutableLiveData<String> gymId = new MutableLiveData<>();
 
-    private final String ID_KEY = "ID_KEY";
-    private final String NAME_KEY = "NAME_KEY";
-    private final String ADDRESS_KEY = "ADDRESS_KEY";
+    private final String DB_ID_KEY = "ID_KEY";
+    private final String DB_NAME_KEY = "NAME_KEY";
+    private final String DB_ADDRESS_KEY = "ADDRESS_KEY";
 
     @Inject
     public GymEditorViewModel(OwnerGymRepository ownerGymRepository,
@@ -92,6 +92,7 @@ public class GymEditorViewModel extends EditorViewModel {
         subscribeInIOThread(ownerGymRepository.saveAsync(gym),
                 new SingleData<>(
                         id -> {
+                            //set gym id in the method, then return boolean result
                             gym.setId(id);
                             dbGym.copy(gym);
                             gymId.setValue(id);
@@ -136,9 +137,9 @@ public class GymEditorViewModel extends EditorViewModel {
         if (gym == null) {
             return;
         }
-        getHandle().put(ID_KEY, gym.getId());
-        getHandle().put(NAME_KEY, gym.getName());
-        getHandle().put(ADDRESS_KEY, gym.getAddress());
+        getHandle().put(DB_ID_KEY, gym.getId());
+        getHandle().put(DB_NAME_KEY, gym.getName());
+        getHandle().put(DB_ADDRESS_KEY, gym.getAddress());
     }
 
     private void saveGymDbState() {
@@ -157,17 +158,16 @@ public class GymEditorViewModel extends EditorViewModel {
 
     private void setHandleState(Gym gym) {
         if (gym == null) {
-            handleItemObtainingNullError();
-            return;
+            gym = new Gym();
         }
-        gym.setId((String) getHandle().get(ID_KEY));
-        gym.setName((String) getHandle().get(NAME_KEY));
-        gym.setAddress((String) getHandle().get(ADDRESS_KEY));
+        gym.setId((String) getHandle().get(DB_ID_KEY));
+        gym.setName((String) getHandle().get(DB_NAME_KEY));
+        gym.setAddress((String) getHandle().get(DB_ADDRESS_KEY));
     }
 
     private void setDbGymState() {
         if (dbGym == null) {
-            return;
+            dbGym = new Gym();
         }
         dbGym.setId((String) getHandle().get(Gym.ID_FIELD));
         dbGym.setName((String) getHandle().get(Gym.NAME_FILED));
