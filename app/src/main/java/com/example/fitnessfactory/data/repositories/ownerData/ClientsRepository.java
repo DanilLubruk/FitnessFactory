@@ -11,8 +11,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
-import java.util.List;
-
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
@@ -65,40 +63,22 @@ public class ClientsRepository extends BaseRepository {
     }
 
     private boolean isNewClientsEmailOccupied(Client client) throws Exception {
-        int clientsWithEmail = getClientsWithEmailAmount(client.getEmail());
+        int clientsWithEmail =
+                getEntitiesAmount(newQuery()
+                        .whereEmailEquals(client.getEmail())
+                        .build());
 
         return clientsWithEmail > 0;
     }
 
     private boolean isExistingClientsEmailOccupied(Client client) throws Exception {
-        int clientsWithEmail = getClientsWithEmailAmount(client.getId(), client.getEmail());
+        int clientsWithEmail =
+                getEntitiesAmount(newQuery()
+                        .whereIdNotEquals(client.getId())
+                        .whereEmailEquals(client.getEmail())
+                        .build());
 
         return clientsWithEmail > 0;
-    }
-
-    private int getClientsWithEmailAmount(String clientId, String clientEmail) throws Exception {
-        return getClientsAmount(
-                ClientsRepository.newBuilder()
-                        .whereIdNotEquals(clientId)
-                        .whereEmailEquals(clientEmail)
-                        .build());
-    }
-
-    private int getClientsWithEmailAmount(String clientEmail) throws Exception {
-        return getClientsAmount(
-                        ClientsRepository.newBuilder()
-                                .whereEmailEquals(clientEmail)
-                                .build());
-    }
-
-    private int getClientsAmount(Query query) throws Exception {
-        List<Client> clients =
-                Tasks.await(
-                query.get())
-                .toObjects(Client.class);
-        checkEmailUniqueness(clients);
-
-        return clients.size();
     }
 
     private String getClientNullMessage() {
@@ -163,10 +143,10 @@ public class ClientsRepository extends BaseRepository {
     private DocumentSnapshot getUniqueClientSnapshot(String clientId) throws Exception {
         return getUniqueEntitySnapshot(
                 getCollection().whereEqualTo(Client.ID_FIELD, clientId),
-                getClientUniqueMessage());
+                getClientNotUniqueMessage());
     }
 
-    private String getClientUniqueMessage() {
+    private String getClientNotUniqueMessage() {
         return ResUtils.getString(R.string.message_client_not_unique);
     }
 
@@ -174,11 +154,11 @@ public class ClientsRepository extends BaseRepository {
         return ResUtils.getString(R.string.message_email_occupied);
     }
 
-    public static ClientsRepository.QueryBuilder newBuilder() {
+    private ClientsRepository.QueryBuilder newQuery() {
         return new ClientsRepository().new QueryBuilder();
     }
 
-    public class QueryBuilder {
+    private class QueryBuilder {
 
         private Query query = getCollection();
 

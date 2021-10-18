@@ -35,15 +35,15 @@ public class AdminsAccessRepository extends BaseRepository implements PersonnelA
         });
     }
 
-    private boolean isAdminWithThisEmailRegistered(String ownerId, String email) throws ExecutionException, InterruptedException {
-        QuerySnapshot snapshot =
-                Tasks.await(
-                        getCollection()
-                                .whereEqualTo(AdminAccessEntry.OWNER_ID_FIELD, ownerId)
-                                .whereEqualTo(AdminAccessEntry.USER_EMAIL_FIELD, email)
-                                .get());
+    private boolean isAdminWithThisEmailRegistered(String ownerId, String userEmail) throws ExecutionException, InterruptedException {
+        int adminsAmount =
+                getEntitiesAmount(
+                        newQuery()
+                                .whereOwnerIdEquals(ownerId)
+                                .whereUserEmailEquals(userEmail)
+                                .build());
 
-        return snapshot.getDocuments().size() > 0;
+        return adminsAmount > 0;
     }
 
     @Override
@@ -103,8 +103,10 @@ public class AdminsAccessRepository extends BaseRepository implements PersonnelA
 
     private List<AdminAccessEntry> getAdminAccessEntriesByUserEmail(String userEmail) throws Exception {
         return Tasks.await(
-                getCollection()
-                        .whereEqualTo(AdminAccessEntry.USER_EMAIL_FIELD, userEmail).get())
+                newQuery()
+                        .whereUserEmailEquals(userEmail)
+                        .build()
+                        .get())
                 .toObjects(AdminAccessEntry.class);
     }
 
@@ -113,12 +115,33 @@ public class AdminsAccessRepository extends BaseRepository implements PersonnelA
     }
 
     private DocumentSnapshot getAdminSnapshot(String ownerId, String email) throws Exception {
-        return getUniqueUserEntitySnapshot(getAdminQueryByEmail(ownerId, email));
+        return getUniqueUserEntitySnapshot(
+                newQuery()
+                        .whereOwnerIdEquals(ownerId)
+                        .whereUserEmailEquals(email)
+                        .build());
     }
 
-    public Query getAdminQueryByEmail(String ownerId, String email) {
-        return getCollection()
-                .whereEqualTo(AdminAccessEntry.OWNER_ID_FIELD, ownerId)
-                .whereEqualTo(AdminAccessEntry.USER_EMAIL_FIELD, email);
+    private AdminsAccessRepository.QueryBuilder newQuery() {
+        return new AdminsAccessRepository().new QueryBuilder();
+    }
+
+    private class QueryBuilder {
+
+        Query query = getCollection();
+
+        public QueryBuilder whereUserEmailEquals(String userEmail) {
+            query = query.whereEqualTo(AdminAccessEntry.USER_EMAIL_FIELD, userEmail);
+            return this;
+        }
+
+        public QueryBuilder whereOwnerIdEquals(String ownerId) {
+            query = query.whereEqualTo(AdminAccessEntry.OWNER_ID_FIELD, ownerId);
+            return this;
+        }
+
+        public Query build() {
+            return query;
+        }
     }
 }

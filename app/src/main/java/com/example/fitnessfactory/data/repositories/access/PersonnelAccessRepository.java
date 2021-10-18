@@ -4,11 +4,11 @@ import com.google.firebase.firestore.WriteBatch;
 
 import io.reactivex.Single;
 
-public interface PersonnelAccessRepository {
+public abstract class PersonnelAccessRepository {
 
-    Single<Boolean> isPersonnelWithThisEmailRegistered(String ownerId, String userEmail);
+    public abstract Single<Boolean> isPersonnelWithThisEmailRegistered(String ownerId, String userEmail);
 
-    Single<WriteBatch> getRegisterPersonnelAccessEntryBatch(String ownerId, String userEmail);
+    public abstract Single<WriteBatch> getRegisterPersonnelAccessEntryBatch(String ownerId, String userEmail);
 
-    Single<WriteBatch> getDeletePersonnelAccessEntryBatch(String ownerId, String userEmail);
+    public abstract Single<WriteBatch> getDeletePersonnelAccessEntryBatch(String ownerId, String userEmail);
 }

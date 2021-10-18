@@ -1,10 +1,12 @@
 package com.example.fitnessfactory.data.repositories.access;
 
 import com.example.fitnessfactory.data.firestoreCollections.CoachAccessCollection;
+import com.example.fitnessfactory.data.models.AdminAccessEntry;
 import com.example.fitnessfactory.data.models.CoachAccessEntry;
 import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
@@ -77,5 +79,24 @@ public class CoachesAccessRepository extends BaseRepository implements Personnel
                 getCollection()
                 .whereEqualTo(CoachAccessEntry.OWNER_ID_FIELD, ownerId)
                 .whereEqualTo(CoachAccessEntry.USER_EMAIL_FIELD, email));
+    }
+
+    private class QueryBuilder {
+
+        Query query = getCollection();
+
+        public QueryBuilder whereUserEmailEquals(String userEmail) {
+            query = query.whereEqualTo(CoachAccessEntry.USER_EMAIL_FIELD, userEmail);
+            return this;
+        }
+
+        public QueryBuilder whereOwnerIdEquals(String ownerId) {
+            query = query.whereEqualTo(CoachAccessEntry.OWNER_ID_FIELD, ownerId);
+            return this;
+        }
+
+        public Query build() {
+            return query;
+        }
     }
 }

@@ -139,7 +139,8 @@ public class OwnerGymRepository extends BaseRepository {
     }
 
     private boolean isNewGymDuplicate(Gym gym) throws ExecutionException, InterruptedException {
-        int gymsAmount = getGymsAmount(OwnerGymRepository.newBuilder()
+        int gymsAmount =
+                getEntitiesAmount(newQuery()
                 .whereNameEquals(gym.getName())
                 .whereAddressEquals(gym.getAddress())
                 .build());
@@ -148,7 +149,8 @@ public class OwnerGymRepository extends BaseRepository {
     }
 
     private boolean isExistingGymDuplicate(Gym gym) throws ExecutionException, InterruptedException {
-        int gymsAmount = getGymsAmount(OwnerGymRepository.newBuilder()
+        int gymsAmount =
+                getEntitiesAmount(newQuery()
                 .whereIdNotEquals(gym.getId())
                 .whereNameEquals(gym.getName())
                 .whereAddressEquals(gym.getAddress())
@@ -157,21 +159,15 @@ public class OwnerGymRepository extends BaseRepository {
         return gymsAmount > 0;
     }
 
-    private int getGymsAmount(Query query) throws ExecutionException, InterruptedException {
-        List<Gym> gyms = Tasks.await(query.get()).toObjects(Gym.class);
-
-        return gyms.size();
-    }
-
     private String getGymDuplicateMessage() {
         return ResUtils.getString(R.string.message_gym_duplicate);
     }
 
-    public static OwnerGymRepository.QueryBuilder newBuilder() {
+    private OwnerGymRepository.QueryBuilder newQuery() {
         return new OwnerGymRepository().new QueryBuilder();
     }
 
-    public class QueryBuilder {
+    private class QueryBuilder {
 
         Query query = getCollection();
 

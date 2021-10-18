@@ -13,6 +13,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;
@@ -114,6 +115,12 @@ public abstract class BaseRepository extends CollectionOperator {
         checkUniqueness(documentSnapshots, notUniqueMessage);
 
         return documentSnapshots.get(0);
+    }
+
+    protected int getEntitiesAmount(Query query) throws ExecutionException, InterruptedException {
+        List<DocumentSnapshot> documents = Tasks.await(query.get()).getDocuments();
+
+        return documents.size();
     }
 
     private String getUserEmailNotUniqueMessage() {

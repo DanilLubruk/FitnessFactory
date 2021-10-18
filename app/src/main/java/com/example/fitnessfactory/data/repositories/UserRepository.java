@@ -79,11 +79,9 @@ public class UserRepository extends BaseRepository {
     }
 
     private boolean isUserRegistered(String email) throws ExecutionException, InterruptedException {
-        List<DocumentSnapshot> documentSnapshots =
-                Tasks.await(
-                        getCollection().whereEqualTo(EMAIL_FILED, email).get()).getDocuments();
+        int usersAmount = getEntitiesAmount(getCollection().whereEqualTo(EMAIL_FILED, email));
 
-        return documentSnapshots.size() > 0;
+        return usersAmount > 0;
     }
 
     public Single<List<AppUser>> getUsersByEmailsAsync(List<String> emails) {
