@@ -1,7 +1,5 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
-import android.os.Bundle;
-
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
@@ -12,7 +10,6 @@ import com.example.fitnessfactory.databinding.ActivityGymEditorBinding;
 import com.example.fitnessfactory.ui.adapters.PersonnelPageAdapter;
 import com.example.fitnessfactory.ui.viewmodels.editors.GymEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.GymEditorViewModelFactory;
-import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.material.tabs.TabLayout;

@@ -7,9 +7,11 @@ import com.example.fitnessfactory.data.firestoreCollections.OwnerGymsCollection;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.example.fitnessfactory.utils.ResUtils;
+import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
@@ -90,38 +92,23 @@ public class OwnerGymRepository extends BaseRepository {
         return Tasks.await(getCollection().whereIn(Gym.ID_FIELD, gymIds).get()).toObjects(Gym.class);
     }
 
-    public Single<String> saveAsync(Gym gym) {
+    public Single<Boolean> saveAsync(Gym gym) {
         return SingleCreate(emitter -> {
-            String gymId = save(gym);
+            boolean isSaved = save(gym);
 
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(gymId);
+                emitter.onSuccess(isSaved);
             }
         });
     }
 
-    private String save(Gym gym) throws Exception {
+    private boolean save(Gym gym) throws Exception {
         if (gym == null) {
             throw new Exception(getGymNullErrorMessage());
         }
+        boolean isNewGym = StringUtils.isEmpty(gym.getId());
 
-        return isNewGym(gym.getId()) ? insert(gym) : update(gym);
-    }
-
-    private boolean isNewGym(String gymId) throws Exception {
-        int gymsNumber = getGymsNumberWithThatId(gymId);
-
-        return gymsNumber == 0;
-    }
-
-    private int getGymsNumberWithThatId(String gymId) throws Exception {
-        List<Gym> gyms =
-                Tasks.await(
-                getCollection().whereEqualTo(Gym.ID_FIELD, gymId).get())
-                .toObjects(Gym.class);
-        checkUniqueness(gyms, getGymsIdUnuniqueErrorMessage());
-
-        return gyms.size();
+        return isNewGym ? insert(gym) : update(gym);
     }
 
     private String getGymNullErrorMessage() {
@@ -130,17 +117,81 @@ public class OwnerGymRepository extends BaseRepository {
                 .concat(ResUtils.getString(R.string.message_error_gym_null));
     }
 
-    private String insert(Gym gym) throws ExecutionException, InterruptedException {
+    private boolean insert(Gym gym) throws Exception {
+        if (isNewGymDuplicate(gym)) {
+            throw new Exception(getGymDuplicateMessage());
+        }
         DocumentReference docReference = getCollection().document();
         gym.setId(docReference.getId());
         Tasks.await(docReference.set(gym));
 
-        return gym.getId();
+        return true;
     }
 
-    private String update(Gym gym) throws ExecutionException, InterruptedException {
+    private boolean update(Gym gym) throws Exception {
+        if (isExistingGymDuplicate(gym)) {
+            throw new Exception(getGymDuplicateMessage());
+        }
+
         Tasks.await(getCollection().document(gym.getId()).set(gym));
 
-        return gym.getId();
+        return true;
+    }
+
+    private boolean isNewGymDuplicate(Gym gym) throws ExecutionException, InterruptedException {
+        int gymsAmount = getGymsAmount(OwnerGymRepository.newBuilder()
+                .whereNameEquals(gym.getName())
+                .whereAddressEquals(gym.getAddress())
+                .build());
+
+        return gymsAmount > 0;
+    }
+
+    private boolean isExistingGymDuplicate(Gym gym) throws ExecutionException, InterruptedException {
+        int gymsAmount = getGymsAmount(OwnerGymRepository.newBuilder()
+                .whereIdNotEquals(gym.getId())
+                .whereNameEquals(gym.getName())
+                .whereAddressEquals(gym.getAddress())
+                .build());
+
+        return gymsAmount > 0;
+    }
+
+    private int getGymsAmount(Query query) throws ExecutionException, InterruptedException {
+        List<Gym> gyms = Tasks.await(query.get()).toObjects(Gym.class);
+
+        return gyms.size();
+    }
+
+    private String getGymDuplicateMessage() {
+        return ResUtils.getString(R.string.message_gym_duplicate);
+    }
+
+    public static OwnerGymRepository.QueryBuilder newBuilder() {
+        return new OwnerGymRepository().new QueryBuilder();
+    }
+
+    public class QueryBuilder {
+
+        Query query = getCollection();
+
+        public QueryBuilder whereIdNotEquals(String gymId) {
+            query = query.whereNotEqualTo(Gym.ID_FIELD, gymId);
+            return this;
+        }
+
+        public QueryBuilder whereNameEquals(String gymName) {
+            query = query.whereEqualTo(Gym.NAME_FILED, gymName);
+            return this;
+        }
+
+        public QueryBuilder whereAddressEquals(String gymAddress) {
+            query = query.whereEqualTo(Gym.ADDRESS_FIELD, gymAddress);
+            return this;
+        }
+
+        public Query build() {
+            return query;
+        }
     }
 }

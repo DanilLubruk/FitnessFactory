@@ -17,8 +17,8 @@ import javax.inject.Inject;
 
 public class GymEditorViewModel extends EditorViewModel {
 
-    OwnerGymRepository ownerGymRepository;
-    GymsAccessManager gymsAccessManager;
+    private final OwnerGymRepository ownerGymRepository;
+    private final GymsAccessManager gymsAccessManager;
 
     private Gym dbGym;
     public final ObservableField<Gym> gym = new ObservableField<>();
@@ -91,12 +91,10 @@ public class GymEditorViewModel extends EditorViewModel {
 
         subscribeInIOThread(ownerGymRepository.saveAsync(gym),
                 new SingleData<>(
-                        id -> {
-                            //set gym id in the method, then return boolean result
-                            gym.setId(id);
+                        isSaved -> {
                             dbGym.copy(gym);
-                            gymId.setValue(id);
-                            observer.setValue(true);
+                            gymId.setValue(gym.getId());
+                            observer.setValue(isSaved);
                         },
                         throwable -> getErrorHandler().handleError(observer, throwable)
                 ));

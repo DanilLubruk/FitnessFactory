@@ -44,7 +44,7 @@ public class ClientsRepository extends BaseRepository {
 
     private boolean insert(Client client) throws Exception {
         if (isNewClientsEmailOccupied(client)) {
-            throw new Exception(ResUtils.getString(R.string.message_email_occupied));
+            throw new Exception(getEmailOccupiedMessage());
         }
 
         DocumentReference documentReference = getCollection().document();
@@ -56,12 +56,10 @@ public class ClientsRepository extends BaseRepository {
 
     private boolean update(Client client) throws Exception {
         if (isExistingClientsEmailOccupied(client)) {
-            throw new Exception(ResUtils.getString(R.string.message_email_occupied));
+            throw new Exception(getEmailOccupiedMessage());
         }
 
-        DocumentReference documentReference = getUniqueClientDocument(client.getId());
-
-        Tasks.await(documentReference.set(client));
+        Tasks.await(getCollection().document(client.getId()).set(client));
 
         return true;
     }
@@ -170,6 +168,10 @@ public class ClientsRepository extends BaseRepository {
 
     private String getClientUniqueMessage() {
         return ResUtils.getString(R.string.message_client_not_unique);
+    }
+
+    private String getEmailOccupiedMessage() {
+        return ResUtils.getString(R.string.message_email_occupied);
     }
 
     public static ClientsRepository.QueryBuilder newBuilder() {
