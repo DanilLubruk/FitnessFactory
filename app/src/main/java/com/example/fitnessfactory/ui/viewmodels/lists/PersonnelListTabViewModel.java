@@ -58,7 +58,7 @@ public abstract class PersonnelListTabViewModel extends BaseViewModel implements
             return;
         }
 
-        subscribeInIOThread(getOwnerRepository().addGymToPersonnel(personnelEmail, gymId));
+        subscribeInIOThread(getOwnerRepository().addGymToPersonnelAsync(personnelEmail, gymId));
     }
 
     public void deleteItem(AppUser personnel) {
@@ -66,7 +66,7 @@ public abstract class PersonnelListTabViewModel extends BaseViewModel implements
             return;
         }
 
-        subscribeInIOThread(getOwnerRepository().removeGymFromPersonnel(personnel.getEmail(), gymId));
+        subscribeInIOThread(getOwnerRepository().removeGymFromPersonnelAsync(personnel.getEmail(), gymId));
     }
 
     public void startDataListener() {

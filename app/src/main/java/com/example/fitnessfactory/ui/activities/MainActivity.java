@@ -127,7 +127,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 openClientsPage();
                 break;
             case R.id.nav_session_types:
-
+                openSessionTypesPage();
                 break;
             case R.id.nav_organisation:
                 openOrganisationPage();

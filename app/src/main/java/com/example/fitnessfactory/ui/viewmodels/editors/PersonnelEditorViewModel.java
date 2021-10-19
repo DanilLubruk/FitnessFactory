@@ -74,7 +74,7 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
         }
 
         subscribeInIOThread(
-                getOwnerRepository().addGymToPersonnel(personnel.getEmail(), gymId),
+                getOwnerRepository().addGymToPersonnelAsync(personnel.getEmail(), gymId),
                 getErrorHandler()::handleError);
     }
 
@@ -87,7 +87,7 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
         }
 
         subscribeInIOThread(
-                getOwnerRepository().removeGymFromPersonnel(personnel.getEmail(), gym.getId()),
+                getOwnerRepository().removeGymFromPersonnelAsync(personnel.getEmail(), gym.getId()),
                 getErrorHandler()::handleError);
     }
 
