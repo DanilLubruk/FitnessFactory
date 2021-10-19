@@ -41,12 +41,12 @@ public abstract class PersonnelAccessManager extends BaseManager {
                                 : getAccessRepository().getRegisterPersonnelAccessEntryBatchAsync(ownerId, userEmail))
                 .flatMap(writeBatch -> {
                     registerBatch.set(writeBatch);
-                    return getOwnerRepository().isPersonnelWithThisEmailAdded(userEmail);
+                    return getOwnerRepository().isPersonnelWithThisEmailAddedAsync(userEmail);
                 })
                 .flatMap(isAdded ->
                         isAdded ?
                                 Single.just(registerBatch.getValue()) :
-                                getOwnerRepository().getAddPersonnelBatch(registerBatch.getValue(), userEmail))
+                                getOwnerRepository().getAddPersonnelBatchAsync(registerBatch.getValue(), userEmail))
                 .flatMap(this::commitBatchSingle);
     }
 
@@ -62,6 +62,6 @@ public abstract class PersonnelAccessManager extends BaseManager {
 
     private Single<WriteBatch> getDeleteBatch(String ownerId, String personnelEmail) {
         return getAccessRepository().getDeletePersonnelAccessEntryBatchAsync(ownerId, personnelEmail)
-                .flatMap(writeBatch -> getOwnerRepository().getDeletePersonnelBatch(writeBatch, personnelEmail));
+                .flatMap(writeBatch -> getOwnerRepository().getDeletePersonnelBatchAsync(writeBatch, personnelEmail));
     }
 }

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
+import com.example.fitnessfactory.data.exceptions.NoDataException;
 import com.example.fitnessfactory.data.firestoreCollections.BaseCollection;
 import com.example.fitnessfactory.data.firestoreCollections.CollectionOperator;
 import com.example.fitnessfactory.utils.ResUtils;
@@ -73,7 +74,7 @@ public abstract class BaseRepository extends CollectionOperator {
     protected <T> void checkDataEmpty(List<T> entities) throws Exception {
         if (entities.isEmpty()) {
             Log.d(AppConsts.DEBUG_TAG, "Base repository.checkDataEmpty(): Empty data obtaining attempt");
-            throw new Exception(ResUtils.getString(R.string.message_error_no_data));
+            throw new NoDataException(ResUtils.getString(R.string.message_error_no_data));
         }
     }
 

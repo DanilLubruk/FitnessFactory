@@ -91,10 +91,10 @@ public abstract class PersonnelListViewModelTests extends BaseTests {
         Mockito.verify(getAccessRepository())
                 .getRegisterPersonnelAccessEntryBatchAsync("ownerId1", "useremail5");
 
-        Mockito.verify(getOwnerRepository()).isPersonnelWithThisEmailAdded("useremail5");
+        Mockito.verify(getOwnerRepository()).isPersonnelWithThisEmailAddedAsync("useremail5");
 
         Mockito.verify(getOwnerRepository())
-                .getAddPersonnelBatch(Mockito.any(), Mockito.eq("useremail5"));
+                .getAddPersonnelBatchAsync(Mockito.any(), Mockito.eq("useremail5"));
 
         AppPrefs.gymOwnerId().resetToDefaultValue();
     }
@@ -148,7 +148,7 @@ public abstract class PersonnelListViewModelTests extends BaseTests {
                         "ownerId1",
                         "useremail3");
         Mockito.verify(getOwnerRepository())
-                .getDeletePersonnelBatch(Mockito.any(), Mockito.eq("useremail3"));
+                .getDeletePersonnelBatchAsync(Mockito.any(), Mockito.eq("useremail3"));
 
         personnelListViewModel.stopDataListener();
         Mockito.verify(getDataListener()).stopDataListener();

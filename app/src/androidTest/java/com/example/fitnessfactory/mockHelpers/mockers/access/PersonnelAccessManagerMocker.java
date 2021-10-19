@@ -40,10 +40,10 @@ abstract class PersonnelAccessManagerMocker {
                 .thenReturn(Single.just(FirebaseFirestore.getInstance().batch()));
 
         Mockito.when(ownersRepository
-                .getAddPersonnelBatch(Mockito.any(), Mockito.anyString()))
+                .getAddPersonnelBatchAsync(Mockito.any(), Mockito.anyString()))
                 .thenReturn(Single.just(FirebaseFirestore.getInstance().batch()));
 
-        Mockito.when(ownersRepository.isPersonnelWithThisEmailAdded(Mockito.anyString()))
+        Mockito.when(ownersRepository.isPersonnelWithThisEmailAddedAsync(Mockito.anyString()))
                 .thenAnswer(invocation -> {
                     String email = invocation.getArgument(0);
 
@@ -56,7 +56,7 @@ abstract class PersonnelAccessManagerMocker {
                     return Single.just(false);
                 });
 
-        Mockito.when(ownersRepository.getDeletePersonnelBatch(Mockito.any(), Mockito.anyString()))
+        Mockito.when(ownersRepository.getDeletePersonnelBatchAsync(Mockito.any(), Mockito.anyString()))
                 .thenReturn(Single.just(FirebaseFirestore.getInstance().batch()));
 
         Mockito.when(accessRepository.getDeletePersonnelAccessEntryBatchAsync(Mockito.anyString(), Mockito.anyString()))

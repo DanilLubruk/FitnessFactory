@@ -40,8 +40,8 @@ public class GymsAccessManager extends BaseManager {
     private Single<WriteBatch> getDeleteBatch(String gymId) {
         return ownerGymRepository.getDeleteGymBatchAsync(gymId)
                 .flatMap(deleteBatch ->
-                        ownerAdminsRepository.getRemoveGymFromAdminBatchAsync(deleteBatch, gymId))
+                        ownerAdminsRepository.getRemoveGymFromPersonnelBatchAsync(deleteBatch, gymId))
                 .flatMap(deleteBatch ->
-                        ownerCoachesRepository.getRemoveGymFromCoachBatchAsync(deleteBatch, gymId));
+                        ownerCoachesRepository.getRemoveGymFromPersonnelBatchAsync(deleteBatch, gymId));
     }
 }

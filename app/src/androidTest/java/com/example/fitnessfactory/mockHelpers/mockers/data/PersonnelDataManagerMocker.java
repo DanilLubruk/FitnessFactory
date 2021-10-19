@@ -21,7 +21,7 @@ abstract class PersonnelDataManagerMocker {
     void setupMock(PersonnelDataProvider<P, PE> dataProvider,
                    OwnerPersonnelRepository ownerRepository,
                    UserRepository userRepository) {
-        Mockito.when(ownerRepository.getPersonnelEmails())
+        Mockito.when(ownerRepository.getPersonnelEmailsAsync())
                 .thenAnswer(invocation -> {
                     List<String> emails = new ArrayList<>();
 

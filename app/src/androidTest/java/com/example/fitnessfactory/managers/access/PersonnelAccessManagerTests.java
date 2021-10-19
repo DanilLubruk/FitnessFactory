@@ -50,7 +50,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
 
     @Test
     public void tryRegisterAddedPersonnelTest() {
-        Mockito.when(getOwnersRepository().isPersonnelWithThisEmailAdded(Mockito.anyString()))
+        Mockito.when(getOwnersRepository().isPersonnelWithThisEmailAddedAsync(Mockito.anyString()))
                 .thenAnswer(invocation -> {
                     String email = invocation.getArgument(0);
 
@@ -68,7 +68,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
                 .getRegisterPersonnelAccessEntryBatchAsync(ownerId, "useremail5");
 
         Mockito.verify(getOwnersRepository(), Mockito.times(0))
-                .getAddPersonnelBatch(Mockito.any(), Mockito.any());
+                .getAddPersonnelBatchAsync(Mockito.any(), Mockito.any());
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -85,7 +85,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
         Mockito.verify(getAccessRepository())
                 .getRegisterPersonnelAccessEntryBatchAsync(ownerId, "useremail6");
 
-        Mockito.verify(getOwnersRepository()).getAddPersonnelBatch(Mockito.any(), Mockito.eq("useremail6"));
+        Mockito.verify(getOwnersRepository()).getAddPersonnelBatchAsync(Mockito.any(), Mockito.eq("useremail6"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -137,7 +137,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
                 });
 
         Mockito.when(getOwnersRepository()
-                .getDeletePersonnelBatch(Mockito.any(), Mockito.anyString()))
+                .getDeletePersonnelBatchAsync(Mockito.any(), Mockito.anyString()))
                 .thenAnswer(invocation -> {
                     WriteBatch argumentWriteBatch = invocation.getArgument(0);
                     String email = invocation.getArgument(1);
