@@ -46,4 +46,11 @@ public class AppPrefs {
                 .setDefaultValue(true)
                 .build();
     }
+
+    public static StringPreference currencySign() {
+        return StringPreference
+                .builder("currency_sign_pref")
+                .setDefaultValue("₽")
+                .build();
+    }
 }

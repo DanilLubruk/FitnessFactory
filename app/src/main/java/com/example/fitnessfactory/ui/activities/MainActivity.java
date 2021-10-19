@@ -126,6 +126,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_clients:
                 openClientsPage();
                 break;
+            case R.id.nav_session_types:
+
+                break;
             case R.id.nav_organisation:
                 openOrganisationPage();
                 break;
@@ -158,6 +161,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void openClientsPage() {
         FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_CLIENTS_ID);
         setMenuChecked(R.id.nav_clients);
+    }
+
+    private void openSessionTypesPage() {
+        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_SESSION_TYPES_ID);
+        setMenuChecked(R.id.nav_session_types);
     }
 
     private void openOrganisationPage() {

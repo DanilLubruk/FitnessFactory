@@ -33,6 +33,11 @@
             android:title="@string/title_clients" />
 
         <item
+            android:id="@+id/nav_session_types"
+            android:checkable="true"
+            android:title="@string/title_session_types"/>
+
+        <item
             android:id="@+id/nav_organisation"
             android:checkable="true"
             android:title="@string/title_organisation" />

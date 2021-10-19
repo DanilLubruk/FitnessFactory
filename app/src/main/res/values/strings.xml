@@ -3,6 +3,7 @@
     <string name="app_name">FitnessFactory</string>
     <string name="title_home">Home</string>
     <string name="title_gyms">Gyms</string>
+    <string name="title_session_types">Session types</string>
     <string name="title_select_gyms">Select gym</string>
     <string name="title_admins">Administrators</string>
     <string name="title_select_admins">Select administrator</string>
@@ -72,6 +73,8 @@
     <string name="message_email_occupied">Email is already occupied</string>
     <string name="message_gym_duplicate">Gym with these name and address already exists</string>
     <string name="message_client_not_unique">Client id is not unique</string>
+    <string name="caption_people_amount">people</string>
+    <string name="message_ask_delete_session_type">Delete session type?</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <string name="caption_user_null">User is not signed in</string>

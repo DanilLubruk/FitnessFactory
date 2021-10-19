@@ -1,5 +1,9 @@
 package com.example.fitnessfactory.data.models;
 
+import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.AppPrefs;
+import com.example.fitnessfactory.utils.ResUtils;
+
 public class SessionType {
 
     public static final String ID_FIELD = "id";
@@ -37,7 +41,9 @@ public class SessionType {
     }
 
     public String getPeopleAmountString() {
-        return String.valueOf(getPeopleAmount());
+        return String.valueOf(getPeopleAmount())
+                .concat(" ")
+                .concat(ResUtils.getString(R.string.caption_people_amount));
     }
 
     public void setPeopleAmount(int peopleAmount) {
@@ -49,7 +55,7 @@ public class SessionType {
     }
 
     public String getPriceString() {
-        return String.valueOf(getPrice());
+        return String.valueOf(getPrice()).concat(" ").concat(AppPrefs.currencySign().getValue());
     }
 
     public void setPrice(float price) {

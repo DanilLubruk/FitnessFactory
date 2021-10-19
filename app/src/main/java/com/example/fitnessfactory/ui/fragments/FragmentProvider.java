@@ -11,6 +11,7 @@ import com.example.fitnessfactory.ui.fragments.lists.AdminsListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.ClientsListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.CoachesListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.GymsListFragment;
+import com.example.fitnessfactory.ui.fragments.lists.SessionTypesListFragment;
 
 public class FragmentProvider {
 
@@ -38,6 +39,10 @@ public class FragmentProvider {
             case AppConsts.FRAGMENT_CLIENTS_ID:
                 curFragment = new ClientsListFragment();
                 fragmentName = AppConsts.FRAGMENT_CLIENTS_NAME;
+                break;
+            case AppConsts.FRAGMENT_SESSION_TYPES_ID:
+                curFragment = new SessionTypesListFragment();
+                fragmentName = AppConsts.FRAGMENT_SESSION_TYPES_NAME;
                 break;
         }
 
