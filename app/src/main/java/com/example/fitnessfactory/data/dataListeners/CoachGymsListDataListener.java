@@ -2,7 +2,7 @@ package com.example.fitnessfactory.data.dataListeners;
 
 import com.example.fitnessfactory.data.events.CoachGymsListListenerEvent;
 import com.example.fitnessfactory.data.firestoreCollections.OwnerCoachesCollection;
-import com.example.fitnessfactory.data.models.Coach;
+import com.example.fitnessfactory.data.models.Personnel;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 
@@ -42,6 +42,6 @@ public class CoachGymsListDataListener extends BaseDataListener implements DataL
     }
 
     private Query getCoachQueryByEmail(String coachEmail) {
-        return getCollection().whereEqualTo(Coach.USER_EMAIL_FIELD, coachEmail);
+        return getCollection().whereEqualTo(Personnel.USER_EMAIL_FIELD, coachEmail);
     }
 }

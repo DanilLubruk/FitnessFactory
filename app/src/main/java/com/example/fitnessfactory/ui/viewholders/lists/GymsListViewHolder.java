@@ -9,8 +9,8 @@ import com.example.fitnessfactory.ui.viewholders.BaseRecyclerViewHolder;
 
 public class GymsListViewHolder extends BaseRecyclerViewHolder<Gym> {
 
-    TextView tvName;
-    TextView tvAddress;
+    private TextView tvName;
+    private TextView tvAddress;
 
     public GymsListViewHolder(View itemView) {
         super(itemView);

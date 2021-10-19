@@ -8,6 +8,7 @@ import com.example.fitnessfactory.data.dataListeners.CoachesListDataListener;
 import com.example.fitnessfactory.data.dataListeners.GymAdminsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.GymCoachesListDataListener;
 import com.example.fitnessfactory.data.dataListeners.GymsListDataListener;
+import com.example.fitnessfactory.data.dataListeners.SessionTypesListDataListener;
 import com.example.fitnessfactory.data.managers.access.AdminsAccessManager;
 import com.example.fitnessfactory.data.managers.data.AdminsDataManager;
 import com.example.fitnessfactory.data.managers.AuthManager;
@@ -179,5 +180,11 @@ public class AppModule {
     @AppScope
     public ClientsRepository provideClientsRepository() {
         return new ClientsRepository();
+    }
+
+    @Provides
+    @AppScope
+    public SessionTypesListDataListener provideSessionTypesListDataListener() {
+        return new SessionTypesListDataListener();
     }
 }

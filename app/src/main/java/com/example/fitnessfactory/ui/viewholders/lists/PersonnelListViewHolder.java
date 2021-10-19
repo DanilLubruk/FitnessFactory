@@ -8,8 +8,8 @@ import com.example.fitnessfactory.ui.viewholders.BaseRecyclerViewHolder;
 
 public class PersonnelListViewHolder extends BaseRecyclerViewHolder<AppUser> {
 
-    TextView tvName;
-    TextView tvEmail;
+    private TextView tvName;
+    private TextView tvEmail;
 
     public PersonnelListViewHolder(View itemView) {
         super(itemView);

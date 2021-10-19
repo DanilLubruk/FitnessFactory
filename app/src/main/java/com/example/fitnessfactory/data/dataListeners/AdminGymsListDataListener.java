@@ -2,7 +2,7 @@ package com.example.fitnessfactory.data.dataListeners;
 
 import com.example.fitnessfactory.data.events.AdminGymsListListenerEvent;
 import com.example.fitnessfactory.data.firestoreCollections.OwnerAdminsCollection;
-import com.example.fitnessfactory.data.models.Admin;
+import com.example.fitnessfactory.data.models.Personnel;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 
@@ -43,6 +43,6 @@ public class AdminGymsListDataListener extends BaseDataListener implements DataL
     }
 
     private Query getAdminQueryByEmail(String adminEmail) {
-        return getCollection().whereEqualTo(Admin.USER_EMAIL_FIELD, adminEmail);
+        return getCollection().whereEqualTo(Personnel.USER_EMAIL_FIELD, adminEmail);
     }
 }

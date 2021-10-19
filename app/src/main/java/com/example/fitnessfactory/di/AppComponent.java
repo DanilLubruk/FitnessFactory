@@ -13,6 +13,7 @@ import com.example.fitnessfactory.ui.viewmodels.factories.CoachesListTabViewMode
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachesListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.GymEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.GymsListViewModelFactory;
+import com.example.fitnessfactory.ui.viewmodels.factories.SessionTypesListViewModelFactory;
 
 import javax.inject.Singleton;
 
@@ -36,4 +37,5 @@ public interface AppComponent {
     void inject(AuthViewModelFactory authViewModelFactory);
     void inject(ClientsListViewModelFactory clientsListViewModelFactory);
     void inject(ClientEditorViewModelFactory clientEditorViewModelFactory);
+    void inject(SessionTypesListViewModelFactory sessionTypesListViewModelFactory);
 }
