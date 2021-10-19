@@ -33,7 +33,7 @@ public class ClientsRepository extends BaseRepository {
 
     private boolean save(Client client) throws Exception {
         if (client == null) {
-            throw new Exception(getClientNullMessage());
+            throw new Exception(getEntityNullMessage());
         }
         boolean isNewClient = StringUtils.isEmpty(client.getId());
 
@@ -52,6 +52,15 @@ public class ClientsRepository extends BaseRepository {
         return true;
     }
 
+    private boolean isNewClientsEmailOccupied(Client client) throws Exception {
+        int clientsWithEmail =
+                getEntitiesAmount(newQuery()
+                        .whereEmailEquals(client.getEmail())
+                        .build());
+
+        return clientsWithEmail > 0;
+    }
+
     private boolean update(Client client) throws Exception {
         if (isExistingClientsEmailOccupied(client)) {
             throw new Exception(getEmailOccupiedMessage());
@@ -60,15 +69,6 @@ public class ClientsRepository extends BaseRepository {
         Tasks.await(getCollection().document(client.getId()).set(client));
 
         return true;
-    }
-
-    private boolean isNewClientsEmailOccupied(Client client) throws Exception {
-        int clientsWithEmail =
-                getEntitiesAmount(newQuery()
-                        .whereEmailEquals(client.getEmail())
-                        .build());
-
-        return clientsWithEmail > 0;
     }
 
     private boolean isExistingClientsEmailOccupied(Client client) throws Exception {
@@ -81,11 +81,7 @@ public class ClientsRepository extends BaseRepository {
         return clientsWithEmail > 0;
     }
 
-    private String getClientNullMessage() {
-        return ResUtils.getString(R.string.message_error_data_save)
-                .concat(" - ")
-                .concat(ResUtils.getString(R.string.message_error_client_null));
-    }
+
 
     public Single<Client> getClientAsync(String clientId) {
         return SingleCreate(emitter -> {
@@ -126,8 +122,7 @@ public class ClientsRepository extends BaseRepository {
     }
 
     private boolean deleteClient(Client client) throws Exception {
-        Tasks.await(getUniqueClientDocument(client.getId())
-                .delete());
+        Tasks.await(getUniqueClientDocument(client.getId()).delete());
 
         return true;
     }
@@ -152,6 +147,12 @@ public class ClientsRepository extends BaseRepository {
 
     private String getEmailOccupiedMessage() {
         return ResUtils.getString(R.string.message_email_occupied);
+    }
+
+    @Override
+    protected String getEntityNullMessage() {
+        return super.getEntityNullMessage()
+                .concat(ResUtils.getString(R.string.message_error_client_null));
     }
 
     private ClientsRepository.QueryBuilder newQuery() {

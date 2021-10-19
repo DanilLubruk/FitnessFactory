@@ -10,12 +10,9 @@ import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -104,16 +101,16 @@ public class OwnerGymRepository extends BaseRepository {
 
     private boolean save(Gym gym) throws Exception {
         if (gym == null) {
-            throw new Exception(getGymNullErrorMessage());
+            throw new Exception(getEntityNullMessage());
         }
         boolean isNewGym = StringUtils.isEmpty(gym.getId());
 
         return isNewGym ? insert(gym) : update(gym);
     }
 
-    private String getGymNullErrorMessage() {
-        return ResUtils.getString(R.string.message_error_data_save)
-                .concat(" - ")
+    @Override
+    protected String getEntityNullMessage() {
+        return super.getEntityNullMessage()
                 .concat(ResUtils.getString(R.string.message_error_gym_null));
     }
 
