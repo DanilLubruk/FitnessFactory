@@ -11,9 +11,7 @@ import com.example.fitnessfactory.ui.activities.BaseActivity;
 import com.example.fitnessfactory.ui.viewmodels.editors.EditorViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
-import com.example.fitnessfactory.utils.StringUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
-import com.google.android.material.textfield.TextInputEditText;
 
 public abstract class EditorActivity extends BaseActivity {
 
@@ -39,6 +37,17 @@ public abstract class EditorActivity extends BaseActivity {
     }
 
     protected abstract EditorViewModel getViewModel();
+
+    protected abstract boolean isNewEntity();
+
+    protected abstract void initEntityKey();
+
+    @Override
+    protected void initActivity() {
+        super.initActivity();
+        initEntityKey();
+        setTitle(isNewEntity() ? R.string.title_add_item : R.string.title_edit_item);
+    }
 
     @Override
     public void onBackPressed() {

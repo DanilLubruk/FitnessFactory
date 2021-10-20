@@ -1,5 +1,7 @@
 package com.example.fitnessfactory.ui.activities.editors;
 import android.view.Menu;
+
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.fitnessfactory.R;
@@ -12,7 +14,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class OrganisationInfoEditorActivity extends EditorActivity {
 
-    private TextInputEditText edtOrgName;
+    private AppCompatEditText edtOrgName;
 
     private OrganisationInfoViewModel viewModel;
     private ActivityOrganisationInfoEditorBinding binding;
@@ -24,6 +26,10 @@ public class OrganisationInfoEditorActivity extends EditorActivity {
         viewModel.getData().observe(this, viewModel::setData);
         super.initActivity();
         binding.setModel(viewModel);
+        setTitleNoMatterNewEntityOrNot();
+    }
+
+    private void setTitleNoMatterNewEntityOrNot() {
         setTitle(ResUtils.getString(R.string.title_organisation));
     }
 
@@ -31,6 +37,14 @@ public class OrganisationInfoEditorActivity extends EditorActivity {
     protected EditorViewModel getViewModel() {
         return viewModel;
     }
+
+    @Override
+    protected boolean isNewEntity() {
+        return false;
+    }
+
+    @Override
+    protected void initEntityKey() { }
 
     @Override
     protected String getDeleteMessage() {

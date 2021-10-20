@@ -20,37 +20,66 @@
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtName"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginBottom="@dimen/component_margin"
             android:hint="@string/caption_name"
-            android:imeOptions="actionNext"
-            android:nextFocusDown="@id/edtAddress"
-            android:text="@={model.sessionType.name}" />
+            app:hintEnabled="true">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtPeopleAmount"
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:selectAllOnFocus="true"
+                android:maxLines="1"
+                android:inputType="text"
+                android:text="@={model.sessionType.name}"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilPeopleAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@={model.sessionType.peopleAmountValue}"
-            android:layout_below="@+id/edtName"
+            android:layout_below="@+id/ilName"
             android:layout_marginBottom="@dimen/component_margin"
-            android:inputType="number"
             android:hint="@string/caption_people_amount"
-            android:imeOptions="actionDone" />
+            app:hintEnabled="true">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtPrice"
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtPeopleAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:selectAllOnFocus="true"
+                android:maxLines="1"
+                android:inputType="number"
+                android:text="@={model.sessionType.peopleAmountValue}"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/edtPeopleAmount"
+            android:layout_below="@+id/ilPeopleAmount"
             android:layout_marginBottom="@dimen/component_margin"
-            android:hint="@{@string/hint_price(AppPrefs.currencySign.getValue())}"
-            android:imeOptions="actionDone"
-            android:inputType="numberDecimal"
-            android:text="@={model.sessionType.priceValue}" />
+            android:hint="@{@string/hint_price(AppPrefs.currencySign.getValue())}">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:selectAllOnFocus="true"
+                android:maxLines="1"
+                android:inputType="numberDecimal"
+                android:text="@={model.sessionType.priceValue}"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
     </RelativeLayout>
 </layout>

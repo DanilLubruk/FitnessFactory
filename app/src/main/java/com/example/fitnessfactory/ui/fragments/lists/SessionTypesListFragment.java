@@ -1,10 +1,14 @@
 package com.example.fitnessfactory.ui.fragments.lists;
 
+import android.content.Intent;
+
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.SessionTypesListDataListenerEvent;
 import com.example.fitnessfactory.data.models.SessionType;
+import com.example.fitnessfactory.ui.activities.editors.SessionTypeEditorActivity;
 import com.example.fitnessfactory.ui.adapters.SessionTypesListAdapter;
 import com.example.fitnessfactory.ui.viewholders.lists.SessionTypesListViewHolder;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
@@ -21,16 +25,6 @@ public class SessionTypesListFragment extends
         ListListenerFragment<SessionType, SessionTypesListViewHolder, SessionTypesListAdapter> {
 
     private SessionTypesListViewModel viewModel;
-
-    @Override
-    public void closeProgress() {
-
-    }
-
-    @Override
-    public void showProgress() {
-
-    }
 
     @Override
     protected DataListListener<SessionType> getViewModel() {
@@ -54,12 +48,14 @@ public class SessionTypesListFragment extends
 
     @Override
     protected void onListRowClicked(SessionType sessionType) {
-
+        showEditorActivity(sessionType);
     }
 
     @Override
     protected void showEditorActivity(SessionType item) {
-
+        Intent intent = new Intent(getBaseActivity(), SessionTypeEditorActivity.class);
+        intent.putExtra(AppConsts.SESSION_TYPE_ID_EXTRA, item.getId());
+        startActivity(intent);
     }
 
     @Override
@@ -75,5 +71,15 @@ public class SessionTypesListFragment extends
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSessionTypesListDataListenerEvent(SessionTypesListDataListenerEvent sessionTypesListDataListenerEvent) {
         setListData(sessionTypesListDataListenerEvent.getSessionTypes());
+    }
+
+    @Override
+    public void closeProgress() {
+
+    }
+
+    @Override
+    public void showProgress() {
+
     }
 }

@@ -19,32 +19,53 @@
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtName"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginBottom="@dimen/component_margin"
             android:hint="@string/caption_name"
-            android:imeOptions="actionNext"
-            android:nextFocusDown="@id/edtAddress"
-            android:text="@={model.gym.name}" />
+            app:hintEnabled="true">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtAddress"
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:selectAllOnFocus="true"
+                android:maxLines="1"
+                android:inputType="text"
+                android:text="@={model.gym.name}"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@={model.gym.address}"
-            android:layout_below="@+id/edtName"
+            android:layout_below="@+id/ilName"
             android:layout_marginBottom="@dimen/component_margin"
             android:hint="@string/caption_address"
-            android:imeOptions="actionDone" />
+            app:hintEnabled="true">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:selectAllOnFocus="true"
+                android:maxLines="1"
+                android:inputType="text"
+                android:text="@={model.gym.address}"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tlPersonnel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/edtAddress"/>
+            android:layout_below="@+id/ilAddress"/>
 
         <androidx.viewpager2.widget.ViewPager2
             xmlns:android="http://schemas.android.com/apk/res/android"

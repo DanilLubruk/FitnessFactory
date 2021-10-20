@@ -24,7 +24,11 @@ public class SessionTypeRepository extends BaseRepository {
 
     public Single<Boolean> saveAsync(SessionType sessionType) {
         return SingleCreate(emitter -> {
+            boolean isSaved = save(sessionType);
 
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(isSaved);
+            }
         });
     }
 

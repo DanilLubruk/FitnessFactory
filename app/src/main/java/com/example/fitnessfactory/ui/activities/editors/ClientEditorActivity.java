@@ -1,5 +1,6 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -14,8 +15,8 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class ClientEditorActivity extends EditorActivity {
 
-    private TextInputEditText edtName;
-    private TextInputEditText edtEmail;
+    private AppCompatEditText edtName;
+    private AppCompatEditText edtEmail;
 
     private String clientId;
     private ClientEditorViewModel viewModel;
@@ -27,13 +28,22 @@ public class ClientEditorActivity extends EditorActivity {
         viewModel = new ViewModelProvider(this, new ClientEditorViewModelFactory()).get(ClientEditorViewModel.class);
         super.initActivity();
         binding.setModel(viewModel);
-        clientId = getIntent().getExtras().getString(AppConsts.CLIENT_ID_EXTRA);
         getViewModel().getClientData(clientId);
     }
 
     @Override
     protected ClientEditorViewModel getViewModel() {
         return viewModel;
+    }
+
+    @Override
+    protected boolean isNewEntity() {
+        return StringUtils.isEmpty(clientId);
+    }
+
+    @Override
+    protected void initEntityKey() {
+        clientId = getIntent().getExtras().getString(AppConsts.CLIENT_ID_EXTRA);
     }
 
     @Override

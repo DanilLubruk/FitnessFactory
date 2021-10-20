@@ -43,11 +43,18 @@ public abstract class PersonnelEditorActivity extends EditorActivity {
     @Override
     public void initActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_personnel_editor);
-        setTitle(R.string.title_edit_item);
         super.initActivity();
         binding.setModel(getViewModel());
         getViewModel().setPersonnelData(getIntent());
     }
+
+    @Override
+    protected boolean isNewEntity() {
+        return false;
+    }
+
+    @Override
+    protected void initEntityKey() { }
 
     @Override
     protected boolean isDataValid() {

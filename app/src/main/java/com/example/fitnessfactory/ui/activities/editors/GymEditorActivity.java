@@ -1,5 +1,6 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
@@ -18,11 +19,12 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class GymEditorActivity extends EditorActivity {
 
-    TextInputEditText edtName;
-    TextInputEditText edtAddress;
-    ViewPager2 vpPersonnel;
-    TabLayout tlPersonnel;
+    private AppCompatEditText edtName;
+    private AppCompatEditText edtAddress;
+    private ViewPager2 vpPersonnel;
+    private TabLayout tlPersonnel;
 
+    private String gymId;
     private GymEditorViewModel viewModel;
     private ActivityGymEditorBinding binding;
     private PersonnelPageAdapter pageAdapter;
@@ -39,8 +41,6 @@ public class GymEditorActivity extends EditorActivity {
         super.initActivity();
         binding.setModel(viewModel);
 
-        String gymId = getIntent().getExtras().getString(AppConsts.GYM_ID_EXTRA);
-        setTitle(gymId != null && !StringUtils.isEmpty(gymId) ? R.string.title_edit_item : R.string.title_add_item);
         viewModel.getGymData(gymId);
         subscribeForGymIdChangesForTabs();
 
@@ -63,6 +63,16 @@ public class GymEditorActivity extends EditorActivity {
     private void subscribeForGymIdChangesForTabs() {
         viewModel.getGymId()
                 .observe(this, gymId -> getIntent().putExtra(AppConsts.GYM_ID_EXTRA, gymId));
+    }
+
+    @Override
+    protected boolean isNewEntity() {
+        return StringUtils.isEmpty(gymId);
+    }
+
+    @Override
+    protected void initEntityKey() {
+        gymId = getIntent().getExtras().getString(AppConsts.GYM_ID_EXTRA);
     }
 
     @Override
