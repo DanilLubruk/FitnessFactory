@@ -55,8 +55,12 @@ public class OwnerGymRepository extends BaseRepository {
             return new Gym();
         }
 
+        return getGymUniqueEntity(gymId);
+    }
+
+    private Gym getGymUniqueEntity(String gymId) throws Exception {
         return getUniqueEntity(
-                getCollection().whereEqualTo(Gym.ID_FIELD, gymId),
+                newQuery().whereIdEquals(gymId).build(),
                 Gym.class,
                 getGymsIdUnuniqueErrorMessage());
     }
@@ -86,7 +90,7 @@ public class OwnerGymRepository extends BaseRepository {
             return new ArrayList<>();
         }
 
-        return Tasks.await(getCollection().whereIn(Gym.ID_FIELD, gymIds).get()).toObjects(Gym.class);
+        return Tasks.await(newQuery().whereIdInArray(gymIds).build().get()).toObjects(Gym.class);
     }
 
     public Single<Boolean> saveAsync(Gym gym) {
@@ -167,6 +171,16 @@ public class OwnerGymRepository extends BaseRepository {
     private class QueryBuilder {
 
         Query query = getCollection();
+
+        public QueryBuilder whereIdInArray(List<String> gymsIds) {
+            query = query.whereIn(Gym.ID_FIELD, gymsIds);
+            return this;
+        }
+
+        public QueryBuilder whereIdEquals(String gymId) {
+            query = query.whereEqualTo(Gym.ID_FIELD, gymId);
+            return this;
+        }
 
         public QueryBuilder whereIdNotEquals(String gymId) {
             query = query.whereNotEqualTo(Gym.ID_FIELD, gymId);

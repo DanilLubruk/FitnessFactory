@@ -23,6 +23,7 @@ import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesReposi
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.example.fitnessfactory.data.repositories.OrganisationInfoRepository;
 import com.example.fitnessfactory.data.repositories.UserRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.SessionTypeRepository;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
 
 import javax.inject.Singleton;
@@ -186,5 +187,11 @@ public class AppModule {
     @AppScope
     public SessionTypesListDataListener provideSessionTypesListDataListener() {
         return new SessionTypesListDataListener();
+    }
+
+    @Provides
+    @AppScope
+    public SessionTypeRepository provideSessionTypeRepository() {
+        return new SessionTypeRepository();
     }
 }

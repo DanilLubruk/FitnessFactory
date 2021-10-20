@@ -39,7 +39,7 @@ public class ClientEditorViewModel extends EditorViewModel {
     private void setClient(Client client) {
         if (client == null) {
             handleItemObtainingNullError();
-            return;
+            client = new Client();
         }
         if (dbClient == null) {
             dbClient = new Client();
@@ -84,7 +84,7 @@ public class ClientEditorViewModel extends EditorViewModel {
                             dbClient.copy(client);
                             isSaved.setValue(isSavedResult);
                         },
-                        getErrorHandler()::handleError));
+                        throwable -> getErrorHandler().handleError(isSaved, throwable)));
 
         return isSaved;
     }

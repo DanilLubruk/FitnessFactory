@@ -73,11 +73,16 @@
     <string name="message_email_occupied">Email is already occupied</string>
     <string name="message_gym_duplicate">Gym with these name and address already exists</string>
     <string name="message_client_not_unique">Client id is not unique</string>
-    <string name="caption_people_amount">people</string>
+    <string name="caption_people">people</string>
     <string name="message_ask_delete_session_type">Delete session type?</string>
     <string name="message_session_type_null">Session type is null</string>
     <string name="message_session_type_not_unique">Session type id is not unique</string>
     <string name="message_session_type_name_occupied">Session type with this name already exists</string>
+    <string name="message_error_restoring_session_type">Error occurred when restoring session type\'s state</string>
+    <string name="message_error_people_amount_null">people amount is null</string>
+    <string name="message_error_price_null">price is null</string>
+    <string name="caption_people_amount">People amount</string>
+    <string name="hint_price">Price (%1$s)</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <string name="caption_user_null">User is not signed in</string>

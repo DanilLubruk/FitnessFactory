@@ -1,5 +1,6 @@
 package com.example.fitnessfactory.utils;
 
+import com.example.fitnessfactory.data.callbacks.NullableCallback;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.utils.dialogs.exceptions.DialogCancelledException;
 
@@ -17,6 +18,16 @@ public class RxUtils implements RxErrorsHandler {
         throwable.printStackTrace();
         if (!(throwable instanceof DialogCancelledException)) {
             GuiUtils.showMessage(throwable.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void handleNullPointerException(NullableCallback callback, String errorMessage) {
+        try {
+            callback.doAction();
+        } catch (Exception e) {
+            e.printStackTrace();
+            GuiUtils.showMessage(e.getLocalizedMessage());
         }
     }
 }

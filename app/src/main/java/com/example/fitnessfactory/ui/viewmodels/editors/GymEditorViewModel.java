@@ -49,7 +49,7 @@ public class GymEditorViewModel extends EditorViewModel {
     private void setGym(Gym gym) {
         if (gym == null) {
             handleItemObtainingNullError();
-            return;
+            gym = new Gym();
         }
         if (dbGym == null) {
             dbGym = new Gym();
@@ -116,7 +116,9 @@ public class GymEditorViewModel extends EditorViewModel {
         }
 
         subscribeInIOThread(gymsAccessManager.deleteGymSingle(gym.getId()),
-                new SingleData<>(observer::setValue, getErrorHandler()::handleError));
+                new SingleData<>(
+                        observer::setValue,
+                        throwable -> getErrorHandler().handleError(observer, throwable)));
 
         return observer;
     }
@@ -156,6 +158,7 @@ public class GymEditorViewModel extends EditorViewModel {
         if (gym == null) {
             gym = new Gym();
         }
+
         gym.setId((String) getHandle().get(DB_ID_KEY));
         gym.setName((String) getHandle().get(DB_NAME_KEY));
         gym.setAddress((String) getHandle().get(DB_ADDRESS_KEY));
@@ -165,6 +168,7 @@ public class GymEditorViewModel extends EditorViewModel {
         if (dbGym == null) {
             dbGym = new Gym();
         }
+
         dbGym.setId((String) getHandle().get(Gym.ID_FIELD));
         dbGym.setName((String) getHandle().get(Gym.NAME_FILED));
         dbGym.setAddress((String) getHandle().get(Gym.ADDRESS_FIELD));

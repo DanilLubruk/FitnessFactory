@@ -57,6 +57,16 @@ public class SessionTypeRepository extends BaseRepository {
         return typesAmount > 0;
     }
 
+    private boolean update(SessionType sessionType) throws Exception {
+        if (isExistingSessionTypeNameOccupied(sessionType)) {
+            throw new Exception(getNameOccupiedMessage());
+        }
+
+        Tasks.await(getCollection().document(sessionType.getId()).set(sessionType));
+
+        return true;
+    }
+
     private boolean isExistingSessionTypeNameOccupied(SessionType sessionType) throws ExecutionException, InterruptedException {
         int typesAmount =
                 getEntitiesAmount(newQuery()
@@ -95,7 +105,7 @@ public class SessionTypeRepository extends BaseRepository {
 
     public Single<SessionType> getSessionTypeAsync(String typeId) {
         return SingleCreate(emitter -> {
-            SessionType sessionType = getUniqueSessionType(typeId);
+            SessionType sessionType = getSessionType(typeId);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(sessionType);
@@ -103,8 +113,16 @@ public class SessionTypeRepository extends BaseRepository {
         });
     }
 
+    private SessionType getSessionType(String typeId) throws Exception {
+        if (StringUtils.isEmpty(typeId)) {
+            return new SessionType();
+        }
+
+        return getUniqueSessionType(typeId);
+    }
+
     private SessionType getUniqueSessionType(String typeId) throws Exception {
-        return getUniqueEntity(newQuery().whereIdEquals(typeId).build(), SessionType.class, getSessionTypeNotUniqueMessage())
+        return getUniqueEntity(newQuery().whereIdEquals(typeId).build(), SessionType.class, getSessionTypeNotUniqueMessage());
     }
 
     private String getSessionTypeNotUniqueMessage() {

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 
+import com.example.fitnessfactory.data.callbacks.NullableCallback;
 import com.example.fitnessfactory.data.managers.RxManager;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.utils.RxErrorsHandler;
@@ -112,6 +113,10 @@ public class BaseViewModel extends ViewModel {
 
     public RxErrorsHandler getErrorHandler() {
         return rxManager.getErrorHandler();
+    }
+
+    protected void handleNullPointerException(NullableCallback callback, String message) {
+        getErrorHandler().handleNullPointerException(callback, message);
     }
 
     public void saveState(Bundle outState) {
