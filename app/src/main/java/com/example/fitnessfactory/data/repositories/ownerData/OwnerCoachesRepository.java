@@ -8,4 +8,9 @@ public class OwnerCoachesRepository extends OwnerPersonnelRepository {
     protected String getRoot() {
         return OwnerCoachesCollection.getRoot();
     }
+
+    @Override
+    protected OwnerCoachesRepository.QueryBuilder newQuery() {
+        return new OwnerCoachesRepository().new QueryBuilder();
+    }
 }

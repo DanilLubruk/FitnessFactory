@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutionException;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-public class OwnerPersonnelRepository extends BaseRepository {
+public abstract class OwnerPersonnelRepository extends BaseRepository {
 
     public Single<Boolean> isPersonnelWithThisEmailAddedAsync(String userEmail) {
         return SingleCreate(emitter -> {
@@ -122,8 +122,8 @@ public class OwnerPersonnelRepository extends BaseRepository {
         });
     }
 
-    private void addGymToAdminPersonnel(String adminEmail, String gymId) throws Exception {
-        Tasks.await(getPersonnelDocumentReference(adminEmail)
+    private void addGymToAdminPersonnel(String personnelEmail, String gymId) throws Exception {
+        Tasks.await(getPersonnelDocumentReference(personnelEmail)
                 .update(Personnel.GYMS_ARRAY_FIELD, FieldValue.arrayUnion(gymId)));
     }
 
@@ -189,25 +189,23 @@ public class OwnerPersonnelRepository extends BaseRepository {
         return Tasks.await(newQuery().wherePersonnelHasGym(gymId).build().get()).getDocuments();
     }
 
-    private DocumentReference getPersonnelDocumentReference(String adminEmail) throws Exception {
-        return getPersonnelSnapshot(adminEmail).getReference();
+    private DocumentReference getPersonnelDocumentReference(String personnelEmail) throws Exception {
+        return getPersonnelSnapshot(personnelEmail).getReference();
     }
 
     private Personnel getUniquePersonnelEntity(String personnelEmail) throws Exception {
-        return getUniqueUserEntity(newQuery().whereUserEmailEquals(personnelEmail).build(), Personnel.class);
+        return getPersonnelSnapshot(personnelEmail).toObject(Personnel.class);
     }
 
-    private DocumentSnapshot getPersonnelSnapshot(String adminEmail) throws Exception {
-        return getUniqueUserEntitySnapshot(newQuery().whereUserEmailEquals(adminEmail).build());
+    private DocumentSnapshot getPersonnelSnapshot(String personnelEmail) throws Exception {
+        return getUniqueUserEntitySnapshot(newQuery().whereUserEmailEquals(personnelEmail).build());
     }
 
-    private OwnerPersonnelRepository.QueryBuilder newQuery() {
-        return new OwnerPersonnelRepository().new QueryBuilder();
-    }
+    protected abstract OwnerPersonnelRepository.QueryBuilder newQuery();
 
-    private class QueryBuilder {
+    protected class QueryBuilder {
 
-        Query query = getCollection();
+        private Query query = getCollection();
 
         public QueryBuilder whereUserEmailEquals(String userEmail) {
             query = query.whereEqualTo(Personnel.USER_EMAIL_FIELD, userEmail);
