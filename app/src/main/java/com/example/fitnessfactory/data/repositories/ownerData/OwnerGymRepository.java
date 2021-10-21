@@ -22,7 +22,7 @@ import io.reactivex.Single;
 public class OwnerGymRepository extends BaseRepository {
 
     @Override
-    public String getRoot() {
+    protected String getRoot() {
         return OwnerGymsCollection.getRoot();
     }
 

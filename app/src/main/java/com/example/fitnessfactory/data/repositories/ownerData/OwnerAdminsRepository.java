@@ -5,7 +5,7 @@ import com.example.fitnessfactory.data.firestoreCollections.OwnerAdminsCollectio
 public class OwnerAdminsRepository extends OwnerPersonnelRepository {
 
     @Override
-    public String getRoot() {
+    protected String getRoot() {
         return OwnerAdminsCollection.getRoot();
     }
 

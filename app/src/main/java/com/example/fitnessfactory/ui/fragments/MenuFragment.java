@@ -9,10 +9,14 @@ import androidx.annotation.Nullable;
 import com.example.fitnessfactory.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.marcohc.robotocalendar.RobotoCalendarView;
 
-public class MenuFragment extends BaseFragment {
+import java.util.Date;
 
-    TextView tvGreeting;
+public class MenuFragment extends BaseFragment implements RobotoCalendarView.RobotoCalendarListener {
+
+    private RobotoCalendarView calendarView;
+    private TextView tvGreeting;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -40,5 +44,26 @@ public class MenuFragment extends BaseFragment {
     @Override
     protected void bindView(View itemView) {
         tvGreeting = itemView.findViewById(R.id.tvGreeting);
+    }
+
+
+    @Override
+    public void onDayClick(Date date) {
+
+    }
+
+    @Override
+    public void onDayLongClick(View view, Date date) {
+
+    }
+
+    @Override
+    public void onRightButtonClick() {
+
+    }
+
+    @Override
+    public void onLeftButtonClick() {
+
     }
 }

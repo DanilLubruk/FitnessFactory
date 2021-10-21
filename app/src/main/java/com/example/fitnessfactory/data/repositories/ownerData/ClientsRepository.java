@@ -17,7 +17,7 @@ import io.reactivex.Single;
 public class ClientsRepository extends BaseRepository {
 
     @Override
-    public String getRoot() {
+    protected String getRoot() {
         return ClientsCollection.getRoot();
     }
 

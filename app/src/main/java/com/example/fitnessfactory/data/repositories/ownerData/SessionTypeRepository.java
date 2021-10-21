@@ -18,7 +18,7 @@ import io.reactivex.Single;
 public class SessionTypeRepository extends BaseRepository {
 
     @Override
-    public String getRoot() {
+    protected String getRoot() {
         return SessionTypesCollection.getRoot();
     }
 

@@ -19,7 +19,7 @@ import io.reactivex.Single;
 public class AdminsAccessRepository extends PersonnelAccessRepository {
 
     @Override
-    public String getRoot() {
+    protected String getRoot() {
         return AdminAccessCollection.getRoot();
     }
 

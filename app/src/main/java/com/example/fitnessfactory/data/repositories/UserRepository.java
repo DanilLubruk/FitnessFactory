@@ -19,7 +19,7 @@ import static com.example.fitnessfactory.data.models.AppUser.EMAIL_FILED;
 public class UserRepository extends BaseRepository {
 
     @Override
-    public String getRoot() {
+    protected String getRoot() {
         return UsersCollection.getRoot();
     }
 
