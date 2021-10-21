@@ -13,7 +13,7 @@ import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Single;
 
-public class PersonnelAccessRepository extends BaseRepository {
+public abstract class PersonnelAccessRepository extends BaseRepository {
 
     public Single<Boolean> isPersonnelWithThisEmailRegisteredAsync(String ownerId, String userEmail) {
         return SingleCreate(emitter -> {
@@ -77,9 +77,7 @@ public class PersonnelAccessRepository extends BaseRepository {
                         .build());
     }
 
-    protected PersonnelAccessRepository.QueryBuilder newQuery() {
-        return new PersonnelAccessRepository().new QueryBuilder();
-    }
+    protected abstract PersonnelAccessRepository.QueryBuilder newQuery();
 
     protected class QueryBuilder {
 

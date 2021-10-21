@@ -2,6 +2,7 @@ package com.example.fitnessfactory.data.models;
 
 import com.google.firebase.Timestamp;
 
+import java.util.Date;
 import java.util.List;
 
 public class Session {
@@ -24,8 +25,8 @@ public class Session {
 
     }
 
-    public Timestamp getDate() {
-        return date;
+    public Date getDate() {
+        return date.toDate();
     }
 
     public void setDate(Timestamp date) {

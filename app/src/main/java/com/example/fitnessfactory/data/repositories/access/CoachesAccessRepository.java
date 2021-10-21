@@ -18,4 +18,9 @@ public class CoachesAccessRepository extends PersonnelAccessRepository {
     protected String getRoot() {
         return CoachAccessCollection.getRoot();
     }
+
+    @Override
+    protected CoachesAccessRepository.QueryBuilder newQuery() {
+        return new CoachesAccessRepository(). new QueryBuilder();
+    }
 }

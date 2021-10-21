@@ -4,4 +4,28 @@
         <item>Organisation owner</item>
         <item>Working staff</item>
     </array>
+
+    <string-array name="days">
+        <item>@string/title_monday</item>
+        <item>@string/title_tuesday</item>
+        <item>@string/title_wednesday</item>
+        <item>@string/title_thursday</item>
+        <item>@string/title_friday</item>
+        <item>@string/title_saturday</item>
+        <item>@string/title_sunday</item>
+    </string-array>
+    <string-array name="months">
+        <item>@string/title_january</item>
+        <item>@string/title_february</item>
+        <item>@string/title_march</item>
+        <item>@string/title_april</item>
+        <item>@string/title_may</item>
+        <item>@string/title_june</item>
+        <item>@string/title_july</item>
+        <item>@string/title_august</item>
+        <item>@string/title_september</item>
+        <item>@string/title_october</item>
+        <item>@string/title_november</item>
+        <item>@string/title_december</item>
+    </string-array>
 </resources>

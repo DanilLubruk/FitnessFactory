@@ -4,6 +4,7 @@ import com.example.fitnessfactory.data.firestoreCollections.AdminAccessCollectio
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.PersonnelAccessEntry;
 import com.example.fitnessfactory.data.repositories.BaseRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -52,5 +53,10 @@ public class AdminsAccessRepository extends PersonnelAccessRepository {
                         .build()
                         .get())
                 .toObjects(PersonnelAccessEntry.class);
+    }
+
+    @Override
+    protected AdminsAccessRepository.QueryBuilder newQuery() {
+        return new AdminsAccessRepository(). new QueryBuilder();
     }
 }

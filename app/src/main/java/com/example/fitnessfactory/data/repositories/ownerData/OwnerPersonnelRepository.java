@@ -46,14 +46,15 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
     private WriteBatch getAddPersonnelBatch(WriteBatch writeBatch, String userEmail) {
         DocumentReference documentReference = getCollection().document();
         Personnel personnel = new Personnel();
+        personnel.setId(documentReference.getId());
         personnel.setUserEmail(userEmail);
 
         return writeBatch.set(documentReference, personnel);
     }
 
-    public Single<WriteBatch> getDeletePersonnelBatchAsync(WriteBatch writeBatch, String personnelEmail) {
+    public Single<WriteBatch> getDeletePersonnelBatchAsync(WriteBatch writeBatch, String userEmail) {
         return SingleCreate(emitter -> {
-            WriteBatch deleteBatch = getDeletePersonnelBatch(writeBatch, personnelEmail);
+            WriteBatch deleteBatch = getDeletePersonnelBatch(writeBatch, userEmail);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(deleteBatch);
@@ -61,8 +62,8 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
         });
     }
 
-    private WriteBatch getDeletePersonnelBatch(WriteBatch writeBatch, String personnelEmail) throws Exception {
-        return writeBatch.delete(getPersonnelDocumentReference(personnelEmail));
+    private WriteBatch getDeletePersonnelBatch(WriteBatch writeBatch, String userEmail) throws Exception {
+        return writeBatch.delete(getPersonnelDocumentReference(userEmail));
     }
 
     public Single<List<String>> getPersonnelEmailsAsync() {
@@ -114,7 +115,7 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
 
     public Completable addGymToPersonnelAsync(String personnelEmail, String gymId) {
         return CompletableCreate(emitter -> {
-            addGymToAdminPersonnel(personnelEmail, gymId);
+            addGymToPersonnel(personnelEmail, gymId);
 
             if (!emitter.isDisposed()) {
                 emitter.onComplete();
@@ -122,7 +123,7 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
         });
     }
 
-    private void addGymToAdminPersonnel(String personnelEmail, String gymId) throws Exception {
+    private void addGymToPersonnel(String personnelEmail, String gymId) throws Exception {
         Tasks.await(getPersonnelDocumentReference(personnelEmail)
                 .update(Personnel.GYMS_ARRAY_FIELD, FieldValue.arrayUnion(gymId)));
     }
@@ -142,9 +143,9 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
                 .update(Personnel.GYMS_ARRAY_FIELD, FieldValue.arrayRemove(gymId)));
     }
 
-    public Single<List<String>> getPersonnelGymsIdsByEmailAsync(String adminEmail) {
+    public Single<List<String>> getPersonnelGymsIdsByEmailAsync(String personnelEmail) {
         return SingleCreate(emitter -> {
-            List<String> gymsIds = getPersonnelGymsIdsByEmail(adminEmail);
+            List<String> gymsIds = getPersonnelGymsIdsByEmail(personnelEmail);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(gymsIds);
