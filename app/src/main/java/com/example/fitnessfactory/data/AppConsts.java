@@ -29,6 +29,7 @@ public class AppConsts {
     public static final String CLIENT_NAME_EXTRA = "CLIENT_NAME_EXTRA";
     public static final String CLIENT_EMAIL_EXTRA = "CLIENT_EMAIL_EXTRA";
     public static final String SESSION_TYPE_ID_EXTRA = "SESSION_TYPE_ID_EXTRA";
+    public static final String SESSION_ID_EXTRA = "SESSION_ID_EXTRA";
 
     public static final String STRING_UNDEFINED_VALUE = "UNDEFINED_VALUE";
     public static final int UNDEFINED_VALUE = -2;

@@ -128,7 +128,7 @@ public abstract class BaseRepository extends CollectionOperator {
         return ResUtils.getString(R.string.message_error_email_isnt_unique);
     }
 
-    protected String getEntityNullMessage() {
+    protected String getEntitySavingNullMessage() {
         return ResUtils.getString(R.string.message_error_data_save)
                 .concat(" - ");
     }

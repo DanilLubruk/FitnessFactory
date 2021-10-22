@@ -33,7 +33,7 @@ public class ClientsRepository extends BaseRepository {
 
     private boolean save(Client client) throws Exception {
         if (client == null) {
-            throw new Exception(getEntityNullMessage());
+            throw new Exception(getEntitySavingNullMessage());
         }
         boolean isNewClient = StringUtils.isEmpty(client.getId());
 
@@ -150,8 +150,8 @@ public class ClientsRepository extends BaseRepository {
     }
 
     @Override
-    protected String getEntityNullMessage() {
-        return super.getEntityNullMessage()
+    protected String getEntitySavingNullMessage() {
+        return super.getEntitySavingNullMessage()
                 .concat(ResUtils.getString(R.string.message_error_client_null));
     }
 

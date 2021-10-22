@@ -25,6 +25,7 @@ import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository
 import com.example.fitnessfactory.data.repositories.OrganisationInfoRepository;
 import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionTypeRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
 
 import javax.inject.Singleton;
@@ -200,5 +201,11 @@ public class AppModule {
     @AppScope
     public SessionsCalendarDataListener provideSessionsCalendarDataListener() {
         return new SessionsCalendarDataListener();
+    }
+
+    @Provides
+    @AppScope
+    public SessionsRepository provideSessionsRepository() {
+        return new SessionsRepository();
     }
 }

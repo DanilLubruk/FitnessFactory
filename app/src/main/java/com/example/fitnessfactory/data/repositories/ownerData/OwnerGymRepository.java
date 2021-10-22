@@ -1,7 +1,5 @@
 package com.example.fitnessfactory.data.repositories.ownerData;
 
-import android.text.TextUtils;
-
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.firestoreCollections.OwnerGymsCollection;
 import com.example.fitnessfactory.data.models.Gym;
@@ -51,7 +49,7 @@ public class OwnerGymRepository extends BaseRepository {
     }
 
     private Gym getGym(String gymId) throws Exception {
-        if (TextUtils.isEmpty(gymId)) {
+        if (StringUtils.isEmpty(gymId)) {
             return new Gym();
         }
 
@@ -105,7 +103,7 @@ public class OwnerGymRepository extends BaseRepository {
 
     private boolean save(Gym gym) throws Exception {
         if (gym == null) {
-            throw new Exception(getEntityNullMessage());
+            throw new Exception(getEntitySavingNullMessage());
         }
         boolean isNewGym = StringUtils.isEmpty(gym.getId());
 
@@ -113,8 +111,8 @@ public class OwnerGymRepository extends BaseRepository {
     }
 
     @Override
-    protected String getEntityNullMessage() {
-        return super.getEntityNullMessage()
+    protected String getEntitySavingNullMessage() {
+        return super.getEntitySavingNullMessage()
                 .concat(ResUtils.getString(R.string.message_error_gym_null));
     }
 

@@ -83,6 +83,13 @@
     <string name="message_error_price_null">price is null</string>
     <string name="caption_people_amount">People amount</string>
     <string name="hint_price">Price (%1$s)</string>
+    <string name="message_error_session_null">Session is null</string>
+    <string name="caption_date">Date</string>
+    <string name="caption_start_time">Start time</string>
+    <string name="caption_end_time">End time</string>
+    <string name="caption_gym">Gym</string>
+    <string name="caption_session_types">Session type</string>
+    <string name="message_ask_delete_session">Delete session?</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <string name="caption_user_null">User is not signed in</string>

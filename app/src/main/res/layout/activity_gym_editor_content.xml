@@ -72,8 +72,8 @@
             android:id="@+id/vpPersonnel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_below="@+id/tlPersonnel">
+            android:layout_below="@+id/tlPersonnel"
+            android:orientation="vertical">
 
         </androidx.viewpager2.widget.ViewPager2>
     </RelativeLayout>

@@ -34,7 +34,7 @@ public class SessionTypeRepository extends BaseRepository {
 
     private boolean save(SessionType sessionType) throws Exception {
         if (sessionType == null) {
-            throw new Exception(getEntityNullMessage());
+            throw new Exception(getEntitySavingNullMessage());
         }
         boolean isNewEntity = StringUtils.isEmpty(sessionType.getId());
 
@@ -134,8 +134,8 @@ public class SessionTypeRepository extends BaseRepository {
     }
 
     @Override
-    protected String getEntityNullMessage() {
-        return super.getEntityNullMessage()
+    protected String getEntitySavingNullMessage() {
+        return super.getEntitySavingNullMessage()
                 .concat(ResUtils.getString(R.string.message_session_type_null));
     }
 

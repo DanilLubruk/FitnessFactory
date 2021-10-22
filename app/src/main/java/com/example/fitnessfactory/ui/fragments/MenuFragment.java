@@ -5,10 +5,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.events.SessionsCalendarDataListenerEvent;
 import com.example.fitnessfactory.data.models.Session;
+import com.example.fitnessfactory.ui.viewmodels.factories.SessionsListViewModelFactory;
+import com.example.fitnessfactory.ui.viewmodels.lists.SessionsListViewModel;
+import com.example.fitnessfactory.utils.CommonUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.marcohc.robotocalendar.RobotoCalendarView;
@@ -24,6 +28,7 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
 
     private RobotoCalendarView calendarView;
     private TextView tvGreeting;
+    private SessionsListViewModel viewModel;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -33,6 +38,7 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
     }
 
     private void initComponents() {
+        viewModel = new ViewModelProvider(this, new SessionsListViewModelFactory()).get(SessionsListViewModel.class);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             tvGreeting.setText(user.getDisplayName() + " " + user.getEmail());
@@ -40,6 +46,11 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
         calendarView.setRobotoCalendarListener(this);
     }
 
+    private void initCalendarData() {
+        Date startDate = CommonUtils.getStartDate(calendarView.getDate());
+        Date endDate = CommonUtils.getEndDate(calendarView.getDate());
+        viewModel.startDataListener(startDate, endDate);
+    }
 
     public void closeProgress() {
 
@@ -72,12 +83,12 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
 
     @Override
     public void onRightButtonClick() {
-
+        initCalendarData();
     }
 
     @Override
     public void onLeftButtonClick() {
-
+        initCalendarData();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -95,17 +106,13 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        /*if (getViewModel() != null) {
-            getViewModel().startDataListener();
-        }*/
+        initCalendarData();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-        /*if (getViewModel() != null) {
-            getViewModel().stopDataListener();
-        }*/
+        viewModel.stopDataListener();
     }
 }
