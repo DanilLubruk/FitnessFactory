@@ -81,11 +81,6 @@ public class ClientsListFragment extends ListListenerFragment<Client, ClientsLis
     }
 
     @Override
-    protected void bindView(View itemView) {
-        super.bindView(itemView);
-    }
-
-    @Override
     protected DataListListener<Client> getViewModel() {
         return viewModel;
     }

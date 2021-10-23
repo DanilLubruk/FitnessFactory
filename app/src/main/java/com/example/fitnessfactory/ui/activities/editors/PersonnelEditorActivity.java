@@ -5,6 +5,7 @@ import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM;
 import android.content.Intent;
 import android.view.Menu;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,9 +29,6 @@ import java.util.List;
 
 public abstract class PersonnelEditorActivity extends EditorActivity {
 
-    RecyclerView rvGyms;
-    FloatingActionButton fabAddGym;
-
     private ActivityPersonnelEditorBinding binding;
     private GymsListAdapter adapter;
     private RecyclerTouchListener touchListener;
@@ -39,6 +37,11 @@ public abstract class PersonnelEditorActivity extends EditorActivity {
     protected abstract PersonnelEditorViewModel getViewModel();
 
     protected abstract String getDeleteGymMessage();
+
+    @Override
+    public Toolbar getToolbar() {
+        return binding.toolbar;
+    }
 
     @Override
     public void initActivity() {
@@ -63,10 +66,10 @@ public abstract class PersonnelEditorActivity extends EditorActivity {
 
     @Override
     public void initComponents() {
-        fabAddGym.setOnClickListener(view -> showSelectionActivity());
-        GuiUtils.initListView(this, rvGyms, true);
-        touchListener = new RecyclerTouchListener(this, rvGyms);
-        rvGyms.addOnItemTouchListener(touchListener);
+        binding.container.fabAddItem.setOnClickListener(view -> showSelectionActivity());
+        GuiUtils.initListView(this, binding.container.rvData, true);
+        touchListener = new RecyclerTouchListener(this, binding.container.rvData);
+        binding.container.rvData.addOnItemTouchListener(touchListener);
         touchListener.setSwipeOptionViews(R.id.btnRemove);
         touchListener.setSwipeable(R.id.rowFG, R.id.rowBG, (viewId, position) -> {
             switch (viewId) {
@@ -126,7 +129,7 @@ public abstract class PersonnelEditorActivity extends EditorActivity {
     private void setData(List<Gym> gyms) {
         if (adapter == null) {
             adapter = new GymsListAdapter(gyms, R.layout.one_bg_button_list_item_view);
-            rvGyms.setAdapter(adapter);
+            binding.container.rvData.setAdapter(adapter);
         } else {
             adapter.setListData(gyms);
         }
@@ -152,12 +155,5 @@ public abstract class PersonnelEditorActivity extends EditorActivity {
         menu.removeItem(MENU_SAVE);
 
         return isCreated;
-    }
-
-    @Override
-    protected void bindViews() {
-        super.bindViews();
-        rvGyms = findViewById(R.id.rvData);
-        fabAddGym = findViewById(R.id.fabAddItem);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -17,6 +18,11 @@ public class SessionEditorActivity extends EditorActivity {
     private String id;
     private SessionEditorViewModel viewModel;
     private ActivitySessionEditorBinding binding;
+
+    @Override
+    public Toolbar getToolbar() {
+        return binding.toolbar;
+    }
 
     @Override
     public void initActivity() {
@@ -49,11 +55,5 @@ public class SessionEditorActivity extends EditorActivity {
     @Override
     protected boolean isDataValid() {
         return true;
-    }
-
-    @Override
-    protected void bindViews() {
-        super.bindViews();
-
     }
 }

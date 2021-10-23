@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
@@ -16,6 +18,7 @@ import com.example.fitnessfactory.data.beans.UsersList;
 import com.example.fitnessfactory.data.callbacks.UsersListCallback;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.observers.SingleDialogEvent;
+import com.example.fitnessfactory.databinding.ActivityAuthBinding;
 import com.example.fitnessfactory.ui.viewmodels.AuthViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.AuthViewModelFactory;
 import com.example.fitnessfactory.utils.GuiUtils;
@@ -27,21 +30,21 @@ import java.util.List;
 
 public class AuthActivity extends BaseActivity {
 
-    SignInButton btnSignIn;
-    ProgressBar pkProgress;
-    TextView tvAppName;
-    ImageView imgLogo;
-    TextView tvLoadStatus;
-
     private final int RC_SIGN_IN = 1;
     private AuthViewModel viewModel;
+    private ActivityAuthBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setFullScreen();
-        setContentView(R.layout.activity_auth);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_auth);
         viewModel = new ViewModelProvider(this, new AuthViewModelFactory()).get(AuthViewModel.class);
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public Toolbar getToolbar() {
+        return binding.toolbar;
     }
 
     @Override
@@ -52,7 +55,7 @@ public class AuthActivity extends BaseActivity {
                showMainActivity();
            }
         });
-        btnSignIn.setOnClickListener(view -> googleSignIn());
+        binding.container.btnSignIn.setOnClickListener(view -> googleSignIn());
         hideToolbar();
     }
 
@@ -119,38 +122,28 @@ public class AuthActivity extends BaseActivity {
 
     @Override
     public void showProgress() {
-        pkProgress.setVisibility(View.VISIBLE);
-        tvLoadStatus.setVisibility(View.VISIBLE);
-        tvAppName.setVisibility(View.GONE);
-        imgLogo.setVisibility(View.GONE);
-        btnSignIn.setVisibility(View.GONE);
+        binding.container.pkProgress.setVisibility(View.VISIBLE);
+        binding.container.tvLoadStatus.setVisibility(View.VISIBLE);
+        binding.container.tvAppName.setVisibility(View.GONE);
+        binding.container.imgLogo.setVisibility(View.GONE);
+        binding.container.btnSignIn.setVisibility(View.GONE);
     }
 
     @Override
     public void closeProgress() {
-        pkProgress.setVisibility(View.GONE);
-        tvLoadStatus.setVisibility(View.GONE);
-        tvLoadStatus.setText("");
-        tvAppName.setVisibility(View.VISIBLE);
-        imgLogo.setVisibility(View.VISIBLE);
-        btnSignIn.setVisibility(View.VISIBLE);
+        binding.container.pkProgress.setVisibility(View.GONE);
+        binding.container.tvLoadStatus.setVisibility(View.GONE);
+        binding.container.tvLoadStatus.setText("");
+        binding.container.tvAppName.setVisibility(View.VISIBLE);
+        binding.container.imgLogo.setVisibility(View.VISIBLE);
+        binding.container.btnSignIn.setVisibility(View.VISIBLE);
     }
 
     private void setSigningInText() {
-        tvLoadStatus.setText(ResUtils.getString(R.string.message_singing_you_in));
+        binding.container.tvLoadStatus.setText(ResUtils.getString(R.string.message_singing_you_in));
     }
 
     private void setObtainingDataText() {
-        tvLoadStatus.setText(ResUtils.getString(R.string.message_obtaining_organistations));
-    }
-
-    @Override
-    protected void bindViews() {
-        super.bindViews();
-        btnSignIn = findViewById(R.id.btnSignIn);
-        pkProgress = findViewById(R.id.pkProgress);
-        tvAppName = findViewById(R.id.tvAppName);
-        imgLogo = findViewById(R.id.imgLogo);
-        tvLoadStatus = findViewById(R.id.tvLoadStatus);
+        binding.container.tvLoadStatus.setText(ResUtils.getString(R.string.message_obtaining_organistations));
     }
 }

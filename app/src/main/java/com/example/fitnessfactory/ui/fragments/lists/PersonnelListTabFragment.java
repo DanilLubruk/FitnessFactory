@@ -41,7 +41,7 @@ public abstract class PersonnelListTabFragment
     protected void initComponents() {
         super.initComponents();
         getViewModel().refreshGymData(getBaseActivity().getIntent().getStringExtra(AppConsts.GYM_ID_EXTRA));
-        fabAddItem.setOnClickListener(view -> tryToShowSelectionActivity());
+        binding.fabAddItem.setOnClickListener(view -> tryToShowSelectionActivity());
         touchListener.setSwipeOptionViews(R.id.btnRemove);
         touchListener.setSwipeable(R.id.rowFG, R.id.rowBG, (viewId, position) -> {
             switch (viewId) {
@@ -125,10 +125,5 @@ public abstract class PersonnelListTabFragment
     @Override
     protected String getTitle() {
         return getBaseActivity().getTitle().toString();
-    }
-
-    @Override
-    protected void bindView(View itemView) {
-        super.bindView(itemView);
     }
 }

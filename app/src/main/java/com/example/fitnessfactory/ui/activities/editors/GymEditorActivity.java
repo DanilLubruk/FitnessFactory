@@ -1,9 +1,8 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
-import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
@@ -13,21 +12,19 @@ import com.example.fitnessfactory.ui.viewmodels.editors.GymEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.GymEditorViewModelFactory;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
-import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.google.android.material.textfield.TextInputEditText;
 
 public class GymEditorActivity extends EditorActivity {
-
-    private AppCompatEditText edtName;
-    private AppCompatEditText edtAddress;
-    private ViewPager2 vpPersonnel;
-    private TabLayout tlPersonnel;
 
     private String gymId;
     private GymEditorViewModel viewModel;
     private ActivityGymEditorBinding binding;
     private PersonnelPageAdapter pageAdapter;
+
+    @Override
+    public Toolbar getToolbar() {
+        return binding.toolbar;
+    }
 
     @Override
     protected GymEditorViewModel getViewModel() {
@@ -45,8 +42,8 @@ public class GymEditorActivity extends EditorActivity {
         subscribeForGymIdChangesForTabs();
 
         pageAdapter = new PersonnelPageAdapter(getSupportFragmentManager(), getLifecycle());
-        vpPersonnel.setAdapter(pageAdapter);
-        new TabLayoutMediator(tlPersonnel, vpPersonnel,
+        binding.container.vpPersonnel.setAdapter(pageAdapter);
+        new TabLayoutMediator(binding.container.tlPersonnel, binding.container.vpPersonnel,
                 (tab, position) -> {
                     switch (position) {
                         case 0:
@@ -82,16 +79,7 @@ public class GymEditorActivity extends EditorActivity {
 
     @Override
     protected boolean isDataValid() {
-        return !StringUtils.isEmpty(edtName.getText())
-                && !StringUtils.isEmpty(edtAddress.getText());
-    }
-
-    @Override
-    protected void bindViews() {
-        super.bindViews();
-        edtName = findViewById(R.id.edtName);
-        edtAddress = findViewById(R.id.edtAddress);
-        vpPersonnel = findViewById(R.id.vpPersonnel);
-        tlPersonnel = findViewById(R.id.tlPersonnel);
+        return !StringUtils.isEmpty(binding.container.edtName.getText())
+                && !StringUtils.isEmpty(binding.container.edtAddress.getText());
     }
 }

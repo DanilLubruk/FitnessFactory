@@ -2,6 +2,7 @@ package com.example.fitnessfactory.ui.activities.editors;
 import android.view.Menu;
 
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.fitnessfactory.R;
@@ -14,10 +15,13 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class OrganisationInfoEditorActivity extends EditorActivity {
 
-    private AppCompatEditText edtOrgName;
-
     private OrganisationInfoViewModel viewModel;
     private ActivityOrganisationInfoEditorBinding binding;
+
+    @Override
+    public Toolbar getToolbar() {
+        return binding.toolbar;
+    }
 
     @Override
     public void initActivity() {
@@ -53,7 +57,7 @@ public class OrganisationInfoEditorActivity extends EditorActivity {
 
     @Override
     protected boolean isDataValid() {
-        return !StringUtils.isEmpty(edtOrgName.getText());
+        return !StringUtils.isEmpty(binding.container.edtName.getText());
     }
 
     @Override
@@ -62,11 +66,5 @@ public class OrganisationInfoEditorActivity extends EditorActivity {
         menu.removeItem(MENU_DELETE);
 
         return isCreated;
-    }
-
-    @Override
-    protected void bindViews() {
-        super.bindViews();
-        edtOrgName = findViewById(R.id.edtName);
     }
 }

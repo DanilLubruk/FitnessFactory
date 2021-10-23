@@ -29,12 +29,6 @@ public abstract class BaseAppFragment<A extends Activity> extends Fragment imple
 
     public abstract void showProgress();
 
-    protected abstract void bindView(View itemView);
-
-    protected int getContentViewId() {
-        return 0;
-    }
-
     private void unsubscribe() {
         if (!disposables.isDisposed()) {
             disposables.dispose();
@@ -79,12 +73,15 @@ public abstract class BaseAppFragment<A extends Activity> extends Fragment imple
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(getContentViewId(), container, false);
-        bindView(view);
-        return view;
+        initBinding(inflater, container);
+        return getRootView();
     }
+
+    protected abstract void initBinding(LayoutInflater inflater, ViewGroup container);
+
+    protected abstract View getRootView();
 
     public abstract A getBaseActivity();
 

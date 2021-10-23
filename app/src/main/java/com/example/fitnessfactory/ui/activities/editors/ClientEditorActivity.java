@@ -1,6 +1,6 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
-import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -11,16 +11,17 @@ import com.example.fitnessfactory.ui.viewmodels.editors.ClientEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.ClientEditorViewModelFactory;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
-import com.google.android.material.textfield.TextInputEditText;
 
 public class ClientEditorActivity extends EditorActivity {
-
-    private AppCompatEditText edtName;
-    private AppCompatEditText edtEmail;
 
     private String clientId;
     private ClientEditorViewModel viewModel;
     private ActivityClientEditorBinding binding;
+
+    @Override
+    public Toolbar getToolbar() {
+        return binding.toolbar;
+    }
 
     @Override
     protected void initActivity() {
@@ -48,19 +49,12 @@ public class ClientEditorActivity extends EditorActivity {
 
     @Override
     protected boolean isDataValid() {
-        return !StringUtils.isEmpty(edtName.getText())
-                && !StringUtils.isEmpty(edtEmail.getText());
+        return !StringUtils.isEmpty(binding.container.edtName.getText())
+                && !StringUtils.isEmpty(binding.container.edtEmail.getText());
     }
 
     @Override
     protected String getDeleteMessage() {
         return ResUtils.getString(R.string.message_ask_delete_client);
-    }
-
-    @Override
-    protected void bindViews() {
-        super.bindViews();
-        edtName = findViewById(R.id.edtName);
-        edtEmail = findViewById(R.id.edtEmail);
     }
 }

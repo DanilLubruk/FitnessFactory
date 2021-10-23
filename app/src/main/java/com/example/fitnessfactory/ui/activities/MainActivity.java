@@ -7,7 +7,9 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,6 +19,7 @@ import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.CurrentUserType;
 import com.example.fitnessfactory.data.observers.SingleData;
+import com.example.fitnessfactory.databinding.ActivityMainBinding;
 import com.example.fitnessfactory.ui.activities.editors.OrganisationInfoEditorActivity;
 import com.example.fitnessfactory.ui.fragments.FragmentProvider;
 import com.example.fitnessfactory.ui.viewmodels.MainActivityViewModel;
@@ -27,29 +30,31 @@ import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    DrawerLayout drawer;
-    NavigationView navigationView;
-    Button btnLogOut;
-
     private MainActivityViewModel viewModel;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+    }
+
+    @Override
+    public Toolbar getToolbar() {
+        return binding.toolbar;
     }
 
     @Override
     public void initComponents() {
         super.initComponents();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+                this, binding.drawer, getToolbar(), R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        binding.drawer.addDrawerListener(toggle);
         toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setItemIconTintList(null);
-        btnLogOut.setOnClickListener(view -> logOut());
+        binding.navView.setNavigationItemSelectedListener(this);
+        binding.navView.setItemIconTintList(null);
+        binding.btnLogOut.setOnClickListener(view -> logOut());
         if (CurrentUserType.isOwner() && AppPrefs.askForOrganisationName().getValue()) {
             showAskOrgNameDialog();
         }
@@ -134,7 +139,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
         }
 
-        drawer.closeDrawer(GravityCompat.START);
+        binding.drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -174,8 +179,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void setMenuChecked(int menuId) {
-        MenuItem item = navigationView.getMenu().findItem(menuId);
-        navigationView.setCheckedItem(item);
+        MenuItem item = binding.navView.getMenu().findItem(menuId);
+        binding.navView.setCheckedItem(item);
     }
 
     @Override
@@ -186,13 +191,5 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onRestoreInstanceState(Bundle savedState) {
         super.onRestoreInstanceState(savedState);
-    }
-
-    @Override
-    protected void bindViews() {
-        super.bindViews();
-        drawer = findViewById(R.id.drawer);
-        navigationView = findViewById(R.id.navView);
-        btnLogOut = findViewById(R.id.btnLogOut);
     }
 }

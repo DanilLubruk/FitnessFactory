@@ -1,13 +1,17 @@
 package com.example.fitnessfactory.ui.fragments.lists;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.observers.SingleData;
+import com.example.fitnessfactory.databinding.FragmentListBinding;
+import com.example.fitnessfactory.databinding.FragmentMainMenuBinding;
 import com.example.fitnessfactory.ui.adapters.ListAdapter;
 import com.example.fitnessfactory.ui.fragments.BaseFragment;
 import com.example.fitnessfactory.ui.viewholders.BaseRecyclerViewHolder;
@@ -27,10 +31,10 @@ public abstract class ListListenerFragment<
         ViewHolderType extends BaseRecyclerViewHolder<ItemType>,
         AdapterType extends ListAdapter<ItemType, ViewHolderType>> extends BaseFragment {
 
-    protected RecyclerView recyclerView;
-    protected FloatingActionButton fabAddItem;
     protected AdapterType adapter;
     protected RecyclerTouchListener touchListener;
+
+    protected FragmentListBinding binding;
 
     protected abstract DataListListener<ItemType> getViewModel();
 
@@ -42,11 +46,21 @@ public abstract class ListListenerFragment<
         initComponents();
     }
 
+    @Override
+    protected void initBinding(LayoutInflater inflater, ViewGroup container) {
+        binding = FragmentListBinding.inflate(inflater, container, false);
+    }
+
+    @Override
+    protected View getRootView() {
+        return binding.getRoot();
+    }
+
     protected void initComponents() {
-        fabAddItem.setOnClickListener(view -> showEditorActivity(getNewItem()));
-        GuiUtils.initListView(getBaseActivity(), recyclerView, true);
-        touchListener = new RecyclerTouchListener(getBaseActivity(), recyclerView);
-        recyclerView.addOnItemTouchListener(touchListener);
+        binding.fabAddItem.setOnClickListener(view -> showEditorActivity(getNewItem()));
+        GuiUtils.initListView(getBaseActivity(), binding.rvData, true);
+        touchListener = new RecyclerTouchListener(getBaseActivity(), binding.rvData);
+        binding.rvData.addOnItemTouchListener(touchListener);
         touchListener.setSwipeOptionViews(R.id.btnEdit, R.id.btnDelete);
         touchListener.setSwipeable(R.id.rowFG, R.id.rowBG, (viewId, position) -> {
             switch (viewId) {
@@ -74,7 +88,7 @@ public abstract class ListListenerFragment<
     protected void setListData(List<ItemType> listData) {
         if (adapter == null) {
             adapter = createNewAdapter(listData);
-            recyclerView.setAdapter(adapter);
+            binding.rvData.setAdapter(adapter);
         } else {
             adapter.setListData(listData);
         }
@@ -119,11 +133,6 @@ public abstract class ListListenerFragment<
     protected abstract String getDeleteMessage();
 
     @Override
-    public int getContentViewId() {
-        return R.layout.fragment_list;
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
@@ -139,11 +148,5 @@ public abstract class ListListenerFragment<
         if (getViewModel() != null) {
             getViewModel().stopDataListener();
         }
-    }
-
-    @Override
-    protected void bindView(View itemView) {
-        recyclerView = itemView.findViewById(R.id.rvData);
-        fabAddItem = itemView.findViewById(R.id.fabAddItem);
     }
 }

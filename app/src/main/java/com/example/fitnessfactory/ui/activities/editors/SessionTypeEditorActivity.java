@@ -1,6 +1,7 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -11,17 +12,17 @@ import com.example.fitnessfactory.ui.viewmodels.editors.SessionTypeEditorViewMod
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionTypeEditorViewModelFactory;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
-import com.google.android.material.textfield.TextInputEditText;
 
 public class SessionTypeEditorActivity extends EditorActivity {
-
-    private AppCompatEditText edtName;
-    private AppCompatEditText edtPeopleAmount;
-    private AppCompatEditText edtPrice;
 
     private String typeId;
     private SessionTypeEditorViewModel viewModel;
     private ActivitySessionTypeEditorBinding binding;
+
+    @Override
+    public Toolbar getToolbar() {
+        return binding.toolbar;
+    }
 
     @Override
     protected void initActivity() {
@@ -29,6 +30,7 @@ public class SessionTypeEditorActivity extends EditorActivity {
         viewModel = new ViewModelProvider(this, new SessionTypeEditorViewModelFactory()).get(SessionTypeEditorViewModel.class);
         super.initActivity();
         binding.setModel(viewModel);
+
         getViewModel().getSessionType(typeId);
     }
 
@@ -54,16 +56,8 @@ public class SessionTypeEditorActivity extends EditorActivity {
 
     @Override
     protected boolean isDataValid() {
-        return !StringUtils.isEmpty(edtName.getText())
-                && !StringUtils.isEmpty(edtPeopleAmount.getText())
-                && !StringUtils.isEmpty(edtPrice.getText());
-    }
-
-    @Override
-    public void bindViews() {
-        super.bindViews();
-        edtName = findViewById(R.id.edtName);
-        edtPeopleAmount = findViewById(R.id.edtPeopleAmount);
-        edtPrice = findViewById(R.id.edtPrice);
+        return !StringUtils.isEmpty(binding.container.edtName.getText())
+                && !StringUtils.isEmpty(binding.container.edtPeopleAmount.getText())
+                && !StringUtils.isEmpty(binding.container.edtPrice.getText());
     }
 }

@@ -28,7 +28,7 @@
 
         <include
             android:id="@+id/container"
-            layout="@layout/"
+            layout="@layout/activity_session_editor_content"
             app:model="@{model}"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -2,16 +2,27 @@ package com.example.fitnessfactory.ui.activities;
 
 import android.os.Bundle;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
+
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
+import com.example.fitnessfactory.databinding.SelectionActivityBinding;
 import com.example.fitnessfactory.ui.fragments.FragmentProvider;
 
 public class SelectionActivity extends BaseActivity {
 
+    private SelectionActivityBinding binding;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.selection_activity);
+        binding = DataBindingUtil.setContentView(this, R.layout.selection_activity);
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public Toolbar getToolbar() {
+        return binding.toolbar;
     }
 
     @Override

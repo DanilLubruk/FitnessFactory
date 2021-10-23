@@ -28,9 +28,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 @SuppressLint("Registered")
-public class BaseActivity extends AppCompatActivity {
-
-    Toolbar toolbar;
+public abstract class BaseActivity extends AppCompatActivity {
 
     protected Bundle savedState = null;
     private final CompositeDisposable disposables = new CompositeDisposable();
@@ -47,13 +45,7 @@ public class BaseActivity extends AppCompatActivity {
         disableAutofill();
     }
 
-    protected void bindViews() {
-        toolbar = findViewById(R.id.toolbar);
-    }
-
-    public Toolbar getToolbar() {
-        return toolbar;
-    }
+    public abstract Toolbar getToolbar();
 
     private void disableAutofill() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -76,7 +68,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void initToolbar() {
-        setSupportActionBar(toolbar);
+        setSupportActionBar(getToolbar());
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -109,7 +101,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void initActivity() {
-        bindViews();
+
     }
 
     @Override

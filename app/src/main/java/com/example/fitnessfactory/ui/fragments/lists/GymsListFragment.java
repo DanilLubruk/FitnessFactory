@@ -112,9 +112,4 @@ public class GymsListFragment extends ListListenerFragment<Gym, GymsListViewHold
     public void showProgress() {
 
     }
-
-    @Override
-    protected void bindView(View itemView) {
-        super.bindView(itemView);
-    }
 }

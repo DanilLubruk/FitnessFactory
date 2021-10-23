@@ -57,7 +57,7 @@ public abstract class PersonnelListFragment
     protected void initComponents() {
         super.initComponents();
         selectMode = getBaseActivity().getIntent().getBooleanExtra(AppConsts.IS_SELECT_MODE_EXTRA, false);
-        fabAddItem.setOnClickListener(view -> showSendEmailInvitationDialog());
+        binding.fabAddItem.setOnClickListener(view -> showSendEmailInvitationDialog());
         getViewModel().getPersonnel().observe(getViewLifecycleOwner(), this::setListData);
     }
 
@@ -114,10 +114,5 @@ public abstract class PersonnelListFragment
     @Override
     protected AppUser getNewItem() {
         return new AppUser();
-    }
-
-    @Override
-    protected void bindView(View itemView) {
-        super.bindView(itemView);
     }
 }

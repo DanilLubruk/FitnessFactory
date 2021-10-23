@@ -1,7 +1,9 @@
 package com.example.fitnessfactory.ui.fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -10,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.events.SessionsCalendarDataListenerEvent;
 import com.example.fitnessfactory.data.models.Session;
+import com.example.fitnessfactory.databinding.FragmentMainMenuBinding;
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionsListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.SessionsListViewModel;
 import com.example.fitnessfactory.utils.CommonUtils;
@@ -26,9 +29,8 @@ import java.util.List;
 
 public class MenuFragment extends BaseFragment implements RobotoCalendarView.RobotoCalendarListener {
 
-    private RobotoCalendarView calendarView;
-    private TextView tvGreeting;
     private SessionsListViewModel viewModel;
+    private FragmentMainMenuBinding binding;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -37,18 +39,28 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
         initComponents();
     }
 
+    @Override
+    protected void initBinding(LayoutInflater inflater, ViewGroup container) {
+        binding = FragmentMainMenuBinding.inflate(inflater, container, false);
+    }
+
+    @Override
+    protected View getRootView() {
+        return binding.getRoot();
+    }
+
     private void initComponents() {
         viewModel = new ViewModelProvider(this, new SessionsListViewModelFactory()).get(SessionsListViewModel.class);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            tvGreeting.setText(user.getDisplayName() + " " + user.getEmail());
+            binding.tvGreeting.setText(user.getDisplayName() + " " + user.getEmail());
         }
-        calendarView.setRobotoCalendarListener(this);
+        binding.calendarView.setRobotoCalendarListener(this);
     }
 
     private void initCalendarData() {
-        Date startDate = CommonUtils.getStartDate(calendarView.getDate());
-        Date endDate = CommonUtils.getEndDate(calendarView.getDate());
+        Date startDate = CommonUtils.getStartDate(binding.calendarView.getDate());
+        Date endDate = CommonUtils.getEndDate(binding.calendarView.getDate());
         viewModel.startDataListener(startDate, endDate);
     }
 
@@ -58,17 +70,6 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
 
     public void showProgress() {
 
-    }
-
-    @Override
-    protected int getContentViewId() {
-        return R.layout.fragment_main_menu;
-    }
-
-    @Override
-    protected void bindView(View itemView) {
-        tvGreeting = itemView.findViewById(R.id.tvGreeting);
-        calendarView = itemView.findViewById(R.id.calendarView);
     }
 
     @Override
@@ -98,7 +99,7 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
 
     private void updateCalendar(List<Session> sessions) {
         for (Session session : sessions) {
-            calendarView.markCircleImage1(session.getDate());
+            binding.calendarView.markCircleImage1(session.getDate());
         }
     }
 
