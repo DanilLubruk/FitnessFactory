@@ -4,8 +4,9 @@
 
         <variable
             name="model"
-            type="com.example.fitnessfactory.ui.viewmodels.editors.SessionTypeEditorViewModel" />
+            type="com.example.fitnessfactory.ui.viewmodels.editors.SessionEditorViewModel" />
     </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -28,7 +29,7 @@
 
         <include
             android:id="@+id/container"
-            layout="@layout/activity_session_type_editor_content"
+            layout="@layout/activity_sessions_editor_content"
             app:model="@{model}"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

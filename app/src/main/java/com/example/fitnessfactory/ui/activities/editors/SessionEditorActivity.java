@@ -23,6 +23,7 @@ public class SessionEditorActivity extends EditorActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_session_editor);
         viewModel = new ViewModelProvider(this, new SessionEditorViewModelFactory()).get(SessionEditorViewModel.class);
         super.initActivity();
+        binding.setModel(viewModel);
     }
 
     @Override
