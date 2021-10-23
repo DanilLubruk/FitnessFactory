@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,15 +8,76 @@
 
     <com.marcohc.robotocalendar.RobotoCalendarView
         android:id="@+id/calendarView"
-        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/tvGreeting"
-        android:layout_weight="1"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
-</LinearLayout>
+        android:layout_alignParentTop="true" />
+
+    <LinearLayout
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/calendarView"
+        android:layout_marginStart="@dimen/component_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginEnd="@dimen/component_margin"
+        android:background="@color/black"
+        android:orientation="horizontal" />
+
+    <RelativeLayout
+        android:id="@+id/sessionsListContainer"
+        android:layout_below="@id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ProgressBar
+            android:id="@+id/pkProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tvEmptyList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/caption_empty_sessions_list"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSessions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true" />
+
+        <com.github.clans.fab.FloatingActionButton
+            xmlns:fab="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/fabAddSession"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/activity_horizontal_margin"
+            fab:menu_animationDelayPerItem="0"
+            fab:menu_colorNormal="@color/colorMessageBackground"
+            fab:menu_colorPressed="@color/colorMessageBackground"
+            fab:menu_colorRipple="@color/colorMessageBackground"
+            fab:menu_labels_colorNormal="@color/colorMessageBackground"
+            fab:menu_labels_colorPressed="#66FFFFFF"
+            fab:menu_labels_colorRipple="#66FFFFFF"
+            fab:menu_labels_hideAnimation="@anim/jump_to_down"
+            fab:menu_labels_showAnimation="@anim/jump_from_down"
+            fab:menu_labels_showShadow="true"
+            fab:menu_labels_textColor="@color/white"
+            fab:menu_shadowColor="#444"
+            fab:menu_showShadow="true"/>
+    </RelativeLayout>
+</RelativeLayout>
 </layout>

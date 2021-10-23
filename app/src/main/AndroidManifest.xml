@@ -33,6 +33,8 @@
         </activity>
         <activity android:name=".ui.activities.editors.SessionTypeEditorActivity">
         </activity>
+        <activity android:name=".ui.activities.editors.SessionEditorActivity">
+        </activity>
     </application>
 
 </manifest>

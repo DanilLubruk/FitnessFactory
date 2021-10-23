@@ -30,6 +30,11 @@ public class SessionEditorActivity extends EditorActivity {
         viewModel = new ViewModelProvider(this, new SessionEditorViewModelFactory()).get(SessionEditorViewModel.class);
         super.initActivity();
         binding.setModel(viewModel);
+        binding.container.edtDate.setOnClickListener(view -> trySelectDate());
+    }
+
+    private void trySelectDate() {
+
     }
 
     @Override

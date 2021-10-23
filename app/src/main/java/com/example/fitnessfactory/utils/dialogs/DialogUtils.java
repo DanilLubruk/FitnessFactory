@@ -1,6 +1,8 @@
 package com.example.fitnessfactory.utils.dialogs;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -18,6 +20,8 @@ import com.example.fitnessfactory.utils.dialogs.exceptions.DialogCancelledExcept
 import com.google.android.material.textfield.TextInputEditText;
 import com.tiromansev.prefswrapper.typedprefs.BooleanPreference;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -77,10 +81,6 @@ public class DialogUtils {
         AppPrefs.gymOwnerId().setValue(ownerId);
 
         boolean isOptionMyOwnGym = option == 0;
-        /*AppPrefs.currentUserType().setValue(
-                isOptionMyOwnGym ?
-                        CurrentUserType.CURRENT_USER_OWNER :
-                        CurrentUserType.CURRENT_USER_STAFF);*/
 
         if (!emitter.isDisposed()) {
             emitter.onSuccess(
@@ -169,6 +169,28 @@ public class DialogUtils {
         } else {
             GuiUtils.showMessage(ResUtils.getString(R.string.caption_blank_fields));
         }
+    }
+
+    public static Single<Date> showDateSelectDialog(BaseActivity context,
+                                                    Date date) {
+        return Single.create(emitter -> {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(date.getTime());
+
+            DatePickerDialog dialog = new DatePickerDialog(context, R.style.MaterialAlertDialog_MaterialComponents,
+                    (view, year, month, dayOfMonth) -> {
+                if (!emitter.isDisposed()) {
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, month);
+                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    emitter.onSuccess(calendar.getTime());
+                }
+            },
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH));
+            dialog.show();
+        });
     }
 
     private static OneLineDialogViewBuilder getOneLineDialogViewBuilder() {

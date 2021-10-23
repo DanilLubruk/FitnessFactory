@@ -1,5 +1,6 @@
 package com.example.fitnessfactory.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +11,11 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.SessionsCalendarDataListenerEvent;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.databinding.FragmentMainMenuBinding;
+import com.example.fitnessfactory.ui.activities.editors.SessionEditorActivity;
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionsListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.SessionsListViewModel;
 import com.example.fitnessfactory.utils.CommonUtils;
@@ -53,9 +56,16 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
         viewModel = new ViewModelProvider(this, new SessionsListViewModelFactory()).get(SessionsListViewModel.class);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            binding.tvGreeting.setText(user.getDisplayName() + " " + user.getEmail());
+            //binding.tvGreeting.setText(user.getDisplayName() + " " + user.getEmail());
         }
         binding.calendarView.setRobotoCalendarListener(this);
+        binding.fabAddSession.setOnClickListener(view -> showSessionEditorActivity(new Session()));
+    }
+
+    private void showSessionEditorActivity(Session session) {
+        Intent intent = new Intent(getBaseActivity(), SessionEditorActivity.class);
+        intent.putExtra(AppConsts.SESSION_ID_EXTRA, session.getId());
+        startActivity(intent);
     }
 
     private void initCalendarData() {
@@ -98,6 +108,7 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
     }
 
     private void updateCalendar(List<Session> sessions) {
+        binding.tvEmptyList.setVisibility(sessions.size() == 0 ? View.VISIBLE : View.GONE);
         for (Session session : sessions) {
             binding.calendarView.markCircleImage1(session.getDate());
         }

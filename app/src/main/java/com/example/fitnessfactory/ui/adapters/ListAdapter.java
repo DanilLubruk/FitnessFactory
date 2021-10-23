@@ -10,7 +10,8 @@ import com.example.fitnessfactory.ui.viewholders.BaseRecyclerViewHolder;
 
 import java.util.List;
 
-public abstract class ListAdapter<ItemType, ViewHolderType extends BaseRecyclerViewHolder<ItemType>> extends RecyclerView.Adapter<ViewHolderType> {
+public abstract class ListAdapter<ItemType, ViewHolderType extends BaseRecyclerViewHolder<ItemType>>
+        extends RecyclerView.Adapter<ViewHolderType> {
 
     private List<ItemType> listData;
     private final int layoutResource;

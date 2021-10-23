@@ -53,6 +53,10 @@ public abstract class EditorViewModel extends BaseViewModel {
         return ResUtils.getString(R.string.message_error_data_obtain);
     }
 
+    protected String getErrorOperationMessage() {
+        return ResUtils.getString(R.string.message_error_data_operate);
+    }
+
     protected abstract String getItemNullClause();
 
     protected String getErrorMessageBreak() {
