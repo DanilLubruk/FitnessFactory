@@ -13,4 +13,6 @@ public class OwnerCoachesRepository extends OwnerPersonnelRepository {
     protected OwnerCoachesRepository.QueryBuilder newQuery() {
         return new OwnerCoachesRepository().new QueryBuilder();
     }
+
+
 }

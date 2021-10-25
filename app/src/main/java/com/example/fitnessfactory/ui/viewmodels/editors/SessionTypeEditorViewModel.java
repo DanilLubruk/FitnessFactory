@@ -57,17 +57,16 @@ public class SessionTypeEditorViewModel extends EditorViewModel {
 
     @Override
     public SingleLiveEvent<Boolean> isModified() {
-        SingleLiveEvent<Boolean> observer = new SingleLiveEvent<>();
-        observer.setValue(false);
+        SingleLiveEvent<Boolean> isModified = new SingleLiveEvent<>();
 
         SessionType sessionType = this.sessionType.get();
         if (SessionType.isNotNull(sessionType)) {
-            boolean isModified = !sessionType.equals(dbSessionType);
-
-            observer.setValue(isModified);
+            isModified.setValue(!sessionType.equals(dbSessionType));
+        } else {
+            isModified.setValue(false);
         }
 
-        return observer;
+        return isModified;
     }
 
     @Override

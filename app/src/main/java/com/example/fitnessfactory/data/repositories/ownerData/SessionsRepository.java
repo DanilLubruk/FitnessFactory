@@ -8,7 +8,12 @@ import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Single;
@@ -76,5 +81,18 @@ public class SessionsRepository extends BaseRepository {
     protected String getEntitySavingNullMessage() {
         return super.getEntitySavingNullMessage()
                 .concat(ResUtils.getString(R.string.message_error_session_null));
+    }
+
+    private SessionsRepository.QueryBuilder newBuilder() {
+        return new SessionsRepository().new QueryBuilder();
+    }
+
+    private class QueryBuilder {
+
+        Query query = getCollection();
+
+        public Query build() {
+            return query;
+        }
     }
 }

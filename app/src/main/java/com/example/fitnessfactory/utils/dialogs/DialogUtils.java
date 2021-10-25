@@ -1,8 +1,8 @@
 package com.example.fitnessfactory.utils.dialogs;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -23,9 +23,6 @@ import com.tiromansev.prefswrapper.typedprefs.BooleanPreference;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import io.reactivex.Completable;
-import io.reactivex.CompletableEmitter;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 
@@ -177,7 +174,7 @@ public class DialogUtils {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(date.getTime());
 
-            DatePickerDialog dialog = new DatePickerDialog(context, R.style.MaterialAlertDialog_MaterialComponents,
+            DatePickerDialog dialog = new DatePickerDialog(context,
                     (view, year, month, dayOfMonth) -> {
                 if (!emitter.isDisposed()) {
                     calendar.set(Calendar.YEAR, year);
@@ -190,6 +187,27 @@ public class DialogUtils {
                     calendar.get(Calendar.MONTH),
                     calendar.get(Calendar.DAY_OF_MONTH));
             dialog.show();
+        });
+    }
+
+    public static Single<Date> showTimePickerDialog(BaseActivity context, Date date) {
+        return Single.create(emitter -> {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+
+            new TimePickerDialog(
+                    context,
+                    ((view, hourOfDay, minute) -> {
+                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        calendar.set(Calendar.MINUTE, minute);
+                        if (!emitter.isDisposed()) {
+                            emitter.onSuccess(calendar.getTime());
+                        }
+                    }),
+                    calendar.get(Calendar.HOUR_OF_DAY),
+                    calendar.get(Calendar.MINUTE),
+                    true)
+                    .show();
         });
     }
 

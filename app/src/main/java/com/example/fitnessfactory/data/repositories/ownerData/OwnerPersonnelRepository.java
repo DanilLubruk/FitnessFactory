@@ -208,6 +208,11 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
 
         private Query query = getCollection();
 
+        public QueryBuilder whereIdInArray(List<String> personnelIds) {
+            query = query.whereIn(Personnel.ID_FIELD, personnelIds);
+            return this;
+        }
+
         public QueryBuilder whereUserEmailEquals(String userEmail) {
             query = query.whereEqualTo(Personnel.USER_EMAIL_FIELD, userEmail);
             return this;

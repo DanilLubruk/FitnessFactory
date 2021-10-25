@@ -88,6 +88,10 @@ public class BaseViewModel extends ViewModel {
         rxManager.subscribeInIOThread(subscriber, observer);
     }
 
+    public <T> void subscribeInMainThread(Single<T> subscriber, SingleData<T> observer) {
+        rxManager.subscribeInMainThread(subscriber, observer);
+    }
+
     public <T> void subscribeInIOThread(Completable subscriber,
                                         Consumer<? super Throwable> onError) {
         rxManager.subscribeInIOThread(subscriber, onError);

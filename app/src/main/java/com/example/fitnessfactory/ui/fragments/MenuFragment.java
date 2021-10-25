@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,7 +17,9 @@ import com.example.fitnessfactory.databinding.FragmentMainMenuBinding;
 import com.example.fitnessfactory.ui.activities.editors.SessionEditorActivity;
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionsListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.SessionsListViewModel;
-import com.example.fitnessfactory.utils.CommonUtils;
+import com.example.fitnessfactory.utils.GuiUtils;
+import com.example.fitnessfactory.utils.ResUtils;
+import com.example.fitnessfactory.utils.TimeUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.marcohc.robotocalendar.RobotoCalendarView;
@@ -63,14 +64,29 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
     }
 
     private void showSessionEditorActivity(Session session) {
+        if (session == null) {
+            GuiUtils.showMessage(ResUtils.getString(R.string.message_error_session_null));
+            return;
+        }
+
         Intent intent = new Intent(getBaseActivity(), SessionEditorActivity.class);
         intent.putExtra(AppConsts.SESSION_ID_EXTRA, session.getId());
+        intent.putExtra(AppConsts.SESSION_DATE, getSelectedDate());
+
         startActivity(intent);
     }
 
+    private long getSelectedDate() {
+        try {
+            return binding.calendarView.getSelectedDay().getTime();
+        } catch (NullPointerException exception) {
+            return TimeUtils.getCurrentMoment().getTime();
+        }
+    }
+
     private void initCalendarData() {
-        Date startDate = CommonUtils.getStartDate(binding.calendarView.getDate());
-        Date endDate = CommonUtils.getEndDate(binding.calendarView.getDate());
+        Date startDate = TimeUtils.getStartDate(binding.calendarView.getDate());
+        Date endDate = TimeUtils.getEndDate(binding.calendarView.getDate());
         viewModel.startDataListener(startDate, endDate);
     }
 

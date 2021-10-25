@@ -65,17 +65,16 @@ public class GymEditorViewModel extends EditorViewModel {
 
     @Override
     public SingleLiveEvent<Boolean> isModified() {
-        SingleLiveEvent<Boolean> observer = new SingleLiveEvent<>();
-        observer.setValue(false);
+        SingleLiveEvent<Boolean> isModified = new SingleLiveEvent<>();
 
         Gym gym = this.gym.get();
         if (Gym.isNotNull(gym)) {
-            boolean isModified = !gym.equals(dbGym);
-
-            observer.setValue(isModified);
+            isModified.setValue(!gym.equals(dbGym));
+        } else {
+            isModified.setValue(false);
         }
 
-        return observer;
+        return isModified;
     }
 
     @Override

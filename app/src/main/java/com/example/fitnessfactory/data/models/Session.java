@@ -1,6 +1,6 @@
 package com.example.fitnessfactory.data.models;
 
-import com.google.firebase.Timestamp;
+import com.example.fitnessfactory.utils.TimeUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -17,9 +17,8 @@ public class Session {
     public static final String CLIENTS_IDS_FIELD = "clientsIds";
 
     private String id;
-    private Timestamp date;
-    private int startTime;
-    private int endTime;
+    private Date date;
+    private Date endTime;
     private String gymId;
     private String sessionTypeId;
     private List<String> coachesIds;
@@ -27,6 +26,37 @@ public class Session {
 
     public Session() {
 
+    }
+
+    public static boolean isNotNull(Session session) {
+        return session != null
+                && session.getId() != null
+                && session.getDate() != null
+                && session.getGymId() != null
+                && session.getSessionTypeId() != null
+                && session.getCoachesIds() != null
+                && session.getClientsIds() != null;
+    }
+
+    public void copy(Session session) {
+        this.setId(session.getId());
+        this.setDate(session.getDate());
+        this.setEndTime(session.getEndTime());
+        this.setGymId(session.getGymId());
+        this.setSessionTypeId(session.getSessionTypeId());
+        this.setCoachesIds(session.getCoachesIds());
+        this.setClientsIds(session.getClientsIds());
+    }
+
+    public boolean equals(Session session) {
+        return
+                this.getId().equals(session.getId())
+                && this.getDate().equals(session.getDate())
+                && this.getEndTime() == session.getEndTime()
+                && this.getGymId().equals(session.getGymId())
+                && this.getSessionTypeId().equals(session.getSessionTypeId())
+                && this.getClientsIds().equals(session.getClientsIds())
+                && this.getCoachesIds().equals(session.getCoachesIds());
     }
 
     public String getId() {
@@ -38,26 +68,30 @@ public class Session {
     }
 
     public Date getDate() {
-        return date.toDate();
+        return date;
     }
 
-    public void setDate(Timestamp date) {
+    public String getDateString() {
+        return TimeUtils.dateToLocaleStr(date);
+    }
+
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public int getStartTime() {
-        return startTime;
+    public String getStartTimeString() {
+        return TimeUtils.dateTo24HoursTime(date);
     }
 
-    public void setStartTime(int startTime) {
-        this.startTime = startTime;
+    public void setStartTime(Date startTime) {
+        this.date = startTime;
     }
 
-    public int getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(int endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 

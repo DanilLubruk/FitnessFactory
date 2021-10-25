@@ -93,6 +93,7 @@
     <string name="caption_arrange_session">Arrange session</string>
     <string name="caption_empty_sessions_list">Add sessions...</string>
     <string name="message_error_date_null">Date is null</string>
+    <string name="message_error_coaches_occupied">Coaches are already occupied</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <string name="caption_user_null">User is not signed in</string>

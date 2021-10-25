@@ -34,6 +34,10 @@ public abstract class EditorViewModel extends BaseViewModel {
         GuiUtils.showMessage(getErrorObtainingMessage().concat(getItemNullClause()));
     }
 
+    protected void handleItemOperationError() {
+        GuiUtils.showMessage(getErrorOperationMessage().concat(getItemNullClause()));
+    }
+
     private SingleLiveEvent<Boolean> handleItemNullError(SingleLiveEvent<Boolean> observer, String message) {
         observer.setValue(false);
         GuiUtils.showMessage(message);

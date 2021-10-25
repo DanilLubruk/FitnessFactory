@@ -9,6 +9,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Single;
@@ -83,12 +84,17 @@ public abstract class PersonnelAccessRepository extends BaseRepository {
 
         Query query = getCollection();
 
-        public PersonnelAccessRepository.QueryBuilder whereUserEmailEquals(String userEmail) {
+        public QueryBuilder whereEmailInArray(List<String> personnelEmails) {
+            query = query.whereIn(PersonnelAccessEntry.USER_EMAIL_FIELD, personnelEmails);
+            return this;
+        }
+
+        public QueryBuilder whereUserEmailEquals(String userEmail) {
             query = query.whereEqualTo(PersonnelAccessEntry.USER_EMAIL_FIELD, userEmail);
             return this;
         }
 
-        public PersonnelAccessRepository.QueryBuilder whereOwnerIdEquals(String ownerId) {
+        public QueryBuilder whereOwnerIdEquals(String ownerId) {
             query = query.whereEqualTo(PersonnelAccessEntry.OWNER_ID_FIELD, ownerId);
             return this;
         }

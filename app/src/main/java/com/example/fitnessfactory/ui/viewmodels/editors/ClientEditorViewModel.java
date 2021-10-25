@@ -55,17 +55,16 @@ public class ClientEditorViewModel extends EditorViewModel {
 
     @Override
     public SingleLiveEvent<Boolean> isModified() {
-        SingleLiveEvent<Boolean> observer = new SingleLiveEvent<>();
-        observer.setValue(false);
+        SingleLiveEvent<Boolean> isModified = new SingleLiveEvent<>();
 
         Client client = this.client.get();
         if (Client.isNotNull(client)) {
-            boolean isModified = !client.equals(dbClient);
-
-            observer.setValue(isModified);
+            isModified.setValue(!client.equals(dbClient));
+        } else {
+            isModified.setValue(false);
         }
 
-        return observer;
+        return isModified;
     }
 
     @Override

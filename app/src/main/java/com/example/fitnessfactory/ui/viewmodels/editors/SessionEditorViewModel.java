@@ -4,10 +4,13 @@ import androidx.databinding.ObservableField;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.models.Session;
+import com.example.fitnessfactory.data.observers.SingleData;
+import com.example.fitnessfactory.data.observers.SingleDialogEvent;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
+import com.example.fitnessfactory.utils.TimeUtils;
 
 import java.util.Date;
 
@@ -15,7 +18,7 @@ import javax.inject.Inject;
 
 public class SessionEditorViewModel extends EditorViewModel {
 
-    private SessionsRepository sessionsRepository;
+    private final SessionsRepository sessionsRepository;
 
     public ObservableField<Session> session = new ObservableField<>();
     private Session dbSession;
@@ -25,33 +28,125 @@ public class SessionEditorViewModel extends EditorViewModel {
         this.sessionsRepository = sessionsRepository;
     }
 
-    public SingleLiveEvent<Date> getSessionDate() {
-        SingleLiveEvent<Date> dateObserver = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> getSession(String sessionId) {
+        SingleLiveEvent<Boolean> isObtained = new SingleLiveEvent<>();
 
-        Session session = this.session.get();
-        if (session != null) {
-            dateObserver.setValue(session.getDate());
-        } else {
-            dateObserver.setValue(null);
-            return handleDateNullError(dateObserver);
+        subscribeInIOThread(
+                sessionsRepository.getSessionAsync(sessionId),
+                new SingleData<>(
+                        obtainedSession -> setSession(obtainedSession, isObtained),
+                        getErrorHandler()::handleError));
+
+        return isObtained;
+    }
+
+    private void setSession(Session session, SingleLiveEvent<Boolean> isObtained) {
+        if (session == null) {
+            session = new Session();
+        }
+        if (dbSession == null) {
+            dbSession = new Session();
+            dbSession.copy(session);
+        }
+        if (hasHandle()) {
+            //restoreHandleState
         }
 
-        return dateObserver;
+        this.session.set(session);
+        isObtained.setValue(true);
+    }
+
+    public void changeSessionDate(SingleDialogEvent<Date, Date> dialogEvent) {
+        Session session = this.session.get();
+
+        if (session == null) {
+            handleItemOperationError();
+            return;
+        }
+
+        subscribeInMainThread(
+                dialogEvent.showDialog(session.getDate()),
+                new SingleData<>(this::setSessionDate, getErrorHandler()::handleError));
+    }
+
+    public void setSessionDate(Date date) {
+        Session session = this.session.get();
+        if (session == null) {
+            handleItemOperationError();
+            return;
+        }
+
+        session.setDate(TimeUtils.getStartOfDayDate(date));
+        this.session.notifyChange();
+    }
+
+    public void changeSessionStartTime(SingleDialogEvent<Date, Date> dialogEvent) {
+        Session session = this.session.get();
+
+        if (session == null) {
+            handleItemOperationError();
+            return;
+        }
+
+        subscribeInMainThread(
+                dialogEvent.showDialog(session.getDate()),
+                new SingleData<>(this::setSessionStartTime, getErrorHandler()::handleError));
+    }
+
+    public void setSessionStartTime(Date date) {
+        Session session = this.session.get();
+        if (session == null) {
+            handleItemOperationError();
+            return;
+        }
+
+        session.setStartTime(date);
+        this.session.notifyChange();
     }
 
     @Override
     public SingleLiveEvent<Boolean> isModified() {
-        return null;
+        SingleLiveEvent<Boolean> isModified = new SingleLiveEvent<>();
+
+        Session session = this.session.get();
+        if (Session.isNotNull(session)) {
+            isModified.setValue(!session.equals(dbSession));
+        } else {
+            isModified.setValue(false);
+        }
+
+        return isModified;
     }
 
     @Override
     public SingleLiveEvent<Boolean> save() {
-        return null;
+        SingleLiveEvent<Boolean> isSaved = new SingleLiveEvent<>();
+
+        Session session = this.session.get();
+        if (session == null) {
+            return handleItemSavingNullError(isSaved);
+        }
+
+        subscribeInIOThread(
+                sessionsRepository.saveAsync(session),
+                new SingleData<>(
+                        isSavedResult -> {
+                            dbSession.copy(session);
+                            isSaved.setValue(isSavedResult);
+                        },
+                        throwable -> getErrorHandler().handleError(isSaved, throwable)));
+
+
+        return isSaved;
     }
 
     @Override
     public SingleLiveEvent<Boolean> delete() {
         return null;
+    }
+
+    private void handleDateNullError() {
+        handleDateNullError(new SingleLiveEvent<>());
     }
 
     private SingleLiveEvent<Date> handleDateNullError(SingleLiveEvent<Date> observer) {

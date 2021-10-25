@@ -59,16 +59,16 @@ public class OrganisationInfoViewModel extends EditorViewModel {
 
     @Override
     public SingleLiveEvent<Boolean> isModified() {
-        SingleLiveEvent<Boolean> observer = new SingleLiveEvent<>();
-        observer.setValue(false);
+        SingleLiveEvent<Boolean> isModified = new SingleLiveEvent<>();
 
         OrganisationData organisationData = organisation.get();
         if (OrganisationData.isNotNull(organisationData)) {
-            boolean isModified = !organisationData.equals(dbOrganisationData);
-            observer.setValue(isModified);
+            isModified.setValue(!organisationData.equals(dbOrganisationData));
+        } else {
+            isModified.setValue(false);
         }
 
-        return observer;
+        return isModified;
     }
 
     @Override
