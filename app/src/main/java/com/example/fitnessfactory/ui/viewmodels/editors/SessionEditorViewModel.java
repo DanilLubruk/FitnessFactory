@@ -56,6 +56,12 @@ public class SessionEditorViewModel extends EditorViewModel {
         isObtained.setValue(true);
     }
 
+    public void setSessionDefaultTime(Date defaultDate) {
+        setSessionDate(defaultDate);
+        setSessionStartTime(defaultDate);
+        setSessionDefaultTime(defaultDate);
+    }
+
     public void changeSessionDate(SingleDialogEvent<Date, Date> dialogEvent) {
         Session session = this.session.get();
 
@@ -69,7 +75,7 @@ public class SessionEditorViewModel extends EditorViewModel {
                 new SingleData<>(this::setSessionDate, getErrorHandler()::handleError));
     }
 
-    public void setSessionDate(Date date) {
+    private void setSessionDate(Date date) {
         Session session = this.session.get();
         if (session == null) {
             handleItemOperationError();
@@ -101,7 +107,7 @@ public class SessionEditorViewModel extends EditorViewModel {
                 .subscribe(this::setSessionStartTime, getErrorHandler()::handleError));
     }
 
-    public void setSessionStartTime(Date date) {
+    private void setSessionStartTime(Date date) {
         Session session = this.session.get();
         if (session == null) {
             handleItemOperationError();
@@ -133,7 +139,7 @@ public class SessionEditorViewModel extends EditorViewModel {
                         .subscribe(this::setSessionEndTime, getErrorHandler()::handleError));
     }
 
-    public void setSessionEndTime(Date date) {
+    private void setSessionEndTime(Date date) {
         Session session = this.session.get();
         if (session == null) {
             handleItemOperationError();

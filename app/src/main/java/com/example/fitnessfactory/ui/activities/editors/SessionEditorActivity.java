@@ -36,17 +36,14 @@ public class SessionEditorActivity extends EditorActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_session_editor);
         viewModel = new ViewModelProvider(this, new SessionEditorViewModelFactory()).get(SessionEditorViewModel.class);
         super.initActivity();
-        binding.setModel(viewModel);
+        binding.setModel(getViewModel());
         binding.container.edtDate.setOnClickListener(view -> trySelectDate());
         binding.container.edtStartTime.setOnClickListener(view -> trySelectStartTime());
         binding.container.edtEndTime.setOnClickListener(view -> trySelectEndTime());
-        viewModel.getSession(id)
+        getViewModel().getSession(id)
                 .observe(this, isObtained -> {
                     if (isObtained && isNewEntity()) {
-                        Date defaultDate = getIntentDefaultDate();
-                        viewModel.setSessionDate(defaultDate);
-                        viewModel.setSessionStartTime(defaultDate);
-                        viewModel.setSessionEndTime(defaultDate);
+                        getViewModel().setSessionDefaultTime(getIntentDefaultDate());
                     }
                 });
     }
@@ -67,6 +64,10 @@ public class SessionEditorActivity extends EditorActivity {
 
     private void trySelectEndTime() {
         getViewModel().changeSessionEndTime(new SingleDialogEvent<>(this, DialogUtils::showTimePickerDialog));
+    }
+
+    private void showGymSelectorDialog() {
+
     }
 
     @Override
