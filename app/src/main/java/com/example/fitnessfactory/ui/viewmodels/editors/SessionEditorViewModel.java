@@ -88,9 +88,17 @@ public class SessionEditorViewModel extends EditorViewModel {
             return;
         }
 
-        subscribeInMainThread(
-                dialogEvent.showDialog(session.getDate()),
-                new SingleData<>(this::setSessionStartTime, getErrorHandler()::handleError));
+        addSubscription(
+                dialogEvent.showDialog(session.getStartTime())
+                .subscribeOn(getMainThreadScheduler())
+                .observeOn(getMainThreadScheduler())
+                .flatMap(startTime ->
+                        sessionsRepository.checkSessionStartTimeCorrectAsync(
+                                startTime,
+                                session.getEndTime()))
+                .subscribeOn(getIOScheduler())
+                .observeOn(getMainThreadScheduler())
+                .subscribe(this::setSessionStartTime, getErrorHandler()::handleError));
     }
 
     public void setSessionStartTime(Date date) {
@@ -101,6 +109,38 @@ public class SessionEditorViewModel extends EditorViewModel {
         }
 
         session.setStartTime(date);
+        this.session.notifyChange();
+    }
+
+    public void changeSessionEndTime(SingleDialogEvent<Date, Date> dialogEvent) {
+        Session session = this.session.get();
+
+        if (session == null) {
+            handleItemOperationError();
+            return;
+        }
+
+        addSubscription(
+                dialogEvent.showDialog(session.getStartTime())
+                        .subscribeOn(getMainThreadScheduler())
+                        .observeOn(getMainThreadScheduler())
+                        .flatMap(endTime ->
+                                sessionsRepository.checkSessionEndTimeCorrectAsync(
+                                        session.getStartTime(),
+                                        endTime))
+                        .subscribeOn(getIOScheduler())
+                        .observeOn(getMainThreadScheduler())
+                        .subscribe(this::setSessionEndTime, getErrorHandler()::handleError));
+    }
+
+    public void setSessionEndTime(Date date) {
+        Session session = this.session.get();
+        if (session == null) {
+            handleItemOperationError();
+            return;
+        }
+
+        session.setEndTime(date);
         this.session.notifyChange();
     }
 

@@ -6,6 +6,7 @@ import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
+import com.example.fitnessfactory.utils.TimeUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.Query;
@@ -75,6 +76,42 @@ public class SessionsRepository extends BaseRepository {
         Tasks.await(documentReference.set(session));
 
         return true;
+    }
+
+    public Single<Date> checkSessionStartTimeCorrectAsync(Date startTime, Date endTime) {
+        return SingleCreate(emitter -> {
+            Date time = checkSessionStartTimeCorrect(startTime, endTime);
+
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(time);
+            }
+        });
+    }
+
+    private Date checkSessionStartTimeCorrect(Date startTime, Date endTime) throws Exception {
+         if (TimeUtils.areDatesCorrectPeriod(startTime, endTime)) {
+             return startTime;
+         } else {
+             throw new Exception(ResUtils.getString(R.string.message_error_wrong_dates));
+         }
+    }
+
+    public Single<Date> checkSessionEndTimeCorrectAsync(Date startTime, Date endTime) {
+        return SingleCreate(emitter -> {
+            Date time = checkSessionEndTimeCorrect(startTime, endTime);
+
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(time);
+            }
+        });
+    }
+
+    private Date checkSessionEndTimeCorrect(Date startTime, Date endTime) throws Exception {
+        if (TimeUtils.areDatesCorrectPeriod(startTime, endTime)) {
+            return endTime;
+        } else {
+            throw new Exception(ResUtils.getString(R.string.message_error_wrong_dates));
+        }
     }
 
     @Override

@@ -80,7 +80,7 @@
                 android:focusableInTouchMode="false"
                 android:maxLines="1"
                 android:inputType="text"
-                android:text=""/>
+                android:text="@{model.session.endTimeString}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

@@ -10,6 +10,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import io.reactivex.Single;
+
 public class TimeUtils {
 
     public static Date getStartDate(Date date) {
@@ -76,6 +78,57 @@ public class TimeUtils {
             return "";
         }
 
-        return new SimpleDateFormat("HH:mm", Locale.UK).format(date);
+        return get24HoursDateFormat().format(date);
+    }
+
+    private static SimpleDateFormat get24HoursDateFormat() {
+        return new SimpleDateFormat("HH:mm", Locale.UK);
+    }
+
+    public static Date setDatesDay(Date example, Date subject) {
+        Calendar exampleCalendar = Calendar.getInstance();
+        exampleCalendar.setTime(example);
+        Calendar subjectCalendar = Calendar.getInstance();
+        subjectCalendar.setTime(subject);
+
+        subjectCalendar.set(Calendar.YEAR, exampleCalendar.get(Calendar.YEAR));
+        subjectCalendar.set(Calendar.MONTH, exampleCalendar.get(Calendar.MONTH));
+        subjectCalendar.set(Calendar.DAY_OF_MONTH, exampleCalendar.get(Calendar.DAY_OF_MONTH));
+
+        return subjectCalendar.getTime();
+    }
+
+    public static boolean isTheSameDay(Date comparableDate, Date comparedDate) {
+        if (comparableDate == null) {
+            comparableDate = new Date();
+        }
+        if (comparedDate == null) {
+            comparedDate = new Date();
+        }
+
+        Calendar comparable = Calendar.getInstance();
+        comparable.setTime(comparableDate);
+        Calendar compared = Calendar.getInstance();
+        compared.setTime(comparedDate);
+
+        return isTheSameDay(comparable, compared);
+    }
+
+    public static boolean isTheSameDay(Calendar comparable, Calendar compared) {
+        return comparable.get(Calendar.YEAR) == compared.get(Calendar.YEAR)
+                && comparable.get(Calendar.MONTH) == comparable.get(Calendar.MONTH)
+                && comparable.get(Calendar.DAY_OF_MONTH) == comparable.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public static Single<Boolean> areDatesCorrectPeriodAsync(Date startDate, Date endDate) {
+        return Single.create(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(areDatesCorrectPeriod(startDate, endDate));
+            }
+        });
+    }
+
+    public static boolean areDatesCorrectPeriod(Date startDate, Date endDate) {
+        return startDate.getTime() < endDate.getTime();
     }
 }

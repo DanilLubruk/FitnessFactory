@@ -39,12 +39,14 @@ public class SessionEditorActivity extends EditorActivity {
         binding.setModel(viewModel);
         binding.container.edtDate.setOnClickListener(view -> trySelectDate());
         binding.container.edtStartTime.setOnClickListener(view -> trySelectStartTime());
+        binding.container.edtEndTime.setOnClickListener(view -> trySelectEndTime());
         viewModel.getSession(id)
                 .observe(this, isObtained -> {
                     if (isObtained && isNewEntity()) {
                         Date defaultDate = getIntentDefaultDate();
                         viewModel.setSessionDate(defaultDate);
                         viewModel.setSessionStartTime(defaultDate);
+                        viewModel.setSessionEndTime(defaultDate);
                     }
                 });
     }
@@ -61,6 +63,10 @@ public class SessionEditorActivity extends EditorActivity {
 
     private void trySelectStartTime() {
         getViewModel().changeSessionStartTime(new SingleDialogEvent<>(this, DialogUtils::showTimePickerDialog));
+    }
+
+    private void trySelectEndTime() {
+        getViewModel().changeSessionEndTime(new SingleDialogEvent<>(this, DialogUtils::showTimePickerDialog));
     }
 
     @Override

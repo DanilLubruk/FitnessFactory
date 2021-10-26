@@ -2,6 +2,7 @@ package com.example.fitnessfactory.data.models;
 
 import com.example.fitnessfactory.utils.TimeUtils;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class Session {
 
     private String id;
     private Date date;
+    private Date startTime;
     private Date endTime;
     private String gymId;
     private String sessionTypeId;
@@ -41,6 +43,7 @@ public class Session {
     public void copy(Session session) {
         this.setId(session.getId());
         this.setDate(session.getDate());
+        this.setStartTime(session.getStartTime());
         this.setEndTime(session.getEndTime());
         this.setGymId(session.getGymId());
         this.setSessionTypeId(session.getSessionTypeId());
@@ -51,12 +54,13 @@ public class Session {
     public boolean equals(Session session) {
         return
                 this.getId().equals(session.getId())
-                && this.getDate().equals(session.getDate())
-                && this.getEndTime() == session.getEndTime()
-                && this.getGymId().equals(session.getGymId())
-                && this.getSessionTypeId().equals(session.getSessionTypeId())
-                && this.getClientsIds().equals(session.getClientsIds())
-                && this.getCoachesIds().equals(session.getCoachesIds());
+                        && this.getDate().equals(session.getDate())
+                        && this.getStartTime().equals(session.getStartTime())
+                        && this.getEndTime() == session.getEndTime()
+                        && this.getGymId().equals(session.getGymId())
+                        && this.getSessionTypeId().equals(session.getSessionTypeId())
+                        && this.getClientsIds().equals(session.getClientsIds())
+                        && this.getCoachesIds().equals(session.getCoachesIds());
     }
 
     public String getId() {
@@ -77,14 +81,20 @@ public class Session {
 
     public void setDate(Date date) {
         this.date = date;
+        correctStartEndTimeDay();
     }
 
-    public String getStartTimeString() {
-        return TimeUtils.dateTo24HoursTime(date);
+    public Date getStartTime() {
+        return startTime;
     }
 
     public void setStartTime(Date startTime) {
-        this.date = startTime;
+        this.startTime = startTime;
+        correctStartEndTimeDay();
+    }
+
+    public String getStartTimeString() {
+        return TimeUtils.dateTo24HoursTime(startTime);
     }
 
     public Date getEndTime() {
@@ -93,6 +103,11 @@ public class Session {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+        correctStartEndTimeDay();
+    }
+
+    public String getEndTimeString() {
+        return TimeUtils.dateTo24HoursTime(endTime);
     }
 
     public String getGymId() {
@@ -125,5 +140,14 @@ public class Session {
 
     public void setClientsIds(List<String> clientsIds) {
         this.clientsIds = clientsIds;
+    }
+
+    private void correctStartEndTimeDay() {
+        if (!TimeUtils.isTheSameDay(getDate(), getStartTime())) {
+            setStartTime(TimeUtils.setDatesDay(getDate(), getStartTime()));
+        }
+        if (!TimeUtils.isTheSameDay(getDate(), getEndTime())) {
+            setEndTime(TimeUtils.setDatesDay(getDate(), getEndTime()));
+        }
     }
 }
