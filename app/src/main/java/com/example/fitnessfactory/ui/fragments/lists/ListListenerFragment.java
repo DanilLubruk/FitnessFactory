@@ -6,12 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.databinding.FragmentListBinding;
-import com.example.fitnessfactory.databinding.FragmentMainMenuBinding;
 import com.example.fitnessfactory.ui.adapters.ListAdapter;
 import com.example.fitnessfactory.ui.fragments.BaseFragment;
 import com.example.fitnessfactory.ui.viewholders.BaseRecyclerViewHolder;
@@ -19,7 +17,6 @@ import com.example.fitnessfactory.ui.viewmodels.DataListListener;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
-import com.github.clans.fab.FloatingActionButton;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 
 import org.greenrobot.eventbus.EventBus;

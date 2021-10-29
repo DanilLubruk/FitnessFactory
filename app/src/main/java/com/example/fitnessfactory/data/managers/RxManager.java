@@ -5,6 +5,7 @@ import com.example.fitnessfactory.utils.RxErrorsHandler;
 import com.example.fitnessfactory.utils.RxUtils;
 
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -70,6 +71,13 @@ public class RxManager {
     }
 
     public <T> void subscribeInMainThread(Single<T> subscriber, SingleData<T> observer) {
+        addSubscription(subscriber
+                .subscribeOn(getMainThreadScheduler())
+                .observeOn(getMainThreadScheduler())
+                .subscribe(observer.getObserver()::onSuccess, observer.getObserver()::onError));
+    }
+
+    public <T> void subscribeInMainThread(Observable<T> subscriber, SingleData<T> observer) {
         addSubscription(subscriber
                 .subscribeOn(getMainThreadScheduler())
                 .observeOn(getMainThreadScheduler())

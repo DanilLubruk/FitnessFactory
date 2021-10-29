@@ -17,6 +17,7 @@ public class AppConsts {
     public static final String FRAGMENT_SESSION_TYPES_NAME = "FRAGMENT_SESSION_TYPES_NAME";
 
     public static final String GYM_ID_EXTRA = "GYM_ID_EXTRA";
+    public static final String GYM_NAME_EXTRA = "GYM_NAME_EXTRA";
     public static final String ADMIN_ID_EXTRA = "ADMIN_ID_EXTRA";
     public static final String ADMIN_NAME_EXTRA = "ADMIN_NAME_EXTRA";
     public static final String ADMIN_EMAIL_EXTRA = "ADMIN_EMAIL_EXTRA";
@@ -39,4 +40,6 @@ public class AppConsts {
     public static final int UNDEFINED_VALUE = -2;
 
     public static final String DEBUG_TAG = "DEBUG_TAG";
+
+    public static final String REQUEST_GYM = "REQUEST_GYM";
 }

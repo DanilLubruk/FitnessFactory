@@ -1,5 +1,8 @@
 package com.example.fitnessfactory.data.models;
 
+import androidx.databinding.Bindable;
+
+import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.utils.TimeUtils;
 
 import java.util.Calendar;

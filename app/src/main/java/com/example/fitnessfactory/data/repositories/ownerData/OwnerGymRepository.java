@@ -38,6 +38,16 @@ public class OwnerGymRepository extends BaseRepository {
         return getFirestore().batch().delete(documentReference);
     }
 
+    public Single<String> getGymNameAsync(String gymId) {
+        return SingleCreate(emitter -> {
+            Gym gym = getGym(gymId);
+
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(gym.getName());
+            }
+        });
+    }
+
     public Single<Gym> getGymAsync(String gymId) {
         return SingleCreate(emitter -> {
             Gym gym = getGym(gymId);

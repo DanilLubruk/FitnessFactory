@@ -96,7 +96,7 @@ public abstract class PersonnelListTabFragment
 
     @Override
     protected PersonnelListAdapter createNewAdapter(List<AppUser> listData) {
-        return new PersonnelListAdapter(listData, R.layout.two_bg_buttons_list_item_view);
+        return new PersonnelListAdapter(listData, R.layout.one_bg_button_list_item_view);
     }
 
     @Override

@@ -42,7 +42,7 @@ public class CoachesListFragment extends PersonnelListFragment {
     }
 
     @Override
-    protected String getEditTitle() {
+    protected String getListTitle() {
         return ResUtils.getString(R.string.title_coaches);
     }
 
@@ -63,7 +63,7 @@ public class CoachesListFragment extends PersonnelListFragment {
     }
 
     @Override
-    protected Intent getSendResultIntent(AppUser personnel) {
+    protected Intent getResultIntent(AppUser personnel) {
         Intent result = new Intent();
         result.putExtra(AppConsts.COACH_EMAIL_EXTRA, personnel.getEmail());
 

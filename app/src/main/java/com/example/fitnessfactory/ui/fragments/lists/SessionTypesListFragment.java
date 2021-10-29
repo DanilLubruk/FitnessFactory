@@ -22,7 +22,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 public class SessionTypesListFragment extends
-        ListListenerFragment<SessionType, SessionTypesListViewHolder, SessionTypesListAdapter> {
+        ListListenerSelectFragment<SessionType, SessionTypesListViewHolder, SessionTypesListAdapter> {
 
     private SessionTypesListViewModel viewModel;
 
@@ -32,7 +32,12 @@ public class SessionTypesListFragment extends
     }
 
     @Override
-    protected String getTitle() {
+    protected String getSelectTitle() {
+        return ResUtils.getString(R.string.title_select_session_type);
+    }
+
+    @Override
+    protected String getListTitle() {
         return ResUtils.getString(R.string.title_session_types);
     }
 
@@ -47,8 +52,11 @@ public class SessionTypesListFragment extends
     }
 
     @Override
-    protected void onListRowClicked(SessionType sessionType) {
-        showEditorActivity(sessionType);
+    protected Intent getResultIntent(SessionType item) {
+        Intent result = new Intent();
+        result.putExtra(AppConsts.SESSION_TYPE_ID_EXTRA, item.getId());
+
+        return result;
     }
 
     @Override

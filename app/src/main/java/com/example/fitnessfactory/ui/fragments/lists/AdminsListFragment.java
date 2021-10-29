@@ -38,7 +38,7 @@ public class AdminsListFragment extends PersonnelListFragment {
     }
 
     @Override
-    protected String getEditTitle() {
+    protected String getListTitle() {
         return ResUtils.getString(R.string.title_admins);
     }
 
@@ -59,7 +59,7 @@ public class AdminsListFragment extends PersonnelListFragment {
     }
 
     @Override
-    protected Intent getSendResultIntent(AppUser personnel) {
+    protected Intent getResultIntent(AppUser personnel) {
         Intent result = new Intent();
         result.putExtra(AppConsts.ADMIN_EMAIL_EXTRA, personnel.getEmail());
 

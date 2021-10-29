@@ -4,6 +4,7 @@
     <string name="title_home">Home</string>
     <string name="title_gyms">Gyms</string>
     <string name="title_session_types">Session types</string>
+    <string name="title_select_session_type">Select session type</string>
     <string name="title_select_gyms">Select gym</string>
     <string name="title_admins">Administrators</string>
     <string name="title_select_admins">Select administrator</string>
@@ -95,6 +96,7 @@
     <string name="message_error_date_null">Date is null</string>
     <string name="message_error_coaches_occupied">Coaches are already occupied</string>
     <string name="message_error_wrong_dates">Time of start and end don\'t form period!</string>
+    <string name="message_selection_failed">Selection failed!</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <string name="caption_user_null">User is not signed in</string>

@@ -107,6 +107,16 @@ public class SessionTypeRepository extends BaseRepository {
         return true;
     }
 
+    public Single<String> getSessionTypeNameAsync(String typeId) {
+        return SingleCreate(emitter -> {
+           SessionType sessionType = getSessionType(typeId);
+
+           if (!emitter.isDisposed()) {
+               emitter.onSuccess(sessionType.getName());
+           }
+        });
+    }
+
     public Single<SessionType> getSessionTypeAsync(String typeId) {
         return SingleCreate(emitter -> {
             SessionType sessionType = getSessionType(typeId);
