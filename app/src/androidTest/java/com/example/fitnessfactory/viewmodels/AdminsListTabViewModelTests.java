@@ -7,8 +7,8 @@ import com.example.fitnessfactory.data.managers.data.PersonnelDataManager;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
 import com.example.fitnessfactory.mockHelpers.mockers.data.AdminsDataManagerMocker;
-import com.example.fitnessfactory.ui.viewmodels.lists.AdminsListTabViewModel;
-import com.example.fitnessfactory.ui.viewmodels.lists.PersonnelListTabViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.GymAdminsListTabViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.GymPersonnelListTabViewModel;
 
 import org.mockito.Mockito;
 
@@ -21,10 +21,10 @@ public class AdminsListTabViewModelTests extends PersonnelListTabViewModelTests 
     private GymAdminsListDataListener dataListener = Mockito.mock(GymAdminsListDataListener.class);
 
     @Override
-    protected PersonnelListTabViewModel initViewModel() {
+    protected GymPersonnelListTabViewModel initViewModel() {
         dataManager = AdminsDataManagerMocker.createMock(ownerRepository, userRepository, gymRepository);
 
-        return new AdminsListTabViewModel(ownerRepository, dataManager, dataListener);
+        return new GymAdminsListTabViewModel(ownerRepository, dataManager, dataListener);
     }
 
     @Override

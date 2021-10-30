@@ -4,25 +4,24 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.GymAdminsListListenerEvent;
-import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.viewmodels.factories.AdminsListTabViewModelFactory;
-import com.example.fitnessfactory.ui.viewmodels.lists.AdminsListTabViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.GymAdminsListTabViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-public class AdminsListTabFragment extends PersonnelListTabFragment {
+public class GymAdminsListTabFragment extends GymPersonnelListTabFragment {
 
-    private AdminsListTabViewModel viewModel;
+    private GymAdminsListTabViewModel viewModel;
 
     @Override
     protected void defineViewModel() {
-        viewModel = new ViewModelProvider(this, new AdminsListTabViewModelFactory()).get(AdminsListTabViewModel.class);
+        viewModel = new ViewModelProvider(this, new AdminsListTabViewModelFactory()).get(GymAdminsListTabViewModel.class);
     }
 
     @Override
-    protected AdminsListTabViewModel getViewModel() {
+    protected GymAdminsListTabViewModel getViewModel() {
         return viewModel;
     }
 

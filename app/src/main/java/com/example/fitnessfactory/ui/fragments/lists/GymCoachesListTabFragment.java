@@ -6,23 +6,23 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.GymCoachesListListenerEvent;
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachesListTabViewModelFactory;
-import com.example.fitnessfactory.ui.viewmodels.lists.CoachesListTabViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.GymCoachesListTabViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-public class CoachesListTabFragment extends PersonnelListTabFragment {
+public class GymCoachesListTabFragment extends GymPersonnelListTabFragment {
 
-    private CoachesListTabViewModel viewModel;
+    private GymCoachesListTabViewModel viewModel;
 
     @Override
     protected void defineViewModel() {
-        viewModel = new ViewModelProvider(this, new CoachesListTabViewModelFactory()).get(CoachesListTabViewModel.class);
+        viewModel = new ViewModelProvider(this, new CoachesListTabViewModelFactory()).get(GymCoachesListTabViewModel.class);
     }
 
     @Override
-    protected CoachesListTabViewModel getViewModel() {
+    protected GymCoachesListTabViewModel getViewModel() {
         return viewModel;
     }
 

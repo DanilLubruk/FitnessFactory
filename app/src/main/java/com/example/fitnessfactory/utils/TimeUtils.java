@@ -43,7 +43,27 @@ public class TimeUtils {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             int firstHourOfDay = calendar.getActualMinimum(Calendar.HOUR_OF_DAY);
+            int firstMinute = calendar.getActualMinimum(Calendar.MINUTE);
+            int firstSecond = calendar.getActualMinimum(Calendar.SECOND);
             calendar.set(Calendar.HOUR_OF_DAY, firstHourOfDay);
+            calendar.set(Calendar.MINUTE, firstMinute);
+            calendar.set(Calendar.SECOND, firstSecond);
+            return calendar.getTime();
+        }
+
+        return null;
+    }
+
+    public static Date getEndOfDayDate(Date date) {
+        if (date != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            int firstHourOfDay = calendar.getActualMaximum(Calendar.HOUR_OF_DAY);
+            int firstMinute = calendar.getActualMaximum(Calendar.MINUTE);
+            int firstSecond = calendar.getActualMaximum(Calendar.SECOND);
+            calendar.set(Calendar.HOUR_OF_DAY, firstHourOfDay);
+            calendar.set(Calendar.MINUTE, firstMinute);
+            calendar.set(Calendar.SECOND, firstSecond);
             return calendar.getTime();
         }
 

@@ -6,9 +6,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.fitnessfactory.ui.fragments.lists.AdminsListFragment;
-import com.example.fitnessfactory.ui.fragments.lists.AdminsListTabFragment;
-import com.example.fitnessfactory.ui.fragments.lists.CoachesListTabFragment;
+import com.example.fitnessfactory.ui.fragments.lists.GymAdminsListTabFragment;
+import com.example.fitnessfactory.ui.fragments.lists.GymCoachesListTabFragment;
 
 public class PersonnelPageAdapter extends FragmentStateAdapter {
 
@@ -21,11 +20,11 @@ public class PersonnelPageAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new AdminsListTabFragment();
+                return new GymAdminsListTabFragment();
             case 1:
-                return new CoachesListTabFragment();
+                return new GymCoachesListTabFragment();
             default:
-                return new AdminsListTabFragment();
+                return new GymAdminsListTabFragment();
         }
     }
 

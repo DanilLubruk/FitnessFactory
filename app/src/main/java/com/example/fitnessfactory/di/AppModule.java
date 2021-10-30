@@ -5,9 +5,11 @@ import com.example.fitnessfactory.data.dataListeners.AdminsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.ClientsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.CoachGymsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.CoachesListDataListener;
+import com.example.fitnessfactory.data.dataListeners.DaysSessionsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.GymAdminsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.GymCoachesListDataListener;
 import com.example.fitnessfactory.data.dataListeners.GymsListDataListener;
+import com.example.fitnessfactory.data.dataListeners.SessionClientsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.SessionTypesListDataListener;
 import com.example.fitnessfactory.data.dataListeners.SessionsCalendarDataListener;
 import com.example.fitnessfactory.data.managers.access.AdminsAccessManager;
@@ -16,6 +18,7 @@ import com.example.fitnessfactory.data.managers.AuthManager;
 import com.example.fitnessfactory.data.managers.access.CoachesAccessManager;
 import com.example.fitnessfactory.data.managers.data.CoachesDataManager;
 import com.example.fitnessfactory.data.managers.access.GymsAccessManager;
+import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
 import com.example.fitnessfactory.data.repositories.access.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.access.CoachesAccessRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.ClientsRepository;
@@ -207,5 +210,24 @@ public class AppModule {
     @AppScope
     public SessionsRepository provideSessionsRepository() {
         return new SessionsRepository();
+    }
+
+    @Provides
+    @AppScope
+    public SessionClientsListDataListener provideSessionClientsListDataListener() {
+        return new SessionClientsListDataListener();
+    }
+
+    @Provides
+    @AppScope
+    public DaysSessionsListDataListener provideDaysSessionsListDataListener() {
+        return new DaysSessionsListDataListener();
+    }
+
+    @Provides
+    @AppScope
+    public SessionsDataManager provideSessionsDataManager(SessionsRepository sessionsRepository,
+                                                          ClientsRepository clientsRepository) {
+        return new SessionsDataManager(sessionsRepository, clientsRepository);
     }
 }

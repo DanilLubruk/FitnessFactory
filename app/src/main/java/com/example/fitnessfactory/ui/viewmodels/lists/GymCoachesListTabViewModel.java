@@ -6,12 +6,12 @@ import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesReposi
 
 import javax.inject.Inject;
 
-public class CoachesListTabViewModel extends PersonnelListTabViewModel {
+public class GymCoachesListTabViewModel extends GymPersonnelListTabViewModel {
 
     @Inject
-    public CoachesListTabViewModel(OwnerCoachesRepository ownerRepository,
-                                   CoachesDataManager dataManager,
-                                   GymCoachesListDataListener dataListener) {
+    public GymCoachesListTabViewModel(OwnerCoachesRepository ownerRepository,
+                                      CoachesDataManager dataManager,
+                                      GymCoachesListDataListener dataListener) {
         super(ownerRepository, dataManager, dataListener);
     }
 }

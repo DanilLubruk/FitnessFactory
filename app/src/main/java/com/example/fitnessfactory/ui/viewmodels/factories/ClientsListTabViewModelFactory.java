@@ -5,16 +5,16 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.FFApp;
-import com.example.fitnessfactory.ui.viewmodels.lists.GymAdminsListTabViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.ClientsListTabViewModel;
 
 import javax.inject.Inject;
 
-public class AdminsListTabViewModelFactory implements ViewModelProvider.Factory {
+public class ClientsListTabViewModelFactory implements ViewModelProvider.Factory {
 
     @Inject
-    GymAdminsListTabViewModel viewModel;
+    ClientsListTabViewModel viewModel;
 
-    public AdminsListTabViewModelFactory() {
+    public ClientsListTabViewModelFactory() {
         FFApp.get().getAppComponent().inject(this);
     }
 

@@ -11,10 +11,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
+import com.example.fitnessfactory.data.events.DaysSessionListDataListenerEvent;
 import com.example.fitnessfactory.data.events.SessionsCalendarDataListenerEvent;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.databinding.FragmentMainMenuBinding;
 import com.example.fitnessfactory.ui.activities.editors.SessionEditorActivity;
+import com.example.fitnessfactory.ui.adapters.SessionsListAdapter;
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionsListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.SessionsListViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
@@ -23,6 +25,7 @@ import com.example.fitnessfactory.utils.TimeUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.marcohc.robotocalendar.RobotoCalendarView;
+import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,6 +38,8 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
 
     private SessionsListViewModel viewModel;
     private FragmentMainMenuBinding binding;
+    private SessionsListAdapter daysSessionsAdapter;
+    private RecyclerTouchListener touchListener;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -61,6 +66,31 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
         }
         binding.calendarView.setRobotoCalendarListener(this);
         binding.fabAddSession.setOnClickListener(view -> showSessionEditorActivity(new Session()));
+        GuiUtils.initListView(getBaseActivity(), binding.rvSessions, true);
+        touchListener = new RecyclerTouchListener(getBaseActivity(), binding.rvSessions);
+        binding.rvSessions.addOnItemTouchListener(touchListener);
+        touchListener.setSwipeOptionViews(R.id.btnEdit, R.id.btnDelete);
+        touchListener.setSwipeable(R.id.rowFG, R.id.rowBG, (viewId, position) -> {
+            switch (viewId) {
+                case R.id.btnEdit:
+                    showSessionEditorActivity(daysSessionsAdapter.getItem(position));
+                    break;
+                case R.id.btnDelete:
+
+                    break;
+            }
+        });
+        touchListener.setClickable(new RecyclerTouchListener.OnRowClickListener() {
+            @Override
+            public void onRowClicked(int position) {
+                showSessionEditorActivity(daysSessionsAdapter.getItem(position));
+            }
+
+            @Override
+            public void onIndependentViewClicked(int independentViewID, int position) {
+
+            }
+        });
     }
 
     private void showSessionEditorActivity(Session session) {
@@ -87,7 +117,7 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
     private void initCalendarData() {
         Date startDate = TimeUtils.getStartDate(binding.calendarView.getDate());
         Date endDate = TimeUtils.getEndDate(binding.calendarView.getDate());
-        viewModel.startDataListener(startDate, endDate);
+        viewModel.startCalendarDataListener(startDate, endDate);
     }
 
     public void closeProgress() {
@@ -100,7 +130,7 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
 
     @Override
     public void onDayClick(Date date) {
-
+        viewModel.startDaysSessionsDataListener(date);
     }
 
     @Override
@@ -123,10 +153,24 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
         updateCalendar(sessionsCalendarDataListenerEvent.getSessions());
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDaysSessionsListenerEvent(DaysSessionListDataListenerEvent sessionListDataListenerEvent) {
+        updateDaysSessions(sessionListDataListenerEvent.getSessions());
+    }
+
     private void updateCalendar(List<Session> sessions) {
-        binding.tvEmptyList.setVisibility(sessions.size() == 0 ? View.VISIBLE : View.GONE);
         for (Session session : sessions) {
             binding.calendarView.markCircleImage1(session.getDate());
+        }
+    }
+
+    private void updateDaysSessions(List<Session> sessions) {
+        binding.tvEmptyList.setVisibility(sessions.size() == 0 ? View.VISIBLE : View.GONE);
+        if (daysSessionsAdapter == null) {
+            daysSessionsAdapter = new SessionsListAdapter(sessions, R.layout.sessions_list_item_view);
+            binding.rvSessions.setAdapter(daysSessionsAdapter);
+        } else {
+            daysSessionsAdapter.setListData(sessions);
         }
     }
 
@@ -141,6 +185,6 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-        viewModel.stopDataListener();
+        viewModel.stopCalendarDataListener();
     }
 }

@@ -1,6 +1,9 @@
 package com.example.fitnessfactory.ui.viewmodels.editors;
 
 import androidx.databinding.ObservableField;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.observers.SingleData;
@@ -12,7 +15,6 @@ import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
-import com.example.fitnessfactory.utils.TimeUtils;
 
 import java.util.Date;
 
@@ -21,21 +23,18 @@ import javax.inject.Inject;
 public class SessionEditorViewModel extends EditorViewModel {
 
     private final SessionsRepository sessionsRepository;
-    private final OwnerGymRepository ownerGymRepository;
-    private final SessionTypeRepository sessionTypeRepository;
 
     public ObservableField<Session> session = new ObservableField<>();
-    public ObservableField<String> gymName = new ObservableField<>();
-    public ObservableField<String> sessionTypeName = new ObservableField<>();
+    public MutableLiveData<String> sessionId = new MutableLiveData<>();
     private Session dbSession;
 
     @Inject
-    public SessionEditorViewModel(SessionsRepository sessionsRepository,
-                                  OwnerGymRepository ownerGymRepository,
-                                  SessionTypeRepository sessionTypeRepository) {
+    public SessionEditorViewModel(SessionsRepository sessionsRepository) {
         this.sessionsRepository = sessionsRepository;
-        this.ownerGymRepository = ownerGymRepository;
-        this.sessionTypeRepository = sessionTypeRepository;
+    }
+
+    public LiveData<String> getSessionId() {
+        return sessionId;
     }
 
     public SingleLiveEvent<Boolean> getSession(String sessionId) {
@@ -92,7 +91,7 @@ public class SessionEditorViewModel extends EditorViewModel {
             return;
         }
 
-        session.setDate(TimeUtils.getStartOfDayDate(date));
+        session.setDate(date);
         this.session.notifyChange();
     }
 
@@ -160,8 +159,8 @@ public class SessionEditorViewModel extends EditorViewModel {
         this.session.notifyChange();
     }
 
-    public void setGym(String gymId) {
-        if (StringUtils.isEmpty(gymId)) {
+    public void setGym(String gymName) {
+        if (StringUtils.isEmpty(gymName)) {
             handleGymNullError();
             return;
         }
@@ -171,37 +170,16 @@ public class SessionEditorViewModel extends EditorViewModel {
             return;
         }
 
-        session.setGymId(gymId);
+        session.setGymName(gymName);
         this.session.notifyChange();
-        changeGymName();
-    }
-
-    private void changeGymName() {
-        Session session = this.session.get();
-        if (session == null) {
-            return;
-        }
-
-        setGymName(session.getGymId());
-    }
-
-    private void setGymName(String gymId) {
-        if (StringUtils.isEmpty(gymId)) {
-            return;
-        }
-        subscribeInIOThread(
-                ownerGymRepository.getGymNameAsync(gymId),
-                new SingleData<>(
-                        gymName::set,
-                        getErrorHandler()::handleError));
     }
 
     private void handleGymNullError() {
         GuiUtils.showMessage(ResUtils.getString(R.string.message_error_gym_null));
     }
 
-    public void setSessionType(String sessionTypeId) {
-        if (StringUtils.isEmpty(sessionTypeId)) {
+    public void setSessionType(String sessionTypeName) {
+        if (StringUtils.isEmpty(sessionTypeName)) {
             handleSessionTypeNullError();
             return;
         }
@@ -211,30 +189,8 @@ public class SessionEditorViewModel extends EditorViewModel {
             return;
         }
 
-        session.setSessionTypeId(sessionTypeId);
+        session.setSessionTypeName(sessionTypeName);
         this.session.notifyChange();
-        changeSessionTypeName();
-    }
-
-    private void changeSessionTypeName() {
-        Session session = this.session.get();
-        if (session == null) {
-            return;
-        }
-
-        setSessionTypeName(session.getSessionTypeId());
-    }
-
-    private void setSessionTypeName(String sessionTypeId) {
-        if (StringUtils.isEmpty(sessionTypeId)) {
-            return;
-        }
-
-        subscribeInIOThread(
-                sessionTypeRepository.getSessionTypeNameAsync(sessionTypeId),
-                new SingleData<>(
-                        sessionTypeName::set,
-                        getErrorHandler()::handleError));
     }
 
     private void handleSessionTypeNullError() {
@@ -269,6 +225,7 @@ public class SessionEditorViewModel extends EditorViewModel {
                 new SingleData<>(
                         isSavedResult -> {
                             dbSession.copy(session);
+                            sessionId.setValue(session.getId());
                             isSaved.setValue(isSavedResult);
                         },
                         throwable -> getErrorHandler().handleError(isSaved, throwable)));

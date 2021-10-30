@@ -8,7 +8,7 @@ import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
-import com.example.fitnessfactory.ui.viewmodels.lists.PersonnelListTabViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.GymPersonnelListTabViewModel;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,9 +28,9 @@ public abstract class PersonnelListTabViewModelTests extends BaseTests {
 
     protected OwnerGymRepository gymRepository = Mockito.mock(OwnerGymRepository.class);
 
-    private PersonnelListTabViewModel viewModel;
+    private GymPersonnelListTabViewModel viewModel;
 
-    protected abstract PersonnelListTabViewModel initViewModel();
+    protected abstract GymPersonnelListTabViewModel initViewModel();
 
     protected abstract OwnerPersonnelRepository getOwnerRepository();
 

@@ -1,5 +1,6 @@
 package com.example.fitnessfactory.ui.viewmodels.lists;
 
+import com.example.fitnessfactory.data.dataListeners.DaysSessionsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.SessionsCalendarDataListener;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
@@ -10,19 +11,30 @@ import javax.inject.Inject;
 
 public class SessionsListViewModel extends BaseViewModel {
 
-    private SessionsCalendarDataListener dataListener;
+    private final SessionsCalendarDataListener calendarDataListener;
+    private final DaysSessionsListDataListener daysSessionsDataListener;
 
     @Inject
-    public SessionsListViewModel(SessionsCalendarDataListener dataListener) {
-        this.dataListener = dataListener;
+    public SessionsListViewModel(SessionsCalendarDataListener calendarDataListener,
+                                 DaysSessionsListDataListener daysSessionsDataListener) {
+        this.calendarDataListener = calendarDataListener;
+        this.daysSessionsDataListener = daysSessionsDataListener;
     }
 
-    public void startDataListener(Date startDate, Date endDate) {
-        dataListener.startDataListener(startDate, endDate);
+    public void startCalendarDataListener(Date startDate, Date endDate) {
+        calendarDataListener.startDataListener(startDate, endDate);
     }
 
-    public void stopDataListener() {
-        dataListener.stopDataListener();
+    public void stopCalendarDataListener() {
+        calendarDataListener.stopDataListener();
+    }
+
+    public void startDaysSessionsDataListener(Date date) {
+        daysSessionsDataListener.stopDataListener();
+        daysSessionsDataListener.startDataListener(date);
+    }
+
+    public void stopDaysSessionsDataListener() {
     }
 
     public void deleteItem(Session item) {

@@ -102,7 +102,7 @@
                 android:focusableInTouchMode="false"
                 android:maxLines="1"
                 android:inputType="text"
-                android:text="@{model.gymName}"/>
+                android:text="@{model.session.gymName}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -124,7 +124,7 @@
                 android:focusableInTouchMode="false"
                 android:maxLines="1"
                 android:inputType="text"
-                android:text="@{model.sessionTypeName}"/>
+                android:text="@{model.session.sessionTypeName}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

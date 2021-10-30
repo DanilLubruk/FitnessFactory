@@ -1,11 +1,7 @@
 package com.example.fitnessfactory.data.models;
 
-import androidx.databinding.Bindable;
-
-import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.utils.TimeUtils;
-
-import java.util.Calendar;
+import com.google.firebase.firestore.Exclude;
 import java.util.Date;
 import java.util.List;
 
@@ -15,8 +11,8 @@ public class Session {
     public static final String DATE_FIELD = "date";
     public static final String START_TIME_FIELD = "startTime";
     public static final String END_TIME_FIELD = "endTime";
-    public static final String GYM_ID_FIELD = "gymId";
-    public static final String SESSION_TYPE_ID = "sessionTypeId";
+    public static final String GYM_NAME_FIELD = "gymName";
+    public static final String SESSION_TYPE_NAME = "sessionTypeName";
     public static final String COACHES_IDS_FIELD = "coachesIds";
     public static final String CLIENTS_IDS_FIELD = "clientsIds";
 
@@ -24,8 +20,8 @@ public class Session {
     private Date date;
     private Date startTime;
     private Date endTime;
-    private String gymId;
-    private String sessionTypeId;
+    private String gymName;
+    private String sessionTypeName;
     private List<String> coachesIds;
     private List<String> clientsIds;
 
@@ -37,8 +33,8 @@ public class Session {
         return session != null
                 && session.getId() != null
                 && session.getDate() != null
-                && session.getGymId() != null
-                && session.getSessionTypeId() != null
+                && session.getGymName() != null
+                && session.getSessionTypeName() != null
                 && session.getCoachesIds() != null
                 && session.getClientsIds() != null;
     }
@@ -48,8 +44,8 @@ public class Session {
         this.setDate(session.getDate());
         this.setStartTime(session.getStartTime());
         this.setEndTime(session.getEndTime());
-        this.setGymId(session.getGymId());
-        this.setSessionTypeId(session.getSessionTypeId());
+        this.setGymName(session.getGymName());
+        this.setSessionTypeName(session.getSessionTypeName());
         this.setCoachesIds(session.getCoachesIds());
         this.setClientsIds(session.getClientsIds());
     }
@@ -60,8 +56,8 @@ public class Session {
                         && this.getDate().equals(session.getDate())
                         && this.getStartTime().equals(session.getStartTime())
                         && this.getEndTime() == session.getEndTime()
-                        && this.getGymId().equals(session.getGymId())
-                        && this.getSessionTypeId().equals(session.getSessionTypeId())
+                        && this.getGymName().equals(session.getGymName())
+                        && this.getSessionTypeName().equals(session.getSessionTypeName())
                         && this.getClientsIds().equals(session.getClientsIds())
                         && this.getCoachesIds().equals(session.getCoachesIds());
     }
@@ -78,6 +74,7 @@ public class Session {
         return date;
     }
 
+    @Exclude
     public String getDateString() {
         return TimeUtils.dateToLocaleStr(date);
     }
@@ -96,6 +93,7 @@ public class Session {
         correctStartEndTimeDay();
     }
 
+    @Exclude
     public String getStartTimeString() {
         return TimeUtils.dateTo24HoursTime(startTime);
     }
@@ -109,24 +107,25 @@ public class Session {
         correctStartEndTimeDay();
     }
 
+    @Exclude
     public String getEndTimeString() {
         return TimeUtils.dateTo24HoursTime(endTime);
     }
 
-    public String getGymId() {
-        return gymId;
+    public String getGymName() {
+        return gymName;
     }
 
-    public void setGymId(String gymId) {
-        this.gymId = gymId;
+    public void setGymName(String gymName) {
+        this.gymName = gymName;
     }
 
-    public String getSessionTypeId() {
-        return sessionTypeId;
+    public String getSessionTypeName() {
+        return sessionTypeName;
     }
 
-    public void setSessionTypeId(String sessionTypeId) {
-        this.sessionTypeId = sessionTypeId;
+    public void setSessionTypeName(String sessionTypeName) {
+        this.sessionTypeName = sessionTypeName;
     }
 
     public List<String> getCoachesIds() {

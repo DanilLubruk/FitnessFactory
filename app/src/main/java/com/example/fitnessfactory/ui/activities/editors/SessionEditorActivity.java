@@ -1,6 +1,6 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
-import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM;
+import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM_NAME;
 import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_SESSION_TYPE;
 
 import android.content.Intent;
@@ -10,7 +10,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
-import com.example.fitnessfactory.data.ActivityRequestCodes;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.observers.SingleDialogEvent;
 import com.example.fitnessfactory.databinding.ActivitySessionEditorBinding;
@@ -52,6 +51,12 @@ public class SessionEditorActivity extends EditorActivity {
                         getViewModel().setSessionDefaultTime(getIntentDefaultDate());
                     }
                 });
+        subscribeForSessionIdChangesForTabs();
+    }
+
+    private void subscribeForSessionIdChangesForTabs() {
+        getViewModel().getSessionId()
+                .observe(this, sessionId -> getIntent().putExtra(AppConsts.SESSION_ID_EXTRA, sessionId));
     }
 
     private Date getIntentDefaultDate() {
@@ -75,13 +80,14 @@ public class SessionEditorActivity extends EditorActivity {
     private void showGymSelectorActivity() {
         Intent intent = new Intent(this, SelectionActivity.class);
         intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, AppConsts.FRAGMENT_GYMS_ID);
-        startActivityForResult(intent, ActivityRequestCodes.REQUEST_GYM);
+        intent.putExtra(AppConsts.REQUEST_CODE, REQUEST_GYM_NAME);
+        startActivityForResult(intent, REQUEST_GYM_NAME);
     }
 
     private void showSessionTypeSelectorActivity() {
         Intent intent = new Intent(this, SelectionActivity.class);
         intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, AppConsts.FRAGMENT_SESSION_TYPES_ID);
-        startActivityForResult(intent, ActivityRequestCodes.REQUEST_SESSION_TYPE);
+        startActivityForResult(intent, REQUEST_SESSION_TYPE);
     }
 
     @Override
@@ -92,13 +98,13 @@ public class SessionEditorActivity extends EditorActivity {
         }
 
         switch (requestCode) {
-            case REQUEST_GYM:
-                String gymId = data.getStringExtra(AppConsts.GYM_ID_EXTRA);
-                getViewModel().setGym(gymId);
+            case REQUEST_GYM_NAME:
+                String gymName = data.getStringExtra(AppConsts.GYM_NAME_EXTRA);
+                getViewModel().setGym(gymName);
                 break;
             case REQUEST_SESSION_TYPE:
-                String sessionTypeId = data.getStringExtra(AppConsts.SESSION_TYPE_ID_EXTRA);
-                getViewModel().setSessionType(sessionTypeId);
+                String sessionTypeName = data.getStringExtra(AppConsts.SESSION_TYPE_NAME_EXTRA);
+                getViewModel().setSessionType(sessionTypeName);
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);

@@ -17,7 +17,7 @@ import com.example.fitnessfactory.utils.RxUtils;
 
 import java.util.List;
 
-public abstract class PersonnelListTabViewModel extends BaseViewModel implements DataListListener<AppUser> {
+public abstract class GymPersonnelListTabViewModel extends BaseViewModel implements DataListListener<AppUser> {
 
     private OwnerPersonnelRepository ownerRepository;
 
@@ -25,9 +25,9 @@ public abstract class PersonnelListTabViewModel extends BaseViewModel implements
 
     private DataListenerStringArgument dataListener;
 
-    public PersonnelListTabViewModel(OwnerPersonnelRepository ownerRepository,
-                                     PersonnelDataManager dataManager,
-                                     DataListenerStringArgument dataListener) {
+    public GymPersonnelListTabViewModel(OwnerPersonnelRepository ownerRepository,
+                                        PersonnelDataManager dataManager,
+                                        DataListenerStringArgument dataListener) {
         this.ownerRepository = ownerRepository;
         this.dataManager = dataManager;
         this.dataListener = dataListener;

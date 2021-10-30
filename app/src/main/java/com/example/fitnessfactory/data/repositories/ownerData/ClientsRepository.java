@@ -9,7 +9,9 @@ import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.WriteBatch;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -19,6 +21,25 @@ public class ClientsRepository extends BaseRepository {
     @Override
     protected String getRoot() {
         return ClientsCollection.getRoot();
+    }
+
+    public Single<WriteBatch> getAddSessionBatchAsync(WriteBatch writeBatch,
+                                                      String sessionId,
+                                                      String clientId) {
+        return SingleCreate(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getAddSessionBatch(writeBatch, sessionId, clientId));
+            }
+        });
+    }
+
+    private WriteBatch getAddSessionBatch(WriteBatch writeBatch,
+                                          String sessionId,
+                                          String clientId) {
+        return writeBatch
+                .update(getCollection().document(clientId),
+                        Client.SESSIONS_IDS_FIELD,
+                        FieldValue.arrayUnion(sessionId));
     }
 
     public Single<Boolean> saveAsync(Client client) {

@@ -1,5 +1,8 @@
 package com.example.fitnessfactory.ui.fragments.lists;
 
+import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM_ID;
+import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM_NAME;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -7,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.ActivityRequestCodes;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.GymsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.Gym;
@@ -64,7 +68,16 @@ public class GymsListFragment extends ListListenerSelectFragment<Gym, GymsListVi
     @Override
     protected Intent getResultIntent(Gym gym) {
         Intent result = new Intent();
-        result.putExtra(AppConsts.GYM_ID_EXTRA, gym.getId());
+
+        int requestCode = getBaseActivity().getIntent().getIntExtra(AppConsts.REQUEST_CODE, REQUEST_GYM_ID);
+        switch (requestCode) {
+            case REQUEST_GYM_ID:
+                result.putExtra(AppConsts.GYM_ID_EXTRA, gym.getId());
+                break;
+            case REQUEST_GYM_NAME:
+                result.putExtra(AppConsts.GYM_NAME_EXTRA, gym.getName());
+                break;
+        }
 
         return result;
     }

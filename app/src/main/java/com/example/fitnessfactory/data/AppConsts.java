@@ -31,6 +31,7 @@ public class AppConsts {
     public static final String CLIENT_EMAIL_EXTRA = "CLIENT_EMAIL_EXTRA";
     public static final String SESSION_TYPE_ID_EXTRA = "SESSION_TYPE_ID_EXTRA";
     public static final String SESSION_ID_EXTRA = "SESSION_ID_EXTRA";
+    public static final String SESSION_TYPE_NAME_EXTRA = "SESSION_TYPE_NAME_EXTRA";
     public static final String SESSION_YEAR_EXTRA = "SESSION_YEAR_EXTRA";
     public static final String SESSION_MONTH_EXTRA = "SESSION_MONTH_EXTRA";
     public static final String SESSION_DAY_OF_MONTH_EXTRA = "SESSION_DAY_OF_MONTH_EXTRA";
@@ -41,5 +42,5 @@ public class AppConsts {
 
     public static final String DEBUG_TAG = "DEBUG_TAG";
 
-    public static final String REQUEST_GYM = "REQUEST_GYM";
+    public static final String REQUEST_CODE = "REQUEST_CODE";
 }

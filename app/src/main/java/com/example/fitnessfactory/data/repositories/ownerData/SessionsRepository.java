@@ -2,6 +2,7 @@ package com.example.fitnessfactory.data.repositories.ownerData;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.firestoreCollections.SessionsCollection;
+import com.example.fitnessfactory.data.models.Personnel;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.example.fitnessfactory.utils.ResUtils;
@@ -9,8 +10,10 @@ import com.example.fitnessfactory.utils.StringUtils;
 import com.example.fitnessfactory.utils.TimeUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,6 +28,22 @@ public class SessionsRepository extends BaseRepository {
     @Override
     protected String getRoot() {
         return SessionsCollection.getRoot();
+    }
+
+    public Single<WriteBatch> getAddClientBatchAsync(String sessionId, String clientId) {
+        return SingleCreate(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getAddClientBatch(sessionId, clientId));
+            }
+        });
+    }
+
+    private WriteBatch getAddClientBatch(String sessionId, String clientId) {
+        return getFirestore()
+                .batch()
+                .update(getCollection().document(sessionId),
+                        Session.CLIENTS_IDS_FIELD,
+                        FieldValue.arrayUnion(clientId));
     }
 
     public Single<Session> getSessionAsync(String sessionId) {

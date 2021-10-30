@@ -1,15 +1,15 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
-import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM;
+import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM_ID;
 
 import android.content.Intent;
 import android.view.Menu;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.ActivityRequestCodes;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.observers.SingleData;
@@ -20,7 +20,6 @@ import com.example.fitnessfactory.ui.viewmodels.editors.PersonnelEditorViewModel
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
-import com.github.clans.fab.FloatingActionButton;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 
 import org.greenrobot.eventbus.EventBus;
@@ -109,14 +108,14 @@ public abstract class PersonnelEditorActivity extends EditorActivity {
     private void showSelectionActivity() {
         Intent intent = new Intent(this, SelectionActivity.class);
         intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, AppConsts.FRAGMENT_GYMS_ID);
-
-        startActivityForResult(intent, REQUEST_GYM);
+        intent.putExtra(AppConsts.REQUEST_CODE, REQUEST_GYM_ID);
+        startActivityForResult(intent, REQUEST_GYM_ID);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case REQUEST_GYM:
+            case REQUEST_GYM_ID:
                 if (resultCode == RESULT_OK) {
                     String gymId = data.getStringExtra(AppConsts.GYM_ID_EXTRA);
                     getViewModel().addGym(gymId);

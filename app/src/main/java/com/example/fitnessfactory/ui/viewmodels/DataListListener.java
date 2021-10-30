@@ -1,10 +1,8 @@
 package com.example.fitnessfactory.ui.viewmodels;
 
-public interface DataListListener<ItemType> {
+import com.example.fitnessfactory.data.dataListeners.DataListener;
 
-    void startDataListener();
-
-    void stopDataListener();
+public interface DataListListener<ItemType> extends DataListener {
 
     void deleteItem(ItemType item);
 }

@@ -54,7 +54,7 @@ public class SessionTypesListFragment extends
     @Override
     protected Intent getResultIntent(SessionType item) {
         Intent result = new Intent();
-        result.putExtra(AppConsts.SESSION_TYPE_ID_EXTRA, item.getId());
+        result.putExtra(AppConsts.SESSION_TYPE_NAME_EXTRA, item.getName());
 
         return result;
     }
