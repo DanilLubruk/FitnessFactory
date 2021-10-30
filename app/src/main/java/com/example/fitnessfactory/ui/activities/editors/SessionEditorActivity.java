@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
+import com.example.fitnessfactory.data.events.SessionIdUpdateEvent;
 import com.example.fitnessfactory.data.observers.SingleDialogEvent;
 import com.example.fitnessfactory.databinding.ActivitySessionEditorBinding;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
@@ -20,6 +21,8 @@ import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Date;
 
@@ -56,7 +59,8 @@ public class SessionEditorActivity extends EditorActivity {
 
     private void subscribeForSessionIdChangesForTabs() {
         getViewModel().getSessionId()
-                .observe(this, sessionId -> getIntent().putExtra(AppConsts.SESSION_ID_EXTRA, sessionId));
+                .observe(this, sessionId -> EventBus.getDefault().post(new SessionIdUpdateEvent(sessionId)));
+        //getIntent().putExtra(AppConsts.SESSION_ID_EXTRA, sessionId));
     }
 
     private Date getIntentDefaultDate() {

@@ -5,27 +5,35 @@ import com.example.fitnessfactory.data.dataListeners.SessionClientsListDataListe
 import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
 import com.example.fitnessfactory.data.models.Client;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
-import com.example.fitnessfactory.ui.viewmodels.DataListListenerStringArgument;
+import com.example.fitnessfactory.ui.viewmodels.DataListListener;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 
 import javax.inject.Inject;
 
-public class ClientsListTabViewModel extends BaseViewModel implements DataListListenerStringArgument<Client> {
+public class SessionClientsListTabViewModel extends BaseViewModel implements DataListListener<Client> {
 
     private final SessionsDataManager sessionsDataManager;
     private final SessionClientsListDataListener dataListener;
+    private String sessionId;
 
     @Inject
-    public ClientsListTabViewModel(SessionsDataManager sessionsDataManager,
-                                   SessionClientsListDataListener dataListener) {
+    public SessionClientsListTabViewModel(SessionsDataManager sessionsDataManager,
+                                          SessionClientsListDataListener dataListener) {
         this.sessionsDataManager = sessionsDataManager;
         this.dataListener = dataListener;
     }
 
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
     @Override
-    public void startDataListener(String sessionId) {
+    public void startDataListener() {
+        if (StringUtils.isEmpty(sessionId)) {
+            return;
+        }
         dataListener.startDataListener(sessionId);
     }
 
@@ -34,9 +42,9 @@ public class ClientsListTabViewModel extends BaseViewModel implements DataListLi
         dataListener.stopDataListener();
     }
 
-    public void addClientToSession(String sessionId, String clientId) {
+    public void addClientToSession(String clientId) {
         if (StringUtils.isEmpty(sessionId)) {
-            GuiUtils.showMessage(ResUtils.getString(R.string.message_error_session_null));
+            GuiUtils.showMessage(getSessionNullMessage());
             return;
         }
         if (StringUtils.isEmpty(clientId)) {
@@ -52,5 +60,9 @@ public class ClientsListTabViewModel extends BaseViewModel implements DataListLi
     @Override
     public void deleteItem(Client item) {
 
+    }
+
+    private String getSessionNullMessage() {
+        return ResUtils.getString(R.string.message_error_session_null);
     }
 }

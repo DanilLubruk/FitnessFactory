@@ -14,6 +14,7 @@ import com.example.fitnessfactory.ui.viewmodels.factories.CoachesListTabViewMode
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachesListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.GymEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.GymsListViewModelFactory;
+import com.example.fitnessfactory.ui.viewmodels.factories.SessionCoachesListTabViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionTypeEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionTypesListViewModelFactory;
@@ -46,4 +47,5 @@ public interface AppComponent {
     void inject(SessionsListViewModelFactory sessionsListViewModelFactory);
     void inject(SessionEditorViewModelFactory sessionEditorViewModelFactory);
     void inject(ClientsListTabViewModelFactory clientsListTabViewModelFactory);
+    void inject(SessionCoachesListTabViewModelFactory sessionCoachesListTabViewModelFactory);
 }

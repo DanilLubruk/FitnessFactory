@@ -13,7 +13,6 @@ public abstract class ListListenerTabFragment<
 
     protected void initComponents() {
         super.initComponents();
-        refreshParentData();
         binding.fabAddItem.setOnClickListener(view -> tryToShowSelectionActivity());
         touchListener.setSwipeOptionViews(R.id.btnRemove);
         touchListener.setSwipeable(R.id.rowFG, R.id.rowBG, (viewId, position) -> {
@@ -33,13 +32,10 @@ public abstract class ListListenerTabFragment<
     private void tryToShowSelectionActivity() {
         getBaseActivity().save(isSaved -> {
             if (isSaved) {
-                refreshParentData();
                 openSelectionActivity();
             }
         });
     }
-
-    protected abstract void refreshParentData();
 
     protected abstract void openSelectionActivity();
 }

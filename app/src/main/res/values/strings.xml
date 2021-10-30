@@ -97,7 +97,8 @@
     <string name="message_error_coaches_occupied">Coaches are already occupied</string>
     <string name="message_error_wrong_dates">Time of start and end don\'t form period!</string>
     <string name="message_selection_failed">Selection failed!</string>
-    <string name="message_ask_remove_client_from_session">Remove client for this session?</string>
+    <string name="message_ask_remove_client_from_session">Remove client from this session?</string>
+    <string name="message_ask_remove_coach_from_session">Remove coach from this session?</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <string name="caption_user_null">User is not signed in</string>

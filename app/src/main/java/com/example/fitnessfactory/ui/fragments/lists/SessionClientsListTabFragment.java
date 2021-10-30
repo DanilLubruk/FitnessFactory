@@ -10,20 +10,23 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
+import com.example.fitnessfactory.data.events.SessionIdUpdateEvent;
 import com.example.fitnessfactory.data.models.Client;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.adapters.ClientsListAdapter;
 import com.example.fitnessfactory.ui.viewholders.lists.ClientsListViewHolder;
-import com.example.fitnessfactory.ui.viewmodels.DataListListener;
 import com.example.fitnessfactory.ui.viewmodels.factories.ClientsListTabViewModelFactory;
-import com.example.fitnessfactory.ui.viewmodels.lists.ClientsListTabViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.SessionClientsListTabViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
-public class ClientsListTabFragment extends ListListenerTabFragment<Client, ClientsListViewHolder, ClientsListAdapter> {
+public class SessionClientsListTabFragment extends ListListenerTabFragment<Client, ClientsListViewHolder, ClientsListAdapter> {
 
-    private ClientsListTabViewModel viewModel;
+    private SessionClientsListTabViewModel viewModel;
 
     @Override
     public void closeProgress() {
@@ -36,7 +39,7 @@ public class ClientsListTabFragment extends ListListenerTabFragment<Client, Clie
     }
 
     @Override
-    protected ClientsListTabViewModel getViewModel() {
+    protected SessionClientsListTabViewModel getViewModel() {
         return viewModel;
     }
 
@@ -47,7 +50,7 @@ public class ClientsListTabFragment extends ListListenerTabFragment<Client, Clie
 
     @Override
     protected void defineViewModel() {
-        viewModel = new ViewModelProvider(this, new ClientsListTabViewModelFactory()).get(ClientsListTabViewModel.class);
+        viewModel = new ViewModelProvider(this, new ClientsListTabViewModelFactory()).get(SessionClientsListTabViewModel.class);
     }
 
     @Override
@@ -76,11 +79,6 @@ public class ClientsListTabFragment extends ListListenerTabFragment<Client, Clie
     }
 
     @Override
-    protected void refreshParentData() {
-
-    }
-
-    @Override
     protected void openSelectionActivity() {
         Intent intent = new Intent(getBaseActivity(), SelectionActivity.class);
         intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, AppConsts.FRAGMENT_CLIENTS_ID);
@@ -94,11 +92,16 @@ public class ClientsListTabFragment extends ListListenerTabFragment<Client, Clie
             case REQUEST_GYM_ID:
                 if (resultCode == RESULT_OK) {
                     String clientId = data.getStringExtra(AppConsts.CLIENT_ID_EXTRA);
-                    String sessionId = getBaseActivity().getIntent().getStringExtra(AppConsts.SESSION_ID_EXTRA);
-                    getViewModel().addClientToSession(sessionId, clientId);
+                    getViewModel().addClientToSession(clientId);
                 }
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSessionIdUpdateEvent(SessionIdUpdateEvent sessionIdUpdateEvent) {
+        getViewModel().setSessionId(sessionIdUpdateEvent.getSessionId());
+        getViewModel().startDataListener();
     }
 }

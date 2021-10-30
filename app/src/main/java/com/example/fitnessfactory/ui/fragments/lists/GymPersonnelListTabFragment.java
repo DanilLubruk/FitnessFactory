@@ -2,6 +2,7 @@ package com.example.fitnessfactory.ui.fragments.lists;
 
 import static android.app.Activity.RESULT_OK;
 import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM_ID;
+import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_PERSONNEL;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -59,13 +60,13 @@ public abstract class GymPersonnelListTabFragment
         Intent intent = new Intent(getBaseActivity(), SelectionActivity.class);
         intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, getSelectionFragmentId());
 
-        startActivityForResult(intent, REQUEST_GYM_ID);
+        startActivityForResult(intent, REQUEST_PERSONNEL);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case REQUEST_GYM_ID:
+            case REQUEST_PERSONNEL:
                 if (resultCode == RESULT_OK) {
                     String personnelEmail = data.getStringExtra(getPersonnelEmailExtraKey());
                     getViewModel().addPersonnelToGym(personnelEmail);
@@ -78,11 +79,6 @@ public abstract class GymPersonnelListTabFragment
     @Override
     protected PersonnelListAdapter createNewAdapter(List<AppUser> listData) {
         return new PersonnelListAdapter(listData, R.layout.one_bg_button_list_item_view);
-    }
-
-    @Override
-    protected void refreshParentData() {
-        getViewModel().refreshGymData(getBaseActivity().getIntent().getStringExtra(AppConsts.GYM_ID_EXTRA));
     }
 
     @Override
