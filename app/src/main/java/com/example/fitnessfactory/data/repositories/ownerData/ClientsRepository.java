@@ -25,48 +25,6 @@ public class ClientsRepository extends BaseRepository {
         return ClientsCollection.getRoot();
     }
 
-    private DocumentReference getSessionDocument(String sessionId, String clientId) {
-        return getSessionsCollection(clientId).document(sessionId);
-    }
-
-    private CollectionReference getSessionsCollection(String clientId) {
-        return getFirestore().collection(ClientsSessionsCollection.getRoot(clientId));
-    }
-
-    public Single<WriteBatch> getRemoveSessionBatchAsync(WriteBatch writeBatch,
-                                                         String sessionId,
-                                                         String clientId) {
-        return SingleCreate(emitter -> {
-            if (!emitter.isDisposed()) {
-                emitter.onSuccess(getRemoveSessionBatch(writeBatch, sessionId, clientId));
-            }
-        });
-    }
-
-    private WriteBatch getRemoveSessionBatch(WriteBatch writeBatch,
-                                             String sessionId,
-                                             String clientId) {
-        return writeBatch.delete(getSessionDocument(sessionId, clientId));
-    }
-
-    public Single<WriteBatch> getAddSessionBatchAsync(WriteBatch writeBatch,
-                                                      String sessionId,
-                                                      String clientId) {
-        return SingleCreate(emitter -> {
-            if (!emitter.isDisposed()) {
-                emitter.onSuccess(getAddSessionBatch(writeBatch, sessionId, clientId));
-            }
-        });
-    }
-
-    private WriteBatch getAddSessionBatch(WriteBatch writeBatch,
-                                          String sessionId,
-                                          String clientId) {
-        return writeBatch
-                .set(getSessionDocument(sessionId, clientId),
-                        UsersSession.builder().setSessionId(sessionId).build());
-    }
-
     public Single<Boolean> saveAsync(Client client) {
         return SingleCreate(emitter -> {
             boolean isSaved = save(client);

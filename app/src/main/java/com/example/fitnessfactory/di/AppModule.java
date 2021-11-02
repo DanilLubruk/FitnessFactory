@@ -22,7 +22,9 @@ import com.example.fitnessfactory.data.managers.access.GymsAccessManager;
 import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
 import com.example.fitnessfactory.data.repositories.access.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.access.CoachesAccessRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.participantsData.ClientSessionsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.ClientsRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.participantsData.CoachSessionsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
@@ -31,8 +33,6 @@ import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionTypeRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
-
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -228,9 +228,10 @@ public class AppModule {
     @Provides
     @AppScope
     public SessionsDataManager provideSessionsDataManager(SessionsRepository sessionsRepository,
-                                                          ClientsRepository clientsRepository,
+                                                          ClientSessionsRepository clientSessionsRepository,
+                                                          CoachSessionsRepository coachSessionsRepository,
                                                           OwnerCoachesRepository ownerCoachesRepository) {
-        return new SessionsDataManager(sessionsRepository, clientsRepository, ownerCoachesRepository);
+        return new SessionsDataManager(sessionsRepository, clientSessionsRepository, coachSessionsRepository, ownerCoachesRepository);
     }
 
     @Provides
