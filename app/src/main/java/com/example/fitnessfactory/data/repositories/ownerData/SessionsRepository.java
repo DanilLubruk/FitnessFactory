@@ -30,6 +30,20 @@ public class SessionsRepository extends BaseRepository {
         return SessionsCollection.getRoot();
     }
 
+    public Single<WriteBatch> getDeleteBatchAsync(Session session) {
+        return SingleCreate(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getDeleteBatch(session));
+            }
+        });
+    }
+
+    private WriteBatch getDeleteBatch(Session session) {
+        return getFirestore()
+                .batch()
+                .delete(getCollection().document(session.getId()));
+    }
+
     public Single<WriteBatch> getRemoveCoachBatchAsync(String sessionId, String coachId) {
         return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {

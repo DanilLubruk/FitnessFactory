@@ -5,6 +5,8 @@ import com.example.fitnessfactory.data.managers.access.GymsAccessManager;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
+import com.example.fitnessfactory.utils.GuiUtils;
+
 import javax.inject.Inject;
 
 public class GymsListViewModel extends BaseViewModel implements DataListListener<Gym> {
@@ -29,6 +31,7 @@ public class GymsListViewModel extends BaseViewModel implements DataListListener
 
     public void deleteItem(Gym gym) {
         if (gym == null) {
+            GuiUtils.showMessage();
             return;
         }
 

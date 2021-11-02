@@ -1,15 +1,18 @@
 package com.example.fitnessfactory.data.managers.data;
 
 import com.example.fitnessfactory.data.managers.BaseManager;
+import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.repositories.ownerData.participantsData.ClientSessionsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.participantsData.CoachSessionsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository;
 import com.example.fitnessfactory.system.SafeReference;
+import com.google.firebase.firestore.WriteBatch;
 
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
+import io.reactivex.Single;
 
 public class SessionsDataManager extends BaseManager {
 
@@ -63,5 +66,21 @@ public class SessionsDataManager extends BaseManager {
                 })
                 .flatMap(writeBatch -> coachSessionsRepository.getRemoveSessionBatchAsync(writeBatch, sessionId, coachIdRef.getValue()))
                 .flatMapCompletable(this::commitBatchCompletable);
+    }
+
+    public Single<Boolean> deleteSessionSingle(Session session) {
+        return getDeleteBatch(session)
+                .flatMap(this::commitBatchSingle);
+    }
+
+    public Completable deleteSessionCompletable(Session session) {
+        return getDeleteBatch(session)
+                .flatMapCompletable(this::commitBatchCompletable);
+    }
+
+    private Single<WriteBatch> getDeleteBatch(Session session) {
+        return sessionsRepository.getDeleteBatchAsync(session)
+                .flatMap(writeBatch -> clientSessionsRepository.getDeleteSessionBatchAsync(writeBatch, session))
+                .flatMap(writeBatch -> coachSessionsRepository.getDeleteSessionBatchAsync(writeBatch, session));
     }
 }

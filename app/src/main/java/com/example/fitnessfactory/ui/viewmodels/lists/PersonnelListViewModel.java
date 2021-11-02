@@ -2,6 +2,7 @@ package com.example.fitnessfactory.ui.viewmodels.lists;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.dataListeners.DataListener;
 import com.example.fitnessfactory.data.managers.access.PersonnelAccessManager;
@@ -12,6 +13,8 @@ import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.system.SafeReference;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
+import com.example.fitnessfactory.utils.GuiUtils;
+import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.RxUtils;
 import com.example.fitnessfactory.utils.dialogs.exceptions.DialogCancelledException;
 
@@ -111,6 +114,7 @@ public abstract class PersonnelListViewModel extends BaseViewModel implements Da
 
     public void deleteItem(AppUser personnel) {
         if (personnel == null) {
+            GuiUtils.showMessage();
             return;
         }
 

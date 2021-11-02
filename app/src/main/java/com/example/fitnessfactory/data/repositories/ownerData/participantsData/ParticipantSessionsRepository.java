@@ -1,20 +1,43 @@
 package com.example.fitnessfactory.data.repositories.ownerData.participantsData;
 
+import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.models.UsersSession;
 import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.WriteBatch;
 
+import java.util.List;
+
 import io.reactivex.Single;
 
 public abstract class ParticipantSessionsRepository extends BaseRepository {
 
-    private DocumentReference getSessionDocument(String sessionId, String clientId) {
-        return getCollection(clientId).document(sessionId);
+    private DocumentReference getSessionDocument(String sessionId, String participantId) {
+        return getCollection(participantId).document(sessionId);
     }
 
     protected abstract CollectionReference getCollection(String participantId);
+
+    protected abstract List<String> getParticipantsIds(Session session);
+
+    public Single<WriteBatch> getDeleteSessionBatchAsync(WriteBatch writeBatch,
+                                                         Session session) {
+        return SingleCreate(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getDeleteSessionBatch(writeBatch, session));
+            }
+        });
+    }
+
+    private WriteBatch getDeleteSessionBatch(WriteBatch writeBatch,
+                                             Session session) {
+        for (String participantId : getParticipantsIds(session)) {
+            writeBatch = writeBatch.delete(getSessionDocument(session.getId(), participantId));
+        }
+
+        return writeBatch;
+    }
 
     public Single<WriteBatch> getRemoveSessionBatchAsync(WriteBatch writeBatch,
                                                          String sessionId,

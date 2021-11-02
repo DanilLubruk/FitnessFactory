@@ -13,20 +13,25 @@ import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
+import com.example.fitnessfactory.utils.GuiUtils;
 
 import java.util.List;
 
 public abstract class GymPersonnelListTabViewModel extends BaseViewModel implements DataListListener<AppUser> {
 
-    private OwnerPersonnelRepository ownerRepository;
+    private final OwnerPersonnelRepository ownerRepository;
 
-    private PersonnelDataManager dataManager;
+    private final PersonnelDataManager dataManager;
 
-    private ArgDataListener dataListener;
+    private final ArgDataListener<String> dataListener;
+
+    private final MutableLiveData<List<AppUser>> personnel = new MutableLiveData<>();
+
+    private String gymId;
 
     public GymPersonnelListTabViewModel(OwnerPersonnelRepository ownerRepository,
                                         PersonnelDataManager dataManager,
-                                        ArgDataListener dataListener) {
+                                        ArgDataListener<String> dataListener) {
         this.ownerRepository = ownerRepository;
         this.dataManager = dataManager;
         this.dataListener = dataListener;
@@ -40,13 +45,9 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
         return dataManager;
     }
 
-    protected ArgDataListener getDataListener() {
+    protected ArgDataListener<String> getDataListener() {
         return dataListener;
     }
-
-    private final MutableLiveData<List<AppUser>> personnel = new MutableLiveData<>();
-
-    private String gymId;
 
     public MutableLiveData<List<AppUser>> getPersonnel() {
         return personnel;
@@ -54,6 +55,7 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
 
     public void addPersonnelToGym(String personnelEmail) {
         if (TextUtils.isEmpty(gymId)) {
+            GuiUtils.showMessage();
             return;
         }
 
@@ -62,6 +64,7 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
 
     public void deleteItem(AppUser personnel) {
         if (TextUtils.isEmpty(gymId)) {
+            GuiUtils.showMessage();
             return;
         }
 
@@ -70,6 +73,7 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
 
     public void startDataListener() {
         if (TextUtils.isEmpty(gymId)) {
+            GuiUtils.showMessage();
             return;
         }
 
@@ -86,6 +90,7 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
 
     public void getPersonnelData() {
         if (TextUtils.isEmpty(gymId)) {
+            GuiUtils.showMessage();
             return;
         }
 

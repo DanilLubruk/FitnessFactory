@@ -5,6 +5,7 @@ import com.example.fitnessfactory.data.models.Client;
 import com.example.fitnessfactory.data.repositories.ownerData.ClientsRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
+import com.example.fitnessfactory.utils.GuiUtils;
 
 import javax.inject.Inject;
 
@@ -33,6 +34,7 @@ public class ClientsListViewModel extends BaseViewModel implements DataListListe
     @Override
     public void deleteItem(Client item) {
         if (item == null) {
+            GuiUtils.showMessage();
             return;
         }
 

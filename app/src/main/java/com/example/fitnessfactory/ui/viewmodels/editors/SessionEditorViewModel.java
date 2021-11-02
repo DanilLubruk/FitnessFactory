@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleDialogEvent;
@@ -22,6 +23,7 @@ import javax.inject.Inject;
 
 public class SessionEditorViewModel extends EditorViewModel {
 
+    private final SessionsDataManager sessionsDataManager;
     private final SessionsRepository sessionsRepository;
 
     public ObservableField<Session> session = new ObservableField<>();
@@ -29,7 +31,9 @@ public class SessionEditorViewModel extends EditorViewModel {
     private Session dbSession;
 
     @Inject
-    public SessionEditorViewModel(SessionsRepository sessionsRepository) {
+    public SessionEditorViewModel(SessionsDataManager sessionsDataManager,
+                                  SessionsRepository sessionsRepository) {
+        this.sessionsDataManager = sessionsDataManager;
         this.sessionsRepository = sessionsRepository;
     }
 
@@ -239,7 +243,20 @@ public class SessionEditorViewModel extends EditorViewModel {
 
     @Override
     public SingleLiveEvent<Boolean> delete() {
-        return null;
+        SingleLiveEvent<Boolean> isDeleted = new SingleLiveEvent<>();
+
+        Session session = this.session.get();
+        if (session == null) {
+            return handleItemDeletingNullError(isDeleted);
+        }
+
+        subscribeInIOThread(
+                sessionsDataManager.deleteSessionSingle(session),
+                new SingleData<>(
+                        isDeleted::setValue,
+                        throwable -> getErrorHandler().handleError(isDeleted, throwable)));
+
+        return isDeleted;
     }
 
     private void handleDateNullError() {
