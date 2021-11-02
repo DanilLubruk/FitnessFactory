@@ -22,8 +22,8 @@ public class CoachesListDataListener extends BaseDataListener implements DataLis
         return Single.create(emitter -> {
             ListenerRegistration listenerRegistration =
                     getCollection().addSnapshotListener((value, error) -> {
-                        if (error != null) {
-                            reportError(emitter, error);
+                        if (checkIsSnapshotValid(emitter, error)) {
+                            return;
                         }
 
                         EventBus.getDefault().post(new CoachesListDataListenerEvent());

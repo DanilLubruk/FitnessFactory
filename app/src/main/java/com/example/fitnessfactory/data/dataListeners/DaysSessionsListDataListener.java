@@ -36,13 +36,8 @@ public class DaysSessionsListDataListener extends BaseDataListener {
                             .whereGreaterThan(Session.DATE_FIELD, TimeUtils.getStartOfDayDate(date))
                             .whereLessThan(Session.DATE_FIELD, TimeUtils.getEndOfDayDate(date))
                             .addSnapshotListener(((value, error) -> {
-                                if (error != null) {
-                                    reportError(emitter, error);
-                                    return;
-                                }
-                                if (value == null) {
+                                if (checkIsSnapshotValid(emitter, value, error)) {
                                     Log.d(AppConsts.DEBUG_TAG, "DaysSessionsListDataListener: value null");
-                                    reportError(emitter, new Exception(ResUtils.getString(R.string.message_error_data_obtain)));
                                     return;
                                 }
 

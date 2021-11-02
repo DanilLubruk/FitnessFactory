@@ -6,7 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.dataListeners.CoachGymsListDataListener;
-import com.example.fitnessfactory.data.dataListeners.DataListenerStringArgument;
+import com.example.fitnessfactory.data.dataListeners.ArgDataListener;
 import com.example.fitnessfactory.data.managers.access.CoachesAccessManager;
 import com.example.fitnessfactory.data.managers.access.PersonnelAccessManager;
 import com.example.fitnessfactory.data.managers.data.CoachesDataManager;
@@ -62,7 +62,7 @@ public class CoachEditorViewModelTests extends PersonnelEditorViewModelTests {
     }
 
     @Override
-    protected DataListenerStringArgument getDataListener() {
+    protected ArgDataListener getDataListener() {
         return dataListener;
     }
 

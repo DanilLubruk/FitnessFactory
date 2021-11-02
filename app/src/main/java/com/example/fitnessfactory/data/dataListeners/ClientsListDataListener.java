@@ -31,12 +31,8 @@ public class ClientsListDataListener extends BaseDataListener {
         return Single.create(emitter -> {
             ListenerRegistration listenerRegistration =
                     getCollection().addSnapshotListener(((value, error) -> {
-                        if (error != null) {
-                            reportError(emitter, error);
-                        }
-                        if (value == null) {
+                        if (checkIsSnapshotValid(emitter, value, error)) {
                             Log.d(AppConsts.DEBUG_TAG, "ClientsListDataListener: value null");
-                            reportError(emitter, new Exception(ResUtils.getString(R.string.message_error_data_obtain)));
                             return;
                         }
 

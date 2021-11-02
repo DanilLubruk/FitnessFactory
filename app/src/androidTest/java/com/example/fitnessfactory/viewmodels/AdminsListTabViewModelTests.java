@@ -1,6 +1,6 @@
 package com.example.fitnessfactory.viewmodels;
 
-import com.example.fitnessfactory.data.dataListeners.DataListenerStringArgument;
+import com.example.fitnessfactory.data.dataListeners.ArgDataListener;
 import com.example.fitnessfactory.data.dataListeners.GymAdminsListDataListener;
 import com.example.fitnessfactory.data.managers.data.AdminsDataManager;
 import com.example.fitnessfactory.data.managers.data.PersonnelDataManager;
@@ -38,7 +38,7 @@ public class AdminsListTabViewModelTests extends PersonnelListTabViewModelTests 
     }
 
     @Override
-    protected DataListenerStringArgument getDataListener() {
+    protected ArgDataListener getDataListener() {
         return dataListener;
     }
 }

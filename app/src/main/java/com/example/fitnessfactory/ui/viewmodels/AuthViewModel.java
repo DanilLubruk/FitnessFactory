@@ -58,8 +58,7 @@ public class AuthViewModel extends BaseViewModel {
     }
 
     public void interruptSignIn() {
-        subscribeInIOThread(firebaseAuthManager.interruptSignInAsync(),
-                getErrorHandler()::handleError);
+        subscribeInIOThread(firebaseAuthManager.interruptSignInAsync());
     }
 
     public SingleLiveEvent<Boolean> signInUser(Intent authData,
@@ -97,7 +96,7 @@ public class AuthViewModel extends BaseViewModel {
     }
 
     public void signOut() {
-        subscribeInIOThread(firebaseAuthManager.signOutCompletable(), getErrorHandler()::handleError);
+        subscribeInIOThread(firebaseAuthManager.signOutCompletable());
     }
 
     public SingleLiveEvent<Boolean> checkOrganisationName() {

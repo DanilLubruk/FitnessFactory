@@ -10,11 +10,12 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.SessionIdUpdateEvent;
-import com.example.fitnessfactory.data.models.Personnel;
+import com.example.fitnessfactory.data.events.SessionsCoachesListDataListenerEvent;
+import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.adapters.PersonnelListAdapter;
 import com.example.fitnessfactory.ui.viewholders.lists.PersonnelListViewHolder;
-\import com.example.fitnessfactory.ui.viewmodels.factories.SessionCoachesListTabViewModelFactory;
+import com.example.fitnessfactory.ui.viewmodels.factories.SessionCoachesListTabViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.SessionCoachesListTabViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 
@@ -23,18 +24,13 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
-public class SessionCoachesListTabFragment extends ListListenerTabFragment<Personnel, PersonnelListViewHolder, PersonnelListAdapter> {
+public class SessionCoachesListTabFragment extends ListListenerTabFragment<AppUser, PersonnelListViewHolder, PersonnelListAdapter> {
 
     private SessionCoachesListTabViewModel viewModel;
 
-    @Override
-    public void closeProgress() {
-
-    }
-
-    @Override
-    public void showProgress() {
-
+    protected void initComponents() {
+        super.initComponents();
+        viewModel.getCoaches().observe(this, this::setListData);
     }
 
     @Override
@@ -43,33 +39,28 @@ public class SessionCoachesListTabFragment extends ListListenerTabFragment<Perso
     }
 
     @Override
-    protected String getTitle() {
-        return null;
-    }
-
-    @Override
     protected void defineViewModel() {
         viewModel = new ViewModelProvider(this, new SessionCoachesListTabViewModelFactory()).get(SessionCoachesListTabViewModel.class);
     }
 
     @Override
-    protected PersonnelListAdapter createNewAdapter(List<Personnel> listData) {
+    protected PersonnelListAdapter createNewAdapter(List<AppUser> listData) {
         return new PersonnelListAdapter(listData, R.layout.one_bg_button_list_item_view);
     }
 
     @Override
-    protected void onListRowClicked(Personnel personnel) {
+    protected void onListRowClicked(AppUser appUser) {
 
     }
 
     @Override
-    protected void showEditorActivity(Personnel item) {
+    protected void showEditorActivity(AppUser item) {
 
     }
 
     @Override
-    protected Personnel getNewItem() {
-        return new Personnel();
+    protected AppUser getNewItem() {
+        return new AppUser();
     }
 
     @Override
@@ -90,8 +81,8 @@ public class SessionCoachesListTabFragment extends ListListenerTabFragment<Perso
         switch (requestCode) {
             case REQUEST_COACH:
                 if (resultCode == RESULT_OK) {
-                    String coachId = data.getStringExtra(AppConsts.COACH_ID_EXTRA);
-                    getViewModel().addCoachToSession(coachId);
+                    String coachEmail = data.getStringExtra(AppConsts.COACH_EMAIL_EXTRA);
+                    getViewModel().addParticipantToSession(coachEmail);
                 }
                 break;
         }
@@ -99,8 +90,23 @@ public class SessionCoachesListTabFragment extends ListListenerTabFragment<Perso
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSessionsCoachesListDataListenerEvent(SessionsCoachesListDataListenerEvent sessionsCoachesListDataListenerEvent) {
+        getViewModel().resetCoachesList(sessionsCoachesListDataListenerEvent.getCoachesEmails());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSessionIdUpdateEvent(SessionIdUpdateEvent sessionIdUpdateEvent) {
-        getViewModel().setSessionId(sessionIdUpdateEvent.getSessionId());
+        getViewModel().resetSessionId(sessionIdUpdateEvent.getSessionId());
         getViewModel().startDataListener();
+    }
+
+    @Override
+    public void closeProgress() {
+
+    }
+
+    @Override
+    public void showProgress() {
+
     }
 }

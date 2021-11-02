@@ -103,9 +103,4 @@ public abstract class GymPersonnelListTabFragment
     public void showProgress() {
 
     }
-
-    @Override
-    protected String getTitle() {
-        return getBaseActivity().getTitle().toString();
-    }
 }

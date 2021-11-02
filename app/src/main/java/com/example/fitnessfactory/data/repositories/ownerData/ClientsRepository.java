@@ -2,14 +2,16 @@ package com.example.fitnessfactory.data.repositories.ownerData;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.firestoreCollections.ClientsCollection;
+import com.example.fitnessfactory.data.firestoreCollections.ClientsSessionsCollection;
 import com.example.fitnessfactory.data.models.Client;
+import com.example.fitnessfactory.data.models.UsersSession;
 import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.WriteBatch;
 
@@ -21,6 +23,14 @@ public class ClientsRepository extends BaseRepository {
     @Override
     protected String getRoot() {
         return ClientsCollection.getRoot();
+    }
+
+    private DocumentReference getSessionDocument(String sessionId, String clientId) {
+        return getSessionsCollection(clientId).document(sessionId);
+    }
+
+    private CollectionReference getSessionsCollection(String clientId) {
+        return getFirestore().collection(ClientsSessionsCollection.getRoot(clientId));
     }
 
     public Single<WriteBatch> getAddSessionBatchAsync(WriteBatch writeBatch,
@@ -37,9 +47,8 @@ public class ClientsRepository extends BaseRepository {
                                           String sessionId,
                                           String clientId) {
         return writeBatch
-                .update(getCollection().document(clientId),
-                        Client.SESSIONS_IDS_FIELD,
-                        FieldValue.arrayUnion(sessionId));
+                .set(getSessionDocument(sessionId, clientId),
+                        UsersSession.builder().setSessionId(sessionId).build());
     }
 
     public Single<Boolean> saveAsync(Client client) {
@@ -101,7 +110,6 @@ public class ClientsRepository extends BaseRepository {
 
         return clientsWithEmail > 0;
     }
-
 
 
     public Single<Client> getClientAsync(String clientId) {

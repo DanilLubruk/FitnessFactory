@@ -6,7 +6,7 @@ import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fitnessfactory.data.AppPrefs;
-import com.example.fitnessfactory.data.dataListeners.DataListenerStringArgument;
+import com.example.fitnessfactory.data.dataListeners.ArgDataListener;
 import com.example.fitnessfactory.data.managers.access.PersonnelAccessManager;
 import com.example.fitnessfactory.data.managers.data.PersonnelDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
@@ -15,7 +15,6 @@ import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
-import com.example.fitnessfactory.utils.GuiUtils;
 
 import java.util.List;
 
@@ -30,12 +29,12 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
 
     protected PersonnelDataManager dataManager;
 
-    protected DataListenerStringArgument dataListener;
+    protected ArgDataListener dataListener;
 
     public PersonnelEditorViewModel(OwnerPersonnelRepository ownerRepository,
                                     PersonnelAccessManager accessManager,
                                     PersonnelDataManager dataManager,
-                                    DataListenerStringArgument dataListener) {
+                                    ArgDataListener dataListener) {
         this.ownerRepository = ownerRepository;
         this.accessManager = accessManager;
         this.dataManager = dataManager;
@@ -54,7 +53,7 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
         return dataManager;
     }
 
-    protected DataListenerStringArgument getDataListener() {
+    protected ArgDataListener getDataListener() {
         return dataListener;
     }
 
@@ -73,9 +72,7 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
             return;
         }
 
-        subscribeInIOThread(
-                getOwnerRepository().addGymToPersonnelAsync(personnel.getEmail(), gymId),
-                getErrorHandler()::handleError);
+        subscribeInIOThread(getOwnerRepository().addGymToPersonnelAsync(personnel.getEmail(), gymId));
     }
 
     @Override
@@ -86,9 +83,7 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
             return;
         }
 
-        subscribeInIOThread(
-                getOwnerRepository().removeGymFromPersonnelAsync(personnel.getEmail(), gym.getId()),
-                getErrorHandler()::handleError);
+        subscribeInIOThread(getOwnerRepository().removeGymFromPersonnelAsync(personnel.getEmail(), gym.getId()));
     }
 
     public MutableLiveData<List<Gym>> getGyms() {

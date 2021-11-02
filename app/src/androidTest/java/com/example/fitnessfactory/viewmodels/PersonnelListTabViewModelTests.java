@@ -2,7 +2,7 @@ package com.example.fitnessfactory.viewmodels;
 
 import com.example.fitnessfactory.BaseTests;
 import com.example.fitnessfactory.TestRxUtils;
-import com.example.fitnessfactory.data.dataListeners.DataListenerStringArgument;
+import com.example.fitnessfactory.data.dataListeners.ArgDataListener;
 import com.example.fitnessfactory.data.managers.data.PersonnelDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.repositories.UserRepository;
@@ -36,7 +36,7 @@ public abstract class PersonnelListTabViewModelTests extends BaseTests {
 
     protected abstract PersonnelDataManager getPersonnelDataManager();
 
-    protected abstract DataListenerStringArgument getDataListener();
+    protected abstract ArgDataListener getDataListener();
 
     @Before
     public void setup() {

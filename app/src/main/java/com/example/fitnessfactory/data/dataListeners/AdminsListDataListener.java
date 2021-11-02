@@ -23,8 +23,7 @@ public class AdminsListDataListener extends BaseDataListener implements DataList
             ListenerRegistration adminsListListener =
                     getAdminsListQuery()
                             .addSnapshotListener(((value, error) -> {
-                                if (error != null) {
-                                    reportError(emitter, error);
+                                if (checkIsSnapshotValid(emitter, error)) {
                                     return;
                                 }
 

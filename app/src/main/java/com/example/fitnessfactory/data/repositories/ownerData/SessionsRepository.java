@@ -30,6 +30,22 @@ public class SessionsRepository extends BaseRepository {
         return SessionsCollection.getRoot();
     }
 
+    public Single<WriteBatch> getAddCoachBatchAsync(String sessionId, String coachId) {
+        return SingleCreate(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getAddCoachBatch(sessionId, coachId));
+            }
+        });
+    }
+
+    private WriteBatch getAddCoachBatch(String sessionId, String coachId) {
+        return getFirestore()
+                .batch()
+                .update(getCollection().document(sessionId),
+                        Session.COACHES_IDS_FIELD,
+                        FieldValue.arrayUnion(coachId));
+    }
+
     public Single<WriteBatch> getAddClientBatchAsync(String sessionId, String clientId) {
         return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {

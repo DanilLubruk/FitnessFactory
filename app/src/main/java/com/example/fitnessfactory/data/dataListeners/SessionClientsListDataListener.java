@@ -16,31 +16,29 @@ import java.util.List;
 
 import io.reactivex.Single;
 
-public class SessionClientsListDataListener extends BaseDataListener implements DataListenerStringArgument {
+public class SessionClientsListDataListener extends BaseDataListener implements ArgDataListener<List<String>> {
 
     @Override
     protected String getRoot() {
         return ClientsCollection.getRoot();
     }
 
-    @Override
-    public void startDataListener(String sessionId) {
-        setListenerRegistration(getDataListener(sessionId));
+    public void startDataListener(List<String> clientsIds) {
+        if (clientsIds == null || clientsIds.size() == 0) {
+            return;
+        }
+
+        setListenerRegistration(getDataListener(clientsIds));
     }
 
-    private Single<ListenerRegistration> getDataListener(String sessionId) {
+    private Single<ListenerRegistration> getDataListener(List<String> clientsIds) {
         return Single.create(emitter -> {
             ListenerRegistration listenerRegistration =
                     getCollection()
-                            .whereArrayContains(Client.SESSIONS_IDS_FIELD, sessionId)
+                            .whereIn(Client.ID_FIELD, clientsIds)
                             .addSnapshotListener(((value, error) -> {
-                                if (error != null) {
-                                    reportError(emitter, error);
-                                    return;
-                                }
-                                if (value == null) {
+                                if (checkIsSnapshotValid(emitter, value, error)) {
                                     Log.d(AppConsts.DEBUG_TAG, "SessionClientsListDataListener: value null");
-                                    reportError(emitter, new Exception(ResUtils.getString(R.string.message_error_data_obtain)));
                                     return;
                                 }
 

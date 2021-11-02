@@ -12,6 +12,7 @@ import com.example.fitnessfactory.data.dataListeners.GymsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.SessionClientsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.SessionTypesListDataListener;
 import com.example.fitnessfactory.data.dataListeners.SessionsCalendarDataListener;
+import com.example.fitnessfactory.data.dataListeners.SessionsCoachesListDataListener;
 import com.example.fitnessfactory.data.managers.access.AdminsAccessManager;
 import com.example.fitnessfactory.data.managers.data.AdminsDataManager;
 import com.example.fitnessfactory.data.managers.AuthManager;
@@ -227,7 +228,14 @@ public class AppModule {
     @Provides
     @AppScope
     public SessionsDataManager provideSessionsDataManager(SessionsRepository sessionsRepository,
-                                                          ClientsRepository clientsRepository) {
-        return new SessionsDataManager(sessionsRepository, clientsRepository);
+                                                          ClientsRepository clientsRepository,
+                                                          OwnerCoachesRepository ownerCoachesRepository) {
+        return new SessionsDataManager(sessionsRepository, clientsRepository, ownerCoachesRepository);
+    }
+
+    @Provides
+    @AppScope
+    public SessionsCoachesListDataListener provideSessionsCoachesListDataListener() {
+        return new SessionsCoachesListDataListener();
     }
 }

@@ -62,6 +62,7 @@ public class SessionEditorViewModel extends EditorViewModel {
         }
 
         this.session.set(session);
+        this.sessionId.setValue(session.getId());
         isObtained.setValue(true);
     }
 
@@ -225,7 +226,9 @@ public class SessionEditorViewModel extends EditorViewModel {
                 new SingleData<>(
                         isSavedResult -> {
                             dbSession.copy(session);
-                            sessionId.setValue(session.getId());
+                            if (!session.getId().equals(sessionId.getValue())) {
+                                sessionId.setValue(session.getId());
+                            }
                             isSaved.setValue(isSavedResult);
                         },
                         throwable -> getErrorHandler().handleError(isSaved, throwable)));

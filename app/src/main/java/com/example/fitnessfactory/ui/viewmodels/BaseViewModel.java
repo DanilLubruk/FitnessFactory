@@ -92,11 +92,6 @@ public class BaseViewModel extends ViewModel {
         rxManager.subscribeInMainThread(subscriber, observer);
     }
 
-    public <T> void subscribeInIOThread(Completable subscriber,
-                                        Consumer<? super Throwable> onError) {
-        rxManager.subscribeInIOThread(subscriber, onError);
-    }
-
     public <T> void subscribe(Single<T> subscriber, SingleData<T> observer) {
         rxManager.subscribe(subscriber, observer);
     }
@@ -108,7 +103,7 @@ public class BaseViewModel extends ViewModel {
     }
 
     public <T> void subscribeInIOThread(Completable subscriber) {
-        rxManager.subscribeInIOThread(subscriber);
+        rxManager.subscribeInIOThread(subscriber, getErrorHandler()::handleError);
     }
 
     public void addSubscription(Disposable disposable) {

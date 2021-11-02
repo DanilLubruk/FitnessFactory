@@ -118,7 +118,6 @@ public abstract class PersonnelListViewModel extends BaseViewModel implements Da
                 getAccessManager()
                         .deletePersonnelCompletable(
                                 AppPrefs.gymOwnerId().getValue(),
-                                personnel.getEmail()),
-                getErrorHandler()::handleError);
+                                personnel.getEmail()));
     }
 }

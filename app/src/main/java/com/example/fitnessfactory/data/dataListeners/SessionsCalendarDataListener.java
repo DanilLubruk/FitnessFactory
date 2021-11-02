@@ -35,13 +35,8 @@ public class SessionsCalendarDataListener extends BaseDataListener {
                     .whereGreaterThan(Session.DATE_FIELD, startDate)
                     .whereLessThan(Session.DATE_FIELD, endDate)
                     .addSnapshotListener((value, error) -> {
-                        if (error != null) {
-                            reportError(emitter, error);
-                            return;
-                        }
-                        if (value == null) {
+                        if (checkIsSnapshotValid(emitter, value, error)) {
                             Log.d(AppConsts.DEBUG_TAG, "SessionsCalendarDataListener: value null");
-                            reportError(emitter, new Exception(ResUtils.getString(R.string.message_error_data_obtain)));
                             return;
                         }
 

@@ -5,6 +5,7 @@
     <string name="title_gyms">Gyms</string>
     <string name="title_session_types">Session types</string>
     <string name="title_select_session_type">Select session type</string>
+    <string name="title_select_client">Select client</string>
     <string name="title_select_gyms">Select gym</string>
     <string name="title_admins">Administrators</string>
     <string name="title_select_admins">Select administrator</string>

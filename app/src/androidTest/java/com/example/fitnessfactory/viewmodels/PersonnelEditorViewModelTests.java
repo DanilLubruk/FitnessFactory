@@ -4,7 +4,7 @@ import android.content.Intent;
 
 import com.example.fitnessfactory.BaseTests;
 import com.example.fitnessfactory.data.AppPrefs;
-import com.example.fitnessfactory.data.dataListeners.DataListenerStringArgument;
+import com.example.fitnessfactory.data.dataListeners.ArgDataListener;
 import com.example.fitnessfactory.data.managers.access.PersonnelAccessManager;
 import com.example.fitnessfactory.data.managers.data.PersonnelDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
@@ -77,7 +77,7 @@ public abstract class PersonnelEditorViewModelTests extends BaseTests {
 
     protected abstract PersonnelDataManager getDataManager();
 
-    protected abstract DataListenerStringArgument getDataListener();
+    protected abstract ArgDataListener getDataListener();
 
     protected abstract PersonnelEditorViewModel getViewModel();
 

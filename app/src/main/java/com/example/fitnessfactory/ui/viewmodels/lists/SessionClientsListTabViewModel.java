@@ -1,68 +1,55 @@
 package com.example.fitnessfactory.ui.viewmodels.lists;
 
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.dataListeners.ArgDataListener;
 import com.example.fitnessfactory.data.dataListeners.SessionClientsListDataListener;
 import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
 import com.example.fitnessfactory.data.models.Client;
+import com.example.fitnessfactory.data.models.Session;
+import com.example.fitnessfactory.data.observers.SingleData;
+import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
-public class SessionClientsListTabViewModel extends BaseViewModel implements DataListListener<Client> {
+import io.reactivex.Completable;
 
-    private final SessionsDataManager sessionsDataManager;
+public class SessionClientsListTabViewModel extends SessionParticipantListTabViewModel<Client> {
+
     private final SessionClientsListDataListener dataListener;
-    private String sessionId;
 
     @Inject
     public SessionClientsListTabViewModel(SessionsDataManager sessionsDataManager,
+                                          SessionsRepository sessionsRepository,
                                           SessionClientsListDataListener dataListener) {
-        this.sessionsDataManager = sessionsDataManager;
+        super(sessionsDataManager, sessionsRepository);
         this.dataListener = dataListener;
     }
 
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+
+    @Override
+    protected ArgDataListener<List<String>> getDataListener() {
+        return dataListener;
     }
 
     @Override
-    public void startDataListener() {
-        if (StringUtils.isEmpty(sessionId)) {
-            return;
-        }
-        dataListener.startDataListener(sessionId);
+    protected Completable getAddParticipantAction(String sessionId, String clientId) {
+        return sessionsDataManager.addClientToSession(sessionId, clientId);
     }
 
     @Override
-    public void stopDataListener() {
-        dataListener.stopDataListener();
-    }
-
-    public void addClientToSession(String clientId) {
-        if (StringUtils.isEmpty(sessionId)) {
-            GuiUtils.showMessage(getSessionNullMessage());
-            return;
-        }
-        if (StringUtils.isEmpty(clientId)) {
-            GuiUtils.showMessage(ResUtils.getString(R.string.message_error_client_null));
-            return;
-        }
-
-        subscribeInIOThread(
-                sessionsDataManager.addClientToSession(sessionId, clientId),
-                getErrorHandler()::handleError);
+    protected List<String> getParticipantsList(Session session) {
+        return session.getClientsIds();
     }
 
     @Override
-    public void deleteItem(Client item) {
-
-    }
-
-    private String getSessionNullMessage() {
-        return ResUtils.getString(R.string.message_error_session_null);
+    protected String getParticipantNullMessage() {
+        return ResUtils.getString(R.string.message_error_client_null);
     }
 }

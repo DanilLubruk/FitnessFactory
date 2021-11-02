@@ -1,12 +1,20 @@
 package com.example.fitnessfactory.data.dataListeners;
 
+import android.util.Log;
+
+import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.firestoreCollections.CollectionOperator;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.system.SafeReference;
+import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.RxErrorsHandler;
 import com.example.fitnessfactory.utils.RxUtils;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import io.reactivex.CompletableEmitter;
 import io.reactivex.Scheduler;
@@ -68,6 +76,31 @@ public abstract class BaseDataListener extends CollectionOperator {
         if (!emitter.isDisposed()) {
             emitter.onError(error);
         }
+    }
+
+    protected <T> boolean checkIsSnapshotValid(SingleEmitter<T> emitter,
+                                               QuerySnapshot value,
+                                               FirebaseFirestoreException error) {
+        if (error != null) {
+            reportError(emitter, error);
+            return false;
+        }
+        if (value == null) {
+            reportError(emitter, new Exception(ResUtils.getString(R.string.message_error_data_obtain)));
+            return false;
+        }
+
+        return true;
+    }
+
+    protected <T> boolean checkIsSnapshotValid(SingleEmitter<T> emitter,
+                                               FirebaseFirestoreException error) {
+        if (error != null) {
+            reportError(emitter, error);
+            return false;
+        }
+
+        return true;
     }
 
     public void setRxErrorsHandler(RxErrorsHandler rxErrorsHandler) {

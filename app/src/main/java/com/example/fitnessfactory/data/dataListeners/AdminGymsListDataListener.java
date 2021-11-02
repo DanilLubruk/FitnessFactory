@@ -11,7 +11,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import io.reactivex.Single;
 
-public class AdminGymsListDataListener extends BaseDataListener implements DataListenerStringArgument {
+public class AdminGymsListDataListener extends BaseDataListener implements ArgDataListener<String> {
 
     @Override
     protected String getRoot() {
@@ -28,8 +28,7 @@ public class AdminGymsListDataListener extends BaseDataListener implements DataL
             ListenerRegistration listenerRegistration =
                     getAdminQueryByEmail(adminEmail)
                             .addSnapshotListener(((value, error) -> {
-                                if (error != null) {
-                                    reportError(emitter, error);
+                                if (checkIsSnapshotValid(emitter, error)) {
                                     return;
                                 }
 

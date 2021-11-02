@@ -9,7 +9,7 @@ import com.google.firebase.firestore.Query;
 import org.greenrobot.eventbus.EventBus;
 import io.reactivex.Single;
 
-public class GymAdminsListDataListener extends BaseDataListener implements DataListenerStringArgument {
+public class GymAdminsListDataListener extends BaseDataListener implements ArgDataListener<String> {
 
     @Override
     protected String getRoot() {
@@ -25,8 +25,7 @@ public class GymAdminsListDataListener extends BaseDataListener implements DataL
            ListenerRegistration listenerRegistration =
                    getAdminQueryByGymId(gymId)
                            .addSnapshotListener(((value, error) -> {
-                               if (error != null) {
-                                   reportError(emitter, error);
+                               if (checkIsSnapshotValid(emitter, error)) {
                                    return;
                                }
 

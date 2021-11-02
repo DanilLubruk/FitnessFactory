@@ -128,13 +128,21 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.viewpager2.widget.ViewPager2 xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/vpParticipators"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tlParticipants"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ilSessionType" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/vpParticipants"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/ilSessionType"
+            android:layout_below="@+id/tlParticipants"
             android:orientation="vertical">
 
         </androidx.viewpager2.widget.ViewPager2>
+
     </RelativeLayout>
 </layout>

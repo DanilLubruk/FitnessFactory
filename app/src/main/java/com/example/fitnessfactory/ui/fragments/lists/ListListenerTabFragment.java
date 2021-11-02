@@ -25,6 +25,11 @@ public abstract class ListListenerTabFragment<
     }
 
     @Override
+    protected String getTitle() {
+        return getBaseActivity().getTitle().toString();
+    }
+
+    @Override
     public EditorActivity getBaseActivity() {
         return (EditorActivity) getActivity();
     }

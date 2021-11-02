@@ -15,12 +15,15 @@ import com.example.fitnessfactory.data.events.SessionIdUpdateEvent;
 import com.example.fitnessfactory.data.observers.SingleDialogEvent;
 import com.example.fitnessfactory.databinding.ActivitySessionEditorBinding;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
+import com.example.fitnessfactory.ui.adapters.PersonnelPageAdapter;
+import com.example.fitnessfactory.ui.adapters.SessionPageAdapter;
 import com.example.fitnessfactory.ui.viewmodels.editors.SessionEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionEditorViewModelFactory;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -31,6 +34,7 @@ public class SessionEditorActivity extends EditorActivity {
     private String id;
     private SessionEditorViewModel viewModel;
     private ActivitySessionEditorBinding binding;
+    private SessionPageAdapter pageAdapter;
 
     @Override
     public Toolbar getToolbar() {
@@ -55,12 +59,25 @@ public class SessionEditorActivity extends EditorActivity {
                     }
                 });
         subscribeForSessionIdChangesForTabs();
+        pageAdapter = new SessionPageAdapter(getSupportFragmentManager(), getLifecycle());
+        binding.container.vpParticipants.setAdapter(pageAdapter);
+        new TabLayoutMediator(binding.container.tlParticipants, binding.container.vpParticipants,
+                (tab, position) -> {
+                    switch (position) {
+                        case 0:
+                            tab.setText(ResUtils.getString(R.string.title_clients));
+                            break;
+                        case 1:
+                            tab.setText(ResUtils.getString(R.string.title_coaches));
+                            break;
+                    }
+                }
+        ).attach();
     }
 
     private void subscribeForSessionIdChangesForTabs() {
         getViewModel().getSessionId()
                 .observe(this, sessionId -> EventBus.getDefault().post(new SessionIdUpdateEvent(sessionId)));
-        //getIntent().putExtra(AppConsts.SESSION_ID_EXTRA, sessionId));
     }
 
     private Date getIntentDefaultDate() {

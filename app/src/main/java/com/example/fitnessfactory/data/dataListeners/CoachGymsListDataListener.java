@@ -10,7 +10,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import io.reactivex.Single;
 
-public class CoachGymsListDataListener extends BaseDataListener implements DataListenerStringArgument {
+public class CoachGymsListDataListener extends BaseDataListener implements ArgDataListener<String> {
 
     @Override
     protected String getRoot() {
@@ -27,8 +27,7 @@ public class CoachGymsListDataListener extends BaseDataListener implements DataL
             ListenerRegistration listenerRegistration =
                     getCoachQueryByEmail(coachEmail)
                             .addSnapshotListener((value, error) -> {
-                                if (error != null) {
-                                    reportError(emitter, error);
+                                if (checkIsSnapshotValid(emitter, error)) {
                                     return;
                                 }
 

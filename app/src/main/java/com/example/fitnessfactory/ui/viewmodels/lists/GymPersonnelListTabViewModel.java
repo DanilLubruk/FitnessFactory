@@ -6,14 +6,13 @@ import android.text.TextUtils;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fitnessfactory.data.AppConsts;
-import com.example.fitnessfactory.data.dataListeners.DataListenerStringArgument;
+import com.example.fitnessfactory.data.dataListeners.ArgDataListener;
 import com.example.fitnessfactory.data.managers.data.PersonnelDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
-import com.example.fitnessfactory.utils.RxUtils;
 
 import java.util.List;
 
@@ -23,11 +22,11 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
 
     private PersonnelDataManager dataManager;
 
-    private DataListenerStringArgument dataListener;
+    private ArgDataListener dataListener;
 
     public GymPersonnelListTabViewModel(OwnerPersonnelRepository ownerRepository,
                                         PersonnelDataManager dataManager,
-                                        DataListenerStringArgument dataListener) {
+                                        ArgDataListener dataListener) {
         this.ownerRepository = ownerRepository;
         this.dataManager = dataManager;
         this.dataListener = dataListener;
@@ -41,7 +40,7 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
         return dataManager;
     }
 
-    protected DataListenerStringArgument getDataListener() {
+    protected ArgDataListener getDataListener() {
         return dataListener;
     }
 
@@ -58,9 +57,7 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
             return;
         }
 
-        subscribeInIOThread(
-                getOwnerRepository().addGymToPersonnelAsync(personnelEmail, gymId),
-                getErrorHandler()::handleError);
+        subscribeInIOThread(getOwnerRepository().addGymToPersonnelAsync(personnelEmail, gymId));
     }
 
     public void deleteItem(AppUser personnel) {
@@ -68,9 +65,7 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
             return;
         }
 
-        subscribeInIOThread(
-                getOwnerRepository().removeGymFromPersonnelAsync(personnel.getEmail(), gymId),
-                getErrorHandler()::handleError);
+        subscribeInIOThread(getOwnerRepository().removeGymFromPersonnelAsync(personnel.getEmail(), gymId));
     }
 
     public void startDataListener() {

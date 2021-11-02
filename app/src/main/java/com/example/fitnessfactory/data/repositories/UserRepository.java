@@ -1,10 +1,10 @@
 package com.example.fitnessfactory.data.repositories;
 import com.example.fitnessfactory.data.firestoreCollections.UsersCollection;
 import com.example.fitnessfactory.data.models.AppUser;
+import com.example.fitnessfactory.data.models.Personnel;
 import com.example.fitnessfactory.utils.UsersUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -40,7 +40,7 @@ public class UserRepository extends BaseRepository {
 
     public Single<List<AppUser>> getOwnersByIds(List<String> ownerIds, String currentUserId) {
         return SingleCreate(emitter -> {
-            List<AppUser> owners = getAppUsersById(ownerIds);
+            List<AppUser> owners = getAppUsersByOwnerIds(ownerIds);
             owners = UsersUtils.makeCurrentUserFirstInList(owners, currentUserId);
 
             if (!emitter.isDisposed()) {
@@ -49,7 +49,7 @@ public class UserRepository extends BaseRepository {
         });
     }
 
-    private List<AppUser> getAppUsersById(List<String> ownerIds) throws Exception {
+    private List<AppUser> getAppUsersByOwnerIds(List<String> ownerIds) throws Exception {
         QuerySnapshot querySnapshot = Tasks.await(newQuery().whereIdIn(ownerIds).build().get());
 
         return querySnapshot.toObjects(AppUser.class);

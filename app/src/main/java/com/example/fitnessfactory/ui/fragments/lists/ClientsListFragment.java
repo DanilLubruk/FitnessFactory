@@ -24,7 +24,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
-public class ClientsListFragment extends ListListenerFragment<Client, ClientsListViewHolder, ClientsListAdapter> {
+public class ClientsListFragment extends ListListenerSelectFragment<Client, ClientsListViewHolder, ClientsListAdapter> {
 
     private ClientsListViewModel viewModel;
 
@@ -34,7 +34,12 @@ public class ClientsListFragment extends ListListenerFragment<Client, ClientsLis
     }
 
     @Override
-    protected String getTitle() {
+    protected String getSelectTitle() {
+        return ResUtils.getString(R.string.title_select_client);
+    }
+
+    @Override
+    protected String getListTitle() {
         return ResUtils.getString(R.string.title_clients);
     }
 
@@ -49,8 +54,11 @@ public class ClientsListFragment extends ListListenerFragment<Client, ClientsLis
     }
 
     @Override
-    protected void onListRowClicked(Client client) {
-        showEditorActivity(client);
+    protected Intent getResultIntent(Client item) {
+        Intent intent = new Intent();
+        intent.putExtra(AppConsts.CLIENT_ID_EXTRA, item.getId());
+
+        return intent;
     }
 
     @Override

@@ -32,8 +32,6 @@ public class MainActivityViewModel extends BaseViewModel {
     }
 
     public void setOrganisationName(String organisationName) {
-        subscribeInIOThread(
-                organisationInfoRepository.setOrganisationNameAsync(organisationName),
-                getErrorHandler()::handleError);
+        subscribeInIOThread(organisationInfoRepository.setOrganisationNameAsync(organisationName));
     }
 }

@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.SessionIdUpdateEvent;
+import com.example.fitnessfactory.data.events.SessionsClientsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.Client;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.adapters.ClientsListAdapter;
@@ -29,23 +30,8 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<Clien
     private SessionClientsListTabViewModel viewModel;
 
     @Override
-    public void closeProgress() {
-
-    }
-
-    @Override
-    public void showProgress() {
-
-    }
-
-    @Override
     protected SessionClientsListTabViewModel getViewModel() {
         return viewModel;
-    }
-
-    @Override
-    protected String getTitle() {
-        return null;
     }
 
     @Override
@@ -89,10 +75,10 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<Clien
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case REQUEST_GYM_ID:
+            case REQUEST_CLIENT:
                 if (resultCode == RESULT_OK) {
                     String clientId = data.getStringExtra(AppConsts.CLIENT_ID_EXTRA);
-                    getViewModel().addClientToSession(clientId);
+                    getViewModel().addParticipantToSession(clientId);
                 }
                 break;
         }
@@ -100,8 +86,23 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<Clien
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSessionsClientsListDataListenerEvent(SessionsClientsListDataListenerEvent sessionsClientsListDataListenerEvent) {
+        setListData(sessionsClientsListDataListenerEvent.getClients());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSessionIdUpdateEvent(SessionIdUpdateEvent sessionIdUpdateEvent) {
-        getViewModel().setSessionId(sessionIdUpdateEvent.getSessionId());
+        getViewModel().resetSessionId(sessionIdUpdateEvent.getSessionId());
         getViewModel().startDataListener();
+    }
+
+    @Override
+    public void closeProgress() {
+
+    }
+
+    @Override
+    public void showProgress() {
+
     }
 }
