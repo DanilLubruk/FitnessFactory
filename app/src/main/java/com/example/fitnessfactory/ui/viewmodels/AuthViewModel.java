@@ -84,29 +84,8 @@ public class AuthViewModel extends BaseViewModel {
         return isSignedIn;
     }
 
-    public SingleLiveEvent<List<AppUser>> handleSignIn(Intent authData) {
-        SingleLiveEvent<List<AppUser>> observer = new SingleLiveEvent<>();
-
-        subscribe(authManager.handleSignIn(authData),
-                new SingleData<>(
-                        observer::setValue,
-                        throwable -> handleAuthError(throwable, observer)));
-
-        return observer;
-    }
-
     public void signOut() {
         subscribeInIOThread(firebaseAuthManager.signOutCompletable());
-    }
-
-    public SingleLiveEvent<Boolean> checkOrganisationName() {
-        SingleLiveEvent<Boolean> observer = new SingleLiveEvent<>();
-
-        subscribe(authManager.checkOrganisationName(),
-                () -> observer.setValue(true),
-                throwable -> getErrorHandler().handleError(observer, throwable));
-
-        return observer;
     }
 
     private void handleAuthError(Throwable throwable, SingleLiveEvent<List<AppUser>> observer) {

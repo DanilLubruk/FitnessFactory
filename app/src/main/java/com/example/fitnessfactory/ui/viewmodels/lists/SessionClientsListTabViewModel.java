@@ -44,8 +44,18 @@ public class SessionClientsListTabViewModel extends SessionParticipantListTabVie
     }
 
     @Override
+    protected Completable getDeleteParticipantAction(String sessionId, String clientId) {
+        return sessionsDataManager.removeClientFromSession(sessionId, clientId);
+    }
+
+    @Override
     protected List<String> getParticipantsList(Session session) {
         return session.getClientsIds();
+    }
+
+    @Override
+    protected String getParticipantId(Client client) {
+        return client.getId();
     }
 
     @Override

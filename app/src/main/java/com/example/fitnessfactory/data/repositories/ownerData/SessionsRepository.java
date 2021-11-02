@@ -30,6 +30,38 @@ public class SessionsRepository extends BaseRepository {
         return SessionsCollection.getRoot();
     }
 
+    public Single<WriteBatch> getRemoveCoachBatchAsync(String sessionId, String coachId) {
+        return SingleCreate(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getRemoveCoachBatch(sessionId, coachId));
+            }
+        });
+    }
+
+    private WriteBatch getRemoveCoachBatch(String sessionId, String coachId) {
+        return getFirestore()
+                .batch()
+                .update(getCollection().document(sessionId),
+                        Session.COACHES_IDS_FIELD,
+                        FieldValue.arrayRemove(coachId));
+    }
+
+    public Single<WriteBatch> getRemoveClientBatchAsync(String sessionId, String clientId) {
+        return SingleCreate(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getRemoveClientBatch(sessionId, clientId));
+            }
+        });
+    }
+
+    private WriteBatch getRemoveClientBatch(String sessionId, String clientId) {
+        return getFirestore()
+                .batch()
+                .update(getCollection().document(sessionId),
+                        Session.CLIENTS_IDS_FIELD,
+                        FieldValue.arrayRemove(clientId));
+    }
+
     public Single<WriteBatch> getAddCoachBatchAsync(String sessionId, String coachId) {
         return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
@@ -125,11 +157,11 @@ public class SessionsRepository extends BaseRepository {
     }
 
     private Date checkSessionStartTimeCorrect(Date startTime, Date endTime) throws Exception {
-         if (TimeUtils.areDatesCorrectPeriod(startTime, endTime)) {
-             return startTime;
-         } else {
-             throw new Exception(ResUtils.getString(R.string.message_error_wrong_dates));
-         }
+        if (TimeUtils.areDatesCorrectPeriod(startTime, endTime)) {
+            return startTime;
+        } else {
+            throw new Exception(ResUtils.getString(R.string.message_error_wrong_dates));
+        }
     }
 
     public Single<Date> checkSessionEndTimeCorrectAsync(Date startTime, Date endTime) {

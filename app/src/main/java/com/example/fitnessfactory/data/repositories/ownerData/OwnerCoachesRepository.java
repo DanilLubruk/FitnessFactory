@@ -7,6 +7,7 @@ import com.example.fitnessfactory.data.models.UsersSession;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.firestore.v1.Write;
 
 import io.reactivex.Single;
 
@@ -23,6 +24,22 @@ public class OwnerCoachesRepository extends OwnerPersonnelRepository {
 
     private CollectionReference getSessionsCollection(String coachId) {
         return getFirestore().collection(CoachesSessionsCollection.getRoot(coachId));
+    }
+
+    public Single<WriteBatch> getRemoveSessionBatchAsync(WriteBatch writeBatch,
+                                                         String sessionId,
+                                                         String coachId) {
+        return SingleCreate(emitter -> {
+           if (!emitter.isDisposed()) {
+               emitter.onSuccess(getRemoveSessionBatch(writeBatch, sessionId, coachId));
+           }
+        });
+    }
+
+    private WriteBatch getRemoveSessionBatch(WriteBatch writeBatch,
+                                             String sessionId,
+                                             String coachId) {
+        return writeBatch.delete(getSessionDocument(sessionId, coachId));
     }
 
     public Single<WriteBatch> getAddSessionBatchAsync(WriteBatch writeBatch,

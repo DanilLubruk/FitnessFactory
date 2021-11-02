@@ -33,6 +33,22 @@ public class ClientsRepository extends BaseRepository {
         return getFirestore().collection(ClientsSessionsCollection.getRoot(clientId));
     }
 
+    public Single<WriteBatch> getRemoveSessionBatchAsync(WriteBatch writeBatch,
+                                                         String sessionId,
+                                                         String clientId) {
+        return SingleCreate(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getRemoveSessionBatch(writeBatch, sessionId, clientId));
+            }
+        });
+    }
+
+    private WriteBatch getRemoveSessionBatch(WriteBatch writeBatch,
+                                             String sessionId,
+                                             String clientId) {
+        return writeBatch.delete(getSessionDocument(sessionId, clientId));
+    }
+
     public Single<WriteBatch> getAddSessionBatchAsync(WriteBatch writeBatch,
                                                       String sessionId,
                                                       String clientId) {

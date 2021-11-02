@@ -26,7 +26,11 @@ public abstract class SessionParticipantListTabViewModel<ItemType> extends BaseV
 
     protected abstract Completable getAddParticipantAction(String sessionId, String participantId);
 
+    protected abstract Completable getDeleteParticipantAction(String sessionId, String participantId);
+
     protected abstract List<String> getParticipantsList(Session session);
+
+    protected abstract String getParticipantId(ItemType participant);
 
     protected abstract String getParticipantNullMessage();
 
@@ -74,7 +78,17 @@ public abstract class SessionParticipantListTabViewModel<ItemType> extends BaseV
 
     @Override
     public void deleteItem(ItemType item) {
+        if (StringUtils.isEmpty(sessionId)) {
+            GuiUtils.showMessage(getSessionNullMessage());
+            return;
+        }
+        String participantId = getParticipantId(item);
+        if (StringUtils.isEmpty(participantId)) {
+            GuiUtils.showMessage(getParticipantNullMessage());
+            return;
+        }
 
+        subscribeInIOThread(getDeleteParticipantAction(sessionId, participantId));
     }
 
     private String getSessionNullMessage() {

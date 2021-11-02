@@ -62,8 +62,18 @@ public class SessionCoachesListTabViewModel extends SessionParticipantListTabVie
     }
 
     @Override
+    protected Completable getDeleteParticipantAction(String sessionId, String coachEmail) {
+        return sessionsDataManager.removeCoachFromSession(sessionId, coachEmail);
+    }
+
+    @Override
     protected List<String> getParticipantsList(Session session) {
         return session.getCoachesIds();
+    }
+
+    @Override
+    protected String getParticipantId(AppUser coach) {
+        return coach.getEmail();
     }
 
     @Override

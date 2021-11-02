@@ -42,4 +42,22 @@ public class SessionsDataManager extends BaseManager {
                 .flatMap(writeBatch -> ownerCoachesRepository.getAddSessionBatchAsync(writeBatch, sessionId, coachIdRef.getValue()))
                 .flatMapCompletable(this::commitBatchCompletable);
     }
+
+    public Completable removeClientFromSession(String sessionId, String clientId) {
+        return sessionsRepository.getRemoveClientBatchAsync(sessionId, clientId)
+                .flatMap(writeBatch -> clientsRepository.getRemoveSessionBatchAsync(writeBatch, sessionId, clientId))
+                .flatMapCompletable(this::commitBatchCompletable);
+    }
+
+    public Completable removeCoachFromSession(String sessionId, String coachEmail) {
+        SafeReference<String> coachIdRef = new SafeReference<>();
+
+        return ownerCoachesRepository.getCoachIdByEmailAsync(coachEmail)
+                .flatMap(coachId -> {
+                    coachIdRef.set(coachId);
+                    return sessionsRepository.getRemoveCoachBatchAsync(sessionId, coachId);
+                })
+                .flatMap(writeBatch -> ownerCoachesRepository.getRemoveSessionBatchAsync(writeBatch, sessionId, coachIdRef.getValue()))
+                .flatMapCompletable(this::commitBatchCompletable);
+    }
 }
