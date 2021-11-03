@@ -101,16 +101,16 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
 
         Intent intent = new Intent(getBaseActivity(), SessionEditorActivity.class);
         intent.putExtra(AppConsts.SESSION_ID_EXTRA, session.getId());
-        intent.putExtra(AppConsts.SESSION_DATE, getSelectedDate());
+        intent.putExtra(AppConsts.SESSION_DATE, getSelectedDate().getTime());
 
         startActivity(intent);
     }
 
-    private long getSelectedDate() {
+    private Date getSelectedDate() {
         try {
-            return binding.calendarView.getSelectedDay().getTime();
+            return binding.calendarView.getSelectedDay();
         } catch (NullPointerException exception) {
-            return TimeUtils.getCurrentMoment().getTime();
+            return TimeUtils.getCurrentMoment();
         }
     }
 
@@ -179,6 +179,7 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
         super.onStart();
         EventBus.getDefault().register(this);
         initCalendarData();
+        viewModel.startDaysSessionsDataListener(getSelectedDate());
     }
 
     @Override
