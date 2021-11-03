@@ -2,7 +2,6 @@ package com.example.fitnessfactory.data.repositories.ownerData;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.firestoreCollections.SessionsCollection;
-import com.example.fitnessfactory.data.models.Personnel;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.example.fitnessfactory.utils.ResUtils;
@@ -12,15 +11,11 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import io.reactivex.Completable;
 import io.reactivex.Single;
 
 public class SessionsRepository extends BaseRepository {
@@ -28,6 +23,18 @@ public class SessionsRepository extends BaseRepository {
     @Override
     protected String getRoot() {
         return SessionsCollection.getRoot();
+    }
+
+    public Single<Boolean> isSessionTypeOccupiedAsync(String sessionTypeName) {
+        return SingleCreate(emitter -> {
+           if (!emitter.isDisposed()) {
+               emitter.onSuccess(isSessionTypeOccupied(sessionTypeName));
+           }
+        });
+    }
+
+    private boolean isSessionTypeOccupied(String sessionTypeName) throws ExecutionException, InterruptedException {
+        return getEntitiesAmount(newQuery().whereSessionTypeNameEquals(sessionTypeName).build()) > 0;
     }
 
     public Single<WriteBatch> getDeleteBatchAsync(Session session) {
@@ -202,13 +209,18 @@ public class SessionsRepository extends BaseRepository {
                 .concat(ResUtils.getString(R.string.message_error_session_null));
     }
 
-    private SessionsRepository.QueryBuilder newBuilder() {
+    private SessionsRepository.QueryBuilder newQuery() {
         return new SessionsRepository().new QueryBuilder();
     }
 
     private class QueryBuilder {
 
         Query query = getCollection();
+
+        public QueryBuilder whereSessionTypeNameEquals(String sessionTypeName) {
+            query = query.whereEqualTo(Session.SESSION_TYPE_NAME_FIELD, sessionTypeName);
+            return this;
+        }
 
         public Query build() {
             return query;

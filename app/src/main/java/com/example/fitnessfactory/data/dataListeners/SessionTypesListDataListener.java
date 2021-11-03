@@ -2,12 +2,10 @@ package com.example.fitnessfactory.data.dataListeners;
 
 import android.util.Log;
 
-import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.SessionTypesListDataListenerEvent;
 import com.example.fitnessfactory.data.firestoreCollections.SessionTypesCollection;
 import com.example.fitnessfactory.data.models.SessionType;
-import com.example.fitnessfactory.utils.ResUtils;
 import com.google.firebase.firestore.ListenerRegistration;
 
 import org.greenrobot.eventbus.EventBus;
@@ -31,7 +29,7 @@ public class SessionTypesListDataListener extends BaseDataListener {
         return Single.create(emitter -> {
            ListenerRegistration listenerRegistration = getCollection()
                    .addSnapshotListener((value, error) -> {
-                       if (checkIsSnapshotValid(emitter, value, error)) {
+                       if (checkIsSnapshotInvalid(emitter, value, error)) {
                            Log.d(AppConsts.DEBUG_TAG, "SessionTypesListDataListener: value null");
                            return;
                        }

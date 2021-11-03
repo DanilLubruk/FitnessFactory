@@ -95,12 +95,4 @@ public abstract class GymPersonnelListTabFragment
     protected void showEditorActivity(AppUser item) {
 
     }
-
-    public void closeProgress() {
-
-    }
-
-    public void showProgress() {
-
-    }
 }

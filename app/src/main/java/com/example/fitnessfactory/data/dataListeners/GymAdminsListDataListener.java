@@ -25,7 +25,7 @@ public class GymAdminsListDataListener extends BaseDataListener implements ArgDa
            ListenerRegistration listenerRegistration =
                    getAdminQueryByGymId(gymId)
                            .addSnapshotListener(((value, error) -> {
-                               if (checkIsSnapshotValid(emitter, error)) {
+                               if (checkIsSnapshotInvalid(emitter, error)) {
                                    return;
                                }
 

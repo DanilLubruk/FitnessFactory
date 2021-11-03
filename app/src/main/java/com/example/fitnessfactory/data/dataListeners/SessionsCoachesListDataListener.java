@@ -36,7 +36,7 @@ public class SessionsCoachesListDataListener extends BaseDataListener implements
             ListenerRegistration listenerRegistration = getCollection()
                     .whereIn(Personnel.ID_FIELD, coachesIds)
                     .addSnapshotListener((value, error) -> {
-                        if (checkIsSnapshotValid(emitter, value, error)) {
+                        if (checkIsSnapshotInvalid(emitter, value, error)) {
                             Log.d(AppConsts.DEBUG_TAG, "SessionsCoachesListDataListener: value null");
                             return;
                         }

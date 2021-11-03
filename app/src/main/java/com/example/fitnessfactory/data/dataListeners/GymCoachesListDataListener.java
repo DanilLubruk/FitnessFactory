@@ -26,7 +26,7 @@ public class GymCoachesListDataListener  extends BaseDataListener implements Arg
             ListenerRegistration listenerRegistration =
                     getCoachQueryByGymId(gymId)
                             .addSnapshotListener(((value, error) -> {
-                                if (checkIsSnapshotValid(emitter, error)) {
+                                if (checkIsSnapshotInvalid(emitter, error)) {
                                     return;
                                 }
 

@@ -2,13 +2,10 @@ package com.example.fitnessfactory.data.dataListeners;
 
 import android.util.Log;
 
-import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.SessionsCalendarDataListenerEvent;
 import com.example.fitnessfactory.data.firestoreCollections.SessionsCollection;
 import com.example.fitnessfactory.data.models.Session;
-import com.example.fitnessfactory.utils.ResUtils;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.ListenerRegistration;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,7 +32,7 @@ public class SessionsCalendarDataListener extends BaseDataListener {
                     .whereGreaterThan(Session.DATE_FIELD, startDate)
                     .whereLessThan(Session.DATE_FIELD, endDate)
                     .addSnapshotListener((value, error) -> {
-                        if (checkIsSnapshotValid(emitter, value, error)) {
+                        if (checkIsSnapshotInvalid(emitter, value, error)) {
                             Log.d(AppConsts.DEBUG_TAG, "SessionsCalendarDataListener: value null");
                             return;
                         }

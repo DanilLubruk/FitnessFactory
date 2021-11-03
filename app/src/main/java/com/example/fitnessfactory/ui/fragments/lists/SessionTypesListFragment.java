@@ -80,14 +80,4 @@ public class SessionTypesListFragment extends
     public void onSessionTypesListDataListenerEvent(SessionTypesListDataListenerEvent sessionTypesListDataListenerEvent) {
         setListData(sessionTypesListDataListenerEvent.getSessionTypes());
     }
-
-    @Override
-    public void closeProgress() {
-
-    }
-
-    @Override
-    public void showProgress() {
-
-    }
 }

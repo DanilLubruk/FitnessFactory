@@ -22,7 +22,7 @@ public class CoachesListDataListener extends BaseDataListener implements DataLis
         return Single.create(emitter -> {
             ListenerRegistration listenerRegistration =
                     getCollection().addSnapshotListener((value, error) -> {
-                        if (checkIsSnapshotValid(emitter, error)) {
+                        if (checkIsSnapshotInvalid(emitter, error)) {
                             return;
                         }
 

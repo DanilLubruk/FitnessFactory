@@ -2,6 +2,7 @@ package com.example.fitnessfactory.ui.viewmodels.lists;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.dataListeners.SessionTypesListDataListener;
+import com.example.fitnessfactory.data.managers.data.SessionTypesDataManager;
 import com.example.fitnessfactory.data.models.SessionType;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionTypeRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
@@ -14,13 +15,13 @@ import javax.inject.Inject;
 
 public class SessionTypesListViewModel extends BaseViewModel implements DataListListener<SessionType> {
 
-    private final SessionTypeRepository sessionTypeRepository;
+    private final SessionTypesDataManager sessionTypesDataManager;
     private final SessionTypesListDataListener dataListener;
 
     @Inject
-    public SessionTypesListViewModel(SessionTypeRepository sessionTypeRepository,
+    public SessionTypesListViewModel(SessionTypesDataManager sessionTypesDataManager,
                                      SessionTypesListDataListener dataListener) {
-        this.sessionTypeRepository = sessionTypeRepository;
+        this.sessionTypesDataManager = sessionTypesDataManager;
         this.dataListener = dataListener;
     }
 
@@ -40,6 +41,6 @@ public class SessionTypesListViewModel extends BaseViewModel implements DataList
             GuiUtils.showMessage(ResUtils.getString(R.string.message_session_type_null));
             return;
         }
-        subscribeInIOThread(sessionTypeRepository.deleteSessionTypeCompletable(item));
+        subscribeInIOThread(sessionTypesDataManager.deleteSessionTypeCompletable(item));
     }
 }

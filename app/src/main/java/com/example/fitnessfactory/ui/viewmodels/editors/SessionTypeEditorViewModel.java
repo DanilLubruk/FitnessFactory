@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.databinding.ObservableField;
 
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.managers.data.SessionTypesDataManager;
 import com.example.fitnessfactory.data.models.SessionType;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
@@ -15,7 +16,8 @@ import javax.inject.Inject;
 
 public class SessionTypeEditorViewModel extends EditorViewModel {
 
-    private SessionTypeRepository sessionTypeRepository;
+    private final SessionTypesDataManager sessionTypesDataManager;
+    private final SessionTypeRepository sessionTypeRepository;
 
     public ObservableField<SessionType> sessionType = new ObservableField<>();
     private SessionType dbSessionType;
@@ -26,7 +28,9 @@ public class SessionTypeEditorViewModel extends EditorViewModel {
     private final String DB_PRICE_KEY = "DB_PRICE_KEY";
 
     @Inject
-    public SessionTypeEditorViewModel(SessionTypeRepository sessionTypeRepository) {
+    public SessionTypeEditorViewModel(SessionTypesDataManager sessionTypesDataManager,
+                                      SessionTypeRepository sessionTypeRepository) {
+        this.sessionTypesDataManager = sessionTypesDataManager;
         this.sessionTypeRepository = sessionTypeRepository;
     }
 
@@ -99,7 +103,7 @@ public class SessionTypeEditorViewModel extends EditorViewModel {
         }
 
         subscribeInIOThread(
-                sessionTypeRepository.deleteSessionTypeSingle(sessionType),
+                sessionTypesDataManager.deleteSessionTypeSingle(sessionType),
                 new SingleData<>(
                         observer::setValue,
                         throwable -> getErrorHandler().handleError(observer, throwable)));

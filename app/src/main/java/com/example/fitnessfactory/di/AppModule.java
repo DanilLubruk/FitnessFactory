@@ -19,6 +19,7 @@ import com.example.fitnessfactory.data.managers.AuthManager;
 import com.example.fitnessfactory.data.managers.access.CoachesAccessManager;
 import com.example.fitnessfactory.data.managers.data.CoachesDataManager;
 import com.example.fitnessfactory.data.managers.access.GymsAccessManager;
+import com.example.fitnessfactory.data.managers.data.SessionTypesDataManager;
 import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
 import com.example.fitnessfactory.data.repositories.access.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.access.CoachesAccessRepository;
@@ -250,5 +251,12 @@ public class AppModule {
     @AppScope
     public CoachSessionsRepository provideCoachSessionsRepository() {
         return new CoachSessionsRepository();
+    }
+
+    @Provides
+    @AppScope
+    public SessionTypesDataManager provideSessionTypesDataManager(SessionsRepository sessionsRepository,
+                                                                  SessionTypeRepository sessionTypeRepository) {
+        return new SessionTypesDataManager(sessionsRepository, sessionTypeRepository);
     }
 }

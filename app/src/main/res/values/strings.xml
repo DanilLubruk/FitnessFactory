@@ -100,6 +100,8 @@
     <string name="message_selection_failed">Selection failed!</string>
     <string name="message_ask_remove_client_from_session">Remove client from this session?</string>
     <string name="message_ask_remove_coach_from_session">Remove coach from this session?</string>
+    <string name="caption_add_items">Add items...</string>
+    <string name="message_error_session_type_occupied">Deletion is impossible. Session type is occupied!</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <string name="caption_user_null">User is not signed in</string>

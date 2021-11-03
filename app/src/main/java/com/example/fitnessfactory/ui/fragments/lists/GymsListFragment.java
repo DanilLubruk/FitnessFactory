@@ -98,12 +98,4 @@ public class GymsListFragment extends ListListenerSelectFragment<Gym, GymsListVi
     protected GymsListAdapter createNewAdapter(List<Gym> listData) {
         return new GymsListAdapter(listData, R.layout.two_bg_buttons_list_item_view);
     }
-
-    public void closeProgress() {
-
-    }
-
-    public void showProgress() {
-
-    }
 }

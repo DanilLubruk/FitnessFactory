@@ -2,12 +2,10 @@ package com.example.fitnessfactory.data.dataListeners;
 
 import android.util.Log;
 
-import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.GymsListDataListenerEvent;
 import com.example.fitnessfactory.data.firestoreCollections.OwnerGymsCollection;
 import com.example.fitnessfactory.data.models.Gym;
-import com.example.fitnessfactory.utils.ResUtils;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 
@@ -33,7 +31,7 @@ public class GymsListDataListener extends BaseDataListener {
             ListenerRegistration listenerRegistration =
                     getGymsListQuery()
                             .addSnapshotListener(((value, error) -> {
-                                if (checkIsSnapshotValid(emitter, value, error)) {
+                                if (checkIsSnapshotInvalid(emitter, value, error)) {
                                     Log.d(AppConsts.DEBUG_TAG, "GymsListDataListener: value null");
                                     return;
                                 }

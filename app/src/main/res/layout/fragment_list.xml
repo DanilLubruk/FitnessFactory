@@ -9,7 +9,16 @@
         android:id="@+id/pkProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tvEmptyData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:text="@string/caption_add_items"
         android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView

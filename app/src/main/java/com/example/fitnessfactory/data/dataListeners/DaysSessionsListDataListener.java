@@ -2,12 +2,10 @@ package com.example.fitnessfactory.data.dataListeners;
 
 import android.util.Log;
 
-import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.DaysSessionListDataListenerEvent;
 import com.example.fitnessfactory.data.firestoreCollections.SessionsCollection;
 import com.example.fitnessfactory.data.models.Session;
-import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.TimeUtils;
 import com.google.firebase.firestore.ListenerRegistration;
 
@@ -36,7 +34,7 @@ public class DaysSessionsListDataListener extends BaseDataListener {
                             .whereGreaterThan(Session.DATE_FIELD, TimeUtils.getStartOfDayDate(date))
                             .whereLessThan(Session.DATE_FIELD, TimeUtils.getEndOfDayDate(date))
                             .addSnapshotListener(((value, error) -> {
-                                if (checkIsSnapshotValid(emitter, value, error)) {
+                                if (checkIsSnapshotInvalid(emitter, value, error)) {
                                     Log.d(AppConsts.DEBUG_TAG, "DaysSessionsListDataListener: value null");
                                     return;
                                 }

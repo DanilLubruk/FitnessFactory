@@ -38,6 +38,7 @@ public abstract class ListListenerFragment<
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         getBaseActivity().setTitle(getTitle());
+        showProgress();
         defineViewModel();
         super.onActivityCreated(savedInstanceState);
         initComponents();
@@ -83,12 +84,14 @@ public abstract class ListListenerFragment<
     }
 
     protected void setListData(List<ItemType> listData) {
+        binding.tvEmptyData.setVisibility(listData.size() == 0 ? View.VISIBLE : View.GONE);
         if (adapter == null) {
             adapter = createNewAdapter(listData);
             binding.rvData.setAdapter(adapter);
         } else {
             adapter.setListData(listData);
         }
+        closeProgress();
     }
 
     protected abstract String getTitle();
@@ -145,5 +148,17 @@ public abstract class ListListenerFragment<
         if (getViewModel() != null) {
             getViewModel().stopDataListener();
         }
+    }
+
+    public void closeProgress() {
+        binding.pkProgress.setVisibility(View.GONE);
+        binding.rvData.setVisibility(View.VISIBLE);
+        binding.fabAddItem.setVisibility(View.VISIBLE);
+    }
+
+    public void showProgress() {
+        binding.pkProgress.setVisibility(View.VISIBLE);
+        binding.rvData.setVisibility(View.GONE);
+        binding.fabAddItem.setVisibility(View.GONE);
     }
 }

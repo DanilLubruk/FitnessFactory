@@ -73,16 +73,6 @@ public class ClientsListFragment extends ListListenerSelectFragment<Client, Clie
         return new Client();
     }
 
-    @Override
-    public void closeProgress() {
-
-    }
-
-    @Override
-    public void showProgress() {
-
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onClientsListDataListenerEvent(ClientsListDataListenerEvent clientsListDataListenerEvent) {
         setListData(clientsListDataListenerEvent.getClientsList());

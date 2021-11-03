@@ -78,29 +78,29 @@ public abstract class BaseDataListener extends CollectionOperator {
         }
     }
 
-    protected <T> boolean checkIsSnapshotValid(SingleEmitter<T> emitter,
-                                               QuerySnapshot value,
-                                               FirebaseFirestoreException error) {
+    protected <T> boolean checkIsSnapshotInvalid(SingleEmitter<T> emitter,
+                                                 QuerySnapshot value,
+                                                 FirebaseFirestoreException error) {
         if (error != null) {
             reportError(emitter, error);
-            return false;
+            return true;
         }
         if (value == null) {
             reportError(emitter, new Exception(ResUtils.getString(R.string.message_error_data_obtain)));
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
-    protected <T> boolean checkIsSnapshotValid(SingleEmitter<T> emitter,
-                                               FirebaseFirestoreException error) {
+    protected <T> boolean checkIsSnapshotInvalid(SingleEmitter<T> emitter,
+                                                 FirebaseFirestoreException error) {
         if (error != null) {
             reportError(emitter, error);
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public void setRxErrorsHandler(RxErrorsHandler rxErrorsHandler) {

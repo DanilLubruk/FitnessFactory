@@ -2,12 +2,10 @@ package com.example.fitnessfactory.data.dataListeners;
 
 import android.util.Log;
 
-import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.ClientsListDataListenerEvent;
 import com.example.fitnessfactory.data.firestoreCollections.ClientsCollection;
 import com.example.fitnessfactory.data.models.Client;
-import com.example.fitnessfactory.utils.ResUtils;
 import com.google.firebase.firestore.ListenerRegistration;
 
 import org.greenrobot.eventbus.EventBus;
@@ -31,7 +29,7 @@ public class ClientsListDataListener extends BaseDataListener {
         return Single.create(emitter -> {
             ListenerRegistration listenerRegistration =
                     getCollection().addSnapshotListener(((value, error) -> {
-                        if (checkIsSnapshotValid(emitter, value, error)) {
+                        if (checkIsSnapshotInvalid(emitter, value, error)) {
                             Log.d(AppConsts.DEBUG_TAG, "ClientsListDataListener: value null");
                             return;
                         }

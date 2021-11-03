@@ -79,7 +79,6 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
 
     public void startDataListener() {
         if (TextUtils.isEmpty(gymId)) {
-            GuiUtils.showMessage(getGymNullMessage());
             return;
         }
 
@@ -103,7 +102,6 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
 
     private String getGymNullMessage() {
         return ResUtils.getString(R.string.message_error_gym_null);
-
     }
 
     @Override

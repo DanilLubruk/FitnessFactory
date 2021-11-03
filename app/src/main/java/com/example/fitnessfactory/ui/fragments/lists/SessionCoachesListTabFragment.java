@@ -99,14 +99,4 @@ public class SessionCoachesListTabFragment extends ListListenerTabFragment<AppUs
         getViewModel().resetSessionId(sessionIdUpdateEvent.getSessionId());
         getViewModel().startDataListener();
     }
-
-    @Override
-    public void closeProgress() {
-
-    }
-
-    @Override
-    public void showProgress() {
-
-    }
 }

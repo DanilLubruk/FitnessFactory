@@ -89,12 +89,4 @@ public class CoachesListFragment extends PersonnelListFragment {
     public void onCoachesListDataListenerEvent(CoachesListDataListenerEvent coachesListDataListenerEvent) {
         viewModel.getPersonnelListData();
     }
-
-    public void closeProgress() {
-
-    }
-
-    public void showProgress() {
-
-    }
 }

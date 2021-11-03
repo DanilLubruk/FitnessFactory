@@ -85,14 +85,4 @@ public class AdminsListFragment extends PersonnelListFragment {
     public void onAdminsListDataListenerEvent(AdminsListDataListenerEvent adminsListDataListenerEvent) {
         viewModel.getPersonnelListData();
     }
-
-    @Override
-    public void closeProgress() {
-
-    }
-
-    @Override
-    public void showProgress() {
-
-    }
 }
