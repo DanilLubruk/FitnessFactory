@@ -1,5 +1,7 @@
 package com.example.fitnessfactory.ui.viewmodels.editors;
 
+import android.os.Bundle;
+
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -259,26 +261,14 @@ public class SessionEditorViewModel extends EditorViewModel {
         return isDeleted;
     }
 
-    private void handleDateNullError() {
-        handleDateNullError(new SingleLiveEvent<>());
-    }
-
-    private SingleLiveEvent<Date> handleDateNullError(SingleLiveEvent<Date> observer) {
-        observer.setValue(null);
-        GuiUtils.showMessage(getDateNullMessage());
-
-        return observer;
-    }
-
-    private String getDateNullMessage() {
-        return getErrorOperationMessage()
-                .concat(getErrorMessageBreak())
-                .concat(ResUtils.getString(R.string.message_error_date_null));
-    }
-
     @Override
     protected String getItemNullClause() {
         return getErrorMessageBreak()
                 .concat(ResUtils.getString(R.string.message_error_session_null));
+    }
+
+    @Override
+    public void saveState(Bundle savedState) {
+        super.saveState(savedState);
     }
 }

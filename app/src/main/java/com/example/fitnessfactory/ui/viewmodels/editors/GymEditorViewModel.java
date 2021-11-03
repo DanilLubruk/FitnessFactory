@@ -48,7 +48,6 @@ public class GymEditorViewModel extends EditorViewModel {
 
     private void setGym(Gym gym) {
         if (gym == null) {
-            handleItemObtainingNullError();
             gym = new Gym();
         }
         if (dbGym == null) {

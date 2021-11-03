@@ -40,7 +40,6 @@ public class SessionTypeEditorViewModel extends EditorViewModel {
 
     private void setSessionType(SessionType sessionType) {
         if (sessionType == null) {
-            handleItemObtainingNullError();
             sessionType = new SessionType();
         }
         if (dbSessionType == null) {

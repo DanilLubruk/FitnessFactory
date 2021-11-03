@@ -186,5 +186,6 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
         super.onStop();
         EventBus.getDefault().unregister(this);
         viewModel.stopCalendarDataListener();
+        viewModel.stopDaysSessionsDataListener();
     }
 }

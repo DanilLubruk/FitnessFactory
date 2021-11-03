@@ -38,7 +38,6 @@ public class ClientEditorViewModel extends EditorViewModel {
 
     private void setClient(Client client) {
         if (client == null) {
-            handleItemObtainingNullError();
             client = new Client();
         }
         if (dbClient == null) {

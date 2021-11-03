@@ -1,8 +1,10 @@
 package com.example.fitnessfactory.ui.viewmodels.lists;
 
+import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.dataListeners.CoachesListDataListener;
 import com.example.fitnessfactory.data.managers.access.CoachesAccessManager;
 import com.example.fitnessfactory.data.managers.data.CoachesDataManager;
+import com.example.fitnessfactory.utils.ResUtils;
 
 import javax.inject.Inject;
 
@@ -13,5 +15,11 @@ public class CoachesListViewModel extends PersonnelListViewModel {
                                 CoachesDataManager dataManager,
                                 CoachesListDataListener dataListener) {
         super(accessManager, dataManager, dataListener);
+    }
+
+
+    @Override
+    protected String getItemNullMessage() {
+        return ResUtils.getString(R.string.message_error_coach_null);
     }
 }

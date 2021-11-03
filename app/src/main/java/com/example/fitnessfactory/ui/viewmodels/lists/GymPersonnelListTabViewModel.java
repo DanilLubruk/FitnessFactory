@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.dataListeners.ArgDataListener;
 import com.example.fitnessfactory.data.managers.data.PersonnelDataManager;
@@ -14,6 +15,7 @@ import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepo
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
 import com.example.fitnessfactory.utils.GuiUtils;
+import com.example.fitnessfactory.utils.ResUtils;
 
 import java.util.List;
 
@@ -55,7 +57,7 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
 
     public void addPersonnelToGym(String personnelEmail) {
         if (TextUtils.isEmpty(gymId)) {
-            GuiUtils.showMessage();
+            GuiUtils.showMessage(getGymNullMessage());
             return;
         }
 
@@ -64,7 +66,7 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
 
     public void deleteItem(AppUser personnel) {
         if (TextUtils.isEmpty(gymId)) {
-            GuiUtils.showMessage();
+            GuiUtils.showMessage(getGymNullMessage());
             return;
         }
 
@@ -73,7 +75,7 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
 
     public void startDataListener() {
         if (TextUtils.isEmpty(gymId)) {
-            GuiUtils.showMessage();
+            GuiUtils.showMessage(getGymNullMessage());
             return;
         }
 
@@ -90,13 +92,18 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
 
     public void getPersonnelData() {
         if (TextUtils.isEmpty(gymId)) {
-            GuiUtils.showMessage();
+            GuiUtils.showMessage(getGymNullMessage());
             return;
         }
 
         subscribeInIOThread(
                 getDataManager().getPersonnelListByGymIdAsync(gymId),
                 new SingleData<>(personnel::setValue, getErrorHandler()::handleError));
+    }
+
+    private String getGymNullMessage() {
+        return ResUtils.getString(R.string.message_error_gym_null);
+
     }
 
     @Override

@@ -153,6 +153,10 @@ public class SessionEditorActivity extends EditorActivity {
 
     @Override
     protected boolean isDataValid() {
-        return true;
+        return !StringUtils.isEmpty(binding.container.edtDate.toString())
+                && !StringUtils.isEmpty(binding.container.edtStartTime.toString())
+                && !StringUtils.isEmpty(binding.container.edtEndTime.toString())
+                && !StringUtils.isEmpty(binding.container.edtGym.toString())
+                && !StringUtils.isEmpty(binding.container.edtSessionType.toString());
     }
 }

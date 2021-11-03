@@ -239,4 +239,16 @@ public class AppModule {
     public SessionsCoachesListDataListener provideSessionsCoachesListDataListener() {
         return new SessionsCoachesListDataListener();
     }
+
+    @Provides
+    @AppScope
+    public ClientSessionsRepository provideClientSessionsRepository() {
+        return new ClientSessionsRepository();
+    }
+
+    @Provides
+    @AppScope
+    public CoachSessionsRepository provideCoachSessionsRepository() {
+        return new CoachSessionsRepository();
+    }
 }

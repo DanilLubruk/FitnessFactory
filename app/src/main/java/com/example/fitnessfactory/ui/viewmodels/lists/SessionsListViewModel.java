@@ -37,12 +37,11 @@ public class SessionsListViewModel extends BaseViewModel {
     }
 
     public void startDaysSessionsDataListener(Date date) {
-        daysSessionsDataListener.stopDataListener();
         daysSessionsDataListener.startDataListener(date);
     }
 
     public void stopDaysSessionsDataListener() {
-
+        daysSessionsDataListener.stopDataListener();
     }
 
     public void deleteItem(Session item) {

@@ -52,6 +52,8 @@ public abstract class PersonnelListViewModel extends BaseViewModel implements Da
         return dataListener;
     }
 
+    protected abstract String getItemNullMessage();
+
     public SingleLiveEvent<String> registerPersonnel(Single<String> emailDialog,
                                                      Single<Boolean> sendInvitationDialog,
                                                      boolean askForSendingInvite) {
@@ -114,7 +116,7 @@ public abstract class PersonnelListViewModel extends BaseViewModel implements Da
 
     public void deleteItem(AppUser personnel) {
         if (personnel == null) {
-            GuiUtils.showMessage();
+            GuiUtils.showMessage(getItemNullMessage());
             return;
         }
 

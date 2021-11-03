@@ -42,8 +42,7 @@ public class OrganisationInfoViewModel extends EditorViewModel {
 
     public void setData(OrganisationData organisationData) {
         if (organisationData == null) {
-            handleItemObtainingNullError();
-            return;
+            organisationData = new OrganisationData();
         }
         if (dbOrganisationData == null) {
             dbOrganisationData = new OrganisationData();
