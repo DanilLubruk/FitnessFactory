@@ -37,6 +37,6 @@ public class GymsListViewModel extends BaseViewModel implements DataListListener
             return;
         }
 
-        subscribeInIOThread(gymsAccessManager.deleteGymCompletable(gym.getId()));
+        subscribeInIOThread(gymsAccessManager.deleteGymCompletable(gym));
     }
 }

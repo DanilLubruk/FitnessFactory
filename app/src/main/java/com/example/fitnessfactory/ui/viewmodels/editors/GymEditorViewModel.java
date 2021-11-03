@@ -114,7 +114,7 @@ public class GymEditorViewModel extends EditorViewModel {
             return handleItemDeletingNullError(observer);
         }
 
-        subscribeInIOThread(gymsAccessManager.deleteGymSingle(gym.getId()),
+        subscribeInIOThread(gymsAccessManager.deleteGymSingle(gym),
                 new SingleData<>(
                         observer::setValue,
                         throwable -> getErrorHandler().handleError(observer, throwable)));

@@ -34,9 +34,7 @@ public class Session {
                 && session.getId() != null
                 && session.getDate() != null
                 && session.getGymName() != null
-                && session.getSessionTypeName() != null
-                && session.getCoachesIds() != null
-                && session.getClientsIds() != null;
+                && session.getSessionTypeName() != null;
     }
 
     public void copy(Session session) {
@@ -57,9 +55,7 @@ public class Session {
                         && this.getStartTime().equals(session.getStartTime())
                         && this.getEndTime() == session.getEndTime()
                         && this.getGymName().equals(session.getGymName())
-                        && this.getSessionTypeName().equals(session.getSessionTypeName())
-                        && this.getClientsIds().equals(session.getClientsIds())
-                        && this.getCoachesIds().equals(session.getCoachesIds());
+                        && this.getSessionTypeName().equals(session.getSessionTypeName());
     }
 
     public String getId() {

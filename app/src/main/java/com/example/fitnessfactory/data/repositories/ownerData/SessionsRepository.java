@@ -25,6 +25,18 @@ public class SessionsRepository extends BaseRepository {
         return SessionsCollection.getRoot();
     }
 
+    public Single<Boolean> isGymNameOccupiedAsync(String gymName) {
+        return SingleCreate(emitter -> {
+           if (!emitter.isDisposed()) {
+               emitter.onSuccess(isGymOccupied(gymName));
+           }
+        });
+    }
+
+    private boolean isGymOccupied(String gymName) throws ExecutionException, InterruptedException {
+        return getEntitiesAmount(newQuery().whereGymNameEquals(gymName).build()) > 0;
+    }
+
     public Single<Boolean> isSessionTypeOccupiedAsync(String sessionTypeName) {
         return SingleCreate(emitter -> {
            if (!emitter.isDisposed()) {
@@ -219,6 +231,11 @@ public class SessionsRepository extends BaseRepository {
 
         public QueryBuilder whereSessionTypeNameEquals(String sessionTypeName) {
             query = query.whereEqualTo(Session.SESSION_TYPE_NAME_FIELD, sessionTypeName);
+            return this;
+        }
+
+        public QueryBuilder whereGymNameEquals(String gymName) {
+            query = query.whereEqualTo(Session.GYM_NAME_FIELD, gymName);
             return this;
         }
 

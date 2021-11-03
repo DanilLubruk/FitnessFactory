@@ -101,10 +101,11 @@ public class AppModule {
 
     @Provides
     @AppScope
-    public GymsAccessManager provideGymsAccessManager(OwnerGymRepository ownerGymRepository,
+    public GymsAccessManager provideGymsAccessManager(SessionsRepository sessionsRepository,
+                                                      OwnerGymRepository ownerGymRepository,
                                                       OwnerAdminsRepository ownerAdminsRepository,
                                                       OwnerCoachesRepository ownerCoachesRepository) {
-        return new GymsAccessManager(ownerGymRepository, ownerAdminsRepository, ownerCoachesRepository);
+        return new GymsAccessManager(sessionsRepository, ownerGymRepository, ownerAdminsRepository, ownerCoachesRepository);
     }
 
     @Provides
