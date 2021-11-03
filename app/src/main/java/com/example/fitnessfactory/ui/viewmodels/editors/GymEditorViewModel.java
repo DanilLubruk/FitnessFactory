@@ -35,7 +35,7 @@ public class GymEditorViewModel extends EditorViewModel {
         this.gymsAccessManager = gymsAccessManager;
     }
 
-    public void getGymData(String gymId) {
+    public void setGymData(String gymId) {
         subscribeInIOThread(ownerGymRepository.getGymAsync(gymId),
                 new SingleData<>(
                         this::setGym,
@@ -60,6 +60,7 @@ public class GymEditorViewModel extends EditorViewModel {
         }
 
         this.gym.set(gym);
+        this.gymId.setValue(gym.getId());
     }
 
     @Override

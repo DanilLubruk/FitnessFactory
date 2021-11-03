@@ -55,6 +55,10 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
         return personnel;
     }
 
+    public void resetGymId(String gymId) {
+        this.gymId = gymId;
+    }
+
     public void addPersonnelToGym(String personnelEmail) {
         if (TextUtils.isEmpty(gymId)) {
             GuiUtils.showMessage(getGymNullMessage());
@@ -84,10 +88,6 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
 
     public void stopDataListener() {
         getDataListener().stopDataListener();
-    }
-
-    public void refreshGymData(String gymId) {
-        this.gymId = gymId;
     }
 
     public void getPersonnelData() {

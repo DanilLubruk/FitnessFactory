@@ -12,7 +12,7 @@ public class Session {
     public static final String START_TIME_FIELD = "startTime";
     public static final String END_TIME_FIELD = "endTime";
     public static final String GYM_NAME_FIELD = "gymName";
-    public static final String SESSION_TYPE_NAME = "sessionTypeName";
+    public static final String SESSION_TYPE_NAME_FIELD = "sessionTypeName";
     public static final String COACHES_IDS_FIELD = "coachesIds";
     public static final String CLIENTS_IDS_FIELD = "clientsIds";
 

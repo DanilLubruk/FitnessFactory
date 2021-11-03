@@ -61,7 +61,7 @@ public abstract class PersonnelListTabViewModelTests extends BaseTests {
         Mockito.verify(userRepository, Mockito.times(0))
                 .getUsersByEmailsAsync(Mockito.anyList());
 
-        viewModel.refreshGymData("gymId2");
+        viewModel.resetGymId("gymId2");
 
         viewModel.startDataListener();
         testScheduler.triggerActions();
@@ -100,7 +100,7 @@ public abstract class PersonnelListTabViewModelTests extends BaseTests {
         Mockito.verify(getOwnerRepository(), Mockito.times(0))
                 .addGymToPersonnel(Mockito.any(), Mockito.anyString());
 
-        viewModel.refreshGymData("gymId2");
+        viewModel.resetGymId("gymId2");
 
         viewModel.addPersonnelToGym("useremail1");
         testScheduler.triggerActions();
@@ -124,7 +124,7 @@ public abstract class PersonnelListTabViewModelTests extends BaseTests {
         Mockito.verify(getOwnerRepository(), Mockito.times(0))
                 .removeGymFromPersonnel(Mockito.any(), Mockito.anyString());
 
-        viewModel.refreshGymData("gymId2");
+        viewModel.resetGymId("gymId2");
 
         viewModel.deleteItem(personnel);
         testScheduler.triggerActions();

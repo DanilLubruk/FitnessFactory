@@ -1,6 +1,9 @@
 package com.example.fitnessfactory.ui.viewmodels.lists;
 
+import android.os.Bundle;
+
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.dataListeners.ArgDataListener;
 import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
 import com.example.fitnessfactory.data.models.Session;
@@ -93,5 +96,17 @@ public abstract class SessionParticipantListTabViewModel<ItemType> extends BaseV
 
     private String getSessionNullMessage() {
         return ResUtils.getString(R.string.message_error_session_null);
+    }
+
+    @Override
+    public void saveState(Bundle savedState) {
+        super.saveState(savedState);
+        getHandle().put(AppConsts.SESSION_ID_EXTRA, sessionId);
+    }
+
+    @Override
+    public void restoreState(Bundle savedState) {
+        super.restoreState(savedState);
+        sessionId = (String) getHandle().get(AppConsts.SESSION_ID_EXTRA);
     }
 }

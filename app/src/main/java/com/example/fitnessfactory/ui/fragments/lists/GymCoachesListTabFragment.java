@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.GymCoachesListListenerEvent;
+import com.example.fitnessfactory.data.events.GymIdUpdateEvent;
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachesListTabViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.GymCoachesListTabViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
@@ -44,5 +45,11 @@ public class GymCoachesListTabFragment extends GymPersonnelListTabFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGymCoachesListListenerEvent(GymCoachesListListenerEvent gymCoachesListListenerEvent) {
         viewModel.getPersonnelData();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGymIdUpdateEvent(GymIdUpdateEvent gymIdUpdateEvent) {
+        getViewModel().resetGymId(gymIdUpdateEvent.getGymId());
+        getViewModel().startDataListener();
     }
 }

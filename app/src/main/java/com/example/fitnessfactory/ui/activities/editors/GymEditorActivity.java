@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
+import com.example.fitnessfactory.data.events.GymIdUpdateEvent;
 import com.example.fitnessfactory.databinding.ActivityGymEditorBinding;
 import com.example.fitnessfactory.ui.adapters.PersonnelPageAdapter;
 import com.example.fitnessfactory.ui.viewmodels.editors.GymEditorViewModel;
@@ -13,6 +14,8 @@ import com.example.fitnessfactory.ui.viewmodels.factories.GymEditorViewModelFact
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.material.tabs.TabLayoutMediator;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class GymEditorActivity extends EditorActivity {
 
@@ -38,7 +41,7 @@ public class GymEditorActivity extends EditorActivity {
         super.initActivity();
         binding.setModel(viewModel);
 
-        viewModel.getGymData(gymId);
+        viewModel.setGymData(gymId);
         subscribeForGymIdChangesForTabs();
 
         pageAdapter = new PersonnelPageAdapter(getSupportFragmentManager(), getLifecycle());
@@ -59,7 +62,7 @@ public class GymEditorActivity extends EditorActivity {
 
     private void subscribeForGymIdChangesForTabs() {
         viewModel.getGymId()
-                .observe(this, gymId -> getIntent().putExtra(AppConsts.GYM_ID_EXTRA, gymId));
+                .observe(this, gymId -> EventBus.getDefault().post(new GymIdUpdateEvent(gymId)));
     }
 
     @Override
