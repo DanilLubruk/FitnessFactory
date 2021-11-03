@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.databinding.ObservableField;
 
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.managers.data.ClientsDataManager;
 import com.example.fitnessfactory.data.models.Client;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
@@ -15,7 +16,8 @@ import javax.inject.Inject;
 
 public class ClientEditorViewModel extends EditorViewModel {
 
-    private ClientsRepository clientsRepository;
+    private final ClientsDataManager clientsDataManager;
+    private final ClientsRepository clientsRepository;
     public ObservableField<Client> client = new ObservableField<>();
     private Client dbClient;
 
@@ -24,7 +26,9 @@ public class ClientEditorViewModel extends EditorViewModel {
     private final String DB_EMAIL_KEY = "DB_EMAIL_KEY";
 
     @Inject
-    public ClientEditorViewModel(ClientsRepository clientsRepository) {
+    public ClientEditorViewModel(ClientsDataManager clientsDataManager,
+                                 ClientsRepository clientsRepository) {
+        this.clientsDataManager = clientsDataManager;
         this.clientsRepository = clientsRepository;
     }
 
@@ -104,7 +108,7 @@ public class ClientEditorViewModel extends EditorViewModel {
         }
 
         subscribeInIOThread(
-                clientsRepository.deleteClientSingle(client),
+                clientsDataManager.deleteClientSingle(client),
                 new SingleData<>(
                         isDeleted::setValue,
                         throwable -> getErrorHandler().handleError(isDeleted, throwable)));

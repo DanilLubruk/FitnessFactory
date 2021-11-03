@@ -12,23 +12,6 @@ public class OwnerCoachesRepository extends OwnerPersonnelRepository {
         return OwnerCoachesCollection.getRoot();
     }
 
-    public Single<String> getCoachIdByEmailAsync(String coachEmail) {
-        return SingleCreate(emitter -> {
-            if (!emitter.isDisposed()) {
-                emitter.onSuccess(getCoachIdByEmail(coachEmail));
-            }
-        });
-    }
-
-    private String getCoachIdByEmail(String coachEmail) throws Exception {
-        Personnel personnel =
-                getUniqueUserEntity(
-                        newQuery().whereUserEmailEquals(coachEmail).build(),
-                        Personnel.class);
-
-        return personnel.getId();
-    }
-
     @Override
     protected OwnerCoachesRepository.QueryBuilder newQuery() {
         return new OwnerCoachesRepository().new QueryBuilder();

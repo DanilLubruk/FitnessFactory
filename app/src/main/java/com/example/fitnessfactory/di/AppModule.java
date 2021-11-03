@@ -17,6 +17,7 @@ import com.example.fitnessfactory.data.managers.access.AdminsAccessManager;
 import com.example.fitnessfactory.data.managers.data.AdminsDataManager;
 import com.example.fitnessfactory.data.managers.AuthManager;
 import com.example.fitnessfactory.data.managers.access.CoachesAccessManager;
+import com.example.fitnessfactory.data.managers.data.ClientsDataManager;
 import com.example.fitnessfactory.data.managers.data.CoachesDataManager;
 import com.example.fitnessfactory.data.managers.access.GymsAccessManager;
 import com.example.fitnessfactory.data.managers.data.SessionTypesDataManager;
@@ -153,9 +154,10 @@ public class AppModule {
 
     @Provides
     @AppScope
-    public CoachesAccessManager provideCoachesAccessManager(CoachesAccessRepository coachesAccessRepository,
+    public CoachesAccessManager provideCoachesAccessManager(CoachSessionsRepository coachSessionsRepository,
+                                                            CoachesAccessRepository coachesAccessRepository,
                                                             OwnerCoachesRepository ownerCoachesRepository) {
-        return new CoachesAccessManager(coachesAccessRepository, ownerCoachesRepository);
+        return new CoachesAccessManager(coachSessionsRepository, coachesAccessRepository, ownerCoachesRepository);
     }
 
     @Provides
@@ -258,5 +260,12 @@ public class AppModule {
     public SessionTypesDataManager provideSessionTypesDataManager(SessionsRepository sessionsRepository,
                                                                   SessionTypeRepository sessionTypeRepository) {
         return new SessionTypesDataManager(sessionsRepository, sessionTypeRepository);
+    }
+
+    @Provides
+    @AppScope
+    public ClientsDataManager provideClientsDataManager(ClientsRepository clientsRepository,
+                                                        ClientSessionsRepository clientSessionsRepository) {
+        return new ClientsDataManager(clientsRepository, clientSessionsRepository);
     }
 }

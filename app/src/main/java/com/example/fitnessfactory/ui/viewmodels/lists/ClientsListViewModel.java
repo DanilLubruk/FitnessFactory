@@ -2,6 +2,7 @@ package com.example.fitnessfactory.ui.viewmodels.lists;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.dataListeners.ClientsListDataListener;
+import com.example.fitnessfactory.data.managers.data.ClientsDataManager;
 import com.example.fitnessfactory.data.models.Client;
 import com.example.fitnessfactory.data.repositories.ownerData.ClientsRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
@@ -13,14 +14,14 @@ import javax.inject.Inject;
 
 public class ClientsListViewModel extends BaseViewModel implements DataListListener<Client> {
 
-    private final ClientsRepository clientsRepository;
+    private final ClientsDataManager clientsDataManager;
     private final ClientsListDataListener dataListener;
 
     @Inject
-    public ClientsListViewModel(ClientsListDataListener dataListener,
-                                ClientsRepository clientsRepository) {
+    public ClientsListViewModel(ClientsDataManager clientsDataManager,
+                                ClientsListDataListener dataListener) {
+        this.clientsDataManager = clientsDataManager;
         this.dataListener = dataListener;
-        this.clientsRepository = clientsRepository;
     }
 
     @Override
@@ -40,6 +41,6 @@ public class ClientsListViewModel extends BaseViewModel implements DataListListe
             return;
         }
 
-        subscribeInIOThread(clientsRepository.deleteClientCompletable(item));
+        subscribeInIOThread(clientsDataManager.deleteClientCompletable(item));
     }
 }

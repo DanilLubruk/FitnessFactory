@@ -3,11 +3,13 @@ package com.example.fitnessfactory.data.repositories.ownerData.participantsData;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.models.UsersSession;
 import com.example.fitnessfactory.data.repositories.BaseRepository;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Single;
 
@@ -20,6 +22,22 @@ public abstract class ParticipantSessionsRepository extends BaseRepository {
     protected abstract CollectionReference getCollection(String participantId);
 
     protected abstract List<String> getParticipantsIds(Session session);
+
+    public Single<Boolean> isParticipantOccupiedAsync(String participantId) {
+        return SingleCreate(emitter -> {
+           if (!emitter.isDisposed()) {
+               emitter.onSuccess(isParticipantOccupied(participantId));
+           }
+        });
+    }
+
+    private boolean isParticipantOccupied(String participantId) throws ExecutionException, InterruptedException {
+        return getParticipantSessionsAmount(participantId) > 0;
+    }
+
+    private int getParticipantSessionsAmount(String participantId) throws ExecutionException, InterruptedException {
+        return Tasks.await(getCollection(participantId).get()).getDocuments().size();
+    }
 
     public Single<WriteBatch> getDeleteSessionBatchAsync(WriteBatch writeBatch,
                                                          Session session) {

@@ -41,7 +41,7 @@ public class SessionsDataManager extends BaseManager {
     public Completable addCoachToSession(String sessionId, String coachEmail) {
         SafeReference<String> coachIdRef = new SafeReference<>();
 
-        return ownerCoachesRepository.getCoachIdByEmailAsync(coachEmail)
+        return ownerCoachesRepository.getPersonnelIdByEmailAsync(coachEmail)
                 .flatMap(coachId -> {
                     coachIdRef.set(coachId);
                     return sessionsRepository.getAddCoachBatchAsync(sessionId, coachId);
@@ -59,7 +59,7 @@ public class SessionsDataManager extends BaseManager {
     public Completable removeCoachFromSession(String sessionId, String coachEmail) {
         SafeReference<String> coachIdRef = new SafeReference<>();
 
-        return ownerCoachesRepository.getCoachIdByEmailAsync(coachEmail)
+        return ownerCoachesRepository.getPersonnelIdByEmailAsync(coachEmail)
                 .flatMap(coachId -> {
                     coachIdRef.set(coachId);
                     return sessionsRepository.getRemoveCoachBatchAsync(sessionId, coachId);

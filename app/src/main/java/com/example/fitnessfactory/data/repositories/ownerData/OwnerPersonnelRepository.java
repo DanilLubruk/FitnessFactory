@@ -19,6 +19,23 @@ import io.reactivex.Single;
 
 public abstract class OwnerPersonnelRepository extends BaseRepository {
 
+    public Single<String> getPersonnelIdByEmailAsync(String personnelEmail) {
+        return SingleCreate(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getPersonnelIdByEmail(personnelEmail));
+            }
+        });
+    }
+
+    private String getPersonnelIdByEmail(String personnelEmail) throws Exception {
+        Personnel personnel =
+                getUniqueUserEntity(
+                        newQuery().whereUserEmailEquals(personnelEmail).build(),
+                        Personnel.class);
+
+        return personnel.getId();
+    }
+
     public Single<Boolean> isPersonnelWithThisEmailAddedAsync(String userEmail) {
         return SingleCreate(emitter -> {
             boolean isAdminAdded = isPersonnelWithThisEmailAdded(userEmail);

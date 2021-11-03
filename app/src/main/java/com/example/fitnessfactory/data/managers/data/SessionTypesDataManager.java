@@ -7,6 +7,8 @@ import com.example.fitnessfactory.data.repositories.ownerData.SessionTypeReposit
 import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository;
 import com.example.fitnessfactory.utils.ResUtils;
 
+import javax.inject.Inject;
+
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
@@ -15,6 +17,7 @@ public class SessionTypesDataManager extends BaseManager {
     private final SessionsRepository sessionsRepository;
     private final SessionTypeRepository sessionTypeRepository;
 
+    @Inject
     public SessionTypesDataManager(SessionsRepository sessionsRepository,
                                    SessionTypeRepository sessionTypeRepository) {
         this.sessionsRepository = sessionsRepository;
@@ -24,7 +27,7 @@ public class SessionTypesDataManager extends BaseManager {
     public Completable deleteSessionTypeCompletable(SessionType sessionType) {
         return sessionsRepository.isSessionTypeOccupiedAsync(sessionType.getName())
                 .flatMapCompletable(isOccupied -> isOccupied ?
-                        Completable.error(new Exception(ResUtils.getString(R.string.message_error_session_type_occupied)))
+                        Completable.error(new Exception(getOccupiedMessage()))
                         :
                         sessionTypeRepository.deleteSessionTypeCompletable(sessionType));
     }
@@ -32,8 +35,14 @@ public class SessionTypesDataManager extends BaseManager {
     public Single<Boolean> deleteSessionTypeSingle(SessionType sessionType) {
         return sessionsRepository.isSessionTypeOccupiedAsync(sessionType.getName())
                 .flatMap(isOccupied -> isOccupied ?
-                        Single.error(new Exception(ResUtils.getString(R.string.message_error_session_type_occupied)))
+                        Single.error(new Exception(getOccupiedMessage()))
                         :
                         sessionTypeRepository.deleteSessionTypeSingle(sessionType));
+    }
+
+    private String getOccupiedMessage() {
+        return String.format(
+                ResUtils.getString(R.string.message_error_item_occupied),
+                ResUtils.getString(R.string.caption_session_types));
     }
 }

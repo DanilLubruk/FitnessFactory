@@ -63,6 +63,7 @@
     <string name="message_send_invitation">Send email invitation for this %1$s?</string>
     <string name="caption_admin">admin</string>
     <string name="caption_coach">coach</string>
+    <string name="caption_coach_capitalized">Coach</string>
     <string name="title_edit_item">Edit item</string>
     <string name="title_add_item">Add item</string>
     <string name="message_admin_is_registered">Administrator is already registered</string>
@@ -101,7 +102,10 @@
     <string name="message_ask_remove_client_from_session">Remove client from this session?</string>
     <string name="message_ask_remove_coach_from_session">Remove coach from this session?</string>
     <string name="caption_add_items">Add items...</string>
+    <string name="message_error_item_occupied">Deletion is impossible. %1$s is occupied!</string>
+    <string name="caption_client">Client</string>
     <string name="message_error_session_type_occupied">Deletion is impossible. Session type is occupied!</string>
+    <string name="message_error_client_occupied">Deletion is impossible. Client is occupied</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <string name="caption_user_null">User is not signed in</string>
