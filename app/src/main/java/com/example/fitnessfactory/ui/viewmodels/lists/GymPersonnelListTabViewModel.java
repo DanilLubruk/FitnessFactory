@@ -19,7 +19,7 @@ import com.example.fitnessfactory.utils.ResUtils;
 
 import java.util.List;
 
-public abstract class GymPersonnelListTabViewModel extends BaseViewModel implements DataListListener<AppUser> {
+public abstract class GymPersonnelListTabViewModel extends ListViewModel<AppUser> {
 
     private final OwnerPersonnelRepository ownerRepository;
 
@@ -79,9 +79,9 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
 
     public void startDataListener() {
         if (TextUtils.isEmpty(gymId)) {
+            doInterruptProgress.setValue(true);
             return;
         }
-
         getDataListener().startDataListener(gymId);
     }
 
@@ -90,11 +90,6 @@ public abstract class GymPersonnelListTabViewModel extends BaseViewModel impleme
     }
 
     public void getPersonnelData() {
-        if (TextUtils.isEmpty(gymId)) {
-            GuiUtils.showMessage(getGymNullMessage());
-            return;
-        }
-
         subscribeInIOThread(
                 getDataManager().getPersonnelListByGymIdAsync(gymId),
                 new SingleData<>(personnel::setValue, getErrorHandler()::handleError));

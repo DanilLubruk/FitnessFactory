@@ -50,7 +50,12 @@ public abstract class ParticipantSessionsRepository extends BaseRepository {
 
     private WriteBatch getDeleteSessionBatch(WriteBatch writeBatch,
                                              Session session) {
-        for (String participantId : getParticipantsIds(session)) {
+        List<String> participantsIds = getParticipantsIds(session);
+        if (participantsIds == null) {
+            return writeBatch;
+        }
+
+        for (String participantId : participantsIds) {
             writeBatch = writeBatch.delete(getSessionDocument(session.getId(), participantId));
         }
 

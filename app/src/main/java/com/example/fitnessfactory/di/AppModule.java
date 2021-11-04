@@ -232,10 +232,16 @@ public class AppModule {
     @Provides
     @AppScope
     public SessionsDataManager provideSessionsDataManager(SessionsRepository sessionsRepository,
+                                                          SessionTypeRepository sessionTypeRepository,
                                                           ClientSessionsRepository clientSessionsRepository,
                                                           CoachSessionsRepository coachSessionsRepository,
                                                           OwnerCoachesRepository ownerCoachesRepository) {
-        return new SessionsDataManager(sessionsRepository, clientSessionsRepository, coachSessionsRepository, ownerCoachesRepository);
+        return new SessionsDataManager(
+                sessionsRepository,
+                sessionTypeRepository,
+                clientSessionsRepository,
+                coachSessionsRepository,
+                ownerCoachesRepository);
     }
 
     @Provides

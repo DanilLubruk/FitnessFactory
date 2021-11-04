@@ -58,6 +58,7 @@ public class GymEditorActivity extends EditorActivity {
                     }
                 }
         ).attach();
+        binding.container.vpPersonnel.setUserInputEnabled(false);
     }
 
     private void subscribeForGymIdChangesForTabs() {

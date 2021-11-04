@@ -19,13 +19,12 @@ import java.util.List;
 
 import io.reactivex.Completable;
 
-public abstract class SessionParticipantListTabViewModel<ItemType> extends BaseViewModel implements DataListListener<ItemType> {
+public abstract class SessionParticipantListTabViewModel<ItemType> extends ListViewModel<ItemType> {
 
     protected final SessionsDataManager sessionsDataManager;
-    private final SessionsRepository sessionsRepository;
     private String sessionId;
 
-    protected abstract ArgDataListener<List<String>> getDataListener();
+    protected abstract ArgDataListener<String> getDataListener();
 
     protected abstract Completable getAddParticipantAction(String sessionId, String participantId);
 
@@ -37,10 +36,8 @@ public abstract class SessionParticipantListTabViewModel<ItemType> extends BaseV
 
     protected abstract String getParticipantNullMessage();
 
-    public SessionParticipantListTabViewModel(SessionsDataManager sessionsDataManager,
-                                              SessionsRepository sessionsRepository) {
+    public SessionParticipantListTabViewModel(SessionsDataManager sessionsDataManager) {
         this.sessionsDataManager = sessionsDataManager;
-        this.sessionsRepository = sessionsRepository;
     }
 
     public void resetSessionId(String sessionId) {
@@ -50,12 +47,10 @@ public abstract class SessionParticipantListTabViewModel<ItemType> extends BaseV
     @Override
     public void startDataListener() {
         if (StringUtils.isEmpty(sessionId)) {
+            doInterruptProgress.setValue(true);
             return;
         }
-        subscribeInIOThread(sessionsRepository.getSessionAsync(sessionId),
-                new SingleData<>(
-                        session -> getDataListener().startDataListener(getParticipantsList(session)),
-                        getErrorHandler()::handleError));
+        getDataListener().startDataListener(sessionId);
     }
 
     @Override
@@ -73,10 +68,7 @@ public abstract class SessionParticipantListTabViewModel<ItemType> extends BaseV
             return;
         }
 
-        subscribeInIOThread(
-                getAddParticipantAction(sessionId, participantId),
-                this::startDataListener,
-                getErrorHandler()::handleError);
+        subscribeInIOThread(getAddParticipantAction(sessionId, participantId));
     }
 
     @Override

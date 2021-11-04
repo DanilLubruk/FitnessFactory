@@ -15,6 +15,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.WriteBatch;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
@@ -23,6 +27,22 @@ public class ClientsRepository extends BaseRepository {
     @Override
     protected String getRoot() {
         return ClientsCollection.getRoot();
+    }
+
+    public Single<List<Client>> getClientsAsync(List<String> clientsIds) {
+        return SingleCreate(emitter -> {
+           if (!emitter.isDisposed()) {
+               emitter.onSuccess(getClients(clientsIds));
+           }
+        });
+    }
+
+    private List<Client> getClients(List<String> clientsIds) throws ExecutionException, InterruptedException {
+        if (clientsIds == null || clientsIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return Tasks.await(newQuery().whereIdInArray(clientsIds).build().get()).toObjects(Client.class);
     }
 
     public Single<Boolean> saveAsync(Client client) {
@@ -178,6 +198,11 @@ public class ClientsRepository extends BaseRepository {
 
         public QueryBuilder whereEmailEquals(String clientEmail) {
             query = query.whereEqualTo(Client.EMAIL_FIELD, clientEmail);
+            return this;
+        }
+
+        public QueryBuilder whereIdInArray(List<String> clientsIds) {
+            query = query.whereIn(Client.ID_FIELD, clientsIds);
             return this;
         }
 

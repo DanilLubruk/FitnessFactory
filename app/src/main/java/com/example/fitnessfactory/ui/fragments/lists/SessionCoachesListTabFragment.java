@@ -19,6 +19,7 @@ import com.example.fitnessfactory.ui.viewmodels.factories.SessionCoachesListTabV
 import com.example.fitnessfactory.ui.viewmodels.lists.SessionCoachesListTabViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -91,12 +92,16 @@ public class SessionCoachesListTabFragment extends ListListenerTabFragment<AppUs
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSessionsCoachesListDataListenerEvent(SessionsCoachesListDataListenerEvent sessionsCoachesListDataListenerEvent) {
-        getViewModel().resetCoachesList(sessionsCoachesListDataListenerEvent.getCoachesEmails());
+        getViewModel().resetCoachesList(sessionsCoachesListDataListenerEvent.getCoachesIds());
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onSessionIdUpdateEvent(SessionIdUpdateEvent sessionIdUpdateEvent) {
         getViewModel().resetSessionId(sessionIdUpdateEvent.getSessionId());
         getViewModel().startDataListener();
+    }
+
+    protected boolean doStartListenerInitially() {
+        return false;
     }
 }

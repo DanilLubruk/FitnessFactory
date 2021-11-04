@@ -27,7 +27,7 @@ public class SessionTypesListFragment extends
     private SessionTypesListViewModel viewModel;
 
     @Override
-    protected DataListListener<SessionType> getViewModel() {
+    protected SessionTypesListViewModel getViewModel() {
         return viewModel;
     }
 

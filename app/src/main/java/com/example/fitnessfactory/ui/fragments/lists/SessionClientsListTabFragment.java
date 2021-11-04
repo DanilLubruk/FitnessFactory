@@ -20,6 +20,7 @@ import com.example.fitnessfactory.ui.viewmodels.factories.ClientsListTabViewMode
 import com.example.fitnessfactory.ui.viewmodels.lists.SessionClientsListTabViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -28,6 +29,11 @@ import java.util.List;
 public class SessionClientsListTabFragment extends ListListenerTabFragment<Client, ClientsListViewHolder, ClientsListAdapter> {
 
     private SessionClientsListTabViewModel viewModel;
+
+    protected void initComponents() {
+        super.initComponents();
+        viewModel.getClients().observe(this, this::setListData);
+    }
 
     @Override
     protected SessionClientsListTabViewModel getViewModel() {
@@ -87,12 +93,16 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<Clien
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSessionsClientsListDataListenerEvent(SessionsClientsListDataListenerEvent sessionsClientsListDataListenerEvent) {
-        setListData(sessionsClientsListDataListenerEvent.getClients());
+        getViewModel().resetClientsList(sessionsClientsListDataListenerEvent.getClientsIds());
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onSessionIdUpdateEvent(SessionIdUpdateEvent sessionIdUpdateEvent) {
         getViewModel().resetSessionId(sessionIdUpdateEvent.getSessionId());
         getViewModel().startDataListener();
+    }
+
+    protected boolean doStartListenerInitially() {
+        return false;
     }
 }

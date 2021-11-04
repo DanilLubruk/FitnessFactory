@@ -22,7 +22,7 @@ import java.util.List;
 
 import io.reactivex.Single;
 
-public abstract class PersonnelListViewModel extends BaseViewModel implements DataListListener<AppUser>  {
+public abstract class PersonnelListViewModel extends ListViewModel<AppUser> {
 
     private PersonnelAccessManager accessManager;
 

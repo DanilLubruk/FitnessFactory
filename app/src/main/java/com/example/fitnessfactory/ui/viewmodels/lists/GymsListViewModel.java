@@ -11,10 +11,10 @@ import com.example.fitnessfactory.utils.ResUtils;
 
 import javax.inject.Inject;
 
-public class GymsListViewModel extends BaseViewModel implements DataListListener<Gym> {
+public class GymsListViewModel extends ListViewModel<Gym> {
 
-    private GymsAccessManager gymsAccessManager;
-    private GymsListDataListener gymsListDataListener;
+    private final GymsAccessManager gymsAccessManager;
+    private final GymsListDataListener gymsListDataListener;
 
     @Inject
     public GymsListViewModel(GymsAccessManager gymsAccessManager,

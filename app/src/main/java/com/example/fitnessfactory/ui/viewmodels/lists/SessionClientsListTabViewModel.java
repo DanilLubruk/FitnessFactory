@@ -1,5 +1,8 @@
 package com.example.fitnessfactory.ui.viewmodels.lists;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.dataListeners.ArgDataListener;
 import com.example.fitnessfactory.data.dataListeners.SessionClientsListDataListener;
@@ -7,6 +10,7 @@ import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
 import com.example.fitnessfactory.data.models.Client;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.observers.SingleData;
+import com.example.fitnessfactory.data.repositories.ownerData.ClientsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
@@ -23,18 +27,31 @@ import io.reactivex.Completable;
 public class SessionClientsListTabViewModel extends SessionParticipantListTabViewModel<Client> {
 
     private final SessionClientsListDataListener dataListener;
+    private final ClientsRepository clientsRepository;
+
+    private final MutableLiveData<List<Client>> clients = new MutableLiveData<>();
 
     @Inject
     public SessionClientsListTabViewModel(SessionsDataManager sessionsDataManager,
-                                          SessionsRepository sessionsRepository,
+                                          ClientsRepository clientsRepository,
                                           SessionClientsListDataListener dataListener) {
-        super(sessionsDataManager, sessionsRepository);
+        super(sessionsDataManager);
+        this.clientsRepository = clientsRepository;
         this.dataListener = dataListener;
     }
 
+    public LiveData<List<Client>> getClients() {
+        return clients;
+    }
+
+    public void resetClientsList(List<String> clientsIds) {
+        subscribeInIOThread(
+                clientsRepository.getClientsAsync(clientsIds),
+                new SingleData<>(clients::setValue, getErrorHandler()::handleError));
+    }
 
     @Override
-    protected ArgDataListener<List<String>> getDataListener() {
+    protected ArgDataListener<String> getDataListener() {
         return dataListener;
     }
 

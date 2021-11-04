@@ -73,11 +73,12 @@ public class SessionEditorActivity extends EditorActivity {
                     }
                 }
         ).attach();
+        binding.container.vpParticipants.setUserInputEnabled(false);
     }
 
     private void subscribeForSessionIdChangesForTabs() {
         getViewModel().getSessionId()
-                .observe(this, sessionId -> EventBus.getDefault().post(new SessionIdUpdateEvent(sessionId)));
+                .observe(this, sessionId -> EventBus.getDefault().postSticky(new SessionIdUpdateEvent(sessionId)));
     }
 
     private Date getIntentDefaultDate() {

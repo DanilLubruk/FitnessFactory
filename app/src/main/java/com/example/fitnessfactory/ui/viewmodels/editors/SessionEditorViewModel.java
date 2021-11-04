@@ -37,8 +37,6 @@ public class SessionEditorViewModel extends EditorViewModel {
     private final String DB_END_TIME_KEY = "DB_END_TIME_KEY";
     private final String DB_GYM_NAME_KEY = "DB_GYM_NAME_KEY";
     private final String DB_SESSION_TYPE_NAME_KEY = "DB_SESSION_TYPE_NAME_KEY";
-    private final String DB_COACHES_IDS_KEY = "DB_COACHES_IDS_KEY";
-    private final String DB_CLIENTS_IDS_KEY = "DB_CLIENTS_IDS_KEY";
 
     @Inject
     public SessionEditorViewModel(SessionsDataManager sessionsDataManager,
@@ -294,8 +292,6 @@ public class SessionEditorViewModel extends EditorViewModel {
         getHandle().put(Session.END_TIME_FIELD, session.getEndTime());
         getHandle().put(Session.GYM_NAME_FIELD, session.getGymName());
         getHandle().put(Session.SESSION_TYPE_NAME_FIELD, session.getSessionTypeName());
-        getHandle().put(Session.COACHES_IDS_FIELD, session.getCoachesIds());
-        getHandle().put(Session.CLIENTS_IDS_FIELD, session.getClientsIds());
     }
 
     private void saveDbSessionState() {
@@ -308,8 +304,6 @@ public class SessionEditorViewModel extends EditorViewModel {
         getHandle().put(DB_END_TIME_KEY, dbSession.getEndTime());
         getHandle().put(DB_GYM_NAME_KEY, dbSession.getGymName());
         getHandle().put(DB_SESSION_TYPE_NAME_KEY, dbSession.getSessionTypeName());
-        getHandle().put(DB_COACHES_IDS_KEY, dbSession.getCoachesIds());
-        getHandle().put(DB_CLIENTS_IDS_KEY, dbSession.getClientsIds());
     }
 
     @Override
@@ -327,8 +321,6 @@ public class SessionEditorViewModel extends EditorViewModel {
         session.setEndTime((Date) getHandle().get(Session.END_TIME_FIELD));
         session.setGymName((String) getHandle().get(Session.GYM_NAME_FIELD));
         session.setSessionTypeName((String) getHandle().get(Session.SESSION_TYPE_NAME_FIELD));
-        session.setCoachesIds((List<String>) getHandle().get(Session.COACHES_IDS_FIELD));
-        session.setClientsIds((List<String>) getHandle().get(Session.CLIENTS_IDS_FIELD));
     }
 
     private void setDbHandleState() {
@@ -341,7 +333,5 @@ public class SessionEditorViewModel extends EditorViewModel {
         dbSession.setEndTime((Date) getHandle().get(DB_END_TIME_KEY));
         dbSession.setGymName((String) getHandle().get(DB_GYM_NAME_KEY));
         dbSession.setSessionTypeName((String) getHandle().get(DB_SESSION_TYPE_NAME_KEY));
-        dbSession.setCoachesIds((List<String>) getHandle().get(DB_COACHES_IDS_KEY));
-        dbSession.setClientsIds((List<String>) getHandle().get(DB_CLIENTS_IDS_KEY));
     }
 }

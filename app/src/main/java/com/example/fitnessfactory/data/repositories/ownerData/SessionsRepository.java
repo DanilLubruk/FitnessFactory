@@ -3,6 +3,7 @@ package com.example.fitnessfactory.data.repositories.ownerData;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.firestoreCollections.SessionsCollection;
 import com.example.fitnessfactory.data.models.Session;
+import com.example.fitnessfactory.data.models.SessionType;
 import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
@@ -23,6 +24,22 @@ public class SessionsRepository extends BaseRepository {
     @Override
     protected String getRoot() {
         return SessionsCollection.getRoot();
+    }
+
+    public Single<Boolean> isSessionPackedAsync(Session session, SessionType sessionType) {
+        return SingleCreate(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(isSessionPacked(session, sessionType));
+            }
+        });
+    }
+
+    private boolean isSessionPacked(Session session, SessionType sessionType) {
+        if (session.getClientsIds() == null) {
+            return false;
+        }
+
+        return session.getClientsIds().size() >= sessionType.getPeopleAmount();
     }
 
     public Single<Boolean> isGymNameOccupiedAsync(String gymName) {
@@ -174,7 +191,14 @@ public class SessionsRepository extends BaseRepository {
 
     private boolean update(Session session) throws ExecutionException, InterruptedException {
         DocumentReference documentReference = getCollection().document(session.getId());
-        Tasks.await(documentReference.set(session));
+        Tasks.await(getFirestore().batch()
+                .update(documentReference, Session.ID_FIELD, session.getId())
+                .update(documentReference, Session.DATE_FIELD, session.getDate())
+                .update(documentReference, Session.START_TIME_FIELD, session.getStartTime())
+                .update(documentReference, Session.END_TIME_FIELD, session.getEndTime())
+                .update(documentReference, Session.GYM_NAME_FIELD, session.getGymName())
+                .update(documentReference, Session.SESSION_TYPE_NAME_FIELD, session.getSessionTypeName())
+                .commit());
 
         return true;
     }
@@ -228,6 +252,11 @@ public class SessionsRepository extends BaseRepository {
     private class QueryBuilder {
 
         Query query = getCollection();
+
+        public QueryBuilder whereIdEquals(String sessionId) {
+            query = query.whereEqualTo(Session.ID_FIELD, sessionId);
+            return this;
+        }
 
         public QueryBuilder whereSessionTypeNameEquals(String sessionTypeName) {
             query = query.whereEqualTo(Session.SESSION_TYPE_NAME_FIELD, sessionTypeName);

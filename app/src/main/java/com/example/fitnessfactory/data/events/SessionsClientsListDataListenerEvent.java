@@ -1,18 +1,16 @@
 package com.example.fitnessfactory.data.events;
 
-import com.example.fitnessfactory.data.models.Client;
-
 import java.util.List;
 
 public class SessionsClientsListDataListenerEvent extends BaseEvent {
 
-    private List<Client> clients;
+    private List<String> clientsIds;
 
-    public SessionsClientsListDataListenerEvent(List<Client> clients) {
-        this.clients = clients;
+    public SessionsClientsListDataListenerEvent(List<String> clientsIds) {
+        this.clientsIds = clientsIds;
     }
 
-    public List<Client> getClients() {
-        return clients;
+    public List<String> getClientsIds() {
+        return clientsIds;
     }
 }

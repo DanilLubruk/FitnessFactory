@@ -107,14 +107,16 @@ public class SessionTypeRepository extends BaseRepository {
         return true;
     }
 
-    public Single<String> getSessionTypeNameAsync(String typeId) {
+    public Single<SessionType> getSessionTypeByNameAsync(String sessionTypeName) {
         return SingleCreate(emitter -> {
-           SessionType sessionType = getSessionType(typeId);
-
-           if (!emitter.isDisposed()) {
-               emitter.onSuccess(sessionType.getName());
-           }
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getSessionTypeByName(sessionTypeName));
+            }
         });
+    }
+
+    private SessionType getSessionTypeByName(String sessionTypeName) throws Exception {
+        return getUniqueSessionTypeByName(sessionTypeName);
     }
 
     public Single<SessionType> getSessionTypeAsync(String typeId) {
@@ -139,8 +141,19 @@ public class SessionTypeRepository extends BaseRepository {
         return getUniqueEntity(newQuery().whereIdEquals(typeId).build(), SessionType.class, getSessionTypeNotUniqueMessage());
     }
 
+    private SessionType getUniqueSessionTypeByName(String sessionTypeName) throws Exception {
+        return getUniqueEntity(
+                newQuery().whereNameEquals(sessionTypeName).build(),
+                SessionType.class,
+                getSessionTypeNameNotUniqueMessage());
+    }
+
     private String getSessionTypeNotUniqueMessage() {
         return ResUtils.getString(R.string.message_session_type_not_unique);
+    }
+
+    private String getSessionTypeNameNotUniqueMessage() {
+        return ResUtils.getString(R.string.message_error_session_type_name_ununique);
     }
 
     @Override

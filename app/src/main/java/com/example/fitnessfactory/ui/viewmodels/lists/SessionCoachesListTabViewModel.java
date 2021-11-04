@@ -5,12 +5,14 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.dataListeners.ArgDataListener;
 import com.example.fitnessfactory.data.dataListeners.SessionsCoachesListDataListener;
+import com.example.fitnessfactory.data.managers.data.CoachesDataManager;
 import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Personnel;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.repositories.UserRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
@@ -26,33 +28,32 @@ import io.reactivex.Completable;
 
 public class SessionCoachesListTabViewModel extends SessionParticipantListTabViewModel<AppUser> {
 
-    private SessionsCoachesListDataListener dataListener;
-    private UserRepository userRepository;
+    private final SessionsCoachesListDataListener dataListener;
+    private final CoachesDataManager coachesDataManager;
 
     private MutableLiveData<List<AppUser>> coaches = new MutableLiveData<>();
 
     @Inject
     public SessionCoachesListTabViewModel(SessionsDataManager sessionsDataManager,
-                                          SessionsRepository sessionsRepository,
                                           SessionsCoachesListDataListener dataListener,
-                                          UserRepository userRepository) {
-        super(sessionsDataManager, sessionsRepository);
+                                          CoachesDataManager coachesDataManager) {
+        super(sessionsDataManager);
         this.dataListener = dataListener;
-        this.userRepository = userRepository;
+        this.coachesDataManager = coachesDataManager;
     }
 
     public MutableLiveData<List<AppUser>> getCoaches() {
         return coaches;
     }
 
-    public void resetCoachesList(List<String> coachesEmails) {
+    public void resetCoachesList(List<String> coachesIds) {
         subscribeInIOThread(
-                userRepository.getUsersByEmailsAsync(coachesEmails),
+                coachesDataManager.getCoachesUsers(coachesIds),
                 new SingleData<>(coaches::setValue, getErrorHandler()::handleError));
     }
 
     @Override
-    protected ArgDataListener<List<String>> getDataListener() {
+    protected ArgDataListener<String> getDataListener() {
         return dataListener;
     }
 

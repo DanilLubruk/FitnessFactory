@@ -12,7 +12,7 @@ import com.example.fitnessfactory.utils.ResUtils;
 
 import javax.inject.Inject;
 
-public class ClientsListViewModel extends BaseViewModel implements DataListListener<Client> {
+public class ClientsListViewModel extends ListViewModel<Client>{
 
     private final ClientsDataManager clientsDataManager;
     private final ClientsListDataListener dataListener;

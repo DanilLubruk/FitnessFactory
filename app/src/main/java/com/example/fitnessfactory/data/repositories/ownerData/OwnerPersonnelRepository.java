@@ -19,6 +19,33 @@ import io.reactivex.Single;
 
 public abstract class OwnerPersonnelRepository extends BaseRepository {
 
+    public Single<List<String>> getPersonnelEmailsAsync(List<String> personnelIds) {
+        return SingleCreate(emitter -> {
+           if (!emitter.isDisposed()) {
+               emitter.onSuccess(getPersonnelEmails(personnelIds));
+           }
+        });
+    }
+
+    private List<String> getPersonnelEmails(List<String> personnelIds) throws ExecutionException, InterruptedException {
+        if (personnelIds == null || personnelIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<Personnel> personnelList =
+                Tasks.await(newQuery()
+                        .whereIdInArray(personnelIds)
+                        .build()
+                        .get())
+                        .toObjects(Personnel.class);
+
+        List<String> personnelEmails = new ArrayList<>();
+        for (Personnel personnel : personnelList) {
+            personnelEmails.add(personnel.getUserEmail());
+        }
+
+        return personnelEmails;
+    }
+
     public Single<String> getPersonnelIdByEmailAsync(String personnelEmail) {
         return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {

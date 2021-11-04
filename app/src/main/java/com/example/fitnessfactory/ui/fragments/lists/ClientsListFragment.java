@@ -79,7 +79,7 @@ public class ClientsListFragment extends ListListenerSelectFragment<Client, Clie
     }
 
     @Override
-    protected DataListListener<Client> getViewModel() {
+    protected ClientsListViewModel getViewModel() {
         return viewModel;
     }
 

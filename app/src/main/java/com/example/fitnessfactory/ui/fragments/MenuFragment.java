@@ -14,6 +14,7 @@ import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.DaysSessionListDataListenerEvent;
 import com.example.fitnessfactory.data.events.SessionsCalendarDataListenerEvent;
 import com.example.fitnessfactory.data.models.Session;
+import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.databinding.FragmentMainMenuBinding;
 import com.example.fitnessfactory.ui.activities.editors.SessionEditorActivity;
 import com.example.fitnessfactory.ui.adapters.SessionsListAdapter;
@@ -22,6 +23,7 @@ import com.example.fitnessfactory.ui.viewmodels.lists.SessionsListViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.TimeUtils;
+import com.example.fitnessfactory.utils.dialogs.DialogUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.marcohc.robotocalendar.RobotoCalendarView;
@@ -76,7 +78,7 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
                     showSessionEditorActivity(daysSessionsAdapter.getItem(position));
                     break;
                 case R.id.btnDelete:
-
+                    askForDelete(daysSessionsAdapter.getItem(position));
                     break;
             }
         });
@@ -91,6 +93,26 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
 
             }
         });
+    }
+
+    protected void askForDelete(Session item) {
+        subscribeInMainThread(
+                DialogUtils.showAskDialog(
+                        getBaseActivity(),
+                        ResUtils.getString(R.string.message_ask_delete_session),
+                        ResUtils.getString(R.string.caption_ok),
+                        ResUtils.getString(R.string.caption_cancel)),
+                new SingleData<>(
+                        doDelete -> {
+                            if (doDelete) {
+                                viewModel.deleteItem(item);
+                            }
+                        },
+                        throwable -> {
+                            throwable.printStackTrace();
+                            GuiUtils.showMessage(throwable.getLocalizedMessage());
+                        }
+                ));
     }
 
     private void showSessionEditorActivity(Session session) {

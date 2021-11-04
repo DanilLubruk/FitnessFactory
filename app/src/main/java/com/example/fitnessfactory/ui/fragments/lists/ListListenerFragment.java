@@ -14,6 +14,7 @@ import com.example.fitnessfactory.ui.adapters.ListAdapter;
 import com.example.fitnessfactory.ui.fragments.BaseFragment;
 import com.example.fitnessfactory.ui.viewholders.BaseRecyclerViewHolder;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
+import com.example.fitnessfactory.ui.viewmodels.lists.ListViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
@@ -33,13 +34,18 @@ public abstract class ListListenerFragment<
 
     protected FragmentListBinding binding;
 
-    protected abstract DataListListener<ItemType> getViewModel();
+    protected abstract ListViewModel<ItemType> getViewModel();
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         getBaseActivity().setTitle(getTitle());
         showProgress();
         defineViewModel();
+        getViewModel().doInterruptProgress.observe(getBaseActivity(), doInterrupt -> {
+            if (doInterrupt) {
+                closeProgress();
+            }
+        });
         super.onActivityCreated(savedInstanceState);
         initComponents();
     }
@@ -136,7 +142,7 @@ public abstract class ListListenerFragment<
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        if (getViewModel() != null) {
+        if (getViewModel() != null || doStartListenerInitially()) {
             getViewModel().startDataListener();
         }
     }
@@ -148,6 +154,10 @@ public abstract class ListListenerFragment<
         if (getViewModel() != null) {
             getViewModel().stopDataListener();
         }
+    }
+
+    protected boolean doStartListenerInitially() {
+        return true;
     }
 
     public void closeProgress() {

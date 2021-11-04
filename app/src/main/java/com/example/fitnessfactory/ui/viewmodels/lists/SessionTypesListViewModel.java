@@ -13,7 +13,7 @@ import com.google.android.gms.common.internal.ResourceUtils;
 
 import javax.inject.Inject;
 
-public class SessionTypesListViewModel extends BaseViewModel implements DataListListener<SessionType> {
+public class SessionTypesListViewModel extends ListViewModel<SessionType> {
 
     private final SessionTypesDataManager sessionTypesDataManager;
     private final SessionTypesListDataListener dataListener;
