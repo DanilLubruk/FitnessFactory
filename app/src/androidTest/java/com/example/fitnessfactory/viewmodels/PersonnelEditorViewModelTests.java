@@ -132,33 +132,33 @@ public abstract class PersonnelEditorViewModelTests extends BaseTests {
 
     @Test
     public void addGymTest() {
-        Mockito.when(getOwnerRepository().addGymToPersonnel(Mockito.anyString(), Mockito.anyString()))
+        Mockito.when(getOwnerRepository().addGymToPersonnelAsync(Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(Completable.complete());
 
         personnelEditorViewModel.addGym(gym.getId());
         Mockito.verify(getOwnerRepository(), Mockito.times(0))
-                .addGymToPersonnel(userEmail, gymId);
+                .addGymToPersonnelAsync(userEmail, gymId);
 
         personnelEditorViewModel.setPersonnelData(getDataIntent(personnel));
 
         personnelEditorViewModel.addGym(gym.getId());
-        Mockito.verify(getOwnerRepository()).addGymToPersonnel(userEmail, gymId);
+        Mockito.verify(getOwnerRepository()).addGymToPersonnelAsync(userEmail, gymId);
     }
 
     @Test
     public void deleteGymTest() {
-        Mockito.when(getOwnerRepository().removeGymFromPersonnel(Mockito.anyString(), Mockito.anyString()))
+        Mockito.when(getOwnerRepository().removeGymFromPersonnelAsync(Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(Completable.complete());
 
         personnelEditorViewModel.deleteItem(gym);
         Mockito.verify(getOwnerRepository(), Mockito.times(0))
-                .removeGymFromPersonnel(userEmail, gymId);
+                .removeGymFromPersonnelAsync(userEmail, gymId);
 
         personnelEditorViewModel.setPersonnelData(getDataIntent(personnel));
 
         personnelEditorViewModel.deleteItem(gym);
         Mockito.verify(getOwnerRepository())
-                .removeGymFromPersonnel(userEmail, gymId);
+                .removeGymFromPersonnelAsync(userEmail, gymId);
     }
 
     @Test

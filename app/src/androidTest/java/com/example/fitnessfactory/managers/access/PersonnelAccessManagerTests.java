@@ -5,6 +5,7 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.managers.access.PersonnelAccessManager;
 import com.example.fitnessfactory.data.repositories.access.PersonnelAccessRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.participantsData.ParticipantSessionsRepository;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
@@ -20,18 +21,10 @@ import static org.junit.Assert.assertEquals;
 
 public abstract class PersonnelAccessManagerTests extends BaseTests {
 
-    protected PersonnelAccessManager personnelAccessManager;
-
-    String ownerId = "ownerId1";
+    String ownerId = "userId2";
     String personnelEmail = "useremail1";
 
-    @Before
-    public void setup() {
-        super.setup();
-        personnelAccessManager = instantiateAccessManager();
-    }
-
-    protected abstract PersonnelAccessManager instantiateAccessManager();
+    protected abstract PersonnelAccessManager getPersonnelAccessManager();
 
     protected abstract PersonnelAccessRepository getAccessRepository();
 
@@ -40,7 +33,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
     @Test
     public void tryRegisterRegisteredPersonnelTest() {
         TestObserver<Boolean> subscriber =
-                subscribeInTestThread(personnelAccessManager.createPersonnel(ownerId, personnelEmail));
+                subscribeInTestThread(getPersonnelAccessManager().createPersonnel(ownerId, personnelEmail));
 
         subscriber.assertError(Exception.class);
         subscriber.assertNotComplete();
@@ -62,7 +55,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
                 });
 
         TestObserver<Boolean> subscriber =
-                subscribeInTestThread(personnelAccessManager.createPersonnel(ownerId, "useremail5"));
+                subscribeInTestThread(getPersonnelAccessManager().createPersonnel(ownerId, "useremail5"));
 
         Mockito.verify(getAccessRepository())
                 .getRegisterPersonnelAccessEntryBatchAsync(ownerId, "useremail5");
@@ -80,7 +73,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
     @Test
     public void registerPersonnelTest() {
         TestObserver<Boolean> subscriber =
-                subscribeInTestThread(personnelAccessManager.createPersonnel(ownerId, "useremail6"));
+                subscribeInTestThread(getPersonnelAccessManager().createPersonnel(ownerId, "useremail6"));
 
         Mockito.verify(getAccessRepository())
                 .getRegisterPersonnelAccessEntryBatchAsync(ownerId, "useremail6");
@@ -99,7 +92,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
         setDeletePersonnelMocks();
 
         TestObserver<Boolean> subscriber =
-                subscribeInTestThread(personnelAccessManager.deletePersonnelSingle(ownerId, personnelEmail));
+                subscribeInTestThread(getPersonnelAccessManager().deletePersonnelSingle(ownerId, personnelEmail));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -113,7 +106,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
         setDeletePersonnelMocks();
 
         TestObserver<Boolean> subscriber =
-                subscribeInTestThread(personnelAccessManager.deletePersonnelSingle("ownerId", personnelEmail));
+                subscribeInTestThread(getPersonnelAccessManager().deletePersonnelSingle("ownerId", personnelEmail));
 
         subscriber.assertError(Exception.class);
         subscriber.assertNotComplete();

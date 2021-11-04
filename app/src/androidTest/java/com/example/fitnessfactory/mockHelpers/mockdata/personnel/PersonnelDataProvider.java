@@ -6,29 +6,41 @@ import com.example.fitnessfactory.data.models.PersonnelAccessEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PersonnelDataProvider<P extends Personnel, PE extends PersonnelAccessEntry> {
+public class PersonnelDataProvider {
 
-    private List<PE> accessEntries;
-    private List<P> personnel;
+    private List<PersonnelAccessEntry> accessEntries;
+    private List<Personnel> personnel;
 
     public PersonnelDataProvider() {
         initData();
     }
 
-    public List<PE> getAccessEntries() {
+    public List<PersonnelAccessEntry> getAccessEntries() {
         return accessEntries;
     }
 
-    public List<P> getPersonnel() {
+    public List<Personnel> getPersonnel() {
         return personnel;
     }
 
-    protected abstract P createPersonnel(String userEmail, List<String> gymsIds);
+    private Personnel createPersonnel(String userEmail, List<String> gymsIds) {
+        return Personnel
+                .builder()
+                .setUserEmail(userEmail)
+                .setGymsIds(gymsIds)
+                .build();
+    }
 
-    protected abstract PE createPersonnelAccessEntry(String userEmail, String ownerId);
+    private PersonnelAccessEntry createPersonnelAccessEntry(String userEmail, String ownerId) {
+        return PersonnelAccessEntry
+                .builder()
+                .setUserEmail(userEmail)
+                .setOwnerId(ownerId)
+                .build();
+    }
 
     private void initData() {
-        accessEntries = new ArrayList<PE>() {{
+        accessEntries = new ArrayList<PersonnelAccessEntry>() {{
             add(createPersonnelAccessEntry("useremail1", "userId2"));
             add(createPersonnelAccessEntry("useremail2", "userId2"));
             add(createPersonnelAccessEntry("useremail3", "userId2"));
@@ -38,7 +50,7 @@ public abstract class PersonnelDataProvider<P extends Personnel, PE extends Pers
             add(createPersonnelAccessEntry("useremail6", "userId3"));
         }};
 
-        personnel = new ArrayList<P>() {{
+        personnel = new ArrayList<Personnel>() {{
             add(createPersonnel(
                     "useremail1",
                     new ArrayList<String>(){{

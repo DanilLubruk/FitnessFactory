@@ -1,5 +1,6 @@
 package com.example.fitnessfactory;
 
+import com.example.fitnessfactory.data.callbacks.NullableCallback;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.utils.RxErrorsHandler;
 
@@ -15,5 +16,10 @@ public class TestRxUtils implements RxErrorsHandler {
     public void handleError(SingleLiveEvent<Boolean> observer, Throwable throwable) {
         observer.setValue(false);
         throwable.printStackTrace();
+    }
+
+    @Override
+    public void handleNullPointerException(NullableCallback callback, String errorMessage) {
+
     }
 }

@@ -1,8 +1,10 @@
 package com.example.fitnessfactory.mockHelpers.mockers.access;
 
 import com.example.fitnessfactory.data.models.AppUser;
+import com.example.fitnessfactory.data.models.Personnel;
+import com.example.fitnessfactory.data.models.PersonnelAccessEntry;
 import com.example.fitnessfactory.data.repositories.access.AdminsAccessRepository;
-import com.example.fitnessfactory.mockHelpers.mockdata.personnel.AdminsDataProvider;
+import com.example.fitnessfactory.mockHelpers.mockdata.personnel.PersonnelDataProvider;
 
 import org.mockito.Mockito;
 
@@ -13,7 +15,7 @@ import io.reactivex.Single;
 
 public class AdminsAccessRepositoryMocker {
 
-    private static AdminsDataProvider dataProvider = new AdminsDataProvider();
+    private static PersonnelDataProvider dataProvider = new PersonnelDataProvider();
 
     public static AdminsAccessRepository createMocker(AdminsAccessRepository adminsAccessRepository) {
         Mockito.when(adminsAccessRepository.getOwnersByInvitedEmail(Mockito.any()))
@@ -22,7 +24,7 @@ public class AdminsAccessRepositoryMocker {
                     List<String> ownerIds = new ArrayList<>();
                     ownerIds.add(appUser.getId());
 
-                    for (AdminAccessEntry adminEntry : dataProvider.getAccessEntries()) {
+                    for (PersonnelAccessEntry adminEntry : dataProvider.getAccessEntries()) {
                         if (adminEntry.getUserEmail().equals(appUser.getEmail())) {
                             ownerIds.add(adminEntry.getOwnerId());
                         }

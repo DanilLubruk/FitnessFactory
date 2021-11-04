@@ -2,22 +2,37 @@ package com.example.fitnessfactory.managers.access;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.example.fitnessfactory.TestFFApp;
+import com.example.fitnessfactory.data.managers.access.AdminsAccessManager;
 import com.example.fitnessfactory.data.managers.access.PersonnelAccessManager;
 import com.example.fitnessfactory.data.repositories.access.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.access.PersonnelAccessRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.participantsData.ParticipantSessionsRepository;
 import com.example.fitnessfactory.mockHelpers.mockers.access.AdminsAccessManagerMocker;
 
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+
+import javax.inject.Inject;
 
 @RunWith(AndroidJUnit4.class)
 public class AdminsAccessManagerTests extends PersonnelAccessManagerTests {
 
-    private AdminsAccessRepository accessRepository = Mockito.mock(AdminsAccessRepository.class);
+    @Inject
+    AdminsAccessRepository accessRepository;
+    @Inject
+    OwnerAdminsRepository ownerRepository;
+    @Inject
+    AdminsAccessManager adminsAccessManager;
 
-    private OwnerAdminsRepository ownerRepository = Mockito.mock(OwnerAdminsRepository.class);
+    @Before
+    public void setup() {
+        super.setup();
+        TestFFApp.getTestAppComponent().inject(this);
+    }
 
     @Override
     protected PersonnelAccessRepository getAccessRepository() {
@@ -30,8 +45,9 @@ public class AdminsAccessManagerTests extends PersonnelAccessManagerTests {
     }
 
     @Override
-    protected PersonnelAccessManager instantiateAccessManager() {
-
-        return AdminsAccessManagerMocker.createMock(accessRepository, ownerRepository);
+    protected PersonnelAccessManager getPersonnelAccessManager() {
+        return adminsAccessManager;
     }
+
+
 }

@@ -15,6 +15,7 @@ import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.repositories.access.CoachesAccessRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.participantsData.CoachSessionsRepository;
 import com.example.fitnessfactory.mockHelpers.mockers.access.CoachesAccessManagerMocker;
 import com.example.fitnessfactory.mockHelpers.mockers.data.CoachesDataManagerMocker;
 import com.example.fitnessfactory.ui.viewmodels.editors.CoachEditorViewModel;
@@ -25,6 +26,8 @@ import org.mockito.Mockito;
 
 @RunWith(AndroidJUnit4.class)
 public class CoachEditorViewModelTests extends PersonnelEditorViewModelTests {
+
+    private CoachSessionsRepository coachSessionsRepository = Mockito.mock(CoachSessionsRepository.class);
 
     private CoachesAccessRepository accessRepository = Mockito.mock(CoachesAccessRepository.class);
 
@@ -39,7 +42,7 @@ public class CoachEditorViewModelTests extends PersonnelEditorViewModelTests {
     @Override
     protected PersonnelEditorViewModel getViewModel() {
         accessManager =
-                CoachesAccessManagerMocker.createMock(accessRepository, ownerRepository);
+                CoachesAccessManagerMocker.createMock(coachSessionsRepository, accessRepository, ownerRepository);
 
         dataManager = CoachesDataManagerMocker.createMock(ownerRepository, userRepository, gymRepository);
 

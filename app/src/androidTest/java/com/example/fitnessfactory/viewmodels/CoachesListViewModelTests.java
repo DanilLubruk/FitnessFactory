@@ -10,6 +10,7 @@ import com.example.fitnessfactory.data.repositories.access.CoachesAccessReposito
 import com.example.fitnessfactory.data.repositories.access.PersonnelAccessRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.participantsData.CoachSessionsRepository;
 import com.example.fitnessfactory.mockHelpers.mockers.access.CoachesAccessManagerMocker;
 import com.example.fitnessfactory.mockHelpers.mockers.data.CoachesDataManagerMocker;
 import com.example.fitnessfactory.ui.viewmodels.lists.CoachesListViewModel;
@@ -19,6 +20,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 
 public class CoachesListViewModelTests extends PersonnelListViewModelTests {
+
+    private CoachSessionsRepository coachSessionsRepository = Mockito.mock(CoachSessionsRepository.class);
 
     private OwnerCoachesRepository ownerRepository = Mockito.mock(OwnerCoachesRepository.class);
 
@@ -35,7 +38,7 @@ public class CoachesListViewModelTests extends PersonnelListViewModelTests {
         dataManager = CoachesDataManagerMocker
                 .createMock(ownerRepository, userRepository, gymRepository);
         accessManager = CoachesAccessManagerMocker
-                .createMock(accessRepository, ownerRepository);
+                .createMock(coachSessionsRepository, accessRepository, ownerRepository);
 
         return new CoachesListViewModel(accessManager, dataManager, dataListener);
     }

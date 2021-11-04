@@ -57,7 +57,7 @@ public abstract class PersonnelListTabViewModelTests extends BaseTests {
         checkLiveDataNotSet(viewModel.getPersonnel());
 
         Mockito.verify(getOwnerRepository(), Mockito.times(0))
-                .getPersonnelEmailsByGymId(Mockito.anyString());
+                .getPersonnelEmailsByGymIdAsync(Mockito.anyString());
         Mockito.verify(userRepository, Mockito.times(0))
                 .getUsersByEmailsAsync(Mockito.anyList());
 
@@ -70,7 +70,7 @@ public abstract class PersonnelListTabViewModelTests extends BaseTests {
         viewModel.getPersonnelData();
         testScheduler.triggerActions();
 
-        Mockito.verify(getOwnerRepository()).getPersonnelEmailsByGymId("gymId2");
+        Mockito.verify(getOwnerRepository()).getPersonnelEmailsByGymIdAsync("gymId2");
         Mockito.verify(userRepository).getUsersByEmailsAsync(Mockito.anyList());
 
         List<AppUser> personnel = getOrAwaitValue(viewModel.getPersonnel());
@@ -91,26 +91,26 @@ public abstract class PersonnelListTabViewModelTests extends BaseTests {
 
     @Test
     public void addPersonnelToGymTest() {
-        Mockito.when(getOwnerRepository().addGymToPersonnel(Mockito.any(), Mockito.anyString()))
+        Mockito.when(getOwnerRepository().addGymToPersonnelAsync(Mockito.any(), Mockito.anyString()))
                 .thenReturn(Completable.complete());
 
         viewModel.addPersonnelToGym("useremail1");
         testScheduler.triggerActions();
 
         Mockito.verify(getOwnerRepository(), Mockito.times(0))
-                .addGymToPersonnel(Mockito.any(), Mockito.anyString());
+                .addGymToPersonnelAsync(Mockito.any(), Mockito.anyString());
 
         viewModel.resetGymId("gymId2");
 
         viewModel.addPersonnelToGym("useremail1");
         testScheduler.triggerActions();
 
-        Mockito.verify(getOwnerRepository()).addGymToPersonnel("useremail1", "gymId2");
+        Mockito.verify(getOwnerRepository()).addGymToPersonnelAsync("useremail1", "gymId2");
     }
 
     @Test
     public void deletePersonnelItemTest() {
-        Mockito.when(getOwnerRepository().removeGymFromPersonnel(Mockito.any(), Mockito.anyString()))
+        Mockito.when(getOwnerRepository().removeGymFromPersonnelAsync(Mockito.any(), Mockito.anyString()))
                 .thenReturn(Completable.complete());
 
         AppUser personnel = AppUser
@@ -122,13 +122,13 @@ public abstract class PersonnelListTabViewModelTests extends BaseTests {
         testScheduler.triggerActions();
 
         Mockito.verify(getOwnerRepository(), Mockito.times(0))
-                .removeGymFromPersonnel(Mockito.any(), Mockito.anyString());
+                .removeGymFromPersonnelAsync(Mockito.any(), Mockito.anyString());
 
         viewModel.resetGymId("gymId2");
 
         viewModel.deleteItem(personnel);
         testScheduler.triggerActions();
 
-        Mockito.verify(getOwnerRepository()).removeGymFromPersonnel("useremail3", "gymId2");
+        Mockito.verify(getOwnerRepository()).removeGymFromPersonnelAsync("useremail3", "gymId2");
     }
 }

@@ -13,9 +13,7 @@ import io.reactivex.Single;
 
 abstract class PersonnelAccessManagerMocker {
 
-    static <P extends Personnel,
-            PE extends PersonnelAccessEntry>
-    void setupMock(PersonnelDataProvider<P, PE> dataProvider,
+    static void setupMock(PersonnelDataProvider dataProvider,
                    PersonnelAccessRepository accessRepository,
                    OwnerPersonnelRepository ownersRepository) {
         Mockito.when(
@@ -25,7 +23,7 @@ abstract class PersonnelAccessManagerMocker {
                     String id = invocation.getArgument(0);
                     String email = invocation.getArgument(1);
 
-                    for (PE accessEntry : dataProvider.getAccessEntries()) {
+                    for (PersonnelAccessEntry accessEntry : dataProvider.getAccessEntries()) {
                         if (id.equals(accessEntry.getOwnerId()) &&
                                 email.equals(accessEntry.getUserEmail())) {
                             return Single.just(true);
@@ -47,7 +45,7 @@ abstract class PersonnelAccessManagerMocker {
                 .thenAnswer(invocation -> {
                     String email = invocation.getArgument(0);
 
-                    for (P personnel : dataProvider.getPersonnel()) {
+                    for (Personnel personnel : dataProvider.getPersonnel()) {
                         if (email.equals(personnel.getUserEmail())) {
                             return Single.just(true);
                         }
