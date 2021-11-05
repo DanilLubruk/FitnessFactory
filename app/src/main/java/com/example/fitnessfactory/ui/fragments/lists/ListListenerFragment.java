@@ -63,6 +63,7 @@ public abstract class ListListenerFragment<
     protected void initComponents() {
         binding.fabAddItem.setOnClickListener(view -> showEditorActivity(getNewItem()));
         GuiUtils.initListView(getBaseActivity(), binding.rvData, true);
+        GuiUtils.setListViewAnimation(binding.rvData, binding.fabAddItem);
         touchListener = new RecyclerTouchListener(getBaseActivity(), binding.rvData);
         binding.rvData.addOnItemTouchListener(touchListener);
         touchListener.setSwipeOptionViews(R.id.btnEdit, R.id.btnDelete);

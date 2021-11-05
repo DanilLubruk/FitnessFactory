@@ -112,7 +112,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/component_margin"
             android:layout_below="@+id/ilGym"
-            android:hint="@string/caption_session_types"
+            android:hint="@string/caption_session_type"
             app:hintEnabled="true">
 
             <androidx.appcompat.widget.AppCompatEditText

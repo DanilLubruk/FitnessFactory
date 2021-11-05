@@ -5,6 +5,7 @@
     android:layout_height="?attr/actionBarSize"
     android:gravity="center_vertical"
     android:orientation="horizontal"
+    android:background="?attr/colorPrimary"
     android:fitsSystemWindows="false">
 
     <ImageView
@@ -22,5 +23,6 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/activity_horizontal_margin"
         android:text="@string/app_name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textColor="?attr/mainTextColor"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 </LinearLayout>

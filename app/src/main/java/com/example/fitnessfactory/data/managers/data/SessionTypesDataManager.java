@@ -43,6 +43,6 @@ public class SessionTypesDataManager extends BaseManager {
     private String getOccupiedMessage() {
         return String.format(
                 ResUtils.getString(R.string.message_error_item_occupied),
-                ResUtils.getString(R.string.caption_session_types));
+                ResUtils.getString(R.string.caption_session_type));
     }
 }

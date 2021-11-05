@@ -92,7 +92,7 @@
     <string name="caption_start_time">Start time</string>
     <string name="caption_end_time">End time</string>
     <string name="caption_gym">Gym</string>
-    <string name="caption_session_types">Session type</string>
+    <string name="caption_session_type">Session type</string>
     <string name="message_ask_delete_session">Delete session?</string>
     <string name="caption_arrange_session">Arrange session</string>
     <string name="caption_empty_sessions_list">Add sessions...</string>
@@ -109,6 +109,8 @@
     <string name="message_error_client_occupied">Deletion is impossible. Client is occupied</string>
     <string name="message_error_session_id_not_unique">Session id is not unique</string>
     <string name="message_error_session_packed">Session is already packed</string>
+    <string name="caption_from">from</string>
+    <string name="caption_until">until</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <string name="caption_user_null">User is not signed in</string>

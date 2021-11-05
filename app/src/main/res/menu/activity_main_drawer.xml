@@ -10,8 +10,7 @@
             android:title="@string/title_home" />
     </group>
 
-    <group android:id="@+id/grGymOptions">
-
+    <group android:id="@+id/grPeople">
         <item
             android:id="@+id/nav_admins"
             android:checkable="true"
@@ -23,20 +22,24 @@
             android:title="@string/title_coaches"/>
 
         <item
+            android:id="@+id/nav_clients"
+            android:checkable="true"
+            android:title="@string/title_clients" />
+    </group>
+
+    <group android:id="@+id/grCatalogs">
+        <item
             android:id="@+id/nav_gyms"
             android:checkable="true"
             android:title="@string/title_gyms" />
 
         <item
-            android:id="@+id/nav_clients"
-            android:checkable="true"
-            android:title="@string/title_clients" />
-
-        <item
             android:id="@+id/nav_session_types"
             android:checkable="true"
             android:title="@string/title_session_types"/>
+    </group>
 
+    <group android:id="@+id/grOptions">
         <item
             android:id="@+id/nav_organisation"
             android:checkable="true"

@@ -15,13 +15,13 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.ActionBar">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary" />
+                android:layout_height="?attr/actionBarSize"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -38,8 +38,12 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="false"
+        android:background="?attr/colorPrimary"
+        app:itemTextColor="?attr/mainTextColor"
+        app:itemIconTint="?attr/mainTextColor"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer">
+        app:menu="@menu/activity_main_drawer"
+        android:theme="@style/NavigatorStyle">
 
         <LinearLayout
             android:layout_width="match_parent"
