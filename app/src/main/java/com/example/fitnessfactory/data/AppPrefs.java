@@ -53,4 +53,11 @@ public class AppPrefs {
                 .setDefaultValue("₽")
                 .build();
     }
+
+    public static IntegerPreference maxPeopleAmount() {
+        return IntegerPreference
+                .builder("max_people_amount_pref")
+                .setDefaultValue(20)
+                .build();
+    }
 }

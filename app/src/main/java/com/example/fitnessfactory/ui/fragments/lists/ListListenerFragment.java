@@ -91,7 +91,6 @@ public abstract class ListListenerFragment<
     }
 
     protected void setListData(List<ItemType> listData) {
-        binding.tvEmptyData.setVisibility(listData.size() == 0 ? View.VISIBLE : View.GONE);
         if (adapter == null) {
             adapter = createNewAdapter(listData);
             binding.rvData.setAdapter(adapter);
@@ -165,6 +164,10 @@ public abstract class ListListenerFragment<
         binding.pkProgress.setVisibility(View.GONE);
         binding.rvData.setVisibility(View.VISIBLE);
         binding.fabAddItem.setVisibility(View.VISIBLE);
+        if (adapter != null) {
+            binding.tvEmptyData.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+
+        }
     }
 
     public void showProgress() {

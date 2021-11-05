@@ -14,6 +14,7 @@
             android:text="@string/caption_remove"
             android:layout_width="wrap_content"
             android:layout_gravity="center"
+            android:backgroundTint="?attr/accentColor"
             android:layout_height="match_parent"/>
     </RelativeLayout>
 
@@ -29,16 +30,22 @@
             android:id="@+id/tvName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-            android:layout_weight="2"
+            android:layout_marginTop="@dimen/list_item_margin"
+            android:layout_marginStart="@dimen/list_item_margin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black"
+            android:layout_weight="1"
             android:gravity="start|center" />
 
         <TextView
             android:id="@+id/tvEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-            android:layout_weight="1"
+            android:layout_marginStart="@dimen/list_item_margin"
+            android:layout_marginBottom="@dimen/list_item_margin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black"
+            android:layout_weight="3"
             android:gravity="start|center" />
     </LinearLayout>
 </RelativeLayout>

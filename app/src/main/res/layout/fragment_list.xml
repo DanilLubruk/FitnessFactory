@@ -25,7 +25,9 @@
         android:id="@+id/rvData"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/component_margin"
+        android:layout_marginEnd="@dimen/component_margin" />
 
     <com.github.clans.fab.FloatingActionButton
         xmlns:fab="http://schemas.android.com/apk/res-auto"

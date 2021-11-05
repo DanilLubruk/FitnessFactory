@@ -2,6 +2,7 @@ package com.example.fitnessfactory.data.repositories.ownerData;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.firestoreCollections.SessionTypesCollection;
+import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.models.SessionType;
 import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.example.fitnessfactory.utils.ResUtils;

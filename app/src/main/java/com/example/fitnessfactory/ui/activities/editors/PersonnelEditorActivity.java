@@ -4,6 +4,7 @@ import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM_I
 
 import android.content.Intent;
 import android.view.Menu;
+import android.view.View;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;

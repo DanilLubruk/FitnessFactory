@@ -19,32 +19,63 @@
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
-            android:id="@+id/tvName"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/component_margin"
             android:layout_alignParentTop="true"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-            android:layout_marginBottom="@dimen/component_margin"
-            android:text="@={model.personnel.name}" />
+            android:hint="@string/caption_name"
+            app:hintEnabled="true">
 
-        <TextView
-            android:id="@+id/tvEmail"
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:selectAllOnFocus="true"
+                android:focusableInTouchMode="false"
+                android:maxLines="1"
+                android:inputType="text"
+                android:text="@={model.personnel.name}"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvName"
             android:layout_marginBottom="@dimen/component_margin"
-            android:text="@{model.personnel.email}"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
+            android:layout_below="@+id/ilName"
+            android:hint="@string/caption_email"
+            app:hintEnabled="true">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/tvEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:selectAllOnFocus="true"
+                android:focusableInTouchMode="false"
+                android:maxLines="1"
+                android:inputType="text"
+                android:text="@={model.personnel.email}"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/ilEmail">
 
         <TextView
             android:id="@+id/tvGyms"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvEmail"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
             android:layout_marginBottom="@dimen/component_margin"
-            android:text="@string/title_gyms" />
+            android:text="@string/title_gyms"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/black" />
 
         <View
             android:id="@+id/separator"
@@ -97,5 +128,6 @@
             fab:menu_labels_textColor="@color/white"
             fab:menu_shadowColor="#444"
             fab:menu_showShadow="true"/>
+        </RelativeLayout>
     </RelativeLayout>
 </layout>

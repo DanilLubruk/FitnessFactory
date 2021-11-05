@@ -11,4 +11,5 @@
     <color name="colorAccent"></color>
     <color name="gray">#808080</color>
     <color name="royalBlue">#246ee9</color>
+    <color name="scarletRed">#ff2400</color>
 </resources>

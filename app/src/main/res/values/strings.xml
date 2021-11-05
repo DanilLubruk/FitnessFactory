@@ -111,6 +111,7 @@
     <string name="message_error_session_packed">Session is already packed</string>
     <string name="caption_from">from</string>
     <string name="caption_until">until</string>
+    <string name="message_input_invalid_value">Valid value is from %1$s to %2$s!</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <string name="caption_user_null">User is not signed in</string>

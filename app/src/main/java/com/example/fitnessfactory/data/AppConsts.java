@@ -43,4 +43,6 @@ public class AppConsts {
     public static final String DEBUG_TAG = "DEBUG_TAG";
 
     public static final String REQUEST_CODE = "REQUEST_CODE";
+
+    public static final int MIN_PEOPLE_AMOUNT = 1;
 }

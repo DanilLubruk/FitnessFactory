@@ -1,5 +1,7 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
+import android.text.InputFilter;
+
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
@@ -7,7 +9,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
+import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.databinding.ActivitySessionTypeEditorBinding;
+import com.example.fitnessfactory.ui.components.filters.InputFilterMinMax;
 import com.example.fitnessfactory.ui.viewmodels.editors.SessionTypeEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionTypeEditorViewModelFactory;
 import com.example.fitnessfactory.utils.ResUtils;
@@ -30,6 +34,12 @@ public class SessionTypeEditorActivity extends EditorActivity {
         viewModel = new ViewModelProvider(this, new SessionTypeEditorViewModelFactory()).get(SessionTypeEditorViewModel.class);
         super.initActivity();
         binding.setModel(viewModel);
+        binding.container.edtPeopleAmount.setFilters(
+                new InputFilter[] {
+                        new InputFilterMinMax(
+                                binding.container.edtPeopleAmount,
+                                AppConsts.MIN_PEOPLE_AMOUNT,
+                                AppPrefs.maxPeopleAmount().getValue())});
 
         getViewModel().getSessionType(typeId);
     }

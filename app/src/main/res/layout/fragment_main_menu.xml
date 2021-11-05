@@ -47,9 +47,9 @@
             android:id="@+id/rvSessions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_marginStart="@dimen/component_margin"
-            android:layout_marginEnd="@dimen/component_margin"
-            android:layout_alignParentTop="true" />
+            android:layout_marginEnd="@dimen/component_margin" />
 
         <com.github.clans.fab.FloatingActionButton
             xmlns:fab="http://schemas.android.com/apk/res-auto"
