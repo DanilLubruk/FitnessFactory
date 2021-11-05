@@ -100,8 +100,4 @@ public class SessionCoachesListTabFragment extends ListListenerTabFragment<AppUs
         getViewModel().resetSessionId(sessionIdUpdateEvent.getSessionId());
         getViewModel().startDataListener();
     }
-
-    protected boolean doStartListenerInitially() {
-        return false;
-    }
 }

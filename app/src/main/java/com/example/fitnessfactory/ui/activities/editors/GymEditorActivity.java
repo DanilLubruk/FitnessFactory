@@ -7,10 +7,12 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.GymIdUpdateEvent;
+import com.example.fitnessfactory.data.events.SessionIdUpdateEvent;
 import com.example.fitnessfactory.databinding.ActivityGymEditorBinding;
 import com.example.fitnessfactory.ui.adapters.PersonnelPageAdapter;
 import com.example.fitnessfactory.ui.viewmodels.editors.GymEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.GymEditorViewModelFactory;
+import com.example.fitnessfactory.utils.EventUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -85,5 +87,11 @@ public class GymEditorActivity extends EditorActivity {
     protected boolean isDataValid() {
         return !StringUtils.isEmpty(binding.container.edtName.getText())
                 && !StringUtils.isEmpty(binding.container.edtAddress.getText());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventUtils.removeStickyEvent(GymIdUpdateEvent.class);
     }
 }

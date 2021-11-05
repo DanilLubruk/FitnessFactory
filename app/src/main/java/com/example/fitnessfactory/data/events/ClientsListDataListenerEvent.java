@@ -4,7 +4,7 @@ import com.example.fitnessfactory.data.models.Client;
 
 import java.util.List;
 
-public class ClientsListDataListenerEvent extends BaseEvent {
+public class ClientsListDataListenerEvent {
 
     private List<Client> clientsList;
 

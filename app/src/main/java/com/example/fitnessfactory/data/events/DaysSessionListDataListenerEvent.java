@@ -4,7 +4,7 @@ import com.example.fitnessfactory.data.models.Session;
 
 import java.util.List;
 
-public class DaysSessionListDataListenerEvent extends BaseEvent {
+public class DaysSessionListDataListenerEvent {
 
     private List<Session> sessions;
 

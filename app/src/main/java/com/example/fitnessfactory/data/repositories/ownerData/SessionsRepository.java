@@ -15,6 +15,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Single;
@@ -24,6 +25,37 @@ public class SessionsRepository extends BaseRepository {
     @Override
     protected String getRoot() {
         return SessionsCollection.getRoot();
+    }
+
+    public Single<Boolean> doesSessionsTimeIntersectWithAnyAsync(String sessionId, List<String> sessionsIds) {
+        return SingleCreate(emitter -> {
+             if (!emitter.isDisposed()) {
+                 emitter.onSuccess(doesSessionsTimeIntersectWithAny(sessionId, sessionsIds));
+             }
+        });
+    }
+
+    private boolean doesSessionsTimeIntersectWithAny(String comparedSessionId, List<String> sessionsIds) throws ExecutionException, InterruptedException {
+        Session comparedSession = getSession(comparedSessionId);
+
+        for (String sessionId : sessionsIds) {
+            Session session = getSession(sessionId);
+            if (doesSessionsTimeIntersect(comparedSession, session)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean doesSessionsTimeIntersect(Session comparedSession, Session session) {
+        long comparedStartTime = comparedSession.getStartTime().getTime();
+        long comparedEndTime = comparedSession.getEndTime().getTime();
+
+        long startTime = session.getStartTime().getTime();
+        long endTime = session.getEndTime().getTime();
+
+        return Math.min(comparedStartTime, startTime) < Math.max(comparedEndTime, endTime);
     }
 
     public Single<Boolean> isSessionPackedAsync(Session session, SessionType sessionType) {

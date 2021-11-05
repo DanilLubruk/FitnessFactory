@@ -2,6 +2,7 @@ package com.example.fitnessfactory.ui.viewmodels.lists;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -82,6 +83,7 @@ public abstract class GymPersonnelListTabViewModel extends ListViewModel<AppUser
             doInterruptProgress.setValue(true);
             return;
         }
+        Log.d(AppConsts.DEBUG_TAG, "gymId: " + gymId);
         getDataListener().startDataListener(gymId);
     }
 

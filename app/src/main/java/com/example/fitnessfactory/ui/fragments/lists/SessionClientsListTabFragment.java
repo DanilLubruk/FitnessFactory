@@ -101,8 +101,4 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<Clien
         getViewModel().resetSessionId(sessionIdUpdateEvent.getSessionId());
         getViewModel().startDataListener();
     }
-
-    protected boolean doStartListenerInitially() {
-        return false;
-    }
 }

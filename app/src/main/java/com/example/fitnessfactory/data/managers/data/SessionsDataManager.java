@@ -60,8 +60,12 @@ public class SessionsDataManager extends BaseManager {
         return ownerCoachesRepository.getPersonnelIdByEmailAsync(coachEmail)
                 .flatMap(coachId -> {
                     coachIdRef.set(coachId);
-                    return sessionsRepository.getAddCoachBatchAsync(sessionId, coachId);
+                    return coachSessionsRepository.getParticipantSessionsIdsAsync(coachId);
                 })
+                .flatMap(sessionsIds -> sessionsRepository.doesSessionsTimeIntersectWithAnyAsync(sessionId, sessionsIds))
+                .flatMap(doesIntersect -> doesIntersect ?
+                        Single.error(new Exception(getCoachOccupiedMessage()))
+                        : sessionsRepository.getAddCoachBatchAsync(sessionId, coachIdRef.getValue()))
                 .flatMap(writeBatch -> coachSessionsRepository.getAddSessionBatchAsync(writeBatch, sessionId, coachIdRef.getValue()))
                 .flatMapCompletable(this::commitBatchCompletable);
     }
@@ -102,5 +106,9 @@ public class SessionsDataManager extends BaseManager {
 
     private String getSessionPackedMessage() {
         return ResUtils.getString(R.string.message_error_session_packed);
+    }
+
+    private String getCoachOccupiedMessage() {
+        return ResUtils.getString(R.string.message_error_coach_occupied);
     }
 }

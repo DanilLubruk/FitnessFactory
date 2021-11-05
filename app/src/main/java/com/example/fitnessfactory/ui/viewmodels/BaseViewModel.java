@@ -54,7 +54,7 @@ public class BaseViewModel extends ViewModel {
         return handle.size() > 0;
     }
 
-    private void unsubscribe() {
+    protected void unsubscribe() {
         rxManager.unsubscribe();
     }
 

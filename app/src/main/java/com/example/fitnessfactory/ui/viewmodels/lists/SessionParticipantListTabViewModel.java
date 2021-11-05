@@ -1,6 +1,7 @@
 package com.example.fitnessfactory.ui.viewmodels.lists;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
@@ -50,6 +51,7 @@ public abstract class SessionParticipantListTabViewModel<ItemType> extends ListV
             doInterruptProgress.setValue(true);
             return;
         }
+        Log.d(AppConsts.DEBUG_TAG, "sessionId: " + sessionId);
         getDataListener().startDataListener(sessionId);
     }
 

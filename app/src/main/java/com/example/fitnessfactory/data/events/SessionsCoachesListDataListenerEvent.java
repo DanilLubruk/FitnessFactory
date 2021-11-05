@@ -2,7 +2,7 @@ package com.example.fitnessfactory.data.events;
 
 import java.util.List;
 
-public class SessionsCoachesListDataListenerEvent extends BaseEvent {
+public class SessionsCoachesListDataListenerEvent {
 
     private final List<String> coachesIds;
 

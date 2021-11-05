@@ -1,6 +1,6 @@
 package com.example.fitnessfactory.data.events;
 
-public class GymIdUpdateEvent extends BaseEvent {
+public class GymIdUpdateEvent extends StickyEvent {
 
     private final String gymId;
 

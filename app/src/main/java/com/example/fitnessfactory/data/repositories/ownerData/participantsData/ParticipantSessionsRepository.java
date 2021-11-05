@@ -6,8 +6,10 @@ import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -22,6 +24,25 @@ public abstract class ParticipantSessionsRepository extends BaseRepository {
     protected abstract CollectionReference getCollection(String participantId);
 
     protected abstract List<String> getParticipantsIds(Session session);
+
+    public Single<List<String>> getParticipantSessionsIdsAsync(String participantId) {
+        return SingleCreate(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getParticipantSessionsIds(participantId));
+            }
+        });
+    }
+
+    private List<String> getParticipantSessionsIds(String participantId) throws ExecutionException, InterruptedException {
+        List<DocumentSnapshot> documentSnapshots = Tasks.await(getCollection(participantId).get()).getDocuments();
+
+        List<String> sessionsIds = new ArrayList<>();
+        for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+            sessionsIds.add(documentSnapshot.getString(UsersSession.ID_FIELD));
+        }
+
+        return sessionsIds;
+    }
 
     public Single<Boolean> isParticipantOccupiedAsync(String participantId) {
         return SingleCreate(emitter -> {

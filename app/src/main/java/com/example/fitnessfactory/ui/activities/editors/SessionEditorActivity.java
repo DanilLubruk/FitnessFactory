@@ -19,6 +19,7 @@ import com.example.fitnessfactory.ui.adapters.PersonnelPageAdapter;
 import com.example.fitnessfactory.ui.adapters.SessionPageAdapter;
 import com.example.fitnessfactory.ui.viewmodels.editors.SessionEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionEditorViewModelFactory;
+import com.example.fitnessfactory.utils.EventUtils;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
@@ -159,5 +160,11 @@ public class SessionEditorActivity extends EditorActivity {
                 && !StringUtils.isEmpty(binding.container.edtEndTime.getText())
                 && !StringUtils.isEmpty(binding.container.edtGym.getText())
                 && !StringUtils.isEmpty(binding.container.edtSessionType.getText());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventUtils.removeStickyEvent(SessionIdUpdateEvent.class);
     }
 }

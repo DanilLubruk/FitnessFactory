@@ -97,7 +97,7 @@
     <string name="caption_arrange_session">Arrange session</string>
     <string name="caption_empty_sessions_list">Add sessions...</string>
     <string name="message_error_date_null">Date is null</string>
-    <string name="message_error_coaches_occupied">Coaches are already occupied</string>
+    <string name="message_error_coach_occupied">Coach already has session at that time</string>
     <string name="message_error_wrong_dates">Time of start and end don\'t form period!</string>
     <string name="message_selection_failed">Selection failed!</string>
     <string name="message_ask_remove_client_from_session">Remove client from this session?</string>
