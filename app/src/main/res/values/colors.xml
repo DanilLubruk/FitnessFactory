@@ -12,4 +12,11 @@
     <color name="gray">#808080</color>
     <color name="royalBlue">#246ee9</color>
     <color name="scarletRed">#ff2400</color>
+    <color name="gold">#FFD700</color>
+
+    <color name="roboto_calendar_month_font">#FF000000</color>
+    <color name="roboto_calendar_month_arrow">#FF000000</color>
+    <color name="roboto_calendar_day_of_the_month_font">#FF000000</color>
+    <color name="roboto_calendar_selected_day_background">@color/gold</color>
+    <color name="roboto_calendar_circle_1">@color/gold</color>
 </resources>
