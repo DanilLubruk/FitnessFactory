@@ -64,7 +64,7 @@ public abstract class PersonnelGymsListTabFragment extends ListListenerTabFragme
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case REQUEST_PERSONNEL:
+            case REQUEST_GYM_ID:
                 if (resultCode == RESULT_OK) {
                     String gymId = data.getStringExtra(AppConsts.GYM_ID_EXTRA);
                     getViewModel().addGym(gymId);
