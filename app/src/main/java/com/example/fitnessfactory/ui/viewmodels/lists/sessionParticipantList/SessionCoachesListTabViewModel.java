@@ -1,4 +1,4 @@
-package com.example.fitnessfactory.ui.viewmodels.lists;
+package com.example.fitnessfactory.ui.viewmodels.lists.sessionParticipantList;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -8,17 +8,9 @@ import com.example.fitnessfactory.data.dataListeners.SessionsCoachesListDataList
 import com.example.fitnessfactory.data.managers.data.CoachesDataManager;
 import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.models.Personnel;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.observers.SingleData;
-import com.example.fitnessfactory.data.repositories.UserRepository;
-import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
-import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository;
-import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
-import com.example.fitnessfactory.ui.viewmodels.DataListListener;
-import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
-import com.example.fitnessfactory.utils.StringUtils;
 
 import java.util.List;
 
@@ -78,7 +70,7 @@ public class SessionCoachesListTabViewModel extends SessionParticipantListTabVie
     }
 
     @Override
-    protected String getParticipantNullMessage() {
-        return ResUtils.getString(R.string.message_error_coach_null);
+    protected String getItemNullClause() {
+        return getErrorMessageBreak().concat(ResUtils.getString(R.string.message_error_coach_null));
     }
 }

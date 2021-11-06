@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.FFApp;
-import com.example.fitnessfactory.ui.viewmodels.lists.GymCoachesListTabViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.gymPersonnelList.GymCoachesListTabViewModel;
 
 import javax.inject.Inject;
 

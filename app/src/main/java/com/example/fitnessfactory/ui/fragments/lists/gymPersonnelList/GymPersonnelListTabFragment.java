@@ -1,7 +1,6 @@
-package com.example.fitnessfactory.ui.fragments.lists;
+package com.example.fitnessfactory.ui.fragments.lists.gymPersonnelList;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM_ID;
 import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_PERSONNEL;
 
 import android.content.Intent;
@@ -15,14 +14,15 @@ import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.activities.editors.EditorActivity;
 import com.example.fitnessfactory.ui.adapters.PersonnelListAdapter;
+import com.example.fitnessfactory.ui.fragments.lists.ListListenerTabFragment;
 import com.example.fitnessfactory.ui.viewholders.lists.PersonnelListViewHolder;
-import com.example.fitnessfactory.ui.viewmodels.lists.GymPersonnelListTabViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.gymPersonnelList.GymPersonnelListTabViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 
 import java.util.List;
 
 public abstract class GymPersonnelListTabFragment
-        extends ListListenerTabFragment<AppUser, PersonnelListViewHolder, PersonnelListAdapter>  {
+        extends ListListenerTabFragment<AppUser, PersonnelListViewHolder, PersonnelListAdapter> {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

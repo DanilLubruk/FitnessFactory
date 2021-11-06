@@ -33,10 +33,15 @@ public class GymsListViewModel extends ListViewModel<Gym> {
 
     public void deleteItem(Gym gym) {
         if (gym == null) {
-            GuiUtils.showMessage(ResUtils.getString(R.string.message_error_gym_null));
+            handleItemDeletingNullError();
             return;
         }
 
         subscribeInIOThread(gymsAccessManager.deleteGymCompletable(gym));
+    }
+
+    @Override
+    protected String getItemNullClause() {
+        return getErrorMessageBreak().concat(ResUtils.getString(R.string.message_error_gym_null));
     }
 }

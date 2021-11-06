@@ -18,101 +18,32 @@ import com.example.fitnessfactory.ui.viewmodels.DataListListener;
 
 import java.util.List;
 
-public abstract class PersonnelEditorViewModel extends EditorViewModel implements DataListListener<Gym> {
+public abstract class PersonnelEditorViewModel extends EditorViewModel {
 
     public final ObservableField<AppUser> personnel = new ObservableField<>();
-    private final MutableLiveData<List<Gym>> gyms = new MutableLiveData<>();
-
-    protected OwnerPersonnelRepository ownerRepository;
+    public final MutableLiveData<String> personnelEmail = new MutableLiveData<>();
 
     protected PersonnelAccessManager accessManager;
 
-    protected PersonnelDataManager dataManager;
-
-    protected ArgDataListener dataListener;
-
-    public PersonnelEditorViewModel(OwnerPersonnelRepository ownerRepository,
-                                    PersonnelAccessManager accessManager,
-                                    PersonnelDataManager dataManager,
-                                    ArgDataListener dataListener) {
-        this.ownerRepository = ownerRepository;
+    public PersonnelEditorViewModel(PersonnelAccessManager accessManager) {
         this.accessManager = accessManager;
-        this.dataManager = dataManager;
-        this.dataListener = dataListener;
-    }
-
-    protected OwnerPersonnelRepository getOwnerRepository() {
-        return ownerRepository;
     }
 
     protected PersonnelAccessManager getAccessManager() {
         return accessManager;
     }
 
-    protected PersonnelDataManager getDataManager() {
-        return dataManager;
-    }
-
-    protected ArgDataListener getDataListener() {
-        return dataListener;
-    }
-
     protected abstract AppUser getPersonnelFromData(Intent personnelData);
+
+    public MutableLiveData<String> getPersonnelEmail() {
+        return personnelEmail;
+    }
 
     public void setPersonnelData(Intent personnelData) {
         AppUser personnel = getPersonnelFromData(personnelData);
 
         this.personnel.set(personnel);
-    }
-
-    public void addGym(String gymId) {
-        AppUser personnel = this.personnel.get();
-        if (personnel == null) {
-            handleItemObtainingNullError();
-            return;
-        }
-
-        subscribeInIOThread(getOwnerRepository().addGymToPersonnelAsync(personnel.getEmail(), gymId));
-    }
-
-    @Override
-    public void deleteItem(Gym gym) {
-        AppUser personnel = this.personnel.get();
-        if (personnel == null) {
-            handleItemDeletingNullError();
-            return;
-        }
-
-        subscribeInIOThread(getOwnerRepository().removeGymFromPersonnelAsync(personnel.getEmail(), gym.getId()));
-    }
-
-    public MutableLiveData<List<Gym>> getGyms() {
-        return gyms;
-    }
-
-    public void startDataListener() {
-        AppUser personnel = this.personnel.get();
-        if (personnel == null) {
-            handleItemObtainingNullError();
-            return;
-        }
-
-        getDataListener().startDataListener(personnel.getEmail());
-    }
-
-    public void stopDataListener() {
-        getDataListener().stopDataListener();
-    }
-
-    public void getGymsData() {
-        AppUser personnel = this.personnel.get();
-        if (personnel == null) {
-            handleItemObtainingNullError();
-            return;
-        }
-
-        subscribeInIOThread(getDataManager().getPersonnelGymsByEmail(personnel.getEmail()),
-                new SingleData<>(gyms::setValue, getErrorHandler()::handleError));
+        this.personnelEmail.setValue(personnel.getEmail());
     }
 
     @Override
@@ -126,6 +57,13 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
     @Override
     public SingleLiveEvent<Boolean> save() {
         SingleLiveEvent<Boolean> isSaved = new SingleLiveEvent<>();
+
+        AppUser personnel = this.personnel.get();
+        if (personnel == null) {
+            return handleItemSavingNullError(isSaved);
+        }
+        personnelEmail.setValue(personnel.getEmail());
+
         isSaved.setValue(true);
 
         return isSaved;
@@ -135,13 +73,13 @@ public abstract class PersonnelEditorViewModel extends EditorViewModel implement
     public SingleLiveEvent<Boolean> delete() {
         SingleLiveEvent<Boolean> isDeleted = new SingleLiveEvent<>();
 
-        AppUser admin = this.personnel.get();
-        if (admin == null) {
+        AppUser personnel = this.personnel.get();
+        if (personnel == null) {
             return handleItemDeletingNullError(isDeleted);
         }
 
         subscribeInIOThread(
-                getAccessManager().deletePersonnelSingle(AppPrefs.gymOwnerId().getValue(), admin.getEmail()),
+                getAccessManager().deletePersonnelSingle(AppPrefs.gymOwnerId().getValue(), personnel.getEmail()),
                 new SingleData<>(
                         isDeleted::setValue,
                         throwable -> getErrorHandler().handleError(isDeleted, throwable)));

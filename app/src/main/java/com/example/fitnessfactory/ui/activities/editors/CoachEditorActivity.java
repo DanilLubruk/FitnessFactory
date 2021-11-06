@@ -1,12 +1,16 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.events.CoachGymsListListenerEvent;
+import com.example.fitnessfactory.ui.adapters.CoachGymsPageAdapter;
+import com.example.fitnessfactory.ui.adapters.SessionPageAdapter;
 import com.example.fitnessfactory.ui.viewmodels.editors.CoachEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachEditorViewModelFactory;
 import com.example.fitnessfactory.utils.ResUtils;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -21,8 +25,8 @@ public class CoachEditorActivity extends PersonnelEditorActivity {
     }
 
     @Override
-    protected String getDeleteGymMessage() {
-        return String.format(ResUtils.getString(R.string.message_ask_remove_personnel_from_gym), ResUtils.getString(R.string.caption_coach));
+    protected FragmentStateAdapter getPageAdapter() {
+        return new CoachGymsPageAdapter(getSupportFragmentManager(), getLifecycle());
     }
 
     @Override
@@ -34,10 +38,5 @@ public class CoachEditorActivity extends PersonnelEditorActivity {
     public void initActivity() {
         viewModel = new ViewModelProvider(this, new CoachEditorViewModelFactory()).get(CoachEditorViewModel.class);
         super.initActivity();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onCoachEditorGymsListenerEvent(CoachGymsListListenerEvent coachGymsListListenerEvent) {
-        viewModel.getGymsData();
     }
 }

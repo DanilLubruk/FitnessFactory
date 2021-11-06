@@ -6,6 +6,7 @@ import com.example.fitnessfactory.data.dataListeners.SessionsCalendarDataListene
 import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
+import com.example.fitnessfactory.ui.viewmodels.DataOperatingViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 
@@ -13,7 +14,7 @@ import java.util.Date;
 
 import javax.inject.Inject;
 
-public class SessionsListViewModel extends BaseViewModel {
+public class SessionsListViewModel extends DataOperatingViewModel {
 
     private final SessionsDataManager sessionsDataManager;
     private final SessionsCalendarDataListener calendarDataListener;
@@ -46,10 +47,15 @@ public class SessionsListViewModel extends BaseViewModel {
 
     public void deleteItem(Session item) {
         if (item == null) {
-            GuiUtils.showMessage(ResUtils.getString(R.string.message_error_session_null));
+            handleItemDeletingNullError();
             return;
         }
 
         subscribeInIOThread(sessionsDataManager.deleteSessionCompletable(item));
+    }
+
+    @Override
+    protected String getItemNullClause() {
+        return getErrorMessageBreak().concat(ResUtils.getString(R.string.message_error_session_null));
     }
 }

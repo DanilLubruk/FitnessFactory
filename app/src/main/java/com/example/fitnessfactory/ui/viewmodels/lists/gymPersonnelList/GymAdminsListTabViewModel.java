@@ -1,8 +1,9 @@
-package com.example.fitnessfactory.ui.viewmodels.lists;
+package com.example.fitnessfactory.ui.viewmodels.lists.gymPersonnelList;
 
 import com.example.fitnessfactory.data.dataListeners.GymAdminsListDataListener;
 import com.example.fitnessfactory.data.managers.data.AdminsDataManager;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
+
 import javax.inject.Inject;
 
 public class GymAdminsListTabViewModel extends GymPersonnelListTabViewModel {

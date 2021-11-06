@@ -7,8 +7,8 @@ import com.example.fitnessfactory.data.managers.data.PersonnelDataManager;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
 import com.example.fitnessfactory.mockHelpers.mockers.data.AdminsDataManagerMocker;
-import com.example.fitnessfactory.ui.viewmodels.lists.GymAdminsListTabViewModel;
-import com.example.fitnessfactory.ui.viewmodels.lists.GymPersonnelListTabViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.gymPersonnelList.GymAdminsListTabViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.gymPersonnelList.GymPersonnelListTabViewModel;
 
 import org.mockito.Mockito;
 

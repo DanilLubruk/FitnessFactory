@@ -37,10 +37,15 @@ public class ClientsListViewModel extends ListViewModel<Client>{
     @Override
     public void deleteItem(Client item) {
         if (item == null) {
-            GuiUtils.showMessage(ResUtils.getString(R.string.message_error_client_null));
+            handleItemDeletingNullError();
             return;
         }
 
         subscribeInIOThread(clientsDataManager.deleteClientCompletable(item));
+    }
+
+    @Override
+    protected String getItemNullClause() {
+        return getErrorMessageBreak().concat(ResUtils.getString(R.string.message_error_client_null));
     }
 }

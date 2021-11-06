@@ -1,4 +1,4 @@
-package com.example.fitnessfactory.ui.viewmodels.lists;
+package com.example.fitnessfactory.ui.viewmodels.lists.gymPersonnelList;
 
 import com.example.fitnessfactory.data.dataListeners.GymCoachesListDataListener;
 import com.example.fitnessfactory.data.managers.data.CoachesDataManager;

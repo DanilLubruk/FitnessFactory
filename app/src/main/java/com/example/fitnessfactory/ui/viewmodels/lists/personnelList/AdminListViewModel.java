@@ -1,4 +1,4 @@
-package com.example.fitnessfactory.ui.viewmodels.lists;
+package com.example.fitnessfactory.ui.viewmodels.lists.personnelList;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.dataListeners.AdminsListDataListener;
@@ -19,7 +19,7 @@ public class AdminListViewModel extends PersonnelListViewModel {
 
 
     @Override
-    protected String getItemNullMessage() {
-        return ResUtils.getString(R.string.message_error_admin_null);
+    protected String getItemNullClause() {
+        return getErrorMessageBreak().concat(ResUtils.getString(R.string.message_error_admin_null));
     }
 }

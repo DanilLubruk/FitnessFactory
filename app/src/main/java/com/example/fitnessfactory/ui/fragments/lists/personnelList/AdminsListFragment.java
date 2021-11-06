@@ -1,8 +1,6 @@
-package com.example.fitnessfactory.ui.fragments.lists;
+package com.example.fitnessfactory.ui.fragments.lists.personnelList;
 import android.content.Intent;
-import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
@@ -12,7 +10,7 @@ import com.example.fitnessfactory.data.events.AdminsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.activities.editors.AdminEditorActivity;
 import com.example.fitnessfactory.ui.viewmodels.factories.AdminsListViewModelFactory;
-import com.example.fitnessfactory.ui.viewmodels.lists.AdminListViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.personnelList.AdminListViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.tiromansev.prefswrapper.typedprefs.BooleanPreference;
 

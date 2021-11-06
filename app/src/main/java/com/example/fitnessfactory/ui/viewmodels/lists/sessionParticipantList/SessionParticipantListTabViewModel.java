@@ -1,4 +1,4 @@
-package com.example.fitnessfactory.ui.viewmodels.lists;
+package com.example.fitnessfactory.ui.viewmodels.lists.sessionParticipantList;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +12,7 @@ import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
+import com.example.fitnessfactory.ui.viewmodels.lists.ListViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
@@ -34,8 +35,6 @@ public abstract class SessionParticipantListTabViewModel<ItemType> extends ListV
     protected abstract List<String> getParticipantsList(Session session);
 
     protected abstract String getParticipantId(ItemType participant);
-
-    protected abstract String getParticipantNullMessage();
 
     public SessionParticipantListTabViewModel(SessionsDataManager sessionsDataManager) {
         this.sessionsDataManager = sessionsDataManager;
@@ -62,30 +61,38 @@ public abstract class SessionParticipantListTabViewModel<ItemType> extends ListV
 
     public void addParticipantToSession(String participantId) {
         if (StringUtils.isEmpty(sessionId)) {
-            GuiUtils.showMessage(getSessionNullMessage());
+            handleSessionOperationNullError();
             return;
         }
         if (StringUtils.isEmpty(participantId)) {
-            GuiUtils.showMessage(getParticipantNullMessage());
+            handleItemOperationError();
             return;
         }
 
         subscribeInIOThread(getAddParticipantAction(sessionId, participantId));
     }
 
+    private void handleSessionOperationNullError() {
+        GuiUtils.showMessage(getErrorOperationMessage().concat(" - ").concat(getSessionNullMessage()));
+    }
+
     @Override
     public void deleteItem(ItemType item) {
         if (StringUtils.isEmpty(sessionId)) {
-            GuiUtils.showMessage(getSessionNullMessage());
+            handleSessionDeletingNullError();
             return;
         }
         String participantId = getParticipantId(item);
         if (StringUtils.isEmpty(participantId)) {
-            GuiUtils.showMessage(getParticipantNullMessage());
+            handleItemDeletingNullError();
             return;
         }
 
         subscribeInIOThread(getDeleteParticipantAction(sessionId, participantId));
+    }
+
+    private void handleSessionDeletingNullError() {
+        GuiUtils.showMessage(getErrorDeletingMessage().concat(" - ").concat(getSessionNullMessage()));
     }
 
     private String getSessionNullMessage() {

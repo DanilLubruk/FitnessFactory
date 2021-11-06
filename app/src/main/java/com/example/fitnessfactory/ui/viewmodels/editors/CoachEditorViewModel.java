@@ -16,11 +16,8 @@ import javax.inject.Inject;
 public class CoachEditorViewModel extends PersonnelEditorViewModel {
 
     @Inject
-    public CoachEditorViewModel(OwnerCoachesRepository ownerRepository,
-                                CoachesAccessManager accessManager,
-                                CoachesDataManager dataManager,
-                                CoachGymsListDataListener dataListener) {
-        super(ownerRepository, accessManager, dataManager, dataListener);
+    public CoachEditorViewModel(CoachesAccessManager accessManager) {
+        super(accessManager);
     }
 
     protected AppUser getPersonnelFromData(Intent personnelData) {

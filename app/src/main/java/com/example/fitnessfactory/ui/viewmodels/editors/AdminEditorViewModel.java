@@ -16,11 +16,8 @@ import javax.inject.Inject;
 public class AdminEditorViewModel extends PersonnelEditorViewModel {
 
     @Inject
-    public AdminEditorViewModel(OwnerAdminsRepository ownerRepository,
-                                AdminsAccessManager accessManager,
-                                AdminsDataManager dataManager,
-                                AdminGymsListDataListener dataListener) {
-        super(ownerRepository, accessManager, dataManager, dataListener);
+    public AdminEditorViewModel(AdminsAccessManager accessManager) {
+        super(accessManager);
     }
 
     @Override

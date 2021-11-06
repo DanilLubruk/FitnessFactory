@@ -30,7 +30,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.Date;
 
-public class SessionEditorActivity extends EditorActivity {
+public class SessionEditorActivity extends TabParentEditorActivity<SessionIdUpdateEvent> {
 
     private String id;
     private SessionEditorViewModel viewModel;
@@ -163,8 +163,7 @@ public class SessionEditorActivity extends EditorActivity {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventUtils.removeStickyEvent(SessionIdUpdateEvent.class);
+    protected Class<SessionIdUpdateEvent> getEventType() {
+        return SessionIdUpdateEvent.class;
     }
 }

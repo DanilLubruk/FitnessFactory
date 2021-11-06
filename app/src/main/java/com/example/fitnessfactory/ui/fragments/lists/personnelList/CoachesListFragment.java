@@ -1,8 +1,7 @@
-package com.example.fitnessfactory.ui.fragments.lists;
+package com.example.fitnessfactory.ui.fragments.lists.personnelList;
 
 import android.content.Intent;
-import android.os.Bundle;
-import androidx.annotation.Nullable;
+
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
@@ -11,16 +10,13 @@ import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.events.CoachesListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.activities.editors.CoachEditorActivity;
-import com.example.fitnessfactory.ui.adapters.PersonnelListAdapter;
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachesListViewModelFactory;
-import com.example.fitnessfactory.ui.viewmodels.lists.CoachesListViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.personnelList.CoachesListViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.tiromansev.prefswrapper.typedprefs.BooleanPreference;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.List;
 
 public class CoachesListFragment extends PersonnelListFragment {
 

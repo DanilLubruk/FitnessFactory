@@ -1,8 +1,7 @@
-package com.example.fitnessfactory.ui.fragments.lists;
+package com.example.fitnessfactory.ui.fragments.lists.sessionParticipantList;
 
 import static android.app.Activity.RESULT_OK;
 import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_CLIENT;
-import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM_ID;
 
 import android.content.Intent;
 
@@ -15,12 +14,12 @@ import com.example.fitnessfactory.data.events.SessionsClientsListDataListenerEve
 import com.example.fitnessfactory.data.models.Client;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.adapters.ClientsListAdapter;
+import com.example.fitnessfactory.ui.fragments.lists.ListListenerTabFragment;
 import com.example.fitnessfactory.ui.viewholders.lists.ClientsListViewHolder;
 import com.example.fitnessfactory.ui.viewmodels.factories.ClientsListTabViewModelFactory;
-import com.example.fitnessfactory.ui.viewmodels.lists.SessionClientsListTabViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.sessionParticipantList.SessionClientsListTabViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 

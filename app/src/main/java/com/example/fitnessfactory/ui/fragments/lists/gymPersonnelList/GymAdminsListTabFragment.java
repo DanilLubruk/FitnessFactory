@@ -1,13 +1,13 @@
-package com.example.fitnessfactory.ui.fragments.lists;
+package com.example.fitnessfactory.ui.fragments.lists.gymPersonnelList;
+
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.GymAdminsListListenerEvent;
 import com.example.fitnessfactory.data.events.GymIdUpdateEvent;
-import com.example.fitnessfactory.data.events.SessionIdUpdateEvent;
 import com.example.fitnessfactory.ui.viewmodels.factories.AdminsListTabViewModelFactory;
-import com.example.fitnessfactory.ui.viewmodels.lists.GymAdminsListTabViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.gymPersonnelList.GymAdminsListTabViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -47,7 +47,7 @@ public class GymAdminsListTabFragment extends GymPersonnelListTabFragment {
         viewModel.getPersonnelData();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onGymIdUpdateEvent(GymIdUpdateEvent gymIdUpdateEvent) {
         getViewModel().resetGymId(gymIdUpdateEvent.getGymId());
         getViewModel().startDataListener();

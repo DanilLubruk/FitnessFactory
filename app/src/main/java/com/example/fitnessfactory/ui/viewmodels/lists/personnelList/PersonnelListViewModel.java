@@ -1,4 +1,4 @@
-package com.example.fitnessfactory.ui.viewmodels.lists;
+package com.example.fitnessfactory.ui.viewmodels.lists.personnelList;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -13,6 +13,7 @@ import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.system.SafeReference;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
+import com.example.fitnessfactory.ui.viewmodels.lists.ListViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.RxUtils;
@@ -51,8 +52,6 @@ public abstract class PersonnelListViewModel extends ListViewModel<AppUser> {
     protected DataListener getDataListener() {
         return dataListener;
     }
-
-    protected abstract String getItemNullMessage();
 
     public SingleLiveEvent<String> registerPersonnel(Single<String> emailDialog,
                                                      Single<Boolean> sendInvitationDialog,
@@ -116,7 +115,7 @@ public abstract class PersonnelListViewModel extends ListViewModel<AppUser> {
 
     public void deleteItem(AppUser personnel) {
         if (personnel == null) {
-            GuiUtils.showMessage(getItemNullMessage());
+            handleItemDeletingNullError();
             return;
         }
 

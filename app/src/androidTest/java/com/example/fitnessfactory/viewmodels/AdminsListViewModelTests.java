@@ -12,8 +12,8 @@ import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsReposit
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
 import com.example.fitnessfactory.mockHelpers.mockers.access.AdminsAccessManagerMocker;
 import com.example.fitnessfactory.mockHelpers.mockers.data.AdminsDataManagerMocker;
-import com.example.fitnessfactory.ui.viewmodels.lists.AdminListViewModel;
-import com.example.fitnessfactory.ui.viewmodels.lists.PersonnelListViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.personnelList.AdminListViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.personnelList.PersonnelListViewModel;
 
 import org.mockito.Mockito;
 

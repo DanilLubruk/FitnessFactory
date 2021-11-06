@@ -38,9 +38,14 @@ public class SessionTypesListViewModel extends ListViewModel<SessionType> {
     @Override
     public void deleteItem(SessionType item) {
         if (item == null) {
-            GuiUtils.showMessage(ResUtils.getString(R.string.message_session_type_null));
+            handleItemDeletingNullError();
             return;
         }
         subscribeInIOThread(sessionTypesDataManager.deleteSessionTypeCompletable(item));
+    }
+
+    @Override
+    protected String getItemNullClause() {
+        return getErrorMessageBreak().concat(ResUtils.getString(R.string.message_session_type_null));
     }
 }

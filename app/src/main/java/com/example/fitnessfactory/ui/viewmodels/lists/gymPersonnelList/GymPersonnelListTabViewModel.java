@@ -1,4 +1,4 @@
-package com.example.fitnessfactory.ui.viewmodels.lists;
+package com.example.fitnessfactory.ui.viewmodels.lists.gymPersonnelList;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,6 +15,7 @@ import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
+import com.example.fitnessfactory.ui.viewmodels.lists.ListViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 
@@ -62,7 +63,7 @@ public abstract class GymPersonnelListTabViewModel extends ListViewModel<AppUser
 
     public void addPersonnelToGym(String personnelEmail) {
         if (TextUtils.isEmpty(gymId)) {
-            GuiUtils.showMessage(getGymNullMessage());
+            handleItemOperationError();
             return;
         }
 
@@ -71,7 +72,7 @@ public abstract class GymPersonnelListTabViewModel extends ListViewModel<AppUser
 
     public void deleteItem(AppUser personnel) {
         if (TextUtils.isEmpty(gymId)) {
-            GuiUtils.showMessage(getGymNullMessage());
+            handleItemDeletingNullError();
             return;
         }
 
@@ -97,10 +98,6 @@ public abstract class GymPersonnelListTabViewModel extends ListViewModel<AppUser
                 new SingleData<>(personnel::setValue, getErrorHandler()::handleError));
     }
 
-    private String getGymNullMessage() {
-        return ResUtils.getString(R.string.message_error_gym_null);
-    }
-
     @Override
     public void saveState(Bundle savedState) {
         super.saveState(savedState);
@@ -111,5 +108,10 @@ public abstract class GymPersonnelListTabViewModel extends ListViewModel<AppUser
     public void restoreState(Bundle savedState) {
         super.restoreState(savedState);
         gymId = (String) getHandle().get(AppConsts.GYM_ID_EXTRA);
+    }
+
+    @Override
+    protected String getItemNullClause() {
+        return getErrorMessageBreak().concat(ResUtils.getString(R.string.message_error_gym_null));
     }
 }

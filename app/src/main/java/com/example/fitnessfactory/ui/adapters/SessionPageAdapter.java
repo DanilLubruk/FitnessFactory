@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
-import com.example.fitnessfactory.ui.fragments.lists.SessionClientsListTabFragment;
-import com.example.fitnessfactory.ui.fragments.lists.SessionCoachesListTabFragment;
+import com.example.fitnessfactory.ui.fragments.lists.sessionParticipantList.SessionClientsListTabFragment;
+import com.example.fitnessfactory.ui.fragments.lists.sessionParticipantList.SessionCoachesListTabFragment;
 
 public class SessionPageAdapter extends FragmentStateAdapter {
 

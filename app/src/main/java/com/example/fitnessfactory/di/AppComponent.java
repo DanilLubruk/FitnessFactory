@@ -3,6 +3,7 @@ package com.example.fitnessfactory.di;
 import com.example.fitnessfactory.ui.viewmodels.MainActivityViewModel;
 import com.example.fitnessfactory.ui.viewmodels.editors.OrganisationInfoViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.AdminEditorViewModelFactory;
+import com.example.fitnessfactory.ui.viewmodels.factories.AdminGymsListTabViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.AdminsListTabViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.AdminsListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.AuthViewModelFactory;
@@ -10,6 +11,7 @@ import com.example.fitnessfactory.ui.viewmodels.factories.ClientEditorViewModelF
 import com.example.fitnessfactory.ui.viewmodels.factories.ClientsListTabViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.ClientsListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachEditorViewModelFactory;
+import com.example.fitnessfactory.ui.viewmodels.factories.CoachGymsListTabViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachesListTabViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachesListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.GymEditorViewModelFactory;
@@ -48,4 +50,6 @@ public interface AppComponent {
     void inject(SessionEditorViewModelFactory sessionEditorViewModelFactory);
     void inject(ClientsListTabViewModelFactory clientsListTabViewModelFactory);
     void inject(SessionCoachesListTabViewModelFactory sessionCoachesListTabViewModelFactory);
+    void inject(CoachGymsListTabViewModelFactory coachGymsListTabViewModelFactory);
+    void inject(AdminGymsListTabViewModelFactory adminGymsListTabViewModelFactory);
 }

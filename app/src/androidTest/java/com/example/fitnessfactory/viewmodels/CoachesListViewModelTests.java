@@ -13,10 +13,9 @@ import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepo
 import com.example.fitnessfactory.data.repositories.ownerData.participantsData.CoachSessionsRepository;
 import com.example.fitnessfactory.mockHelpers.mockers.access.CoachesAccessManagerMocker;
 import com.example.fitnessfactory.mockHelpers.mockers.data.CoachesDataManagerMocker;
-import com.example.fitnessfactory.ui.viewmodels.lists.CoachesListViewModel;
-import com.example.fitnessfactory.ui.viewmodels.lists.PersonnelListViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.personnelList.CoachesListViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.personnelList.PersonnelListViewModel;
 
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 public class CoachesListViewModelTests extends PersonnelListViewModelTests {

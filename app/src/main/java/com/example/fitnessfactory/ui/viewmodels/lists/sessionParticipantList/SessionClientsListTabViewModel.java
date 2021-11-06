@@ -1,4 +1,4 @@
-package com.example.fitnessfactory.ui.viewmodels.lists;
+package com.example.fitnessfactory.ui.viewmodels.lists.sessionParticipantList;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -11,12 +11,7 @@ import com.example.fitnessfactory.data.models.Client;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.repositories.ownerData.ClientsRepository;
-import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository;
-import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
-import com.example.fitnessfactory.ui.viewmodels.DataListListener;
-import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
-import com.example.fitnessfactory.utils.StringUtils;
 
 import java.util.List;
 
@@ -76,7 +71,7 @@ public class SessionClientsListTabViewModel extends SessionParticipantListTabVie
     }
 
     @Override
-    protected String getParticipantNullMessage() {
-        return ResUtils.getString(R.string.message_error_client_null);
+    protected String getItemNullClause() {
+        return getErrorMessageBreak().concat(ResUtils.getString(R.string.message_error_client_null));
     }
 }

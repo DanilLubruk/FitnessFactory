@@ -5,9 +5,13 @@ import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 
+import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.callbacks.NullableCallback;
 import com.example.fitnessfactory.data.managers.RxManager;
 import com.example.fitnessfactory.data.observers.SingleData;
+import com.example.fitnessfactory.data.observers.SingleLiveEvent;
+import com.example.fitnessfactory.utils.GuiUtils;
+import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.RxErrorsHandler;
 
 import java.util.HashMap;
@@ -20,7 +24,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
-public class BaseViewModel extends ViewModel {
+public abstract class BaseViewModel extends ViewModel {
 
     private HashMap<String, Object> handle = new HashMap<>();
     private static final String HANDLE = "HANDLE";

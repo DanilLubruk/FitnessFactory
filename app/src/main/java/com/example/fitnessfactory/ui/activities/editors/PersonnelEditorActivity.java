@@ -1,42 +1,27 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
-import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM_ID;
-
-import android.content.Intent;
 import android.view.Menu;
-import android.view.View;
-
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.fitnessfactory.R;
-import com.example.fitnessfactory.data.ActivityRequestCodes;
-import com.example.fitnessfactory.data.AppConsts;
-import com.example.fitnessfactory.data.models.Gym;
-import com.example.fitnessfactory.data.observers.SingleData;
+import com.example.fitnessfactory.data.events.PersonnelEmailUpdateEvent;
 import com.example.fitnessfactory.databinding.ActivityPersonnelEditorBinding;
-import com.example.fitnessfactory.ui.activities.SelectionActivity;
-import com.example.fitnessfactory.ui.adapters.GymsListAdapter;
 import com.example.fitnessfactory.ui.viewmodels.editors.PersonnelEditorViewModel;
-import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
-import com.example.fitnessfactory.utils.dialogs.DialogUtils;
-import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.List;
+public abstract class PersonnelEditorActivity extends TabParentEditorActivity<PersonnelEmailUpdateEvent> {
 
-public abstract class PersonnelEditorActivity extends EditorActivity {
-
-    private ActivityPersonnelEditorBinding binding;
-    private GymsListAdapter adapter;
-    private RecyclerTouchListener touchListener;
+    protected ActivityPersonnelEditorBinding binding;
 
     @Override
     protected abstract PersonnelEditorViewModel getViewModel();
 
-    protected abstract String getDeleteGymMessage();
+    protected abstract FragmentStateAdapter getPageAdapter();
 
     @Override
     public Toolbar getToolbar() {
@@ -49,6 +34,23 @@ public abstract class PersonnelEditorActivity extends EditorActivity {
         super.initActivity();
         binding.setModel(getViewModel());
         getViewModel().setPersonnelData(getIntent());
+        subscribeForPersonnelEmailChangesForTabs();
+        binding.container.vpGyms.setAdapter(getPageAdapter());
+        new TabLayoutMediator(binding.container.tlGyms, binding.container.vpGyms,
+                (tab, position) -> {
+                    switch (position) {
+                        case 0:
+                            tab.setText(ResUtils.getString(R.string.title_gyms));
+                            break;
+                    }
+                }
+        ).attach();
+        binding.container.vpGyms.setUserInputEnabled(false);
+    }
+
+    private void subscribeForPersonnelEmailChangesForTabs() {
+        getViewModel().getPersonnelEmail()
+                .observe(this, personnelEmail -> EventBus.getDefault().postSticky(new PersonnelEmailUpdateEvent(personnelEmail)));
     }
 
     @Override
@@ -65,95 +67,15 @@ public abstract class PersonnelEditorActivity extends EditorActivity {
     }
 
     @Override
-    public void initComponents() {
-        binding.container.fabAddItem.setOnClickListener(view -> showSelectionActivity());
-        GuiUtils.initListView(this, binding.container.rvData, true);
-        touchListener = new RecyclerTouchListener(this, binding.container.rvData);
-        binding.container.rvData.addOnItemTouchListener(touchListener);
-        touchListener.setSwipeOptionViews(R.id.btnRemove);
-        touchListener.setSwipeable(R.id.rowFG, R.id.rowBG, (viewId, position) -> {
-            switch (viewId) {
-                case R.id.btnRemove:
-                    Gym gym = adapter.getItem(position);
-                    askForDeleteGym(gym);
-                    break;
-            }
-        });
-        getViewModel().getGyms().observe(this, this::setData);
-    }
-
-    private void askForDeleteGym(Gym gym) {
-        subscribeInMainThread(
-                DialogUtils.showAskDialog(
-                        this,
-                        getDeleteGymMessage(),
-                        ResUtils.getString(R.string.caption_ok),
-                        ResUtils.getString(R.string.caption_cancel)),
-                new SingleData<>(
-                        doDelete -> {
-                            if (doDelete) {
-                                deleteGym(gym);
-                            }
-                        },
-                        throwable -> {
-                            throwable.printStackTrace();
-                            GuiUtils.showMessage(throwable.getLocalizedMessage());
-                        }
-                ));
-    }
-
-    private void deleteGym(Gym gym) {
-        getViewModel().deleteItem(gym);
-    }
-
-    private void showSelectionActivity() {
-        Intent intent = new Intent(this, SelectionActivity.class);
-        intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, AppConsts.FRAGMENT_GYMS_ID);
-        intent.putExtra(AppConsts.REQUEST_CODE, REQUEST_GYM_ID);
-        startActivityForResult(intent, REQUEST_GYM_ID);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_GYM_ID:
-                if (resultCode == RESULT_OK) {
-                    String gymId = data.getStringExtra(AppConsts.GYM_ID_EXTRA);
-                    getViewModel().addGym(gymId);
-                }
-                break;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private void setData(List<Gym> gyms) {
-        if (adapter == null) {
-            adapter = new GymsListAdapter(gyms, R.layout.one_bg_button_list_item_view);
-            binding.container.rvData.setAdapter(adapter);
-        } else {
-            adapter.setListData(gyms);
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        getViewModel().startDataListener();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        getViewModel().stopDataListener();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean isCreated = super.onCreateOptionsMenu(menu);
         menu.removeItem(MENU_SAVE);
 
         return isCreated;
+    }
+
+    @Override
+    protected Class<PersonnelEmailUpdateEvent> getEventType() {
+        return PersonnelEmailUpdateEvent.class;
     }
 }

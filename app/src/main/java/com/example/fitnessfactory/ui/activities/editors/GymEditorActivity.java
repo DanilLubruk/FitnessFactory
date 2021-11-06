@@ -19,7 +19,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.greenrobot.eventbus.EventBus;
 
-public class GymEditorActivity extends EditorActivity {
+public class GymEditorActivity extends TabParentEditorActivity<GymIdUpdateEvent> {
 
     private String gymId;
     private GymEditorViewModel viewModel;
@@ -65,7 +65,7 @@ public class GymEditorActivity extends EditorActivity {
 
     private void subscribeForGymIdChangesForTabs() {
         viewModel.getGymId()
-                .observe(this, gymId -> EventBus.getDefault().post(new GymIdUpdateEvent(gymId)));
+                .observe(this, gymId -> EventBus.getDefault().postSticky(new GymIdUpdateEvent(gymId)));
     }
 
     @Override
@@ -90,8 +90,7 @@ public class GymEditorActivity extends EditorActivity {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventUtils.removeStickyEvent(GymIdUpdateEvent.class);
+    protected Class<GymIdUpdateEvent> getEventType() {
+        return GymIdUpdateEvent.class;
     }
 }

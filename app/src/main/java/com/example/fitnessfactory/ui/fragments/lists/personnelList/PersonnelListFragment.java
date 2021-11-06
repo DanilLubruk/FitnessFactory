@@ -1,6 +1,5 @@
-package com.example.fitnessfactory.ui.fragments.lists;
+package com.example.fitnessfactory.ui.fragments.lists.personnelList;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,8 +8,9 @@ import androidx.annotation.Nullable;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.adapters.PersonnelListAdapter;
+import com.example.fitnessfactory.ui.fragments.lists.ListListenerSelectFragment;
 import com.example.fitnessfactory.ui.viewholders.lists.PersonnelListViewHolder;
-import com.example.fitnessfactory.ui.viewmodels.lists.PersonnelListViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.personnelList.PersonnelListViewModel;
 import com.example.fitnessfactory.utils.IntentUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
