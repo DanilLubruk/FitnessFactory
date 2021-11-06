@@ -118,6 +118,7 @@
     <string name="title_sessions">Sessions</string>
     <string name="title_todays_sessions">Today\'s sessions</string>
     <string name="caption_day">Day</string>
+    <string name="caption_add">Add</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <string name="caption_user_null">User is not signed in</string>

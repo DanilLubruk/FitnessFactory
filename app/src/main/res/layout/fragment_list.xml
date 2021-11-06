@@ -29,7 +29,7 @@
         android:layout_marginStart="@dimen/component_margin"
         android:layout_marginEnd="@dimen/component_margin" />
 
-    <com.github.clans.fab.FloatingActionButton
+    <com.github.clans.fab.FloatingActionMenu
         xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:id="@+id/fabAddItem"
         android:layout_width="match_parent"
@@ -44,13 +44,13 @@
         android:paddingEnd="@dimen/activity_horizontal_margin"
         android:paddingStart="@dimen/activity_horizontal_margin"
         android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:text="@string/caption_add"
+        fab:fab_label="@string/caption_add"
+        fab:backgroundTint="?attr/accentColor"
         fab:menu_animationDelayPerItem="0"
-        fab:menu_colorNormal="@color/colorMessageBackground"
-        fab:menu_colorPressed="@color/colorMessageBackground"
-        fab:menu_colorRipple="@color/colorMessageBackground"
-        fab:menu_labels_colorNormal="@color/colorMessageBackground"
-        fab:menu_labels_colorPressed="#66FFFFFF"
-        fab:menu_labels_colorRipple="#66FFFFFF"
+        fab:menu_colorNormal="?attr/accentColor"
+        fab:menu_colorPressed="?attr/warnColor"
+        fab:menu_icon="@drawable/ic_add"
         fab:menu_labels_hideAnimation="@anim/jump_to_down"
         fab:menu_labels_showAnimation="@anim/jump_from_down"
         fab:menu_labels_showShadow="true"

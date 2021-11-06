@@ -22,6 +22,7 @@ import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 
 import org.greenrobot.eventbus.EventBus;
@@ -68,7 +69,7 @@ public abstract class ListListenerFragment<
         return binding.rvData;
     }
 
-    protected FloatingActionButton getFAB() {
+    protected FloatingActionMenu getFAB() {
         return binding.fabAddItem;
     }
 
@@ -81,7 +82,7 @@ public abstract class ListListenerFragment<
     }
 
     protected void initComponents() {
-        getFAB().setOnClickListener(view -> showEditorActivity(getNewItem()));
+        getFAB().setOnMenuButtonClickListener(view -> showEditorActivity(getNewItem()));
         GuiUtils.initListView(getBaseActivity(), getRecyclerView(), true);
         GuiUtils.setListViewAnimation(getRecyclerView(), getFAB());
         touchListener = new RecyclerTouchListener(getBaseActivity(), getRecyclerView());

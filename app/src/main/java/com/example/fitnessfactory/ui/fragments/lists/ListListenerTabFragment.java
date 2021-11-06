@@ -13,7 +13,7 @@ public abstract class ListListenerTabFragment<
 
     protected void initComponents() {
         super.initComponents();
-        getFAB().setOnClickListener(view -> tryToShowSelectionActivity());
+        getFAB().setOnMenuButtonClickListener(view -> tryToShowSelectionActivity());
         touchListener.setSwipeOptionViews(R.id.btnRemove);
         touchListener.setSwipeable(R.id.rowFG, R.id.rowBG, (viewId, position) -> {
             switch (viewId) {

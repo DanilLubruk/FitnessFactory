@@ -15,8 +15,9 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="mainTextColor">@color/white</item>
-        <item name="accentColor">@color/scarletRed</item>
+        <item name="warnColor">@color/scarletRed</item>
         <item name="tabBackground">@color/light_tab_background</item>
+        <item name="accentColor">@color/gold</item>
     </style>
     <style name="FragmentDialogsTheme" parent="@android:style/Theme.Panel">
         <item name="android:windowAnimationStyle">@style/MyAnimation.Window</item>

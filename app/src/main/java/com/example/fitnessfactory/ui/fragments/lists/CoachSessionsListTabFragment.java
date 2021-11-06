@@ -26,7 +26,7 @@ import com.example.fitnessfactory.ui.viewmodels.lists.CoachSessionsListTabViewMo
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
-import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -76,7 +76,7 @@ public class CoachSessionsListTabFragment extends ListListenerTabFragment<Sessio
         return tabBinding.listContainer.rvData;
     }
 
-    protected FloatingActionButton getFAB() {
+    protected FloatingActionMenu getFAB() {
         return tabBinding.listContainer.fabAddItem;
     }
 

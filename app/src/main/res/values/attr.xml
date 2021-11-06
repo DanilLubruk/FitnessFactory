@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="mainTextColor" format="color"/>
-    <attr name="accentColor" format="color"/>
+    <attr name="warnColor" format="color"/>
     <attr name="tabsBackground" format="color"/>
+    <attr name="accentColor" format="color"/>
 </resources>

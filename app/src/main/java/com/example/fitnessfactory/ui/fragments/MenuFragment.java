@@ -68,7 +68,7 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
             //binding.tvGreeting.setText(user.getDisplayName() + " " + user.getEmail());
         }
         binding.calendarView.setRobotoCalendarListener(this);
-        binding.fabAddSession.setOnClickListener(view -> showSessionEditorActivity(new Session()));
+        binding.fabAddSession.setOnMenuButtonClickListener(view -> showSessionEditorActivity(new Session()));
         GuiUtils.initListView(getBaseActivity(), binding.rvSessions, true);
         GuiUtils.setListViewAnimation(binding.rvSessions, binding.fabAddSession);
         touchListener = new RecyclerTouchListener(getBaseActivity(), binding.rvSessions);
