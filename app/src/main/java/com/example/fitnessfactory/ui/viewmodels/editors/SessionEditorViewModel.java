@@ -12,13 +12,13 @@ import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleDialogEvent;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
+import com.example.fitnessfactory.data.repositories.SessionViewRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -26,8 +26,11 @@ public class SessionEditorViewModel extends EditorViewModel {
 
     private final SessionsDataManager sessionsDataManager;
     private final SessionsRepository sessionsRepository;
+    private final SessionViewRepository sessionViewRepository;
 
     public ObservableField<Session> session = new ObservableField<>();
+    public ObservableField<String> sessionTypeName = new ObservableField<>();
+    public ObservableField<String> gymName = new ObservableField<>();
     public MutableLiveData<String> sessionId = new MutableLiveData<>();
     private Session dbSession;
 
@@ -35,14 +38,16 @@ public class SessionEditorViewModel extends EditorViewModel {
     private final String DB_DATE_KEY = "DB_DATE_KEY";
     private final String DB_START_TIME_KEY = "DB_START_TIME_KEY";
     private final String DB_END_TIME_KEY = "DB_END_TIME_KEY";
-    private final String DB_GYM_NAME_KEY = "DB_GYM_NAME_KEY";
-    private final String DB_SESSION_TYPE_NAME_KEY = "DB_SESSION_TYPE_NAME_KEY";
+    private final String DB_GYM_ID_KEY = "DB_GYM_ID_KEY";
+    private final String DB_SESSION_TYPE_ID_KEY = "DB_SESSION_TYPE_ID_KEY";
 
     @Inject
     public SessionEditorViewModel(SessionsDataManager sessionsDataManager,
-                                  SessionsRepository sessionsRepository) {
+                                  SessionsRepository sessionsRepository,
+                                  SessionViewRepository sessionViewRepository) {
         this.sessionsDataManager = sessionsDataManager;
         this.sessionsRepository = sessionsRepository;
+        this.sessionViewRepository = sessionViewRepository;
     }
 
     public LiveData<String> getSessionId() {
@@ -76,7 +81,33 @@ public class SessionEditorViewModel extends EditorViewModel {
 
         this.session.set(session);
         this.sessionId.setValue(session.getId());
+        setSessionTypeName();
+        setGymName();
         isObtained.setValue(true);
+    }
+
+    private void setSessionTypeName() {
+        Session session = this.session.get();
+        if (session == null) {
+            handleItemOperationError();
+            return;
+        }
+
+        subscribeInIOThread(
+                sessionViewRepository.getSessionTypeNameAsync(session.getSessionTypeId()),
+                new SingleData<>(sessionTypeName::set, getErrorHandler()::handleError));
+    }
+
+    private void setGymName() {
+        Session session = this.session.get();
+        if (session == null) {
+            handleItemOperationError();
+            return;
+        }
+
+        subscribeInIOThread(
+                sessionViewRepository.getGymNameAsync(session.getGymId()),
+                new SingleData<>(gymName::set, getErrorHandler()::handleError));
     }
 
     public void setSessionDefaultTime(Date defaultDate) {
@@ -173,8 +204,8 @@ public class SessionEditorViewModel extends EditorViewModel {
         this.session.notifyChange();
     }
 
-    public void setGym(String gymName) {
-        if (StringUtils.isEmpty(gymName)) {
+    public void setGym(String gymId) {
+        if (StringUtils.isEmpty(gymId)) {
             handleGymNullError();
             return;
         }
@@ -184,16 +215,16 @@ public class SessionEditorViewModel extends EditorViewModel {
             return;
         }
 
-        session.setGymName(gymName);
-        this.session.notifyChange();
+        session.setGymId(gymId);
+        setGymName();
     }
 
     private void handleGymNullError() {
         GuiUtils.showMessage(ResUtils.getString(R.string.message_error_gym_null));
     }
 
-    public void setSessionType(String sessionTypeName) {
-        if (StringUtils.isEmpty(sessionTypeName)) {
+    public void setSessionType(String sessionTypeId) {
+        if (StringUtils.isEmpty(sessionTypeId)) {
             handleSessionTypeNullError();
             return;
         }
@@ -203,8 +234,8 @@ public class SessionEditorViewModel extends EditorViewModel {
             return;
         }
 
-        session.setSessionTypeName(sessionTypeName);
-        this.session.notifyChange();
+        session.setSessionTypeId(sessionTypeId);
+        setSessionTypeName();
     }
 
     private void handleSessionTypeNullError() {
@@ -290,8 +321,8 @@ public class SessionEditorViewModel extends EditorViewModel {
         getHandle().put(Session.DATE_FIELD, session.getDate());
         getHandle().put(Session.START_TIME_FIELD, session.getStartTime());
         getHandle().put(Session.END_TIME_FIELD, session.getEndTime());
-        getHandle().put(Session.GYM_NAME_FIELD, session.getGymName());
-        getHandle().put(Session.SESSION_TYPE_NAME_FIELD, session.getSessionTypeName());
+        getHandle().put(Session.GYM_ID_FIELD, session.getGymId());
+        getHandle().put(Session.SESSION_TYPE_ID_FIELD, session.getSessionTypeId());
     }
 
     private void saveDbSessionState() {
@@ -302,8 +333,8 @@ public class SessionEditorViewModel extends EditorViewModel {
         getHandle().put(DB_DATE_KEY, dbSession.getDate());
         getHandle().put(DB_START_TIME_KEY, dbSession.getStartTime());
         getHandle().put(DB_END_TIME_KEY, dbSession.getEndTime());
-        getHandle().put(DB_GYM_NAME_KEY, dbSession.getGymName());
-        getHandle().put(DB_SESSION_TYPE_NAME_KEY, dbSession.getSessionTypeName());
+        getHandle().put(DB_GYM_ID_KEY, dbSession.getGymId());
+        getHandle().put(DB_SESSION_TYPE_ID_KEY, dbSession.getSessionTypeId());
     }
 
     @Override
@@ -319,8 +350,8 @@ public class SessionEditorViewModel extends EditorViewModel {
         session.setDate((Date) getHandle().get(Session.DATE_FIELD));
         session.setStartTime((Date) getHandle().get(Session.START_TIME_FIELD));
         session.setEndTime((Date) getHandle().get(Session.END_TIME_FIELD));
-        session.setGymName((String) getHandle().get(Session.GYM_NAME_FIELD));
-        session.setSessionTypeName((String) getHandle().get(Session.SESSION_TYPE_NAME_FIELD));
+        session.setGymId((String) getHandle().get(Session.GYM_ID_FIELD));
+        session.setSessionTypeId((String) getHandle().get(Session.SESSION_TYPE_ID_FIELD));
     }
 
     private void setDbHandleState() {
@@ -331,7 +362,7 @@ public class SessionEditorViewModel extends EditorViewModel {
         dbSession.setDate((Date) getHandle().get(DB_DATE_KEY));
         dbSession.setStartTime((Date) getHandle().get(DB_START_TIME_KEY));
         dbSession.setEndTime((Date) getHandle().get(DB_END_TIME_KEY));
-        dbSession.setGymName((String) getHandle().get(DB_GYM_NAME_KEY));
-        dbSession.setSessionTypeName((String) getHandle().get(DB_SESSION_TYPE_NAME_KEY));
+        dbSession.setGymId((String) getHandle().get(DB_GYM_ID_KEY));
+        dbSession.setSessionTypeId((String) getHandle().get(DB_SESSION_TYPE_ID_KEY));
     }
 }

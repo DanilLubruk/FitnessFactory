@@ -228,8 +228,8 @@ public class SessionsRepository extends BaseRepository {
                 .update(documentReference, Session.DATE_FIELD, session.getDate())
                 .update(documentReference, Session.START_TIME_FIELD, session.getStartTime())
                 .update(documentReference, Session.END_TIME_FIELD, session.getEndTime())
-                .update(documentReference, Session.GYM_NAME_FIELD, session.getGymName())
-                .update(documentReference, Session.SESSION_TYPE_NAME_FIELD, session.getSessionTypeName())
+                .update(documentReference, Session.GYM_ID_FIELD, session.getGymId())
+                .update(documentReference, Session.SESSION_TYPE_ID_FIELD, session.getSessionTypeId())
                 .commit());
 
         return true;
@@ -291,12 +291,12 @@ public class SessionsRepository extends BaseRepository {
         }
 
         public QueryBuilder whereSessionTypeNameEquals(String sessionTypeName) {
-            query = query.whereEqualTo(Session.SESSION_TYPE_NAME_FIELD, sessionTypeName);
+            query = query.whereEqualTo(Session.SESSION_TYPE_ID_FIELD, sessionTypeName);
             return this;
         }
 
         public QueryBuilder whereGymNameEquals(String gymName) {
-            query = query.whereEqualTo(Session.GYM_NAME_FIELD, gymName);
+            query = query.whereEqualTo(Session.GYM_ID_FIELD, gymName);
             return this;
         }
 

@@ -113,6 +113,8 @@
     <string name="caption_from">from</string>
     <string name="caption_until">until</string>
     <string name="message_input_invalid_value">Valid value is from %1$s to %2$s!</string>
+    <string name="message_error_session_type_id_not_unique">Session type id is not unique</string>
+    <string name="message_error_gym_id_not_unique">Gym id is not unique</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <string name="caption_user_null">User is not signed in</string>

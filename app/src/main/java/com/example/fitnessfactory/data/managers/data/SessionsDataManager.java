@@ -3,11 +3,14 @@ package com.example.fitnessfactory.data.managers.data;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.managers.BaseManager;
 import com.example.fitnessfactory.data.models.Session;
+import com.example.fitnessfactory.data.repositories.SessionViewRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionTypeRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.participantsData.ClientSessionsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.participantsData.CoachSessionsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository;
+import com.example.fitnessfactory.data.views.SessionView;
 import com.example.fitnessfactory.system.SafeReference;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.google.firebase.firestore.WriteBatch;
@@ -24,18 +27,26 @@ public class SessionsDataManager extends BaseManager {
     private final ClientSessionsRepository clientSessionsRepository;
     private final CoachSessionsRepository coachSessionsRepository;
     private final OwnerCoachesRepository ownerCoachesRepository;
+    private final SessionViewRepository sessionViewRepository;
 
     @Inject
     public SessionsDataManager(SessionsRepository sessionsRepository,
                                SessionTypeRepository sessionTypeRepository,
                                ClientSessionsRepository clientSessionsRepository,
                                CoachSessionsRepository coachSessionsRepository,
-                               OwnerCoachesRepository ownerCoachesRepository) {
+                               OwnerCoachesRepository ownerCoachesRepository,
+                               SessionViewRepository sessionViewRepository) {
         this.sessionsRepository = sessionsRepository;
         this.sessionTypeRepository = sessionTypeRepository;
         this.clientSessionsRepository = clientSessionsRepository;
         this.coachSessionsRepository = coachSessionsRepository;
         this.ownerCoachesRepository = ownerCoachesRepository;
+        this.sessionViewRepository = sessionViewRepository;
+    }
+
+    public Single<SessionView> getSessionView(String sessionId) {
+        return sessionsRepository.getSessionAsync(sessionId)
+                .flatMap(sessionViewRepository::getSessionViewAsync);
     }
 
     public Completable addClientToSession(String sessionId, String clientId) {
@@ -44,7 +55,7 @@ public class SessionsDataManager extends BaseManager {
         return sessionsRepository.getSessionAsync(sessionId)
                 .flatMap(session -> {
                     sessionRef.set(session);
-                    return sessionTypeRepository.getSessionTypeByNameAsync(session.getSessionTypeName());
+                    return sessionTypeRepository.getSessionTypeByNameAsync(session.getSessionTypeId());
                 })
                 .flatMap(sessionType -> sessionsRepository.isSessionPackedAsync(sessionRef.getValue(), sessionType))
                 .flatMap(isPacked -> isPacked ?

@@ -11,8 +11,8 @@ public class Session {
     public static final String DATE_FIELD = "date";
     public static final String START_TIME_FIELD = "startTime";
     public static final String END_TIME_FIELD = "endTime";
-    public static final String GYM_NAME_FIELD = "gymName";
-    public static final String SESSION_TYPE_NAME_FIELD = "sessionTypeName";
+    public static final String GYM_ID_FIELD = "gymId";
+    public static final String SESSION_TYPE_ID_FIELD = "sessionTypeId";
     public static final String COACHES_IDS_FIELD = "coachesIds";
     public static final String CLIENTS_IDS_FIELD = "clientsIds";
 
@@ -20,8 +20,8 @@ public class Session {
     private Date date;
     private Date startTime;
     private Date endTime;
-    private String gymName;
-    private String sessionTypeName;
+    private String gymId;
+    private String sessionTypeId;
     private List<String> coachesIds;
     private List<String> clientsIds;
 
@@ -33,8 +33,8 @@ public class Session {
         return session != null
                 && session.getId() != null
                 && session.getDate() != null
-                && session.getGymName() != null
-                && session.getSessionTypeName() != null;
+                && session.getGymId() != null
+                && session.getSessionTypeId() != null;
     }
 
     public void copy(Session session) {
@@ -42,8 +42,8 @@ public class Session {
         this.setDate(session.getDate());
         this.setStartTime(session.getStartTime());
         this.setEndTime(session.getEndTime());
-        this.setGymName(session.getGymName());
-        this.setSessionTypeName(session.getSessionTypeName());
+        this.setGymId(session.getGymId());
+        this.setSessionTypeId(session.getSessionTypeId());
         this.setCoachesIds(session.getCoachesIds());
         this.setClientsIds(session.getClientsIds());
     }
@@ -54,8 +54,8 @@ public class Session {
                         && this.getDate().equals(session.getDate())
                         && this.getStartTime().equals(session.getStartTime())
                         && this.getEndTime() == session.getEndTime()
-                        && this.getGymName().equals(session.getGymName())
-                        && this.getSessionTypeName().equals(session.getSessionTypeName());
+                        && this.getGymId().equals(session.getGymId())
+                        && this.getSessionTypeId().equals(session.getSessionTypeId());
     }
 
     public String getId() {
@@ -108,20 +108,20 @@ public class Session {
         return TimeUtils.dateTo24HoursTime(endTime);
     }
 
-    public String getGymName() {
-        return gymName;
+    public String getGymId() {
+        return gymId;
     }
 
-    public void setGymName(String gymName) {
-        this.gymName = gymName;
+    public void setGymId(String gymId) {
+        this.gymId = gymId;
     }
 
-    public String getSessionTypeName() {
-        return sessionTypeName;
+    public String getSessionTypeId() {
+        return sessionTypeId;
     }
 
-    public void setSessionTypeName(String sessionTypeName) {
-        this.sessionTypeName = sessionTypeName;
+    public void setSessionTypeId(String sessionTypeId) {
+        this.sessionTypeId = sessionTypeId;
     }
 
     public List<String> getCoachesIds() {

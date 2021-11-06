@@ -5,9 +5,10 @@ import android.widget.TextView;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.models.Session;
+import com.example.fitnessfactory.data.views.SessionView;
 import com.example.fitnessfactory.ui.viewholders.BaseRecyclerViewHolder;
 
-public class SessionsListViewHolder extends BaseRecyclerViewHolder<Session> {
+public class SessionsListViewHolder extends BaseRecyclerViewHolder<SessionView> {
 
     private TextView tvStartTime;
     private TextView tvEndTime;
@@ -19,7 +20,7 @@ public class SessionsListViewHolder extends BaseRecyclerViewHolder<Session> {
     }
 
     @Override
-    public void setData(Session data) {
+    public void setData(SessionView data) {
         tvStartTime.setText(data.getStartTimeString());
         tvEndTime.setText(data.getEndTimeString());
         tvGymName.setText(data.getGymName());

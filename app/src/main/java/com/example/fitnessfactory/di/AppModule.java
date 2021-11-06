@@ -22,6 +22,7 @@ import com.example.fitnessfactory.data.managers.data.CoachesDataManager;
 import com.example.fitnessfactory.data.managers.access.GymsAccessManager;
 import com.example.fitnessfactory.data.managers.data.SessionTypesDataManager;
 import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
+import com.example.fitnessfactory.data.repositories.SessionViewRepository;
 import com.example.fitnessfactory.data.repositories.access.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.access.CoachesAccessRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.participantsData.ClientSessionsRepository;
@@ -235,13 +236,15 @@ public class AppModule {
                                                           SessionTypeRepository sessionTypeRepository,
                                                           ClientSessionsRepository clientSessionsRepository,
                                                           CoachSessionsRepository coachSessionsRepository,
-                                                          OwnerCoachesRepository ownerCoachesRepository) {
+                                                          OwnerCoachesRepository ownerCoachesRepository,
+                                                          SessionViewRepository sessionViewRepository) {
         return new SessionsDataManager(
                 sessionsRepository,
                 sessionTypeRepository,
                 clientSessionsRepository,
                 coachSessionsRepository,
-                ownerCoachesRepository);
+                ownerCoachesRepository,
+                sessionViewRepository);
     }
 
     @Provides
@@ -274,5 +277,11 @@ public class AppModule {
     public ClientsDataManager provideClientsDataManager(ClientsRepository clientsRepository,
                                                         ClientSessionsRepository clientSessionsRepository) {
         return new ClientsDataManager(clientsRepository, clientSessionsRepository);
+    }
+
+    @Provides
+    @AppScope
+    public SessionViewRepository provideSessionViewRepository() {
+        return new SessionViewRepository();
     }
 }

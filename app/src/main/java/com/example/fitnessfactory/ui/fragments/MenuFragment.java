@@ -15,6 +15,7 @@ import com.example.fitnessfactory.data.events.DaysSessionListDataListenerEvent;
 import com.example.fitnessfactory.data.events.SessionsCalendarDataListenerEvent;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.observers.SingleData;
+import com.example.fitnessfactory.data.views.SessionView;
 import com.example.fitnessfactory.databinding.FragmentMainMenuBinding;
 import com.example.fitnessfactory.ui.activities.editors.SessionEditorActivity;
 import com.example.fitnessfactory.ui.adapters.SessionsListAdapter;
@@ -76,17 +77,17 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
         touchListener.setSwipeable(R.id.rowFG, R.id.rowBG, (viewId, position) -> {
             switch (viewId) {
                 case R.id.btnEdit:
-                    showSessionEditorActivity(daysSessionsAdapter.getItem(position));
+                    showSessionEditorActivity(daysSessionsAdapter.getItem(position).getSession());
                     break;
                 case R.id.btnDelete:
-                    askForDelete(daysSessionsAdapter.getItem(position));
+                    askForDelete(daysSessionsAdapter.getItem(position).getSession());
                     break;
             }
         });
         touchListener.setClickable(new RecyclerTouchListener.OnRowClickListener() {
             @Override
             public void onRowClicked(int position) {
-                showSessionEditorActivity(daysSessionsAdapter.getItem(position));
+                showSessionEditorActivity(daysSessionsAdapter.getItem(position).getSession());
             }
 
             @Override
@@ -94,6 +95,7 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
 
             }
         });
+        viewModel.getSessions().observe(getBaseActivity(), this::updateDaysSessions);
     }
 
     protected void askForDelete(Session item) {
@@ -178,7 +180,7 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDaysSessionsListenerEvent(DaysSessionListDataListenerEvent sessionListDataListenerEvent) {
-        updateDaysSessions(sessionListDataListenerEvent.getSessions());
+        viewModel.getSessionsData(sessionListDataListenerEvent.getSessions());
     }
 
     private void updateCalendar(List<Session> sessions) {
@@ -187,7 +189,7 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
         }
     }
 
-    private void updateDaysSessions(List<Session> sessions) {
+    private void updateDaysSessions(List<SessionView> sessions) {
         binding.tvEmptyList.setVisibility(sessions.size() == 0 ? View.VISIBLE : View.GONE);
         if (daysSessionsAdapter == null) {
             daysSessionsAdapter = new SessionsListAdapter(sessions, R.layout.sessions_list_item_view);
