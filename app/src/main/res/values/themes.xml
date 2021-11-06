@@ -16,6 +16,7 @@
         <item name="windowNoTitle">true</item>
         <item name="mainTextColor">@color/white</item>
         <item name="accentColor">@color/scarletRed</item>
+        <item name="tabBackground">@color/light_tab_background</item>
     </style>
     <style name="FragmentDialogsTheme" parent="@android:style/Theme.Panel">
         <item name="android:windowAnimationStyle">@style/MyAnimation.Window</item>

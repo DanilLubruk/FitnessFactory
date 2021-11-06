@@ -35,17 +35,23 @@ public abstract class PersonnelEditorActivity extends TabParentEditorActivity<Pe
         binding.setModel(getViewModel());
         getViewModel().setPersonnelData(getIntent());
         subscribeForPersonnelEmailChangesForTabs();
-        binding.container.vpGyms.setAdapter(getPageAdapter());
-        new TabLayoutMediator(binding.container.tlGyms, binding.container.vpGyms,
-                (tab, position) -> {
-                    switch (position) {
-                        case 0:
-                            tab.setText(ResUtils.getString(R.string.title_gyms));
-                            break;
-                    }
-                }
+        binding.container.vpPersonnelData.setAdapter(getPageAdapter());
+        new TabLayoutMediator(
+                binding.container.tlPersonnelData,
+                binding.container.vpPersonnelData,
+                getTabsList()
         ).attach();
-        binding.container.vpGyms.setUserInputEnabled(false);
+        binding.container.vpPersonnelData.setUserInputEnabled(false);
+    }
+
+    protected TabLayoutMediator.TabConfigurationStrategy getTabsList() {
+        return (tab, position) -> {
+            switch (position) {
+                case 0:
+                    tab.setText(ResUtils.getString(R.string.title_gyms));
+                    break;
+            }
+        };
     }
 
     private void subscribeForPersonnelEmailChangesForTabs() {

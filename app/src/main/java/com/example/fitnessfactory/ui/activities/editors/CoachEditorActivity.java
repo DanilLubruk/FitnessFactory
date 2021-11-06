@@ -1,5 +1,6 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
@@ -38,5 +39,19 @@ public class CoachEditorActivity extends PersonnelEditorActivity {
     public void initActivity() {
         viewModel = new ViewModelProvider(this, new CoachEditorViewModelFactory()).get(CoachEditorViewModel.class);
         super.initActivity();
+    }
+
+    @Override
+    protected TabLayoutMediator.TabConfigurationStrategy getTabsList() {
+        return (tab, position) -> {
+            switch (position) {
+                case 0:
+                    tab.setText(ResUtils.getString(R.string.title_gyms));
+                    break;
+                case 1:
+                    tab.setText(ResUtils.getString(R.string.title_sessions));
+                    break;
+            }
+        };
     }
 }

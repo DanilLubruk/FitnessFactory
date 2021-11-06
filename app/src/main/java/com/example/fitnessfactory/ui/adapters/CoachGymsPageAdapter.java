@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.fitnessfactory.ui.fragments.lists.CoachSessionsListTabFragment;
 import com.example.fitnessfactory.ui.fragments.lists.personnelGymsList.CoachGymsListTabFragment;
 
 public class CoachGymsPageAdapter extends FragmentStateAdapter {
@@ -20,6 +21,8 @@ public class CoachGymsPageAdapter extends FragmentStateAdapter {
         switch (position) {
             case 0:
                 return new CoachGymsListTabFragment();
+            case 1:
+                return new CoachSessionsListTabFragment();
             default:
                 return new CoachGymsListTabFragment();
         }
@@ -27,6 +30,6 @@ public class CoachGymsPageAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 1;
+        return 2;
     }
 }

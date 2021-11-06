@@ -4,8 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.observers.SingleData;
@@ -18,6 +21,7 @@ import com.example.fitnessfactory.ui.viewmodels.lists.ListViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
+import com.github.clans.fab.FloatingActionButton;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,7 +36,7 @@ public abstract class ListListenerFragment<
     protected AdapterType adapter;
     protected RecyclerTouchListener touchListener;
 
-    protected FragmentListBinding binding;
+    private FragmentListBinding binding;
 
     protected abstract ListViewModel<ItemType> getViewModel();
 
@@ -60,12 +64,28 @@ public abstract class ListListenerFragment<
         return binding.getRoot();
     }
 
+    protected RecyclerView getRecyclerView() {
+        return binding.rvData;
+    }
+
+    protected FloatingActionButton getFAB() {
+        return binding.fabAddItem;
+    }
+
+    protected ProgressBar getProgressBar() {
+        return binding.pkProgress;
+    }
+
+    protected TextView getEmptyDataLabel() {
+        return binding.tvEmptyData;
+    }
+
     protected void initComponents() {
-        binding.fabAddItem.setOnClickListener(view -> showEditorActivity(getNewItem()));
-        GuiUtils.initListView(getBaseActivity(), binding.rvData, true);
-        GuiUtils.setListViewAnimation(binding.rvData, binding.fabAddItem);
-        touchListener = new RecyclerTouchListener(getBaseActivity(), binding.rvData);
-        binding.rvData.addOnItemTouchListener(touchListener);
+        getFAB().setOnClickListener(view -> showEditorActivity(getNewItem()));
+        GuiUtils.initListView(getBaseActivity(), getRecyclerView(), true);
+        GuiUtils.setListViewAnimation(getRecyclerView(), getFAB());
+        touchListener = new RecyclerTouchListener(getBaseActivity(), getRecyclerView());
+        getRecyclerView().addOnItemTouchListener(touchListener);
         touchListener.setSwipeOptionViews(R.id.btnEdit, R.id.btnDelete);
         touchListener.setSwipeable(R.id.rowFG, R.id.rowBG, (viewId, position) -> {
             switch (viewId) {
@@ -93,7 +113,7 @@ public abstract class ListListenerFragment<
     protected void setListData(List<ItemType> listData) {
         if (adapter == null) {
             adapter = createNewAdapter(listData);
-            binding.rvData.setAdapter(adapter);
+            getRecyclerView().setAdapter(adapter);
         } else {
             adapter.setListData(listData);
         }
@@ -161,18 +181,18 @@ public abstract class ListListenerFragment<
     }
 
     public void closeProgress() {
-        binding.pkProgress.setVisibility(View.GONE);
-        binding.rvData.setVisibility(View.VISIBLE);
-        binding.fabAddItem.setVisibility(View.VISIBLE);
+        getProgressBar().setVisibility(View.GONE);
+        getRecyclerView().setVisibility(View.VISIBLE);
+        getFAB().setVisibility(View.VISIBLE);
         if (adapter != null) {
-            binding.tvEmptyData.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+            getEmptyDataLabel().setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
 
         }
     }
 
     public void showProgress() {
-        binding.pkProgress.setVisibility(View.VISIBLE);
-        binding.rvData.setVisibility(View.GONE);
-        binding.fabAddItem.setVisibility(View.GONE);
+        getProgressBar().setVisibility(View.VISIBLE);
+        getRecyclerView().setVisibility(View.GONE);
+        getFAB().setVisibility(View.GONE);
     }
 }

@@ -64,17 +64,17 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tlGyms"
+            android:id="@+id/tlPersonnelData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ilEmail" />
 
         <androidx.viewpager2.widget.ViewPager2
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/vpGyms"
+            android:id="@+id/vpPersonnelData"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/tlGyms"
+            android:layout_below="@+id/tlPersonnelData"
             android:orientation="vertical">
 
         </androidx.viewpager2.widget.ViewPager2>

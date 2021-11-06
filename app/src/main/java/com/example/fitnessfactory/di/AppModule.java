@@ -3,6 +3,7 @@ package com.example.fitnessfactory.di;
 import com.example.fitnessfactory.data.dataListeners.AdminGymsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.AdminsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.ClientsListDataListener;
+import com.example.fitnessfactory.data.dataListeners.CoachDaysSessionsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.CoachGymsListDataListener;
 import com.example.fitnessfactory.data.dataListeners.CoachesListDataListener;
 import com.example.fitnessfactory.data.dataListeners.DaysSessionsListDataListener;
@@ -283,5 +284,11 @@ public class AppModule {
     @AppScope
     public SessionViewRepository provideSessionViewRepository() {
         return new SessionViewRepository();
+    }
+
+    @Provides
+    @AppScope
+    public CoachDaysSessionsListDataListener provideCoachDaysSessionsListDataListener() {
+        return new CoachDaysSessionsListDataListener();
     }
 }

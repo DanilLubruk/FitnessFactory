@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.example.fitnessfactory.ui.viewmodels.lists.CoachSessionsListTabViewModel" />
+    </data>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/activity_vertical_margin"
+    android:layout_marginTop="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_vertical_margin"
+    android:layout_marginBottom="@dimen/activity_horizontal_margin">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ilDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/component_margin"
+        android:layout_marginEnd="@dimen/component_margin"
+        android:layout_marginBottom="@dimen/component_margin"
+        android:layout_marginTop="@dimen/component_margin"
+        android:hint="@string/caption_day"
+        app:hintEnabled="true">
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/edtDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionNext"
+        android:focusableInTouchMode="false"
+        android:selectAllOnFocus="true"
+        android:maxLines="1"
+        android:inputType="text"
+        android:textDate="@{model.dateField}"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <include
+        android:id="@+id/listContainer"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/ilDate"
+        layout="@layout/fragment_list"/>
+</RelativeLayout>
+</layout>
