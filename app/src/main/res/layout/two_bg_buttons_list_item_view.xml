@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_marginStart="@dimen/list_item_margin"
+    android:layout_marginEnd="@dimen/list_item_margin"
+    android:layout_marginBottom="@dimen/list_item_margin"
+    android:layout_marginTop="@dimen/list_item_margin"
     android:layout_height="@dimen/recycler_view_two_line_height">
 
     <RelativeLayout
@@ -33,6 +37,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+    <LinearLayout
+        android:id="@+id/rowFGLayer"
+        android:background="@drawable/list_item_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/tvName"
             android:layout_width="match_parent"
@@ -40,7 +51,7 @@
             android:layout_marginTop="@dimen/list_item_margin"
             android:layout_marginStart="@dimen/list_item_margin"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="?attr/colorPrimary"
+            android:textColor="?attr/mainTextColor"
             android:textStyle="bold"
             android:layout_weight="1"
             android:gravity="start|center" />
@@ -52,8 +63,10 @@
             android:layout_marginStart="@dimen/list_item_margin"
             android:layout_marginBottom="@dimen/list_item_margin"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="?attr/colorPrimary"
+            android:textColor="?attr/mainTextColor"
             android:layout_weight="3"
             android:gravity="start|center" />
+
+    </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

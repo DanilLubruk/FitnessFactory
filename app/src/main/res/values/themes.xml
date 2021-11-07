@@ -40,4 +40,5 @@
     <style name="NavigatorStyle">
         <item name="android:listDivider">?attr/mainTextColor</item>
     </style>
+
 </resources>

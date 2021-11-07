@@ -43,7 +43,7 @@ public abstract class PersonnelListFragment
     @Override
     protected void initComponents() {
         super.initComponents();
-        getFAB().setOnClickListener(view -> showSendEmailInvitationDialog());
+        getFAB().setOnMenuButtonClickListener(view -> showSendEmailInvitationDialog());
         getViewModel().getPersonnel().observe(getViewLifecycleOwner(), this::setListData);
     }
     @Override

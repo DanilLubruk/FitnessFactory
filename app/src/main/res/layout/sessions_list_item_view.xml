@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_marginStart="@dimen/list_item_margin"
+    android:layout_marginEnd="@dimen/list_item_margin"
+    android:layout_marginBottom="@dimen/list_item_margin"
+    android:layout_marginTop="@dimen/list_item_margin"
     android:layout_height="@dimen/recycler_view_two_line_height">
 
     <RelativeLayout
@@ -35,13 +39,19 @@
         android:elevation="4dp"
         android:orientation="horizontal">
 
+    <LinearLayout
+        android:id="@+id/rowFGLayer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/list_item_bg"
+        android:orientation="horizontal">
+
         <LinearLayout
             android:id="@+id/llData"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginStart="@dimen/list_item_margin"
-            android:background="@color/white"
             android:orientation="vertical">
 
             <TextView
@@ -52,7 +62,7 @@
                 android:gravity="start|center"
                 android:layout_marginTop="@dimen/list_item_margin"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="?attr/colorPrimary"
+                android:textColor="?attr/mainTextColor"
                 android:textStyle="bold" />
 
             <TextView
@@ -63,7 +73,7 @@
                 android:gravity="start|center"
                 android:layout_marginBottom="@dimen/list_item_margin"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="?attr/colorPrimary"/>
+                android:textColor="?attr/mainTextColor"/>
         </LinearLayout>
 
         <LinearLayout
@@ -71,7 +81,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:background="@color/white"
             android:layout_marginTop="@dimen/list_item_margin"
             android:orientation="vertical">
 
@@ -88,7 +97,7 @@
                     android:gravity="start|center"
                     android:layout_gravity="center"
                     android:text="@string/caption_from"
-
+                    android:textColor="?attr/mainTextColor"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
                 <TextView
@@ -99,7 +108,7 @@
                     android:gravity="start|center"
                     android:layout_gravity="center"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?attr/colorPrimary"
+                    android:textColor="?attr/mainTextColor"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -119,6 +128,7 @@
                     android:gravity="start|center"
                     android:text="@string/caption_until"
                     android:layout_gravity="center"
+                    android:textColor="?attr/mainTextColor"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
                 <TextView
@@ -129,10 +139,11 @@
                     android:gravity="start|center"
                     android:layout_gravity="center"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?attr/colorPrimary"
+                    android:textColor="?attr/mainTextColor"
                     android:textStyle="bold" />
             </LinearLayout>
 
+        </LinearLayout>
 
         </LinearLayout>
 

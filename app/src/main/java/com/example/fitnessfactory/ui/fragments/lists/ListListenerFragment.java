@@ -83,7 +83,7 @@ public abstract class ListListenerFragment<
 
     protected void initComponents() {
         getFAB().setOnMenuButtonClickListener(view -> showEditorActivity(getNewItem()));
-        GuiUtils.initListView(getBaseActivity(), getRecyclerView(), true);
+        GuiUtils.initListView(getBaseActivity(), getRecyclerView(), false);
         GuiUtils.setListViewAnimation(getRecyclerView(), getFAB());
         touchListener = new RecyclerTouchListener(getBaseActivity(), getRecyclerView());
         getRecyclerView().addOnItemTouchListener(touchListener);

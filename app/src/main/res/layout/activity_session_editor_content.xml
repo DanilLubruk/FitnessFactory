@@ -132,7 +132,10 @@
             android:id="@+id/tlParticipants"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ilSessionType" />
+            android:layout_below="@+id/ilSessionType"
+            app:tabBackground="@color/white"
+            app:tabIndicatorColor="@color/royalBlue"
+            app:tabSelectedTextColor="@color/royalBlue"/>
 
         <androidx.viewpager2.widget.ViewPager2
             xmlns:android="http://schemas.android.com/apk/res/android"
