@@ -4,7 +4,6 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.managers.BaseManager;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.repositories.SessionViewRepository;
-import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionTypeRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.participantsData.ClientSessionsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.participantsData.CoachSessionsRepository;
@@ -55,7 +54,7 @@ public class SessionsDataManager extends BaseManager {
         return sessionsRepository.getSessionAsync(sessionId)
                 .flatMap(session -> {
                     sessionRef.set(session);
-                    return sessionTypeRepository.getSessionTypeByNameAsync(session.getSessionTypeId());
+                    return sessionTypeRepository.getSessionTypeByIdAsync(session.getSessionTypeId());
                 })
                 .flatMap(sessionType -> sessionsRepository.isSessionPackedAsync(sessionRef.getValue(), sessionType))
                 .flatMap(isPacked -> isPacked ?

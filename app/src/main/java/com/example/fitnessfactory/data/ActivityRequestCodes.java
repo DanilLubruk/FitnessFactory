@@ -8,4 +8,5 @@ public class ActivityRequestCodes {
     public static final int REQUEST_CLIENT = 23;
     public static final int REQUEST_COACH = 24;
     public static final int REQUEST_PERSONNEL = 25;
+    public static final int REQUEST_SESSION = 26;
 }

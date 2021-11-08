@@ -108,16 +108,16 @@ public class SessionTypeRepository extends BaseRepository {
         return true;
     }
 
-    public Single<SessionType> getSessionTypeByNameAsync(String sessionTypeName) {
+    public Single<SessionType> getSessionTypeByIdAsync(String sessionTypeId) {
         return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(getSessionTypeByName(sessionTypeName));
+                emitter.onSuccess(getSessionTypeById(sessionTypeId));
             }
         });
     }
 
-    private SessionType getSessionTypeByName(String sessionTypeName) throws Exception {
-        return getUniqueSessionTypeByName(sessionTypeName);
+    private SessionType getSessionTypeById(String sessionTypeId) throws Exception {
+        return Tasks.await(getCollection().document(sessionTypeId).get()).toObject(SessionType.class);
     }
 
     public Single<SessionType> getSessionTypeAsync(String typeId) {

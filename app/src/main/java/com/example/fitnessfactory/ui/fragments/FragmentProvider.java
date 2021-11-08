@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
+import com.example.fitnessfactory.ui.fragments.lists.DaySessionsListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.personnelList.AdminsListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.ClientsListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.personnelList.CoachesListFragment;
@@ -43,6 +44,10 @@ public class FragmentProvider {
             case AppConsts.FRAGMENT_SESSION_TYPES_ID:
                 curFragment = new SessionTypesListFragment();
                 fragmentName = AppConsts.FRAGMENT_SESSION_TYPES_NAME;
+                break;
+            case AppConsts.FRAGMENT_DAYS_SESSIONS_ID:
+                curFragment = new DaySessionsListFragment();
+                fragmentName = AppConsts.FRAGMENT_DAYS_SESSIONS_NAME;
                 break;
         }
 

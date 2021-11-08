@@ -1,5 +1,9 @@
 package com.example.fitnessfactory.ui.fragments.lists;
 
+import static android.app.Activity.RESULT_OK;
+import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM_ID;
+import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_SESSION;
+
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +21,8 @@ import com.example.fitnessfactory.data.events.PersonnelEmailUpdateEvent;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.observers.SingleDialogEvent;
 import com.example.fitnessfactory.data.views.SessionView;
-import com.example.fitnessfactory.databinding.TabFragmentCoachSessionsListBinding;
+import com.example.fitnessfactory.databinding.FragmentDaysSessionsListBinding;
+import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.activities.editors.SessionEditorActivity;
 import com.example.fitnessfactory.ui.adapters.SessionsListAdapter;
 import com.example.fitnessfactory.ui.viewholders.lists.SessionsListViewHolder;
@@ -36,7 +41,7 @@ import java.util.List;
 public class CoachSessionsListTabFragment extends ListListenerTabFragment<SessionView, SessionsListViewHolder, SessionsListAdapter> {
 
     private CoachSessionsListTabViewModel viewModel;
-    private TabFragmentCoachSessionsListBinding tabBinding;
+    private FragmentDaysSessionsListBinding tabBinding;
 
     @Override
     protected CoachSessionsListTabViewModel getViewModel() {
@@ -51,7 +56,6 @@ public class CoachSessionsListTabFragment extends ListListenerTabFragment<Sessio
     protected void initComponents() {
         super.initComponents();
         tabBinding.setModel(getViewModel());
-        getFAB().setVisibility(View.GONE);
         tabBinding.edtDate.setOnClickListener(view -> trySelectDate());
         getViewModel().setDefaultDate();
         getViewModel().getSessions().observe(this, this::setListData);
@@ -64,7 +68,7 @@ public class CoachSessionsListTabFragment extends ListListenerTabFragment<Sessio
 
     @Override
     protected void initBinding(LayoutInflater inflater, ViewGroup container) {
-        tabBinding = TabFragmentCoachSessionsListBinding.inflate(inflater, container, false);
+        tabBinding = FragmentDaysSessionsListBinding.inflate(inflater, container, false);
     }
 
     @Override
@@ -128,7 +132,22 @@ public class CoachSessionsListTabFragment extends ListListenerTabFragment<Sessio
 
     @Override
     protected void openSelectionActivity() {
+        Intent intent = new Intent(getBaseActivity(), SelectionActivity.class);
+        intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, AppConsts.FRAGMENT_DAYS_SESSIONS_ID);
 
+        startActivityForResult(intent, REQUEST_SESSION);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_SESSION:
+                if (resultCode == RESULT_OK) {
+                    String sessionId = data.getStringExtra(AppConsts.SESSION_ID_EXTRA);
+                    getViewModel().addCoachToSession(sessionId);
+                }
+                break;
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

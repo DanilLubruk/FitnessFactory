@@ -55,7 +55,7 @@ public class SessionsRepository extends BaseRepository {
         long startTime = session.getStartTime().getTime();
         long endTime = session.getEndTime().getTime();
 
-        return Math.min(comparedStartTime, startTime) < Math.max(comparedEndTime, endTime);
+        return Math.max(comparedStartTime, startTime) <= Math.min(comparedEndTime, endTime);
     }
 
     public Single<Boolean> isSessionPackedAsync(Session session, SessionType sessionType) {

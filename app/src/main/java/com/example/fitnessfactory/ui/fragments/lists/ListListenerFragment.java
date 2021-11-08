@@ -29,7 +29,9 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-public abstract class ListListenerFragment<
+public abstract class
+
+ListListenerFragment<
         ItemType,
         ViewHolderType extends BaseRecyclerViewHolder<ItemType>,
         AdapterType extends ListAdapter<ItemType, ViewHolderType>> extends BaseFragment {

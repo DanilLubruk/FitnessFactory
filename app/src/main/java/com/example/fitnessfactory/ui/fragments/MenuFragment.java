@@ -68,7 +68,7 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
             //binding.tvGreeting.setText(user.getDisplayName() + " " + user.getEmail());
         }
         binding.calendarView.setRobotoCalendarListener(this);
-        binding.fabAddSession.setOnMenuButtonClickListener(view -> showSessionEditorActivity(new Session()));
+        binding.fabAddSession.setOnMenuButtonClickListener(view -> showSessionEditorActivity(new SessionView(new Session())));
         GuiUtils.initListView(getBaseActivity(), binding.rvSessions, false);
         GuiUtils.setListViewAnimation(binding.rvSessions, binding.fabAddSession);
         touchListener = new RecyclerTouchListener(getBaseActivity(), binding.rvSessions);
@@ -77,17 +77,17 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
         touchListener.setSwipeable(R.id.rowFG, R.id.rowBG, (viewId, position) -> {
             switch (viewId) {
                 case R.id.btnEdit:
-                    showSessionEditorActivity(daysSessionsAdapter.getItem(position).getSession());
+                    showSessionEditorActivity(daysSessionsAdapter.getItem(position));
                     break;
                 case R.id.btnDelete:
-                    askForDelete(daysSessionsAdapter.getItem(position).getSession());
+                    askForDelete(daysSessionsAdapter.getItem(position));
                     break;
             }
         });
         touchListener.setClickable(new RecyclerTouchListener.OnRowClickListener() {
             @Override
             public void onRowClicked(int position) {
-                showSessionEditorActivity(daysSessionsAdapter.getItem(position).getSession());
+                showSessionEditorActivity(daysSessionsAdapter.getItem(position));
             }
 
             @Override
@@ -96,9 +96,10 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
             }
         });
         viewModel.getSessions().observe(getBaseActivity(), this::updateDaysSessions);
+        viewModel.getDate().observe(getBaseActivity(), date -> viewModel.startDataListener());
     }
 
-    protected void askForDelete(Session item) {
+    protected void askForDelete(SessionView item) {
         subscribeInMainThread(
                 DialogUtils.showAskDialog(
                         getBaseActivity(),
@@ -118,7 +119,12 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
                 ));
     }
 
-    private void showSessionEditorActivity(Session session) {
+    private void showSessionEditorActivity(SessionView sessionView) {
+        if (sessionView == null) {
+            GuiUtils.showMessage(ResUtils.getString(R.string.message_error_session_null));
+            return;
+        }
+        Session session = sessionView.getSession();
         if (session == null) {
             GuiUtils.showMessage(ResUtils.getString(R.string.message_error_session_null));
             return;
@@ -155,7 +161,7 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
 
     @Override
     public void onDayClick(Date date) {
-        viewModel.startDaysSessionsDataListener(date);
+        viewModel.setDate(date);
     }
 
     @Override
@@ -204,7 +210,7 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
         super.onStart();
         EventBus.getDefault().register(this);
         initCalendarData();
-        viewModel.startDaysSessionsDataListener(getSelectedDate());
+        viewModel.setDate(getSelectedDate());
     }
 
     @Override
@@ -212,6 +218,6 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
         super.onStop();
         EventBus.getDefault().unregister(this);
         viewModel.stopCalendarDataListener();
-        viewModel.stopDaysSessionsDataListener();
+        viewModel.stopDataListener();
     }
 }
