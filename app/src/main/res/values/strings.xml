@@ -120,6 +120,7 @@
     <string name="title_todays_sessions">Today\'s sessions</string>
     <string name="caption_day">Day</string>
     <string name="caption_add">Add</string>
+    <string name="message_error_coach_not_have_gym">This coach doesn\'t work at this gym</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <string name="caption_user_null">User is not signed in</string>

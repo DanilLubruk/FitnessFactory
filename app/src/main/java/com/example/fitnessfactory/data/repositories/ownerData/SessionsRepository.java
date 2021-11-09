@@ -27,6 +27,20 @@ public class SessionsRepository extends BaseRepository {
         return SessionsCollection.getRoot();
     }
 
+    public Single<Boolean> doesCoachWorkAtSessionsGymAsync(String sessionId, List<String> gymsIds) {
+        return SingleCreate(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(doesCoachWorkAtSessionsGym(sessionId, gymsIds));
+            }
+        });
+    }
+
+    private boolean doesCoachWorkAtSessionsGym(String sessionId, List<String> gymsIds) throws ExecutionException, InterruptedException {
+        String sessionGym = Tasks.await(getCollection().document(sessionId).get()).getString(Session.GYM_ID_FIELD);
+
+        return gymsIds.contains(sessionGym);
+    }
+
     public Single<Boolean> doesSessionsTimeIntersectWithAnyAsync(String sessionId, List<String> sessionsIds) {
         return SingleCreate(emitter -> {
              if (!emitter.isDisposed()) {

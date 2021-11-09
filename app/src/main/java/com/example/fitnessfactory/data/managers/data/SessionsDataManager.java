@@ -58,7 +58,7 @@ public class SessionsDataManager extends BaseManager {
                 })
                 .flatMap(sessionType -> sessionsRepository.isSessionPackedAsync(sessionRef.getValue(), sessionType))
                 .flatMap(isPacked -> isPacked ?
-                        Single.error(new Exception(getSessionPackedMessage())):
+                        Single.error(new Exception(getSessionPackedMessage())) :
                         sessionsRepository.getAddClientBatchAsync(sessionId, clientId))
                 .flatMap(writeBatch -> clientSessionsRepository.getAddSessionBatchAsync(writeBatch, sessionId, clientId))
                 .flatMapCompletable(this::commitBatchCompletable);
@@ -70,8 +70,12 @@ public class SessionsDataManager extends BaseManager {
         return ownerCoachesRepository.getPersonnelIdByEmailAsync(coachEmail)
                 .flatMap(coachId -> {
                     coachIdRef.set(coachId);
-                    return coachSessionsRepository.getParticipantSessionsIdsAsync(coachId);
+                    return ownerCoachesRepository.getPersonnelGymsIdsByEmailAsync(coachEmail);
                 })
+                .flatMap(coachGymsIds -> sessionsRepository.doesCoachWorkAtSessionsGymAsync(sessionId, coachGymsIds))
+                .flatMap(doesCoachWork -> doesCoachWork ?
+                        coachSessionsRepository.getParticipantSessionsIdsAsync(coachIdRef.getValue()) :
+                        Single.error(new Exception(getCoachNotHaveGym())))
                 .flatMap(sessionsIds -> sessionsRepository.doesSessionsTimeIntersectWithAnyAsync(sessionId, sessionsIds))
                 .flatMap(doesIntersect -> doesIntersect ?
                         Single.error(new Exception(getCoachOccupiedMessage()))
@@ -120,5 +124,9 @@ public class SessionsDataManager extends BaseManager {
 
     private String getCoachOccupiedMessage() {
         return ResUtils.getString(R.string.message_error_coach_occupied);
+    }
+
+    private String getCoachNotHaveGym() {
+        return ResUtils.getString(R.string.message_error_coach_not_have_gym);
     }
 }
