@@ -20,6 +20,7 @@ import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.CurrentUserType;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.databinding.ActivityMainBinding;
+import com.example.fitnessfactory.system.FirebaseAuthManager;
 import com.example.fitnessfactory.ui.activities.editors.OrganisationInfoEditorActivity;
 import com.example.fitnessfactory.ui.fragments.FragmentProvider;
 import com.example.fitnessfactory.ui.viewmodels.MainActivityViewModel;
@@ -58,6 +59,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (CurrentUserType.isOwner() && AppPrefs.askForOrganisationName().getValue()) {
             showAskOrgNameDialog();
         }
+        viewModel.isCurrentUserOwner()
+                .observe(this, isOwner ->
+                        binding.navView.getMenu().getItem(R.id.nav_organisation).setVisible(isOwner));
     }
 
     private void showAskOrgNameDialog() {

@@ -52,12 +52,6 @@ public class AppModule {
 
     @Provides
     @AppScope
-    public FirebaseAuthManager provideFirebaseAuthManager() {
-        return new FirebaseAuthManager();
-    }
-
-    @Provides
-    @AppScope
     public OwnerGymRepository provideGymRepository() {
         return new OwnerGymRepository();
     }
@@ -290,5 +284,11 @@ public class AppModule {
     @AppScope
     public CoachDaysSessionsListDataListener provideCoachDaysSessionsListDataListener() {
         return new CoachDaysSessionsListDataListener();
+    }
+
+    @Provides
+    @AppScope
+    public FirebaseAuthManager provideFirebaseAuthManager(UserRepository userRepository) {
+        return new FirebaseAuthManager(userRepository);
     }
 }

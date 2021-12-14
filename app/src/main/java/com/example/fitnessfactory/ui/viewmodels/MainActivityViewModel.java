@@ -15,6 +15,8 @@ public class MainActivityViewModel extends BaseViewModel {
     FirebaseAuthManager authManager;
     @Inject
     OrganisationInfoRepository organisationInfoRepository;
+    @Inject
+    FirebaseAuthManager firebaseAuthManager;
 
     public MainActivityViewModel() {
         FFApp.get().getAppComponent().inject(this);
@@ -33,5 +35,16 @@ public class MainActivityViewModel extends BaseViewModel {
 
     public void setOrganisationName(String organisationName) {
         subscribeInIOThread(organisationInfoRepository.setOrganisationNameAsync(organisationName));
+    }
+
+    public SingleLiveEvent<Boolean> isCurrentUserOwner() {
+        SingleLiveEvent<Boolean> observable = new SingleLiveEvent<>();
+
+        subscribeInIOThread(firebaseAuthManager.isCurrentUserOwnerAsync(),
+                new SingleData<>(
+                        observable::setValue,
+                        throwable -> getErrorHandler().handleError(observable, throwable)));
+
+        return observable;
     }
 }

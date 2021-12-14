@@ -6,6 +6,7 @@ import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.models.AppUser;
+import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.data.security.ObfuscateData;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
@@ -21,6 +22,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.concurrent.ExecutionException;
 
+import javax.inject.Inject;
+
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
@@ -29,9 +32,33 @@ public class FirebaseAuthManager {
 
     private final FirebaseAuth mAuth;
     private boolean signInInProcess = false;
+    private final UserRepository userRepository;
 
-    public FirebaseAuthManager() {
+    @Inject
+    public FirebaseAuthManager(UserRepository userRepository) {
+        this.userRepository = userRepository;
         mAuth = FirebaseAuth.getInstance();
+    }
+
+    public Single<Boolean> isCurrentUserOwnerAsync() {
+        return getCurrentUserEmail()
+                .flatMap(userEmail -> userRepository.getAppUserByEmailAsync(userEmail))
+                .flatMap(user -> Single.just(user.getId().equals(AppPrefs.gymOwnerId().getValue())));
+    }
+
+    private Single<String> getCurrentUserEmail() {
+        return Single.create(emitter -> {
+            if (mAuth == null || mAuth.getCurrentUser() == null) {
+                if (!emitter.isDisposed()) {
+                    emitter.onError(new Exception(ResUtils.getString(R.string.caption_user_null)));
+                }
+                return;
+            }
+
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(mAuth.getCurrentUser().getEmail());
+            }
+        });
     }
 
     public Single<Boolean> isLoggedIn() {
