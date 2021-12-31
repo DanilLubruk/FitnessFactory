@@ -2,12 +2,12 @@
 buildscript {
     repositories {
         google()
-        jcenter()
         mavenCentral()
+        jcenter()
         maven {   url "https://maven.google.com"  }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath 'com.android.tools.build:gradle:7.0.2'
         classpath 'com.google.gms:google-services:4.3.10'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -21,8 +21,8 @@ allprojects {
         maven { url 'https://dl.bintray.com/amulyakhare/maven' }
         maven { url "https://clojars.org/repo/" }
         maven {   url "https://maven.google.com"  }
-        jcenter()
         mavenCentral()
+        jcenter()
     }
 }
 

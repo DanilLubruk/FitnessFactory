@@ -2,6 +2,8 @@ package com.example.fitnessfactory.data;
 
 public class FirestoreCollections {
 
+    public static final String APP_DATA_COLLECTION = "appData";
+
     public static final String USERS_COLLECTION = "users";
 
     public static final String GYMS_COLLECTION = "gyms";

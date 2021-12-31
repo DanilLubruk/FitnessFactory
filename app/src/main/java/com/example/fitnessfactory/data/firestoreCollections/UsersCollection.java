@@ -5,6 +5,10 @@ import com.example.fitnessfactory.data.FirestoreCollections;
 public class UsersCollection {
 
     public static String getRoot() {
-        return FirestoreCollections.USERS_COLLECTION;
+        return FirestoreCollections.APP_DATA_COLLECTION +
+                "/" +
+                FirestoreCollections.USERS_COLLECTION +
+                "/" +
+                FirestoreCollections.USERS_COLLECTION;
     }
 }
