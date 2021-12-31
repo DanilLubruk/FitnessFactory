@@ -37,8 +37,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -59,9 +59,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (CurrentUserType.isOwner() && AppPrefs.askForOrganisationName().getValue()) {
             showAskOrgNameDialog();
         }
-        viewModel.isCurrentUserOwner()
-                .observe(this, isOwner ->
-                        binding.navView.getMenu().getItem(R.id.nav_organisation).setVisible(isOwner));
     }
 
     private void showAskOrgNameDialog() {
