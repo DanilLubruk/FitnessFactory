@@ -26,6 +26,7 @@ import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
 import com.example.fitnessfactory.data.repositories.SessionViewRepository;
 import com.example.fitnessfactory.data.repositories.access.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.access.CoachesAccessRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnersRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.participantsData.ClientSessionsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.ClientsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.participantsData.CoachSessionsRepository;
@@ -97,6 +98,12 @@ public class AppModule {
 
     @Provides
     @AppScope
+    public OwnersRepository provideOwnersRepository() {
+        return new OwnersRepository();
+    }
+
+    @Provides
+    @AppScope
     public GymsAccessManager provideGymsAccessManager(SessionsRepository sessionsRepository,
                                                       OwnerGymRepository ownerGymRepository,
                                                       OwnerAdminsRepository ownerAdminsRepository,
@@ -115,8 +122,9 @@ public class AppModule {
     public AuthManager provideAuthManager(UserRepository userRepository,
                                           AdminsAccessRepository adminsAccessRepository,
                                           FirebaseAuthManager authManager,
-                                          OrganisationInfoRepository organisationInfoRepository) {
-        return new AuthManager(userRepository, adminsAccessRepository, authManager, organisationInfoRepository);
+                                          OrganisationInfoRepository organisationInfoRepository,
+                                          OwnersRepository ownersRepository) {
+        return new AuthManager(userRepository, adminsAccessRepository, authManager, organisationInfoRepository, ownersRepository);
     }
 
     @Provides

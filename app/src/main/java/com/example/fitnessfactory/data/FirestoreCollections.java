@@ -24,5 +24,5 @@ public class FirestoreCollections {
 
     public static final String SESSIONS_COLLECTION = "sessions";
 
-    public static final String OWNERS_COLLECTION = "owner";
+    public static final String OWNERS_COLLECTION = "owners";
 }

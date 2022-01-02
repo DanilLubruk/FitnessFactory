@@ -7,6 +7,7 @@ import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.repositories.access.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.OrganisationInfoRepository;
 import com.example.fitnessfactory.data.repositories.UserRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnersRepository;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
 import com.example.fitnessfactory.system.SafeReference;
 
@@ -23,16 +24,19 @@ public class AuthManager extends BaseManager {
     AdminsAccessRepository adminsAccessRepository;
     FirebaseAuthManager authManager;
     OrganisationInfoRepository organisationInfoRepository;
+    OwnersRepository ownersRepository;
 
     @Inject
     public AuthManager(UserRepository userRepository,
                        AdminsAccessRepository adminsAccessRepository,
                        FirebaseAuthManager authManager,
-                       OrganisationInfoRepository organisationInfoRepository) {
+                       OrganisationInfoRepository organisationInfoRepository,
+                       OwnersRepository ownersRepository) {
         this.userRepository = userRepository;
         this.adminsAccessRepository = adminsAccessRepository;
         this.authManager = authManager;
         this.organisationInfoRepository = organisationInfoRepository;
+        this.ownersRepository = ownersRepository;
     }
 
     public Single<List<AppUser>> handleSignIn(Intent signInData) {
@@ -51,7 +55,8 @@ public class AuthManager extends BaseManager {
                                 userRepository.getAppUserByEmailAsync(user.getValue().getEmail()) :
                                 userRepository.registerUser(
                                         user.getValue().getEmail(),
-                                        user.getValue().getName()))
+                                        user.getValue().getName())
+                                .flatMap(authUser -> ownersRepository.setOwnersIdAsync(authUser)))
                 .observeOn(getIOScheduler())
                 .flatMap(authUser -> adminsAccessRepository.getOwnersByInvitedEmail(authUser))
                 .observeOn(getIOScheduler())
