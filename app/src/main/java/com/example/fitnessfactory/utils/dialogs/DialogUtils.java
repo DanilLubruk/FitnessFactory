@@ -13,6 +13,9 @@ import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.CurrentUserType;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.activities.BaseActivity;
+import com.example.fitnessfactory.ui.components.filters.ValueCheckers.EmailValueChecker;
+import com.example.fitnessfactory.ui.components.filters.ValueCheckers.NoConditionChecker;
+import com.example.fitnessfactory.ui.components.filters.ValueCheckers.ValueChecker;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
@@ -121,14 +124,30 @@ public class DialogUtils {
                 ResUtils.getString(R.string.title_invite_personnel),
                 ResUtils.getString(R.string.caption_email),
                 ResUtils.getString(R.string.caption_send),
-                ResUtils.getString(R.string.caption_cancel));
+                ResUtils.getString(R.string.caption_cancel),
+                EmailValueChecker.getInstance());
     }
 
     public static Single<String> showOneLineEditDialog(BaseActivity context,
+                                                        String title,
+                                                        String hint,
+                                                        String okCaption,
+                                                        String cancelCaption) {
+        return showOneLineEditDialog(
+                context,
+                title,
+                hint,
+                okCaption,
+                cancelCaption,
+                NoConditionChecker.getInstance());
+    }
+
+    private static Single<String> showOneLineEditDialog(BaseActivity context,
                                                        String title,
                                                        String hint,
                                                        String okCaption,
-                                                       String cancelCaption) {
+                                                       String cancelCaption,
+                                                       ValueChecker valueChecker) {
         return Single.create(emitter -> {
             RelativeLayout dialogView =
                     getOneLineDialogViewBuilder()
@@ -152,7 +171,11 @@ public class DialogUtils {
             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((view) -> {
                 TextInputEditText edtField = dialogView.findViewById(R.id.edtField);
                 String value = edtField.getText() != null ? edtField.getText().toString() : "";
-                handleInput(value.trim(), alertDialog, emitter);
+                if (!valueChecker.isValueValid(value)) {
+                    GuiUtils.showMessage(valueChecker.getErrorMessage());
+                } else {
+                    handleInput(value.trim(), alertDialog, emitter);
+                }
             });
         });
     }

@@ -9,7 +9,7 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.ui.fragments.lists.DaySessionsListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.personnelList.AdminsListFragment;
-import com.example.fitnessfactory.ui.fragments.lists.ClientsListFragment;
+import com.example.fitnessfactory.ui.fragments.lists.personnelList.ClientsListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.personnelList.CoachesListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.GymsListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.SessionTypesListFragment;

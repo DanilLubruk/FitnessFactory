@@ -17,7 +17,6 @@ public class AdminListViewModel extends PersonnelListViewModel {
         super(accessManager, dataManager, dataListener);
     }
 
-
     @Override
     protected String getItemNullClause() {
         return getErrorMessageBreak().concat(ResUtils.getString(R.string.message_error_admin_null));

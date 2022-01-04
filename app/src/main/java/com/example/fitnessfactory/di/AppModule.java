@@ -15,6 +15,7 @@ import com.example.fitnessfactory.data.dataListeners.SessionTypesListDataListene
 import com.example.fitnessfactory.data.dataListeners.SessionsCalendarDataListener;
 import com.example.fitnessfactory.data.dataListeners.SessionsCoachesListDataListener;
 import com.example.fitnessfactory.data.managers.access.AdminsAccessManager;
+import com.example.fitnessfactory.data.managers.access.ClientsAccessManager;
 import com.example.fitnessfactory.data.managers.data.AdminsDataManager;
 import com.example.fitnessfactory.data.managers.AuthManager;
 import com.example.fitnessfactory.data.managers.access.CoachesAccessManager;
@@ -25,7 +26,9 @@ import com.example.fitnessfactory.data.managers.data.SessionTypesDataManager;
 import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
 import com.example.fitnessfactory.data.repositories.SessionViewRepository;
 import com.example.fitnessfactory.data.repositories.access.AdminsAccessRepository;
+import com.example.fitnessfactory.data.repositories.access.ClientsAccessRepository;
 import com.example.fitnessfactory.data.repositories.access.CoachesAccessRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerClientsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnersRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.participantsData.ClientSessionsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.ClientsRepository;
@@ -277,9 +280,17 @@ public class AppModule {
 
     @Provides
     @AppScope
-    public ClientsDataManager provideClientsDataManager(ClientsRepository clientsRepository,
-                                                        ClientSessionsRepository clientSessionsRepository) {
-        return new ClientsDataManager(clientsRepository, clientSessionsRepository);
+    public OwnerClientsRepository provideOwnerClientsRepository() {
+        return new OwnerClientsRepository();
+    }
+
+    @Provides
+    @AppScope
+    public ClientsDataManager provideClientsDataManager(OwnerClientsRepository clientsRepository,
+                                                        ClientSessionsRepository clientSessionsRepository,
+                                                        UserRepository userRepository,
+                                                        OwnerGymRepository ownerGymRepository) {
+        return new ClientsDataManager(clientsRepository, clientSessionsRepository, userRepository, ownerGymRepository);
     }
 
     @Provides
@@ -298,5 +309,19 @@ public class AppModule {
     @AppScope
     public FirebaseAuthManager provideFirebaseAuthManager(UserRepository userRepository) {
         return new FirebaseAuthManager(userRepository);
+    }
+
+    @Provides
+    @AppScope
+    public ClientsAccessRepository provideClientsAccessRepository() {
+        return new ClientsAccessRepository();
+    }
+
+    @Provides
+    @AppScope
+    public ClientsAccessManager provideClientsAccessManager(ClientsAccessRepository accessRepository,
+                                                            OwnerClientsRepository ownerRepository,
+                                                            ClientSessionsRepository clientSessionsRepository) {
+        return new ClientsAccessManager(accessRepository, ownerRepository, clientSessionsRepository);
     }
 }

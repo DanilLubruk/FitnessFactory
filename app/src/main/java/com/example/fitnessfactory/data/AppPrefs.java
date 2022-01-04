@@ -47,6 +47,13 @@ public class AppPrefs {
                 .build();
     }
 
+    public static BooleanPreference askToSendClientEmailInvite() {
+        return BooleanPreference
+                .builder("ask_for_sending_client_email_invite")
+                .setDefaultValue(true)
+                .build();
+    }
+
     public static StringPreference currencySign() {
         return StringPreference
                 .builder("currency_sign_pref")

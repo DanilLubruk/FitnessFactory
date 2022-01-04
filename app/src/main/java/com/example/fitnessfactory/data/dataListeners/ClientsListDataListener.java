@@ -14,7 +14,7 @@ import java.util.List;
 
 import io.reactivex.Single;
 
-public class ClientsListDataListener extends BaseDataListener {
+public class ClientsListDataListener extends BaseDataListener implements DataListener {
 
     @Override
     protected String getRoot() {
