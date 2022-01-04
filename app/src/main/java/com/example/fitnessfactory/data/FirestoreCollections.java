@@ -12,6 +12,8 @@ public class FirestoreCollections {
 
     public static final String COACHES_ACCESS_COLLECTION = "coachesAccess";
 
+    public static final String CLIENTS_ACCESS_COLLECTION = "clientsAccess";
+
     public static final String ADMINS = "admins";
 
     public static final String COACHES = "coaches";

@@ -48,6 +48,6 @@ public class CoachesAccessManager extends PersonnelAccessManager {
 
     @Override
     protected String getAlreadyRegisteredMessage() {
-        return ResUtils.getString(R.string.message_admin_is_registered);
+        return ResUtils.getString(R.string.message_coach_is_registered);
     }
 }
