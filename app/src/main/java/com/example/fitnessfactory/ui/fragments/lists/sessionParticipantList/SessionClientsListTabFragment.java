@@ -11,6 +11,7 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.SessionIdUpdateEvent;
 import com.example.fitnessfactory.data.events.SessionsClientsListDataListenerEvent;
+import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Client;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.adapters.ClientsListAdapter;
@@ -25,7 +26,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
-public class SessionClientsListTabFragment extends ListListenerTabFragment<Client, ClientsListViewHolder, ClientsListAdapter> {
+public class SessionClientsListTabFragment extends ListListenerTabFragment<AppUser, ClientsListViewHolder, ClientsListAdapter> {
 
     private SessionClientsListTabViewModel viewModel;
 
@@ -45,23 +46,23 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<Clien
     }
 
     @Override
-    protected ClientsListAdapter createNewAdapter(List<Client> listData) {
+    protected ClientsListAdapter createNewAdapter(List<AppUser> listData) {
         return new ClientsListAdapter(listData, R.layout.one_bg_button_list_item_view);
     }
 
     @Override
-    protected void onListRowClicked(Client client) {
+    protected void onListRowClicked(AppUser client) {
 
     }
 
     @Override
-    protected void showEditorActivity(Client item) {
+    protected void showEditorActivity(AppUser item) {
 
     }
 
     @Override
-    protected Client getNewItem() {
-        return new Client();
+    protected AppUser getNewItem() {
+        return new AppUser();
     }
 
     @Override

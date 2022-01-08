@@ -2,6 +2,7 @@ package com.example.fitnessfactory.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -39,6 +40,7 @@ public class AuthActivity extends BaseActivity {
         setFullScreen();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_auth);
         viewModel = new ViewModelProvider(this, new AuthViewModelFactory()).get(AuthViewModel.class);
+        Log.d("TAG", "init screen");
         super.onCreate(savedInstanceState);
     }
 
@@ -51,6 +53,7 @@ public class AuthActivity extends BaseActivity {
     public void initComponents() {
         super.initComponents();
         viewModel.isLoggedIn().observe(this, isLoggedIn -> {
+            Log.d("TAG", "received result");
            if (isLoggedIn) {
                showMainActivity();
            }

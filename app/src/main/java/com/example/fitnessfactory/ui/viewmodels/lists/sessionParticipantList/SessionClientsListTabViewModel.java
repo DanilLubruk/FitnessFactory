@@ -7,9 +7,11 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.dataListeners.ArgDataListener;
 import com.example.fitnessfactory.data.dataListeners.SessionClientsListDataListener;
 import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
+import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Client;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.observers.SingleData;
+import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.ClientsRepository;
 import com.example.fitnessfactory.utils.ResUtils;
 
@@ -19,29 +21,32 @@ import javax.inject.Inject;
 
 import io.reactivex.Completable;
 
-public class SessionClientsListTabViewModel extends SessionParticipantListTabViewModel<Client> {
+public class SessionClientsListTabViewModel extends SessionParticipantListTabViewModel<AppUser> {
 
     private final SessionClientsListDataListener dataListener;
     private final ClientsRepository clientsRepository;
+    private final UserRepository userRepository;
 
-    private final MutableLiveData<List<Client>> clients = new MutableLiveData<>();
+    private final MutableLiveData<List<AppUser>> clients = new MutableLiveData<>();
 
     @Inject
     public SessionClientsListTabViewModel(SessionsDataManager sessionsDataManager,
                                           ClientsRepository clientsRepository,
+                                          UserRepository userRepository,
                                           SessionClientsListDataListener dataListener) {
         super(sessionsDataManager);
         this.clientsRepository = clientsRepository;
+        this.userRepository = userRepository;
         this.dataListener = dataListener;
     }
 
-    public LiveData<List<Client>> getClients() {
+    public LiveData<List<AppUser>> getClients() {
         return clients;
     }
 
     public void resetClientsList(List<String> clientsIds) {
         subscribeInIOThread(
-                clientsRepository.getClientsAsync(clientsIds),
+                userRepository.getUsersByIdsAsync(clientsIds),
                 new SingleData<>(clients::setValue, getErrorHandler()::handleError));
     }
 
@@ -66,7 +71,7 @@ public class SessionClientsListTabViewModel extends SessionParticipantListTabVie
     }
 
     @Override
-    protected String getParticipantId(Client client) {
+    protected String getParticipantId(AppUser client) {
         return client.getId();
     }
 

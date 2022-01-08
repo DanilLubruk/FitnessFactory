@@ -29,6 +29,26 @@ public class ClientsRepository extends BaseRepository {
         return ClientsCollection.getRoot();
     }
 
+    public Single<List<String>> getClientsEmailsAsync(List<String> clientsIds) {
+        return SingleCreate(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getClientsEmails(clientsIds));
+            }
+        });
+    }
+
+    private List<String> getClientsEmails(List<String> clientsIds) throws ExecutionException, InterruptedException {
+        List<String> emails = new ArrayList<>();
+
+        for (Client client : getClients(clientsIds)) {
+            if (client != null) {
+                emails.add(client.getEmail());
+            }
+        }
+
+        return emails;
+    }
+
     public Single<List<Client>> getClientsAsync(List<String> clientsIds) {
         return SingleCreate(emitter -> {
            if (!emitter.isDisposed()) {

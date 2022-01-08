@@ -4,10 +4,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Client;
 import com.example.fitnessfactory.ui.viewholders.BaseRecyclerViewHolder;
 
-public class ClientsListViewHolder extends BaseRecyclerViewHolder<Client> {
+public class ClientsListViewHolder extends BaseRecyclerViewHolder<AppUser> {
 
     private TextView tvName;
     private TextView tvEmail;
@@ -17,7 +18,7 @@ public class ClientsListViewHolder extends BaseRecyclerViewHolder<Client> {
     }
 
     @Override
-    public void setData(Client data) {
+    public void setData(AppUser data) {
         tvName.setText(data.getName());
         tvEmail.setText(data.getEmail());
     }

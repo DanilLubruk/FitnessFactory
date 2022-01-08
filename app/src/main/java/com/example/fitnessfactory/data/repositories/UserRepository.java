@@ -1,7 +1,6 @@
 package com.example.fitnessfactory.data.repositories;
 import com.example.fitnessfactory.data.firestoreCollections.UsersCollection;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.models.Personnel;
 import com.example.fitnessfactory.utils.UsersUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
@@ -38,9 +37,17 @@ public class UserRepository extends BaseRepository {
         });
     }
 
+    public Single<List<AppUser>> getUsersByIdsAsync(List<String> usersIds) {
+        return SingleCreate(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getAppUsersByIds(usersIds));
+            }
+        });
+    }
+
     public Single<List<AppUser>> getOwnersByIds(List<String> ownerIds, String currentUserId) {
         return SingleCreate(emitter -> {
-            List<AppUser> owners = getAppUsersByOwnerIds(ownerIds);
+            List<AppUser> owners = getAppUsersByIds(ownerIds);
             owners = UsersUtils.makeCurrentUserFirstInList(owners, currentUserId);
 
             if (!emitter.isDisposed()) {
@@ -49,8 +56,11 @@ public class UserRepository extends BaseRepository {
         });
     }
 
-    private List<AppUser> getAppUsersByOwnerIds(List<String> ownerIds) throws Exception {
-        QuerySnapshot querySnapshot = Tasks.await(newQuery().whereIdIn(ownerIds).build().get());
+    private List<AppUser> getAppUsersByIds(List<String> usersIds) throws Exception {
+        if (usersIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+        QuerySnapshot querySnapshot = Tasks.await(newQuery().whereIdIn(usersIds).build().get());
 
         return querySnapshot.toObjects(AppUser.class);
     }
