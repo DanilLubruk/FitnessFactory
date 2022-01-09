@@ -49,6 +49,24 @@ public class ClientsRepository extends BaseRepository {
         return emails;
     }
 
+    public Single<String> getClientIdAsync(String clientEmail) {
+        return SingleCreate(emitter -> {
+           if (!emitter.isDisposed()) {
+               emitter.onSuccess(getClientIdByEmail(clientEmail));
+           }
+        });
+    }
+
+    private String getClientIdByEmail(String clientEmail) throws Exception {
+        Client client =
+                getUniqueEntity(
+                newQuery().whereEmailEquals(clientEmail).build(),
+                Client.class,
+                getClientNotUniqueMessage());
+
+        return client.getId();
+    }
+
     public Single<List<Client>> getClientsAsync(List<String> clientsIds) {
         return SingleCreate(emitter -> {
            if (!emitter.isDisposed()) {

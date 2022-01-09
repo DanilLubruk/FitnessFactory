@@ -67,7 +67,7 @@ public class ClientsListFragment extends PersonnelListFragment {
     @Override
     protected Intent getResultIntent(AppUser personnel) {
         Intent intent = new Intent();
-        intent.putExtra(AppConsts.CLIENT_ID_EXTRA, personnel.getId());
+        intent.putExtra(AppConsts.CLIENT_EMAIL_EXTRA, personnel.getEmail());
 
         return intent;
     }

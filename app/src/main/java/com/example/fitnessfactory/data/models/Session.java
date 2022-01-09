@@ -14,7 +14,7 @@ public class Session {
     public static final String GYM_ID_FIELD = "gymId";
     public static final String SESSION_TYPE_ID_FIELD = "sessionTypeId";
     public static final String COACHES_IDS_FIELD = "coachesIds";
-    public static final String CLIENTS_IDS_FIELD = "clientsIds";
+    public static final String CLIENTS_EMAILS_FIELD = "clientsEmails";
 
     private String id;
     private Date date;
@@ -23,7 +23,7 @@ public class Session {
     private String gymId;
     private String sessionTypeId;
     private List<String> coachesIds;
-    private List<String> clientsIds;
+    private List<String> clientsEmails;
 
     public Session() {
 
@@ -45,7 +45,7 @@ public class Session {
         this.setGymId(session.getGymId());
         this.setSessionTypeId(session.getSessionTypeId());
         this.setCoachesIds(session.getCoachesIds());
-        this.setClientsIds(session.getClientsIds());
+        this.setClientsEmails(session.getClientsEmails());
     }
 
     public boolean equals(Session session) {
@@ -132,12 +132,12 @@ public class Session {
         this.coachesIds = coachesIds;
     }
 
-    public List<String> getClientsIds() {
-        return clientsIds;
+    public List<String> getClientsEmails() {
+        return clientsEmails;
     }
 
-    public void setClientsIds(List<String> clientsIds) {
-        this.clientsIds = clientsIds;
+    public void setClientsEmails(List<String> clientsEmails) {
+        this.clientsEmails = clientsEmails;
     }
 
     private void correctStartEndTimeDay() {

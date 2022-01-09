@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.dataListeners.ArgDataListener;
 import com.example.fitnessfactory.data.dataListeners.SessionClientsListDataListener;
+import com.example.fitnessfactory.data.managers.data.ClientsDataManager;
 import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.models.Client;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.repositories.UserRepository;
@@ -23,9 +23,9 @@ import io.reactivex.Completable;
 
 public class SessionClientsListTabViewModel extends SessionParticipantListTabViewModel<AppUser> {
 
+    private final UserRepository userRepository;
     private final SessionClientsListDataListener dataListener;
     private final ClientsRepository clientsRepository;
-    private final UserRepository userRepository;
 
     private final MutableLiveData<List<AppUser>> clients = new MutableLiveData<>();
 
@@ -44,9 +44,9 @@ public class SessionClientsListTabViewModel extends SessionParticipantListTabVie
         return clients;
     }
 
-    public void resetClientsList(List<String> clientsIds) {
+    public void resetClientsList(List<String> clientsEmails) {
         subscribeInIOThread(
-                userRepository.getUsersByIdsAsync(clientsIds),
+                userRepository.getUsersByEmailsAsync(clientsEmails),
                 new SingleData<>(clients::setValue, getErrorHandler()::handleError));
     }
 
@@ -56,23 +56,23 @@ public class SessionClientsListTabViewModel extends SessionParticipantListTabVie
     }
 
     @Override
-    protected Completable getAddParticipantAction(String sessionId, String clientId) {
-        return sessionsDataManager.addClientToSession(sessionId, clientId);
+    protected Completable getAddParticipantAction(String sessionId, String clientEmail) {
+        return sessionsDataManager.addClientToSession(sessionId, clientEmail);
     }
 
     @Override
-    protected Completable getDeleteParticipantAction(String sessionId, String clientId) {
-        return sessionsDataManager.removeClientFromSession(sessionId, clientId);
+    protected Completable getDeleteParticipantAction(String sessionId, String clientEmail) {
+        return sessionsDataManager.removeClientFromSession(sessionId, clientEmail);
     }
 
     @Override
     protected List<String> getParticipantsList(Session session) {
-        return session.getClientsIds();
+        return session.getClientsEmails();
     }
 
     @Override
     protected String getParticipantId(AppUser client) {
-        return client.getId();
+        return client.getEmail();
     }
 
     @Override

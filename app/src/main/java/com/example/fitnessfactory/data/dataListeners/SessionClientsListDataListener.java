@@ -5,9 +5,7 @@ import android.util.Log;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.SessionsClientsListDataListenerEvent;
-import com.example.fitnessfactory.data.firestoreCollections.ClientsCollection;
 import com.example.fitnessfactory.data.firestoreCollections.SessionsCollection;
-import com.example.fitnessfactory.data.models.Client;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -50,7 +48,7 @@ public class SessionClientsListDataListener extends BaseDataListener implements 
                                 }
 
                                 Session session = sessions.get(0);
-                                EventBus.getDefault().post(new SessionsClientsListDataListenerEvent(session.getClientsIds()));
+                                EventBus.getDefault().post(new SessionsClientsListDataListenerEvent(session.getClientsEmails()));
                             }));
 
             if (!emitter.isDisposed()) {

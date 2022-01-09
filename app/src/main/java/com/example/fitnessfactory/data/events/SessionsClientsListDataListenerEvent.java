@@ -4,13 +4,13 @@ import java.util.List;
 
 public class SessionsClientsListDataListenerEvent {
 
-    private List<String> clientsIds;
+    private List<String> clientsEmails;
 
     public SessionsClientsListDataListenerEvent(List<String> clientsIds) {
-        this.clientsIds = clientsIds;
+        this.clientsEmails = clientsIds;
     }
 
-    public List<String> getClientsIds() {
-        return clientsIds;
+    public List<String> getClientsEmails() {
+        return clientsEmails;
     }
 }

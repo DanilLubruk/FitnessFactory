@@ -243,14 +243,18 @@ public class AppModule {
                                                           ClientSessionsRepository clientSessionsRepository,
                                                           CoachSessionsRepository coachSessionsRepository,
                                                           OwnerCoachesRepository ownerCoachesRepository,
-                                                          SessionViewRepository sessionViewRepository) {
+                                                          SessionViewRepository sessionViewRepository,
+                                                          OwnerClientsRepository ownerClientsRepository,
+                                                          ClientsRepository clientsRepository) {
         return new SessionsDataManager(
                 sessionsRepository,
                 sessionTypeRepository,
                 clientSessionsRepository,
                 coachSessionsRepository,
                 ownerCoachesRepository,
-                sessionViewRepository);
+                sessionViewRepository,
+                ownerClientsRepository,
+                clientsRepository);
     }
 
     @Provides

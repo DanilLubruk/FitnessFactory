@@ -12,7 +12,6 @@ import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.SessionIdUpdateEvent;
 import com.example.fitnessfactory.data.events.SessionsClientsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.models.Client;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.adapters.ClientsListAdapter;
 import com.example.fitnessfactory.ui.fragments.lists.ListListenerTabFragment;
@@ -83,8 +82,8 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<AppUs
         switch (requestCode) {
             case REQUEST_CLIENT:
                 if (resultCode == RESULT_OK) {
-                    String clientId = data.getStringExtra(AppConsts.CLIENT_ID_EXTRA);
-                    getViewModel().addParticipantToSession(clientId);
+                    String clientEmail = data.getStringExtra(AppConsts.CLIENT_EMAIL_EXTRA);
+                    getViewModel().addParticipantToSession(clientEmail);
                 }
                 break;
         }
@@ -93,7 +92,7 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<AppUs
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSessionsClientsListDataListenerEvent(SessionsClientsListDataListenerEvent sessionsClientsListDataListenerEvent) {
-        getViewModel().resetClientsList(sessionsClientsListDataListenerEvent.getClientsIds());
+        getViewModel().resetClientsList(sessionsClientsListDataListenerEvent.getClientsEmails());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)

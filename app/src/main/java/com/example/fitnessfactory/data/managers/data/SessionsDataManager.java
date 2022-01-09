@@ -4,6 +4,8 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.managers.BaseManager;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.repositories.SessionViewRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.ClientsRepository;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnerClientsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionTypeRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.participantsData.ClientSessionsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.participantsData.CoachSessionsRepository;
@@ -27,6 +29,8 @@ public class SessionsDataManager extends BaseManager {
     private final CoachSessionsRepository coachSessionsRepository;
     private final OwnerCoachesRepository ownerCoachesRepository;
     private final SessionViewRepository sessionViewRepository;
+    private final OwnerClientsRepository ownerClientsRepository;
+    private final ClientsRepository clientsRepository;
 
     @Inject
     public SessionsDataManager(SessionsRepository sessionsRepository,
@@ -34,13 +38,17 @@ public class SessionsDataManager extends BaseManager {
                                ClientSessionsRepository clientSessionsRepository,
                                CoachSessionsRepository coachSessionsRepository,
                                OwnerCoachesRepository ownerCoachesRepository,
-                               SessionViewRepository sessionViewRepository) {
+                               SessionViewRepository sessionViewRepository,
+                               OwnerClientsRepository ownerClientsRepository,
+                               ClientsRepository clientsRepository) {
         this.sessionsRepository = sessionsRepository;
         this.sessionTypeRepository = sessionTypeRepository;
         this.clientSessionsRepository = clientSessionsRepository;
         this.coachSessionsRepository = coachSessionsRepository;
         this.ownerCoachesRepository = ownerCoachesRepository;
         this.sessionViewRepository = sessionViewRepository;
+        this.ownerClientsRepository = ownerClientsRepository;
+        this.clientsRepository = clientsRepository;
     }
 
     public Single<SessionView> getSessionView(String sessionId) {
@@ -48,8 +56,9 @@ public class SessionsDataManager extends BaseManager {
                 .flatMap(sessionViewRepository::getSessionViewAsync);
     }
 
-    public Completable addClientToSession(String sessionId, String clientId) {
+    public Completable addClientToSession(String sessionId, String clientEmail) {
         SafeReference<Session> sessionRef = new SafeReference<>();
+        SafeReference<WriteBatch> addBatch = new SafeReference<>();
 
         return sessionsRepository.getSessionAsync(sessionId)
                 .flatMap(session -> {
@@ -59,8 +68,12 @@ public class SessionsDataManager extends BaseManager {
                 .flatMap(sessionType -> sessionsRepository.isSessionPackedAsync(sessionRef.getValue(), sessionType))
                 .flatMap(isPacked -> isPacked ?
                         Single.error(new Exception(getSessionPackedMessage())) :
-                        sessionsRepository.getAddClientBatchAsync(sessionId, clientId))
-                .flatMap(writeBatch -> clientSessionsRepository.getAddSessionBatchAsync(writeBatch, sessionId, clientId))
+                        sessionsRepository.getAddClientBatchAsync(sessionId, clientEmail))
+                .flatMap(writeBatch -> {
+                    addBatch.set(writeBatch);
+                    return clientsRepository.getClientIdAsync(clientEmail);
+                })
+                .flatMap(clientId -> clientSessionsRepository.getAddSessionBatchAsync(addBatch.getValue(), sessionId, clientId))
                 .flatMapCompletable(this::commitBatchCompletable);
     }
 
@@ -84,9 +97,15 @@ public class SessionsDataManager extends BaseManager {
                 .flatMapCompletable(this::commitBatchCompletable);
     }
 
-    public Completable removeClientFromSession(String sessionId, String clientId) {
-        return sessionsRepository.getRemoveClientBatchAsync(sessionId, clientId)
-                .flatMap(writeBatch -> clientSessionsRepository.getRemoveSessionBatchAsync(writeBatch, sessionId, clientId))
+    public Completable removeClientFromSession(String sessionId, String clientEmail) {
+        SafeReference<String> clientIdRef = new SafeReference<>();
+
+        return ownerClientsRepository.getPersonnelIdByEmailAsync(clientEmail)
+                .flatMap(clientId -> {
+                    clientIdRef.set(clientId);
+                    return sessionsRepository.getRemoveClientBatchAsync(sessionId, clientEmail);
+                })
+                .flatMap(writeBatch -> clientSessionsRepository.getRemoveSessionBatchAsync(writeBatch, sessionId, clientIdRef.getValue()))
                 .flatMapCompletable(this::commitBatchCompletable);
     }
 

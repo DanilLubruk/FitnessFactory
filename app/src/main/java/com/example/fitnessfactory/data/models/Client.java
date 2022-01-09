@@ -4,7 +4,7 @@ public class Client {
 
     public static final String ID_FIELD = "id";
     public static final String NAME_FIELD = "name";
-    public static final String EMAIL_FIELD = "email";
+    public static final String EMAIL_FIELD = "userEmail";
 
     private String id;
     private String name;
