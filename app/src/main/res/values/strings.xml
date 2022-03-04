@@ -125,6 +125,8 @@
     <string name="caption_add">Add</string>
     <string name="message_error_coach_not_have_gym">This coach doesn\'t work at this gym</string>
     <string name="message_error_email_invalid">Email invalid! Input correct email address</string>
+    <string name="title_settings">Settings</string>
+    <string name="preferences_language_title">Select language</string>
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>
     <string name="caption_user_null">User is not signed in</string>

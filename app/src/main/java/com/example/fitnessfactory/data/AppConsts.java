@@ -9,6 +9,7 @@ public class AppConsts {
     public static final int FRAGMENT_CLIENTS_ID = 4;
     public static final int FRAGMENT_SESSION_TYPES_ID = 5;
     public static final int FRAGMENT_DAYS_SESSIONS_ID = 6;
+    public static final int FRAGMENT_SETTINGS_ID = 7;
 
     public static final String FRAGMENT_HOME_NAME = "MENU_HOME_FRAGMENT";
     public static final String FRAGMENT_ADMINS_NAME = "MENU_ADMINS_FRAGMENT";
@@ -17,6 +18,7 @@ public class AppConsts {
     public static final String FRAGMENT_CLIENTS_NAME = "MENU_CLIENTS_FRAGMENT";
     public static final String FRAGMENT_SESSION_TYPES_NAME = "FRAGMENT_SESSION_TYPES_NAME";
     public static final String FRAGMENT_DAYS_SESSIONS_NAME = "FRAGMENT_DAYS_SESSIONS_NAME";
+    public static final String FRAGMENT_SETTINGS_NAME = "FRAGMENT_SETTINGS_NAME";
 
     public static final String GYM_ID_EXTRA = "GYM_ID_EXTRA";
     public static final String GYM_NAME_EXTRA = "GYM_NAME_EXTRA";

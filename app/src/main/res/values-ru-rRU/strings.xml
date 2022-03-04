@@ -126,6 +126,9 @@
     <string name="caption_add">Добавить</string>
     <string name="message_error_coach_not_have_gym">Данные тренер не работает в этом зале</string>
     <string name="message_error_email_invalid">Некорректное значение почтового адреса!</string>
+    <string name="title_settings">Настройка</string>
+    <string name="preferences_language_title">Выберите язык</string>
+
     <!--authentication-->
     <string name="caption_wrong_auth">Неуспешная аутентификация</string>
     <string name="caption_user_null">Пользователь не аутентифицирован</string>

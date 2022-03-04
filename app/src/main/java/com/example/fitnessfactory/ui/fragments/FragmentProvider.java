@@ -49,6 +49,10 @@ public class FragmentProvider {
                 curFragment = new DaySessionsListFragment();
                 fragmentName = AppConsts.FRAGMENT_DAYS_SESSIONS_NAME;
                 break;
+            case AppConsts.FRAGMENT_SETTINGS_ID:
+                curFragment = new SettingsActivity();
+                fragmentName = AppConsts.FRAGMENT_SETTINGS_NAME;
+                break;
         }
 
         if (curFragment != null) {

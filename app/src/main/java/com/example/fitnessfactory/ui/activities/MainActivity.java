@@ -138,6 +138,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_organisation:
                 openOrganisationPage();
                 break;
+            case R.id.nav_settings:
+                openSettingsPage();
+                break;
         }
 
         binding.drawer.closeDrawer(GravityCompat.START);
@@ -177,6 +180,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void openOrganisationPage() {
         Intent intent = new Intent(this, OrganisationInfoEditorActivity.class);
         startActivity(intent);
+    }
+
+    private void openSettingsPage() {
+        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_SETTINGS_ID);
+        setMenuChecked(R.id.nav_settings);
     }
 
     private void setMenuChecked(int menuId) {

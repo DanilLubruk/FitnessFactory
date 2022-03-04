@@ -44,6 +44,10 @@
             android:id="@+id/nav_organisation"
             android:checkable="true"
             android:title="@string/title_organisation" />
+        <item
+            android:id="@+id/nav_settings"
+            android:checkable="true"
+            android:title="@string/title_organisation" />
     </group>
 
 </menu>
