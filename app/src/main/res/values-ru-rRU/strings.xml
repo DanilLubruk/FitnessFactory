@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--development-->
+    <string name="app_name">FitnessFactory</string>
+    <string name="title_home">Главная</string>
+    <string name="title_gyms">Залы</string>
+    <string name="title_session_types">Виды тренировок</string>
+    <string name="title_select_session_type">Выберите вид тренировки</string>
+    <string name="title_select_client">Выберите клиента</string>
+    <string name="title_select_gyms">Выберите зал</string>
+    <string name="title_admins">Администраторы</string>
+    <string name="title_select_admins">Выберите администратора</string>
+    <string name="title_coaches">Тренера</string>
+    <string name="title_select_coach">Выберите тренера</string>
+    <string name="navigation_drawer_open">Open menu</string>
+    <string name="navigation_drawer_close">Close menu</string>
+    <string name="caption_edit">Редактировать</string>
+    <string name="caption_delete">Удалить</string>
+    <string name="caption_save">Сохранить</string>
+    <string name="caption_close">Закрыть</string>
+    <string name="caption_name">Имя</string>
+    <string name="caption_email">Почта</string>
+    <string name="caption_address">Адрес</string>
+    <string name="caption_ok">ОК</string>
+    <string name="caption_cancel">Отмена</string>
+    <string name="caption_blank_fields">Нужно заполнить пустые поля!</string>
+    <string name="caption_log_out">Выйти</string>
+    <string name="message_error_data_obtain">Произошла ошибка получения данных</string>
+    <string name="message_error_data_save">Произошла ошибка сохранения данных</string>
+    <string name="message_error_data_operate">Произошла ошибка обработки данных</string>
+    <string name="message_error_gym_null">Некорректные данные зала</string>
+    <string name="message_error_client_null">Некорректные данные клиента</string>
+    <string name="message_error_admin_null">Некорректные данные администратора</string>
+    <string name="message_error_coach_null">Некорректные данные тренера</string>
+    <string name="message_error_org_data_null">Некорректные данные организации</string>
+    <string name="message_error_ununique_id">Идентификатор не уникален</string>
+    <string name="caption_warning_title">Внимание</string>
+    <string name="caption_no_button">Нет</string>
+    <string name="caption_yes_button">Да</string>
+    <string name="message_data_modified">Закрыть без сохранения??</string>
+    <string name="message_ask_delete_gym">Удалить зал?</string>
+    <string name="message_ask_delete_admin">Удалить администратора?</string>
+    <string name="message_ask_delete_coach">Удалить тренера?</string>
+    <string name="message_ask_delete_client">Удалить клиента?</string>
+    <string name="caption_organisation_owner">Владелец организации</string>
+    <string name="caption_my_own_gym">Мой собственный</string>
+    <string name="caption_personnel">Персонал</string>
+    <string name="title_ask_gym_owner">С каким залом вы будете работать?</string>
+    <string name="title_invite_personnel">Выслать приглашение по почте</string>
+    <string name="caption_send">Отправить</string>
+    <string name="caption_job_offer">Предложение о работе</string>
+    <string name="text_invitation_to_personnel">Привет! Вы были выбраны одним из %1$s нашего зала! Мы ожидаем вас в нашем приложении FitnessFactory! Просто войдите в приложение используя вашу почту!</string>
+    <string name="caption_admins">администраторов</string>
+    <string name="caption_coaches">тренеров</string>
+    <string name="caption_clients">клиентов</string>
+    <string name="message_error_email_isnt_unique">Почта пользователя не уникальна!</string>
+    <string name="message_error_sign_in_process">Авторизация.…</string>
+    <string name="message_obtaining_organistations">Получение данных…</string>
+    <string name="message_singing_you_in">Авторизируем вас…</string>
+    <string name="title_ask_org_name">Введите название вашей организации</string>
+    <string name="message_ask_remove_personnel_from_gym">Удалить зал из %1$s?</string>
+    <string name="message_ask_remove_gym">Удалить зал?</string>
+    <string name="caption_remove">Удалить</string>
+    <string name="caption_ask_no_more">Больше не спрашивать</string>
+    <string name="title_question">Вопрос</string>
+    <string name="message_send_invitation">Отправить уведомление %1$s?</string>
+    <string name="caption_admin">администратору</string>
+    <string name="caption_coach">тренеру</string>
+    <string name="caption_coach_capitalized">Тренер</string>
+    <string name="title_edit_item">Редактировать</string>
+    <string name="title_add_item">Добавить</string>
+    <string name="message_admin_is_registered">Администратор уже зарегистрирован</string>
+    <string name="message_coach_is_registered">Тренер уже зарегистрирован</string>
+    <string name="message_client_is_registered">Клиент уже зарегистрирован</string>
+    <string name="message_error_no_data">Нет данных</string>
+    <string name="message_error_canceled">Отменено</string>
+    <string name="title_organisation">Информация об организации</string>
+    <string name="title_clients">Клиенты</string>
+    <string name="message_error_data_delete">Произошла ошибка удаления данных</string>
+    <string name="message_email_occupied">Данный почтовый адрес уже занят</string>
+    <string name="message_gym_duplicate">Зал с данным именем и адресом уже зарегистрирован</string>
+    <string name="message_client_not_unique">Идентификатор клиента не уникален</string>
+    <string name="caption_people">человек</string>
+    <string name="message_ask_delete_session_type">Удалить вид тренировок?</string>
+    <string name="message_session_type_null">Некорректные данные вида тренировок</string>
+    <string name="message_session_type_not_unique">Идентификатор вида тренировок не уникален</string>
+    <string name="message_error_session_type_name_ununique">Наименование вида тренировок не уникально</string>
+    <string name="message_session_type_name_occupied">Вид тренировок с таким наименованием уже существует</string>
+    <string name="message_error_restoring_session_type">Произошла ошибка восстановления состояния вида тренировок</string>
+    <string name="message_error_people_amount_null">количество человек равно нулю</string>
+    <string name="message_error_price_null">цена равна нулю</string>
+    <string name="caption_people_amount">Количество людей</string>
+    <string name="hint_price">Цена (%1$s)</string>
+    <string name="message_error_session_null">Некорректные данные тренировки</string>
+    <string name="caption_date">Дата</string>
+    <string name="caption_start_time">Время начала</string>
+    <string name="caption_end_time">Время конца</string>
+    <string name="caption_gym">Зал</string>
+    <string name="caption_session_type">Вид тренировки</string>
+    <string name="message_ask_delete_session">Удалить сессию?</string>
+    <string name="caption_arrange_session">Создать сессию</string>
+    <string name="caption_empty_sessions_list">Добавить сессию...</string>
+    <string name="message_error_date_null">Некорректные данные даты</string>
+    <string name="message_error_coach_occupied">Тренер уже занят в это время</string>
+    <string name="message_error_wrong_dates">Время начала и коцна не формируют период!</string>
+    <string name="message_selection_failed">Выбор отменён!</string>
+    <string name="message_ask_remove_client_from_session">Удалить клиента из данной сессии?</string>
+    <string name="message_ask_remove_coach_from_session">Удалить тренера из данной сессии?</string>
+    <string name="caption_add_items">Добавить элементы...</string>
+    <string name="message_error_item_occupied">Удаление невозможно. %1$s уже занят!</string>
+    <string name="caption_client_capitalized">Клиент</string>
+    <string name="caption_client">клиент</string>
+    <string name="message_error_session_type_occupied">Удаление невозможно. Вид тренировок уже используется!</string>
+    <string name="message_error_client_occupied">Удаление невозможно. Клиент уже занят</string>
+    <string name="message_error_session_id_not_unique">Идентификатор тренировки не уникален</string>
+    <string name="message_error_session_packed">Тренировка уже заполнена</string>
+    <string name="caption_from">с</string>
+    <string name="caption_until">до</string>
+    <string name="message_input_invalid_value">Корректное значение - с %1$s по %2$s!</string>
+    <string name="message_error_session_type_id_not_unique">Идентификатор вида тренировок не уникален</string>
+    <string name="message_error_gym_id_not_unique">Идентификатор зала не уникален</string>
+    <string name="title_sessions">Тренировки</string>
+    <string name="title_select_session">Выберите тренировку</string>
+    <string name="title_todays_sessions">Сегодняшние тренировки</string>
+    <string name="caption_day">День</string>
+    <string name="caption_add">Добавить</string>
+    <string name="message_error_coach_not_have_gym">Данные тренер не работает в этом зале</string>
+    <string name="message_error_email_invalid">Некорректное значение почтового адреса!</string>
+    <!--authentication-->
+    <string name="caption_wrong_auth">Неуспешная аутентификация</string>
+    <string name="caption_user_null">Пользователь не аутентифицирован</string>
+    <!--authentication-->
+
+    <!--days of week-->
+    <string name="title_monday">Пн</string>
+    <string name="title_tuesday">Вт</string>
+    <string name="title_wednesday">Ср</string>
+    <string name="title_thursday">Чт</string>
+    <string name="title_friday">Пт</string>
+    <string name="title_saturday">Сб</string>
+    <string name="title_sunday">Вс</string>
+    <!--days of week-->
+
+    <!--months-->
+    <string name="title_january">Январь</string>
+    <string name="title_february">Февраль</string>
+    <string name="title_march">Март</string>
+    <string name="title_april">Апрель</string>
+    <string name="title_may">Май</string>
+    <string name="title_june">Июнь</string>
+    <string name="title_july">Июль</string>
+    <string name="title_august">Август</string>
+    <string name="title_september">Сентябрь</string>
+    <string name="title_october">Октябрь</string>
+    <string name="title_november">Ноябрь</string>
+    <string name="title_december">Декабрь</string>
+    <!--months -->
+    <!--development-->
+
+
+</resources>
