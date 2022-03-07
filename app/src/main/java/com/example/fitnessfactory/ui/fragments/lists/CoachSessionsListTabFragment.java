@@ -60,6 +60,7 @@ public class CoachSessionsListTabFragment extends ListListenerTabFragment<Sessio
         getViewModel().setDefaultDate();
         getViewModel().getSessions().observe(this, this::setListData);
         getViewModel().getDate().observe(this, date -> getViewModel().startDataListener());
+        getFAB().setVisibility(View.GONE);
     }
 
     private void trySelectDate() {

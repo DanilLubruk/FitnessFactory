@@ -16,41 +16,41 @@ import com.example.fitnessfactory.ui.fragments.lists.SessionTypesListFragment;
 
 public class FragmentProvider {
 
-    public static void attachFragment(AppCompatActivity activity, int fragmentId) {
-        Fragment curFragment = null;
+    public static <FragmentType extends Fragment> void attachFragment(AppCompatActivity activity, int fragmentId) {
+        FragmentType curFragment = null;
         String fragmentName = "";
 
         switch (fragmentId) {
             case AppConsts.FRAGMENT_HOME_ID:
-                curFragment = new MenuFragment();
+                curFragment = (FragmentType) new MenuFragment();
                 fragmentName = AppConsts.FRAGMENT_HOME_NAME;
                 break;
             case AppConsts.FRAGMENT_ADMINS_ID:
-                curFragment = new AdminsListFragment();
+                curFragment = (FragmentType) new AdminsListFragment();
                 fragmentName = AppConsts.FRAGMENT_ADMINS_NAME;
                 break;
             case AppConsts.FRAGMENT_COACHES_ID:
-                curFragment = new CoachesListFragment();
+                curFragment = (FragmentType) new CoachesListFragment();
                 fragmentName = AppConsts.FRAGMENT_COACHES_NAME;
                 break;
             case AppConsts.FRAGMENT_GYMS_ID:
-                curFragment = new GymsListFragment();
+                curFragment = (FragmentType) new GymsListFragment();
                 fragmentName = AppConsts.FRAGMENT_GYMS_NAME;
                 break;
             case AppConsts.FRAGMENT_CLIENTS_ID:
-                curFragment = new ClientsListFragment();
+                curFragment = (FragmentType) new ClientsListFragment();
                 fragmentName = AppConsts.FRAGMENT_CLIENTS_NAME;
                 break;
             case AppConsts.FRAGMENT_SESSION_TYPES_ID:
-                curFragment = new SessionTypesListFragment();
+                curFragment = (FragmentType) new SessionTypesListFragment();
                 fragmentName = AppConsts.FRAGMENT_SESSION_TYPES_NAME;
                 break;
             case AppConsts.FRAGMENT_DAYS_SESSIONS_ID:
-                curFragment = new DaySessionsListFragment();
+                curFragment = (FragmentType) new DaySessionsListFragment();
                 fragmentName = AppConsts.FRAGMENT_DAYS_SESSIONS_NAME;
                 break;
             case AppConsts.FRAGMENT_SETTINGS_ID:
-                curFragment = new SettingsActivity();
+                curFragment = (FragmentType) new SettingsFragment();
                 fragmentName = AppConsts.FRAGMENT_SETTINGS_NAME;
                 break;
         }

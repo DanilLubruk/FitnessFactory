@@ -123,13 +123,11 @@ public abstract class EditorActivity extends BaseActivity {
                 DialogUtils.showAskDialog(
                         this,
                         ResUtils.getString(R.string.message_data_modified),
-                        ResUtils.getString(R.string.caption_save),
-                        ResUtils.getString(R.string.caption_close)),
+                        ResUtils.getString(R.string.caption_ok),
+                        ResUtils.getString(R.string.caption_cancel)),
                 new SingleData<>(
-                        doSave -> {
-                            if (doSave) {
-                                save();
-                            } else {
+                        doClose -> {
+                            if (doClose) {
                                 close();
                             }
                         },

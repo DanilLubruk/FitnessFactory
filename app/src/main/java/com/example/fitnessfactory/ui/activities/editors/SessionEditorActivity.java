@@ -5,6 +5,7 @@ import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM_N
 import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_SESSION_TYPE;
 
 import android.content.Intent;
+import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
+import com.example.fitnessfactory.data.callbacks.EditorCallback;
 import com.example.fitnessfactory.data.events.SessionIdUpdateEvent;
 import com.example.fitnessfactory.data.observers.SingleDialogEvent;
 import com.example.fitnessfactory.databinding.ActivitySessionEditorBinding;
@@ -54,7 +56,7 @@ public class SessionEditorActivity extends TabParentEditorActivity<SessionIdUpda
         binding.container.edtEndTime.setOnClickListener(view -> trySelectEndTime());
         binding.container.edtGym.setOnClickListener(view -> showGymSelectorActivity());
         binding.container.edtSessionType.setOnClickListener(view -> showSessionTypeSelectorActivity());
-        getViewModel().getSession(id)
+        getViewModel().getSession(getSessionId())
                 .observe(this, isObtained -> {
                     if (isObtained && isNewEntity()) {
                         getViewModel().setSessionDefaultTime(getIntentDefaultDate());
@@ -80,7 +82,10 @@ public class SessionEditorActivity extends TabParentEditorActivity<SessionIdUpda
 
     private void subscribeForSessionIdChangesForTabs() {
         getViewModel().getSessionId()
-                .observe(this, sessionId -> EventBus.getDefault().postSticky(new SessionIdUpdateEvent(sessionId)));
+                .observe(this, sessionId -> {
+                    getIntent().putExtra(AppConsts.SESSION_ID_EXTRA, sessionId);
+                    EventBus.getDefault().postSticky(new SessionIdUpdateEvent(sessionId));
+                });
     }
 
     private Date getIntentDefaultDate() {
@@ -120,17 +125,27 @@ public class SessionEditorActivity extends TabParentEditorActivity<SessionIdUpda
             GuiUtils.showMessage(ResUtils.getString(R.string.message_selection_failed));
             return;
         }
+        getViewModel().getSession(getSessionId())
+                .observe(this, isObtained -> {
+                    if (isObtained && isNewEntity()) {
+                        getViewModel().setSessionDefaultTime(getIntentDefaultDate());
+                    }
+                    if (!isObtained) {
+                        return;
+                    }
+                    switch (requestCode) {
+                        case REQUEST_GYM_ID:
 
-        switch (requestCode) {
-            case REQUEST_GYM_ID:
-                String gymId = data.getStringExtra(AppConsts.GYM_ID_EXTRA);
-                getViewModel().setGym(gymId);
-                break;
-            case REQUEST_SESSION_TYPE:
-                String sessionTypeId = data.getStringExtra(AppConsts.SESSION_TYPE_ID_EXTRA);
-                getViewModel().setSessionType(sessionTypeId);
-                break;
-        }
+                            String gymId = data.getStringExtra(AppConsts.GYM_ID_EXTRA);
+                            getViewModel().setGym(gymId);
+                            break;
+                        case REQUEST_SESSION_TYPE:
+                            String sessionTypeId = data.getStringExtra(AppConsts.SESSION_TYPE_ID_EXTRA);
+                            getViewModel().setSessionType(sessionTypeId);
+                            break;
+                    }
+                });
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -147,6 +162,10 @@ public class SessionEditorActivity extends TabParentEditorActivity<SessionIdUpda
     @Override
     protected void initEntityKey() {
         id = getIntent().getStringExtra(AppConsts.SESSION_ID_EXTRA);
+    }
+
+    private String getSessionId() {
+        return getIntent().getStringExtra(AppConsts.SESSION_ID_EXTRA);
     }
 
     @Override

@@ -106,7 +106,7 @@ public class UserRepository extends BaseRepository {
     }
 
     private List<AppUser> getUsersByEmails(List<String> emails) throws Exception {
-        if (emails.size() == 0) {
+        if (emails == null || emails.size() == 0) {
             return new ArrayList<>();
         }
         QuerySnapshot adminsQuery = Tasks.await(newQuery().whereEmailIn(emails).build().get());

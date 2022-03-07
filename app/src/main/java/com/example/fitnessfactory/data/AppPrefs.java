@@ -1,9 +1,14 @@
 package com.example.fitnessfactory.data;
+
 import com.tiromansev.prefswrapper.typedprefs.BooleanPreference;
 import com.tiromansev.prefswrapper.typedprefs.IntegerPreference;
 import com.tiromansev.prefswrapper.typedprefs.StringPreference;
 
+import java.util.Locale;
+
 public class AppPrefs {
+
+    public static final String languageLocale = "language_locale";
 
     public static StringPreference gymOwnerId() {
         return StringPreference
@@ -65,6 +70,13 @@ public class AppPrefs {
         return IntegerPreference
                 .builder("max_people_amount_pref")
                 .setDefaultValue(20)
+                .build();
+    }
+
+    public static StringPreference languageLocale() {
+        return StringPreference
+                .builder(languageLocale)
+                .setDefaultValue(LocaleHelper.getLocaleLanguage())
                 .build();
     }
 }

@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 
 import com.example.fitnessfactory.R;
@@ -26,10 +28,28 @@ import com.tiromansev.prefswrapper.typedprefs.BooleanPreference;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 
 public class DialogUtils {
+
+    public static <ItemType> Single<ItemType> showOptionPickerDialog(BaseActivity context,
+                                                                     String title,
+                                                                     List<ItemType> items) {
+        return Single.create(emitter -> {
+            ArrayAdapter<ItemType> adapter =
+                    new ArrayAdapter<ItemType>(context, R.layout.support_simple_spinner_dropdown_item, items);
+
+            new AlertDialog.Builder(context)
+                    .setTitle(title)
+                    .setSingleChoiceItems(
+                            adapter,
+                            0,
+                            (dialog, position) -> emitter.onSuccess(items.get(position)))
+                    .show();
+        });
+    }
 
     public static Single<Boolean> showAskDialog(BaseActivity context,
                                                 String message,
@@ -85,8 +105,8 @@ public class DialogUtils {
         if (!emitter.isDisposed()) {
             emitter.onSuccess(
                     isOptionMyOwnGym ?
-                    CurrentUserType.CURRENT_USER_OWNER :
-                    CurrentUserType.CURRENT_USER_STAFF);
+                            CurrentUserType.CURRENT_USER_OWNER :
+                            CurrentUserType.CURRENT_USER_STAFF);
         }
     }
 
@@ -129,10 +149,10 @@ public class DialogUtils {
     }
 
     public static Single<String> showOneLineEditDialog(BaseActivity context,
-                                                        String title,
-                                                        String hint,
-                                                        String okCaption,
-                                                        String cancelCaption) {
+                                                       String title,
+                                                       String hint,
+                                                       String okCaption,
+                                                       String cancelCaption) {
         return showOneLineEditDialog(
                 context,
                 title,
@@ -143,16 +163,16 @@ public class DialogUtils {
     }
 
     private static Single<String> showOneLineEditDialog(BaseActivity context,
-                                                       String title,
-                                                       String hint,
-                                                       String okCaption,
-                                                       String cancelCaption,
-                                                       ValueChecker valueChecker) {
+                                                        String title,
+                                                        String hint,
+                                                        String okCaption,
+                                                        String cancelCaption,
+                                                        ValueChecker valueChecker) {
         return Single.create(emitter -> {
             RelativeLayout dialogView =
                     getOneLineDialogViewBuilder()
-                    .setHint(hint)
-                    .build(context);
+                            .setHint(hint)
+                            .build(context);
 
             AlertDialog alertDialog = new AlertDialog.Builder(context)
                     .setTitle(title)
@@ -199,13 +219,13 @@ public class DialogUtils {
 
             DatePickerDialog dialog = new DatePickerDialog(context,
                     (view, year, month, dayOfMonth) -> {
-                if (!emitter.isDisposed()) {
-                    calendar.set(Calendar.YEAR, year);
-                    calendar.set(Calendar.MONTH, month);
-                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    emitter.onSuccess(calendar.getTime());
-                }
-            },
+                        if (!emitter.isDisposed()) {
+                            calendar.set(Calendar.YEAR, year);
+                            calendar.set(Calendar.MONTH, month);
+                            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                            emitter.onSuccess(calendar.getTime());
+                        }
+                    },
                     calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH),
                     calendar.get(Calendar.DAY_OF_MONTH));

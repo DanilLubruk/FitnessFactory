@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <Preference
-        android:key="preferences_language"
+        android:key="language_locale"
         android:title="@string/preferences_language_title" />
 </PreferenceScreen>

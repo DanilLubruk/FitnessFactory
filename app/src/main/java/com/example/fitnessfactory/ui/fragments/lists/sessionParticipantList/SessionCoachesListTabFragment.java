@@ -5,6 +5,8 @@ import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_COACH
 
 import android.content.Intent;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
@@ -28,6 +30,17 @@ import java.util.List;
 public class SessionCoachesListTabFragment extends ListListenerTabFragment<AppUser, PersonnelListViewHolder, PersonnelListAdapter> {
 
     private SessionCoachesListTabViewModel viewModel;
+
+    private final ActivityResultLauncher<Intent> openCoachesSelection = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                getViewModel().resetSessionId(getSessionId());
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    String coachEmail = result.getData().getStringExtra(AppConsts.COACH_EMAIL_EXTRA);
+                    getViewModel().addParticipantToSession(coachEmail);
+                }
+            }
+    );
 
     protected void initComponents() {
         super.initComponents();
@@ -71,23 +84,16 @@ public class SessionCoachesListTabFragment extends ListListenerTabFragment<AppUs
 
     @Override
     protected void openSelectionActivity() {
-        Intent intent = new Intent(getBaseActivity(), SelectionActivity.class);
-        intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, AppConsts.FRAGMENT_COACHES_ID);
+        getBaseActivity().save(isSaved -> {
+            if (!isSaved) {
+                return;
+            }
 
-        startActivityForResult(intent, REQUEST_COACH);
-    }
+            Intent intent = new Intent(getBaseActivity(), SelectionActivity.class);
+            intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, AppConsts.FRAGMENT_COACHES_ID);
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_COACH:
-                if (resultCode == RESULT_OK) {
-                    String coachEmail = data.getStringExtra(AppConsts.COACH_EMAIL_EXTRA);
-                    getViewModel().addParticipantToSession(coachEmail);
-                }
-                break;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
+            openCoachesSelection.launch(intent);
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -95,9 +101,17 @@ public class SessionCoachesListTabFragment extends ListListenerTabFragment<AppUs
         getViewModel().resetCoachesList(sessionsCoachesListDataListenerEvent.getCoachesIds());
     }
 
+    private boolean isSessionIdRegistered() {
+        return getSessionId() != null && !getSessionId().isEmpty();
+    }
+
+    private String getSessionId() {
+        return getBaseActivity().getIntent().getStringExtra(AppConsts.SESSION_ID_EXTRA);
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onSessionIdUpdateEvent(SessionIdUpdateEvent sessionIdUpdateEvent) {
-        getViewModel().resetSessionId(sessionIdUpdateEvent.getSessionId());
+        getViewModel().resetSessionId(getSessionId());
         getViewModel().startDataListener();
     }
 }

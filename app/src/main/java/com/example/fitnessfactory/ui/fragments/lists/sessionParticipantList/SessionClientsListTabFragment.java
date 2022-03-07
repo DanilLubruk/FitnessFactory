@@ -4,7 +4,11 @@ import static android.app.Activity.RESULT_OK;
 import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_CLIENT;
 
 import android.content.Intent;
+import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
@@ -28,6 +32,17 @@ import java.util.List;
 public class SessionClientsListTabFragment extends ListListenerTabFragment<AppUser, ClientsListViewHolder, ClientsListAdapter> {
 
     private SessionClientsListTabViewModel viewModel;
+
+    private final ActivityResultLauncher<Intent> openClientsSelection = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                getViewModel().resetSessionId(getSessionId());
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    String clientEmail = result.getData().getStringExtra(AppConsts.CLIENT_EMAIL_EXTRA);
+                    getViewModel().addParticipantToSession(clientEmail);
+                }
+            }
+    );
 
     protected void initComponents() {
         super.initComponents();
@@ -71,23 +86,16 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<AppUs
 
     @Override
     protected void openSelectionActivity() {
-        Intent intent = new Intent(getBaseActivity(), SelectionActivity.class);
-        intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, AppConsts.FRAGMENT_CLIENTS_ID);
+        getBaseActivity().save(isSaved -> {
+            if (!isSaved) {
+                return;
+            }
 
-        startActivityForResult(intent, REQUEST_CLIENT);
-    }
+            Intent intent = new Intent(getBaseActivity(), SelectionActivity.class);
+            intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, AppConsts.FRAGMENT_CLIENTS_ID);
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_CLIENT:
-                if (resultCode == RESULT_OK) {
-                    String clientEmail = data.getStringExtra(AppConsts.CLIENT_EMAIL_EXTRA);
-                    getViewModel().addParticipantToSession(clientEmail);
-                }
-                break;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
+            openClientsSelection.launch(intent);
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -97,7 +105,21 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<AppUs
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onSessionIdUpdateEvent(SessionIdUpdateEvent sessionIdUpdateEvent) {
-        getViewModel().resetSessionId(sessionIdUpdateEvent.getSessionId());
+        getViewModel().resetSessionId(getSessionId());
         getViewModel().startDataListener();
+    }
+
+    private boolean isSessionIdRegistered() {
+        return getSessionId() != null && !getSessionId().isEmpty();
+    }
+
+    private String getSessionId() {
+        return getBaseActivity().getIntent().getStringExtra(AppConsts.SESSION_ID_EXTRA);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedState) {
+        super.onSaveInstanceState(savedState);
+        getViewModel().saveState(savedState);
     }
 }

@@ -1,20 +1,14 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
-import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.fitnessfactory.R;
-import com.example.fitnessfactory.data.events.CoachGymsListListenerEvent;
 import com.example.fitnessfactory.ui.adapters.CoachGymsPageAdapter;
-import com.example.fitnessfactory.ui.adapters.SessionPageAdapter;
 import com.example.fitnessfactory.ui.viewmodels.editors.CoachEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachEditorViewModelFactory;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.google.android.material.tabs.TabLayoutMediator;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 public class CoachEditorActivity extends PersonnelEditorActivity {
 

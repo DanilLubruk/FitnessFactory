@@ -94,7 +94,7 @@ public class OwnerGymRepository extends BaseRepository {
     }
 
     private List<Gym> getGymsByIds(List<String> gymIds) throws ExecutionException, InterruptedException {
-        if (gymIds.size() == 0) {
+        if (gymIds == null || gymIds.size() == 0) {
             return new ArrayList<>();
         }
 

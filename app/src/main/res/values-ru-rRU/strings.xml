@@ -12,9 +12,9 @@
     <string name="title_select_admins">Выберите администратора</string>
     <string name="title_coaches">Тренера</string>
     <string name="title_select_coach">Выберите тренера</string>
-    <string name="navigation_drawer_open">Open menu</string>
-    <string name="navigation_drawer_close">Close menu</string>
-    <string name="caption_edit">Редактировать</string>
+    <string name="navigation_drawer_open">Открыть меню</string>
+    <string name="navigation_drawer_close">Закрыть меню</string>
+    <string name="caption_edit">Изменить</string>
     <string name="caption_delete">Удалить</string>
     <string name="caption_save">Сохранить</string>
     <string name="caption_close">Закрыть</string>
@@ -46,8 +46,8 @@
     <string name="caption_my_own_gym">Мой собственный</string>
     <string name="caption_personnel">Персонал</string>
     <string name="title_ask_gym_owner">С каким залом вы будете работать?</string>
-    <string name="title_invite_personnel">Выслать приглашение по почте</string>
-    <string name="caption_send">Отправить</string>
+    <string name="title_invite_personnel">Добавить пользователя</string>
+    <string name="caption_send">Добавить</string>
     <string name="caption_job_offer">Предложение о работе</string>
     <string name="text_invitation_to_personnel">Привет! Вы были выбраны одним из %1$s нашего зала! Мы ожидаем вас в нашем приложении FitnessFactory! Просто войдите в приложение используя вашу почту!</string>
     <string name="caption_admins">администраторов</string>
@@ -67,7 +67,7 @@
     <string name="caption_admin">администратору</string>
     <string name="caption_coach">тренеру</string>
     <string name="caption_coach_capitalized">Тренер</string>
-    <string name="title_edit_item">Редактировать</string>
+    <string name="title_edit_item">Изменить</string>
     <string name="title_add_item">Добавить</string>
     <string name="message_admin_is_registered">Администратор уже зарегистрирован</string>
     <string name="message_coach_is_registered">Тренер уже зарегистрирован</string>
@@ -109,7 +109,7 @@
     <string name="caption_add_items">Добавить элементы...</string>
     <string name="message_error_item_occupied">Удаление невозможно. %1$s уже занят!</string>
     <string name="caption_client_capitalized">Клиент</string>
-    <string name="caption_client">клиент</string>
+    <string name="caption_client">клиенту</string>
     <string name="message_error_session_type_occupied">Удаление невозможно. Вид тренировок уже используется!</string>
     <string name="message_error_client_occupied">Удаление невозможно. Клиент уже занят</string>
     <string name="message_error_session_id_not_unique">Идентификатор тренировки не уникален</string>
@@ -128,6 +128,10 @@
     <string name="message_error_email_invalid">Некорректное значение почтового адреса!</string>
     <string name="title_settings">Настройка</string>
     <string name="preferences_language_title">Выберите язык</string>
+    <string name="caption_russian_language">Русский</string>
+    <string name="caption_english_language">Английский</string>
+    <string name="caption_system">Системный</string>
+    <string name="caption_select_language">Выберите язык</string>
 
     <!--authentication-->
     <string name="caption_wrong_auth">Неуспешная аутентификация</string>

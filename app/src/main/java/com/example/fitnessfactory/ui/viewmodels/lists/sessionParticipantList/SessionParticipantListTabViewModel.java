@@ -40,6 +40,7 @@ public abstract class SessionParticipantListTabViewModel<ItemType> extends ListV
         this.sessionsDataManager = sessionsDataManager;
     }
 
+
     public void resetSessionId(String sessionId) {
         this.sessionId = sessionId;
     }
@@ -102,7 +103,6 @@ public abstract class SessionParticipantListTabViewModel<ItemType> extends ListV
     @Override
     public void saveState(Bundle savedState) {
         super.saveState(savedState);
-        getHandle().put(AppConsts.SESSION_ID_EXTRA, sessionId);
     }
 
     @Override
