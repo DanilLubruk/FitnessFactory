@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
@@ -16,6 +17,7 @@ import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.callbacks.EditorCallback;
 import com.example.fitnessfactory.data.events.SessionIdUpdateEvent;
 import com.example.fitnessfactory.data.observers.SingleDialogEvent;
+import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.databinding.ActivitySessionEditorBinding;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.adapters.PersonnelPageAdapter;
@@ -78,6 +80,11 @@ public class SessionEditorActivity extends TabParentEditorActivity<SessionIdUpda
                 }
         ).attach();
         binding.container.vpParticipants.setUserInputEnabled(false);
+    }
+
+    @Override
+    public MutableLiveData<String> getItemId() {
+        return getViewModel().sessionId;
     }
 
     private void subscribeForSessionIdChangesForTabs() {

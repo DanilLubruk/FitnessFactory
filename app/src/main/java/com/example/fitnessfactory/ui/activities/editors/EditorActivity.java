@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.callbacks.EditorCallback;
 import com.example.fitnessfactory.data.observers.SingleData;
@@ -41,6 +43,10 @@ public abstract class EditorActivity extends BaseActivity {
     protected abstract boolean isNewEntity();
 
     protected abstract void initEntityKey();
+
+    public MutableLiveData<String> getItemId() {
+        return new MutableLiveData<String>();
+    }
 
     @Override
     protected void initActivity() {

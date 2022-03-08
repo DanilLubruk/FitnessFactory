@@ -33,13 +33,13 @@ public class SessionCoachesListTabFragment extends ListListenerTabFragment<AppUs
 
     private final ActivityResultLauncher<Intent> openCoachesSelection = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                getViewModel().resetSessionId(getSessionId());
+            result -> getBaseActivity().getItemId().observe(getViewLifecycleOwner(), (sessionId) -> {
+                getViewModel().resetSessionId(sessionId);
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     String coachEmail = result.getData().getStringExtra(AppConsts.COACH_EMAIL_EXTRA);
                     getViewModel().addParticipantToSession(coachEmail);
                 }
-            }
+            })
     );
 
     protected void initComponents() {
