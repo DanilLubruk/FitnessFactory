@@ -40,6 +40,12 @@ public class AuthActivity extends BaseActivity {
         setFullScreen();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_auth);
         viewModel = new ViewModelProvider(this, new AuthViewModelFactory()).get(AuthViewModel.class);
+        viewModel.isLoading.observe(this, isLoading -> {
+            if (!isLoading) {
+                binding.container.pkProgress.setVisibility(View.GONE);
+                binding.container.btnSignIn.setVisibility(View.VISIBLE);
+            }
+        });
         Log.d("TAG", "init screen");
         super.onCreate(savedInstanceState);
     }
@@ -54,6 +60,7 @@ public class AuthActivity extends BaseActivity {
         super.initComponents();
         viewModel.isLoggedIn().observe(this, isLoggedIn -> {
             Log.d("TAG", "received result");
+            viewModel.isLoading.setValue(false);
            if (isLoggedIn) {
                showMainActivity();
            }

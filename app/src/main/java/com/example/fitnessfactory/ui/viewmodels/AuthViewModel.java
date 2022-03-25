@@ -2,6 +2,8 @@ package com.example.fitnessfactory.ui.viewmodels;
 
 import android.content.Intent;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppPrefs;
@@ -28,6 +30,8 @@ public class AuthViewModel extends BaseViewModel {
 
     private AuthManager authManager;
     private FirebaseAuthManager firebaseAuthManager;
+
+    public MutableLiveData<Boolean> isLoading = new MutableLiveData<>(true);
 
     @Inject
     public AuthViewModel(AuthManager authManager,

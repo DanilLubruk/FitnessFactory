@@ -8,13 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.AuthActivity">
 
-    <ProgressBar
-        android:id="@+id/pkProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone"/>
-
     <TextView
         android:id="@+id/tvLoadStatus"
         android:layout_width="wrap_content"
@@ -44,7 +37,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imgLogo"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
+
+    <ProgressBar
+        android:id="@+id/pkProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnSignIn"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>
 </layout>
