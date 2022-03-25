@@ -31,8 +31,6 @@ public abstract class GymPersonnelListTabViewModel extends ListViewModel<AppUser
 
     private final MutableLiveData<List<AppUser>> personnel = new MutableLiveData<>();
 
-    private String gymId;
-
     public GymPersonnelListTabViewModel(OwnerPersonnelRepository ownerRepository,
                                         PersonnelDataManager dataManager,
                                         ArgDataListener<String> dataListener) {
@@ -57,11 +55,7 @@ public abstract class GymPersonnelListTabViewModel extends ListViewModel<AppUser
         return personnel;
     }
 
-    public void resetGymId(String gymId) {
-        this.gymId = gymId;
-    }
-
-    public void addPersonnelToGym(String personnelEmail) {
+    public void addPersonnelToGym(String gymId, String personnelEmail) {
         if (TextUtils.isEmpty(gymId)) {
             handleItemOperationError();
             return;
@@ -70,7 +64,7 @@ public abstract class GymPersonnelListTabViewModel extends ListViewModel<AppUser
         subscribeInIOThread(getOwnerRepository().addGymToPersonnelAsync(personnelEmail, gymId));
     }
 
-    public void deleteItem(AppUser personnel) {
+    public void deleteItem(String gymId, AppUser personnel) {
         if (TextUtils.isEmpty(gymId)) {
             handleItemDeletingNullError();
             return;
@@ -79,7 +73,7 @@ public abstract class GymPersonnelListTabViewModel extends ListViewModel<AppUser
         subscribeInIOThread(getOwnerRepository().removeGymFromPersonnelAsync(personnel.getEmail(), gymId));
     }
 
-    public void startDataListener() {
+    public void startDataListener(String gymId) {
         if (TextUtils.isEmpty(gymId)) {
             doInterruptProgress.setValue(true);
             return;
@@ -92,7 +86,7 @@ public abstract class GymPersonnelListTabViewModel extends ListViewModel<AppUser
         getDataListener().stopDataListener();
     }
 
-    public void getPersonnelData() {
+    public void getPersonnelData(String gymId) {
         subscribeInIOThread(
                 getDataManager().getPersonnelListByGymIdAsync(gymId),
                 new SingleData<>(personnel::setValue, getErrorHandler()::handleError));
@@ -101,13 +95,11 @@ public abstract class GymPersonnelListTabViewModel extends ListViewModel<AppUser
     @Override
     public void saveState(Bundle savedState) {
         super.saveState(savedState);
-        getHandle().put(AppConsts.GYM_ID_EXTRA, gymId);
     }
 
     @Override
     public void restoreState(Bundle savedState) {
         super.restoreState(savedState);
-        gymId = (String) getHandle().get(AppConsts.GYM_ID_EXTRA);
     }
 
     @Override

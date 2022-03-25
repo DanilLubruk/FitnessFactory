@@ -4,9 +4,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
-import com.example.fitnessfactory.data.events.GymIdUpdateEvent;
 import com.example.fitnessfactory.databinding.ActivityGymEditorBinding;
 import com.example.fitnessfactory.ui.adapters.PersonnelPageAdapter;
 import com.example.fitnessfactory.ui.viewmodels.editors.GymEditorViewModel;
@@ -15,14 +15,17 @@ import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import org.greenrobot.eventbus.EventBus;
+import javax.inject.Inject;
 
-public class GymEditorActivity extends TabParentEditorActivity<GymIdUpdateEvent> {
+public class GymEditorActivity extends EditorActivity {
 
     private String gymId;
     private GymEditorViewModel viewModel;
     private ActivityGymEditorBinding binding;
     private PersonnelPageAdapter pageAdapter;
+
+    @Inject
+    GymEditorViewModelFactory gymEditorViewModelFactory;
 
     @Override
     public Toolbar getToolbar() {
@@ -36,13 +39,13 @@ public class GymEditorActivity extends TabParentEditorActivity<GymIdUpdateEvent>
 
     @Override
     public void initActivity() {
+        FFApp.get().getAppComponent().inject(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_gym_editor);
-        viewModel = new ViewModelProvider(this, new GymEditorViewModelFactory()).get(GymEditorViewModel.class);
+        viewModel = new ViewModelProvider(this, gymEditorViewModelFactory).get(GymEditorViewModel.class);
         super.initActivity();
         binding.setModel(viewModel);
 
         viewModel.setGymData(gymId);
-        subscribeForGymIdChangesForTabs();
 
         pageAdapter = new PersonnelPageAdapter(getSupportFragmentManager(), getLifecycle());
         binding.container.vpPersonnel.setAdapter(pageAdapter);
@@ -59,11 +62,6 @@ public class GymEditorActivity extends TabParentEditorActivity<GymIdUpdateEvent>
                 }
         ).attach();
         binding.container.vpPersonnel.setUserInputEnabled(false);
-    }
-
-    private void subscribeForGymIdChangesForTabs() {
-        viewModel.getGymId()
-                .observe(this, gymId -> EventBus.getDefault().postSticky(new GymIdUpdateEvent(gymId)));
     }
 
     @Override
@@ -88,7 +86,8 @@ public class GymEditorActivity extends TabParentEditorActivity<GymIdUpdateEvent>
     }
 
     @Override
-    protected Class<GymIdUpdateEvent> getEventType() {
-        return GymIdUpdateEvent.class;
+    protected void close() {
+        FFApp.get().initAppComponent();
+        super.close();
     }
 }

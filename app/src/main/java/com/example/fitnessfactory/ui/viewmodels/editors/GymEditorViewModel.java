@@ -22,7 +22,7 @@ public class GymEditorViewModel extends EditorViewModel {
 
     private Gym dbGym;
     public final ObservableField<Gym> gym = new ObservableField<>();
-    private final MutableLiveData<String> gymId = new MutableLiveData<>();
+    private final MutableLiveData<String> gymId = new MutableLiveData<>("");
 
     private final String DB_ID_KEY = "DB_ID_KEY";
     private final String DB_NAME_KEY = "DB_NAME_KEY";

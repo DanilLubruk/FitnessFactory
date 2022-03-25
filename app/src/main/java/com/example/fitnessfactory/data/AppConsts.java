@@ -3,8 +3,12 @@ package com.example.fitnessfactory.data;
 public class AppConsts {
 
     public static final int FRAGMENT_HOME_ID = 0;
+
     public static final int FRAGMENT_ADMINS_ID = 1;
+    public static final int FRAGMENT_GYMS_ADMINS_ID = 11;
+
     public static final int FRAGMENT_COACHES_ID = 2;
+    public static final int FRAGMENT_GYMS_COACHES_ID = 21;
 
     public static final int FRAGMENT_GYMS_ID = 3;
     public static final int FRAGMENT_SESSIONS_GYMS_ID = 31;

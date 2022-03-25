@@ -45,7 +45,6 @@ ListListenerFragment<
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        getBaseActivity().setTitle(getTitle());
         showProgress();
         defineViewModel();
         getViewModel().doInterruptProgress.observe(getBaseActivity(), doInterrupt -> {
@@ -55,6 +54,11 @@ ListListenerFragment<
         });
         super.onActivityCreated(savedInstanceState);
         initComponents();
+        setTitle();
+    }
+
+    protected void setTitle() {
+        getBaseActivity().setTitle(getTitle());
     }
 
     @Override

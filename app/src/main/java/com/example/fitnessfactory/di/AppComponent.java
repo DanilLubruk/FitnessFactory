@@ -2,8 +2,11 @@ package com.example.fitnessfactory.di;
 
 import com.example.fitnessfactory.ui.activities.editors.AdminEditorActivity;
 import com.example.fitnessfactory.ui.activities.editors.CoachEditorActivity;
+import com.example.fitnessfactory.ui.activities.editors.GymEditorActivity;
 import com.example.fitnessfactory.ui.activities.editors.SessionEditorActivity;
 import com.example.fitnessfactory.ui.fragments.lists.SessionTypesListFragment;
+import com.example.fitnessfactory.ui.fragments.lists.gymPersonnelList.GymAdminsListTabFragment;
+import com.example.fitnessfactory.ui.fragments.lists.gymPersonnelList.GymCoachesListTabFragment;
 import com.example.fitnessfactory.ui.fragments.lists.gymsList.AdminGymSelectionListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.gymsList.CoachGymSelectionListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.gymsList.SessionGymSelectionListFragment;
@@ -11,6 +14,8 @@ import com.example.fitnessfactory.ui.fragments.lists.personnelGymsList.AdminGyms
 import com.example.fitnessfactory.ui.fragments.lists.personnelGymsList.CoachGymsListTabFragment;
 import com.example.fitnessfactory.ui.fragments.lists.personnelList.ClientsListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.personnelList.CoachesListFragment;
+import com.example.fitnessfactory.ui.fragments.lists.personnelList.GymAdminSelectionListFragment;
+import com.example.fitnessfactory.ui.fragments.lists.personnelList.GymCoachSelectionListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.sessionParticipantList.SessionClientsListTabFragment;
 import com.example.fitnessfactory.ui.fragments.lists.sessionParticipantList.SessionCoachesListTabFragment;
 import com.example.fitnessfactory.ui.fragments.lists.sessionsList.CoachSessionsListTabFragment;
@@ -82,4 +87,9 @@ public interface AppComponent {
     void inject(CoachSessionsListTabFragment coachSessionsListTabFragment);
     void inject(AdminEditorActivity adminEditorActivity);
     void inject(CoachEditorActivity coachEditorActivity);
+    void inject(GymEditorActivity gymEditorActivity);
+    void inject(GymAdminSelectionListFragment gymAdminSelectionListFragment);
+    void inject(GymCoachSelectionListFragment gymCoachSelectionListFragment);
+    void inject(GymAdminsListTabFragment gymAdminsListTabFragment);
+    void inject(GymCoachesListTabFragment gymCoachesListTabFragment);
 }

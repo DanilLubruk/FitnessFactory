@@ -14,6 +14,7 @@ import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.activities.editors.EditorActivity;
 import com.example.fitnessfactory.ui.adapters.PersonnelListAdapter;
+import com.example.fitnessfactory.ui.fragments.FragmentProvider;
 import com.example.fitnessfactory.ui.fragments.lists.ListListenerTabFragment;
 import com.example.fitnessfactory.ui.viewholders.lists.PersonnelListViewHolder;
 import com.example.fitnessfactory.ui.viewmodels.lists.gymPersonnelList.GymPersonnelListTabViewModel;
@@ -57,10 +58,8 @@ public abstract class GymPersonnelListTabFragment
 
     @Override
     protected void openSelectionActivity() {
-        Intent intent = new Intent(getBaseActivity(), SelectionActivity.class);
-        intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, getSelectionFragmentId());
-
-        startActivityForResult(intent, REQUEST_PERSONNEL);
+        getBaseActivity().getIntent().putExtra(AppConsts.IS_SELECT_MODE_EXTRA, true);
+        FragmentProvider.attachFragment(getBaseActivity(), getSelectionFragmentId());
     }
 
     @Override
@@ -69,7 +68,7 @@ public abstract class GymPersonnelListTabFragment
             case REQUEST_PERSONNEL:
                 if (resultCode == RESULT_OK) {
                     String personnelEmail = data.getStringExtra(getPersonnelEmailExtraKey());
-                    getViewModel().addPersonnelToGym(personnelEmail);
+                    //getViewModel().addPersonnelToGym(personnelEmail);
                 }
                 break;
         }

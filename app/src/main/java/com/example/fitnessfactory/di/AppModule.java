@@ -43,6 +43,7 @@ import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository
 import com.example.fitnessfactory.system.FirebaseAuthManager;
 import com.example.fitnessfactory.ui.viewmodels.factories.AdminEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachEditorViewModelFactory;
+import com.example.fitnessfactory.ui.viewmodels.factories.GymEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionEditorViewModelFactory;
 
 import javax.inject.Singleton;
@@ -350,5 +351,11 @@ public class AppModule {
     @Singleton
     public CoachEditorViewModelFactory provideCoachEditorViewModelFactory() {
         return new CoachEditorViewModelFactory();
+    }
+
+    @Provides
+    @Singleton
+    public GymEditorViewModelFactory provideGymEditorViewModelFactory() {
+        return new GymEditorViewModelFactory();
     }
 }

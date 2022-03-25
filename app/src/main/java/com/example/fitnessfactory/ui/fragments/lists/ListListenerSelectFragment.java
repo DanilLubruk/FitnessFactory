@@ -24,6 +24,12 @@ public abstract class ListListenerSelectFragment<ItemType,
         }
     }
 
+    protected void setTitle() {
+        if (!selectMode) {
+            getBaseActivity().setTitle(getTitle());
+        }
+    }
+
     public void closeFragment() {
         getBaseActivity().getToolbar().setVisibility(View.VISIBLE);
         FragmentProvider.detachFragment(getBaseActivity(), this);
