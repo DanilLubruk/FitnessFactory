@@ -15,11 +15,9 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.observers.SingleDialogEvent;
 import com.example.fitnessfactory.databinding.ActivitySessionEditorBinding;
-import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.adapters.SessionPageAdapter;
 import com.example.fitnessfactory.ui.fragments.FragmentProvider;
 import com.example.fitnessfactory.ui.fragments.lists.ListListenerSelectFragment;
-import com.example.fitnessfactory.ui.fragments.lists.personnelList.PersonnelListFragment;
 import com.example.fitnessfactory.ui.viewmodels.editors.SessionEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionEditorViewModelFactory;
 import com.example.fitnessfactory.utils.GuiUtils;
@@ -83,19 +81,6 @@ public class SessionEditorActivity extends EditorActivity {
         binding.content.vpParticipants.setUserInputEnabled(false);
     }
 
-    @Override
-    public void onBackPressed() {
-        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
-        Fragment topFragment = fragmentList.get(fragmentList.size() - 1);
-
-        if (topFragment instanceof ListListenerSelectFragment) {
-            ListListenerSelectFragment listFragment = (ListListenerSelectFragment) topFragment;
-            listFragment.closeFragment();
-        } else {
-            cancelAndClose();
-        }
-    }
-
     private Date getIntentDefaultDate() {
         long time = getIntent().getLongExtra(AppConsts.SESSION_DATE, AppConsts.UNDEFINED_VALUE);
 
@@ -116,19 +101,12 @@ public class SessionEditorActivity extends EditorActivity {
 
     private void showGymSelectorActivity() {
         getIntent().putExtra(AppConsts.IS_SELECT_MODE_EXTRA, true);
-        FragmentProvider.attachFragmentSelectActivity(this, AppConsts.FRAGMENT_GYMS_ID);
-        /*Intent intent = new Intent(this, SelectionActivity.class);
-        intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, AppConsts.FRAGMENT_GYMS_ID);
-        intent.putExtra(AppConsts.REQUEST_CODE, REQUEST_GYM_ID);
-        startActivityForResult(intent, REQUEST_GYM_ID);*/
+        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_SESSIONS_GYMS_ID);
     }
 
     private void showSessionTypeSelectorActivity() {
         getIntent().putExtra(AppConsts.IS_SELECT_MODE_EXTRA, true);
-        FragmentProvider.attachFragmentSelectActivity(this, AppConsts.FRAGMENT_SESSION_TYPES_ID);
-       /* Intent intent = new Intent(this, SelectionActivity.class);
-        intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, AppConsts.FRAGMENT_SESSION_TYPES_ID);
-        startActivityForResult(intent, REQUEST_SESSION_TYPE);*/
+        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_SESSION_TYPES_ID);
     }
 
     @Override

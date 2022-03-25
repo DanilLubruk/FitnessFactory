@@ -6,7 +6,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.fitnessfactory.R;
-import com.example.fitnessfactory.data.events.PersonnelEmailUpdateEvent;
 import com.example.fitnessfactory.databinding.ActivityPersonnelEditorBinding;
 import com.example.fitnessfactory.ui.viewmodels.editors.PersonnelEditorViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
@@ -14,7 +13,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.greenrobot.eventbus.EventBus;
 
-public abstract class PersonnelEditorActivity extends TabParentEditorActivity<PersonnelEmailUpdateEvent> {
+public abstract class PersonnelEditorActivity extends EditorActivity {
 
     protected ActivityPersonnelEditorBinding binding;
 
@@ -34,7 +33,6 @@ public abstract class PersonnelEditorActivity extends TabParentEditorActivity<Pe
         super.initActivity();
         binding.setModel(getViewModel());
         getViewModel().setPersonnelData(getIntent());
-        subscribeForPersonnelEmailChangesForTabs();
         binding.container.vpPersonnelData.setAdapter(getPageAdapter());
         new TabLayoutMediator(
                 binding.container.tlPersonnelData,
@@ -52,11 +50,6 @@ public abstract class PersonnelEditorActivity extends TabParentEditorActivity<Pe
                     break;
             }
         };
-    }
-
-    private void subscribeForPersonnelEmailChangesForTabs() {
-        getViewModel().getPersonnelEmail()
-                .observe(this, personnelEmail -> EventBus.getDefault().postSticky(new PersonnelEmailUpdateEvent(personnelEmail)));
     }
 
     @Override
@@ -78,10 +71,5 @@ public abstract class PersonnelEditorActivity extends TabParentEditorActivity<Pe
         menu.removeItem(MENU_SAVE);
 
         return isCreated;
-    }
-
-    @Override
-    protected Class<PersonnelEmailUpdateEvent> getEventType() {
-        return PersonnelEmailUpdateEvent.class;
     }
 }

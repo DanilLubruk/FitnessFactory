@@ -3,6 +3,7 @@ package com.example.fitnessfactory.ui.activities.editors;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.ui.adapters.CoachGymsPageAdapter;
 import com.example.fitnessfactory.ui.viewmodels.editors.CoachEditorViewModel;
@@ -10,9 +11,14 @@ import com.example.fitnessfactory.ui.viewmodels.factories.CoachEditorViewModelFa
 import com.example.fitnessfactory.utils.ResUtils;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import javax.inject.Inject;
+
 public class CoachEditorActivity extends PersonnelEditorActivity {
 
     private CoachEditorViewModel viewModel;
+
+    @Inject
+    CoachEditorViewModelFactory coachEditorViewModelFactory;
 
     @Override
     protected CoachEditorViewModel getViewModel() {
@@ -31,7 +37,8 @@ public class CoachEditorActivity extends PersonnelEditorActivity {
 
     @Override
     public void initActivity() {
-        viewModel = new ViewModelProvider(this, new CoachEditorViewModelFactory()).get(CoachEditorViewModel.class);
+        FFApp.get().getAppComponent().inject(this);
+        viewModel = new ViewModelProvider(this, coachEditorViewModelFactory).get(CoachEditorViewModel.class);
         super.initActivity();
     }
 
@@ -47,5 +54,11 @@ public class CoachEditorActivity extends PersonnelEditorActivity {
                     break;
             }
         };
+    }
+
+    @Override
+    protected void close() {
+        FFApp.get().initAppComponent();
+        super.close();
     }
 }

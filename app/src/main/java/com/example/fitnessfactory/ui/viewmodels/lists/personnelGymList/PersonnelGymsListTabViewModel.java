@@ -22,7 +22,6 @@ public abstract class PersonnelGymsListTabViewModel extends ListViewModel<Gym> {
     protected PersonnelDataManager dataManager;
 
     private final MutableLiveData<List<Gym>> gyms = new MutableLiveData<>();
-    private String personnelEmail;
 
     public PersonnelGymsListTabViewModel(OwnerPersonnelRepository ownerRepository,
                                          ArgDataListener<String> dataListener,
@@ -44,15 +43,11 @@ public abstract class PersonnelGymsListTabViewModel extends ListViewModel<Gym> {
         return dataManager;
     }
 
-    public void resetPersonnelEmail(String personnelEmail) {
-        this.personnelEmail = personnelEmail;
-    }
-
     public MutableLiveData<List<Gym>> getGyms() {
         return gyms;
     }
 
-    public void getGymsData() {
+    public void getGymsData(String personnelEmail) {
         if (StringUtils.isEmpty(personnelEmail)) {
             return;
         }
@@ -61,7 +56,7 @@ public abstract class PersonnelGymsListTabViewModel extends ListViewModel<Gym> {
                 new SingleData<>(gyms::setValue, getErrorHandler()::handleError));
     }
 
-    public void addGym(String gymId) {
+    public void addGym(String personnelEmail, String gymId) {
         if (StringUtils.isEmpty(personnelEmail)) {
             handleItemOperationError();
             return;
@@ -79,7 +74,7 @@ public abstract class PersonnelGymsListTabViewModel extends ListViewModel<Gym> {
     }
 
     @Override
-    public void deleteItem(Gym gym) {
+    public void deleteItem(String personnelEmail, Gym gym) {
         if (StringUtils.isEmpty(personnelEmail)) {
             handleItemDeletingNullError();
             return;
@@ -96,7 +91,7 @@ public abstract class PersonnelGymsListTabViewModel extends ListViewModel<Gym> {
         GuiUtils.showMessage(getErrorDeletingMessage().concat(" - ").concat(getGymNullError()));
     }
 
-    public void startDataListener() {
+    public void startDataListener(String personnelEmail) {
         if (StringUtils.isEmpty(personnelEmail)) {
             doInterruptProgress.setValue(true);
             return;

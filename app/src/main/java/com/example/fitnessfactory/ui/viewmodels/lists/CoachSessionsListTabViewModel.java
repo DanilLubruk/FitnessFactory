@@ -30,7 +30,6 @@ public class CoachSessionsListTabViewModel extends ListViewModel<SessionView> {
     private final MutableLiveData<List<SessionView>> sessions = new MutableLiveData<>();
     private final MutableLiveData<Date> date = new MutableLiveData<>();
     public final ObservableField<Date> dateField = new ObservableField<>();
-    private String coachEmail;
 
     @Inject
     public CoachSessionsListTabViewModel(SessionsDataManager sessionsDataManager,
@@ -56,10 +55,6 @@ public class CoachSessionsListTabViewModel extends ListViewModel<SessionView> {
         return date;
     }
 
-    public void resetCoachEmail(String coachEmail) {
-        this.coachEmail = coachEmail;
-    }
-
     public MutableLiveData<List<SessionView>> getSessions() {
         return sessions;
     }
@@ -70,7 +65,7 @@ public class CoachSessionsListTabViewModel extends ListViewModel<SessionView> {
                 new SingleData<>(sessions::setValue, getErrorHandler()::handleError));
     }
 
-    public void addCoachToSession(String sessionId) {
+    public void addCoachToSession(String coachEmail, String sessionId) {
         if (StringUtils.isEmpty(coachEmail)) {
             handleItemDeletingNullError();
             return;
@@ -96,7 +91,7 @@ public class CoachSessionsListTabViewModel extends ListViewModel<SessionView> {
     }
 
     @Override
-    public void startDataListener() {
+    public void startDataListener(String coachEmail) {
         if (StringUtils.isEmpty(coachEmail)) {
             handleItemDeletingNullError();
             return;
@@ -123,7 +118,7 @@ public class CoachSessionsListTabViewModel extends ListViewModel<SessionView> {
     }
 
     @Override
-    public void deleteItem(SessionView item) {
+    public void deleteItem(String coachEmail, SessionView item) {
         if (StringUtils.isEmpty(coachEmail)) {
             handleItemDeletingNullError();
             return;

@@ -11,6 +11,7 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.callbacks.EditorCallback;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.ui.activities.BaseActivity;
+import com.example.fitnessfactory.ui.fragments.lists.ListListenerSelectFragment;
 import com.example.fitnessfactory.ui.fragments.lists.personnelList.PersonnelListFragment;
 import com.example.fitnessfactory.ui.viewmodels.editors.EditorViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
@@ -57,7 +58,15 @@ public abstract class EditorActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        cancelAndClose();
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+        Fragment topFragment = fragmentList.get(fragmentList.size() - 1);
+
+        if (topFragment instanceof ListListenerSelectFragment) {
+            ListListenerSelectFragment listFragment = (ListListenerSelectFragment) topFragment;
+            listFragment.closeFragment();
+        } else {
+            cancelAndClose();
+        }
     }
 
     @Override

@@ -21,7 +21,7 @@ import java.util.List;
 public abstract class PersonnelEditorViewModel extends EditorViewModel {
 
     public final ObservableField<AppUser> personnel = new ObservableField<>();
-    public final MutableLiveData<String> personnelEmail = new MutableLiveData<>();
+    public final MutableLiveData<String> personnelEmail = new MutableLiveData<>("");
 
     protected PersonnelAccessManager accessManager;
 

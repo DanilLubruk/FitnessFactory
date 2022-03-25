@@ -54,20 +54,12 @@ public abstract class PersonnelGymsListTabFragment extends ListListenerTabFragme
     }
 
     @Override
-    protected void openSelectionActivity() {
-        Intent intent = new Intent(getBaseActivity(), SelectionActivity.class);
-        intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, AppConsts.FRAGMENT_GYMS_ID);
-        intent.putExtra(AppConsts.REQUEST_CODE, REQUEST_GYM_ID);
-        startActivityForResult(intent, REQUEST_GYM_ID);
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_GYM_ID:
                 if (resultCode == RESULT_OK) {
                     String gymId = data.getStringExtra(AppConsts.GYM_ID_EXTRA);
-                    getViewModel().addGym(gymId);
+                    //getViewModel().addGym(gymId);
                 }
                 break;
         }

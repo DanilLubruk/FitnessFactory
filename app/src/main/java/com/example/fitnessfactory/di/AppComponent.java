@@ -1,12 +1,19 @@
 package com.example.fitnessfactory.di;
 
+import com.example.fitnessfactory.ui.activities.editors.AdminEditorActivity;
+import com.example.fitnessfactory.ui.activities.editors.CoachEditorActivity;
 import com.example.fitnessfactory.ui.activities.editors.SessionEditorActivity;
-import com.example.fitnessfactory.ui.fragments.lists.GymsListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.SessionTypesListFragment;
+import com.example.fitnessfactory.ui.fragments.lists.gymsList.AdminGymSelectionListFragment;
+import com.example.fitnessfactory.ui.fragments.lists.gymsList.CoachGymSelectionListFragment;
+import com.example.fitnessfactory.ui.fragments.lists.gymsList.SessionGymSelectionListFragment;
+import com.example.fitnessfactory.ui.fragments.lists.personnelGymsList.AdminGymsListTabFragment;
+import com.example.fitnessfactory.ui.fragments.lists.personnelGymsList.CoachGymsListTabFragment;
 import com.example.fitnessfactory.ui.fragments.lists.personnelList.ClientsListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.personnelList.CoachesListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.sessionParticipantList.SessionClientsListTabFragment;
 import com.example.fitnessfactory.ui.fragments.lists.sessionParticipantList.SessionCoachesListTabFragment;
+import com.example.fitnessfactory.ui.fragments.lists.sessionsList.CoachSessionsListTabFragment;
 import com.example.fitnessfactory.ui.viewmodels.MainActivityViewModel;
 import com.example.fitnessfactory.ui.viewmodels.editors.OrganisationInfoViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.AdminEditorViewModelFactory;
@@ -66,6 +73,13 @@ public interface AppComponent {
     void inject(SessionCoachesListTabFragment sessionCoachesListTabFragment);
     void inject(ClientsListFragment clientsListFragment);
     void inject(CoachesListFragment coachesListFragment);
-    void inject(GymsListFragment gymsListFragment);
+    void inject(SessionGymSelectionListFragment gymsListFragment);
     void inject(SessionTypesListFragment sessionTypesListFragment);
+    void inject(AdminGymsListTabFragment adminGymsListTabFragment);
+    void inject(AdminGymSelectionListFragment adminGymSelectionListFragment);
+    void inject(CoachGymSelectionListFragment coachGymSelectionListFragment);
+    void inject(CoachGymsListTabFragment coachGymsListTabFragment);
+    void inject(CoachSessionsListTabFragment coachSessionsListTabFragment);
+    void inject(AdminEditorActivity adminEditorActivity);
+    void inject(CoachEditorActivity coachEditorActivity);
 }

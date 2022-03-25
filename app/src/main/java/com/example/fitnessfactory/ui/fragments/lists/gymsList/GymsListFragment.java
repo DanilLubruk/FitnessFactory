@@ -1,4 +1,4 @@
-package com.example.fitnessfactory.ui.fragments.lists;
+package com.example.fitnessfactory.ui.fragments.lists.gymsList;
 
 import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM_ID;
 import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM_NAME;
@@ -18,6 +18,7 @@ import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.ui.activities.editors.GymEditorActivity;
 import com.example.fitnessfactory.ui.adapters.GymsListAdapter;
+import com.example.fitnessfactory.ui.fragments.lists.ListListenerSelectFragment;
 import com.example.fitnessfactory.ui.viewholders.lists.GymsListViewHolder;
 import com.example.fitnessfactory.ui.viewmodels.editors.SessionEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.GymsListViewModelFactory;
@@ -36,11 +37,6 @@ public class GymsListFragment extends ListListenerSelectFragment<Gym, GymsListVi
 
     private GymsListViewModel viewModel;
 
-    private SessionEditorViewModel editorViewModel;
-
-    @Inject
-    SessionEditorViewModelFactory sessionEditorViewModelFactory;
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -58,9 +54,7 @@ public class GymsListFragment extends ListListenerSelectFragment<Gym, GymsListVi
 
     @Override
     protected void defineViewModel() {
-        FFApp.get().getAppComponent().inject(this);
         viewModel = new ViewModelProvider(this, new GymsListViewModelFactory()).get(GymsListViewModel.class);
-        editorViewModel = new ViewModelProvider(this, sessionEditorViewModelFactory).get(SessionEditorViewModel.class);
     }
 
     @Override
@@ -76,12 +70,6 @@ public class GymsListFragment extends ListListenerSelectFragment<Gym, GymsListVi
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGymsListDataListenerEvent(GymsListDataListenerEvent gymsListDataListenerEvent) {
         setListData(gymsListDataListenerEvent.getGyms());
-    }
-
-    @Override
-    protected void sendSelectResult(Gym gym) {
-        editorViewModel.setGym(gym.getId());
-        closeFragment();
     }
 
     @Override

@@ -33,6 +33,7 @@ public class ClientEditorActivity extends PersonnelEditorActivity {
     public void initActivity() {
         viewModel = new ViewModelProvider(this, new ClientEditorViewModelFactory()).get(ClientEditorViewModel.class);
         super.initActivity();
+        binding.container.tlPersonnelData.setVisibility(View.GONE);
         binding.container.vpPersonnelData.setVisibility(View.GONE);
     }
 }

@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.fitnessfactory.ui.fragments.lists.CoachSessionsListTabFragment;
+import com.example.fitnessfactory.ui.fragments.lists.sessionsList.CoachSessionsListTabFragment;
 import com.example.fitnessfactory.ui.fragments.lists.personnelGymsList.CoachGymsListTabFragment;
 
 public class CoachGymsPageAdapter extends FragmentStateAdapter {

@@ -100,7 +100,7 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<AppUs
             }
 
             getBaseActivity().getIntent().putExtra(AppConsts.IS_SELECT_MODE_EXTRA, true);
-            FragmentProvider.attachFragmentSelectActivity(getBaseActivity(), AppConsts.FRAGMENT_CLIENTS_ID);
+            FragmentProvider.attachFragment(getBaseActivity(), AppConsts.FRAGMENT_CLIENTS_ID);
         });
     }
 

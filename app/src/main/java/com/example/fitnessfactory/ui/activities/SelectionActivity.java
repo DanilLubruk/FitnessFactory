@@ -30,6 +30,6 @@ public class SelectionActivity extends BaseActivity {
         super.initActivity();
         int fragmentId = getIntent().getIntExtra(AppConsts.FRAGMENT_ID_EXTRA, AppConsts.UNDEFINED_VALUE);
         getIntent().putExtra(AppConsts.IS_SELECT_MODE_EXTRA, true);
-        FragmentProvider.attachFragmentSelectActivity(this, fragmentId);
+        FragmentProvider.attachFragment(this, fragmentId);
     }
 }

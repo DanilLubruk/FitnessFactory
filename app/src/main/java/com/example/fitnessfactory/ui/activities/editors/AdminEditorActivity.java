@@ -3,6 +3,7 @@ package com.example.fitnessfactory.ui.activities.editors;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.events.AdminGymsListListenerEvent;
 import com.example.fitnessfactory.ui.adapters.AdminGymsPageAdapter;
@@ -15,9 +16,14 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import javax.inject.Inject;
+
 public class AdminEditorActivity extends PersonnelEditorActivity {
 
     private AdminEditorViewModel viewModel;
+
+    @Inject
+    AdminEditorViewModelFactory adminEditorViewModelFactory;
 
     @Override
     protected AdminEditorViewModel getViewModel() {
@@ -36,8 +42,15 @@ public class AdminEditorActivity extends PersonnelEditorActivity {
 
     @Override
     public void initActivity() {
-        viewModel = new ViewModelProvider(this, new AdminEditorViewModelFactory()).get(AdminEditorViewModel.class);
+        FFApp.get().getAppComponent().inject(this);
+        viewModel = new ViewModelProvider(this, adminEditorViewModelFactory).get(AdminEditorViewModel.class);
         super.initActivity();
+    }
+
+    @Override
+    protected void close() {
+        FFApp.get().initAppComponent();
+        super.close();
     }
 }
 

@@ -5,7 +5,12 @@ public class AppConsts {
     public static final int FRAGMENT_HOME_ID = 0;
     public static final int FRAGMENT_ADMINS_ID = 1;
     public static final int FRAGMENT_COACHES_ID = 2;
+
     public static final int FRAGMENT_GYMS_ID = 3;
+    public static final int FRAGMENT_SESSIONS_GYMS_ID = 31;
+    public static final int FRAGMENT_ADMIN_GYMS_ID = 32;
+    public static final int FRAGMENT_COACH_GYMS_ID = 33;
+
     public static final int FRAGMENT_CLIENTS_ID = 4;
     public static final int FRAGMENT_SESSION_TYPES_ID = 5;
     public static final int FRAGMENT_DAYS_SESSIONS_ID = 6;

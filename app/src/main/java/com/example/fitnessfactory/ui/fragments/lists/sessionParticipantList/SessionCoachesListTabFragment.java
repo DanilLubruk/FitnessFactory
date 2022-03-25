@@ -13,7 +13,6 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.SessionsCoachesListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.adapters.PersonnelListAdapter;
 import com.example.fitnessfactory.ui.fragments.FragmentProvider;
 import com.example.fitnessfactory.ui.fragments.lists.ListListenerTabFragment;
@@ -99,7 +98,7 @@ public class SessionCoachesListTabFragment extends ListListenerTabFragment<AppUs
                 return;
             }
             getBaseActivity().getIntent().putExtra(AppConsts.IS_SELECT_MODE_EXTRA, true);
-            FragmentProvider.attachFragmentSelectActivity(getBaseActivity(), AppConsts.FRAGMENT_COACHES_ID);
+            FragmentProvider.attachFragment(getBaseActivity(), AppConsts.FRAGMENT_COACHES_ID);
         });
     }
 

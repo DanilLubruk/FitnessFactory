@@ -145,32 +145,32 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void openMainPage() {
-        FragmentProvider.attachFragmentSelectActivity(this, AppConsts.FRAGMENT_HOME_ID);
+        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_HOME_ID);
         setMenuChecked(R.id.nav_home);
     }
 
     private void openAdminsPage() {
-        FragmentProvider.attachFragmentSelectActivity(this, AppConsts.FRAGMENT_ADMINS_ID);
+        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_ADMINS_ID);
         setMenuChecked(R.id.nav_admins);
     }
 
     private void openCoachesPage() {
-        FragmentProvider.attachFragmentSelectActivity(this, AppConsts.FRAGMENT_COACHES_ID);
+        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_COACHES_ID);
         setMenuChecked(R.id.nav_coaches);
     }
 
     private void openGymsPage() {
-        FragmentProvider.attachFragmentSelectActivity(this, AppConsts.FRAGMENT_GYMS_ID);
+        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_GYMS_ID);
         setMenuChecked(R.id.nav_gyms);
     }
 
     private void openClientsPage() {
-        FragmentProvider.attachFragmentSelectActivity(this, AppConsts.FRAGMENT_CLIENTS_ID);
+        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_CLIENTS_ID);
         setMenuChecked(R.id.nav_clients);
     }
 
     private void openSessionTypesPage() {
-        FragmentProvider.attachFragmentSelectActivity(this, AppConsts.FRAGMENT_SESSION_TYPES_ID);
+        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_SESSION_TYPES_ID);
         setMenuChecked(R.id.nav_session_types);
     }
 

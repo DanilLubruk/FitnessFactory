@@ -1,7 +1,6 @@
-package com.example.fitnessfactory.ui.fragments.lists;
+package com.example.fitnessfactory.ui.fragments.lists.sessionsList;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM_ID;
 import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_SESSION;
 
 import android.content.Intent;
@@ -14,10 +13,11 @@ import android.widget.TextView;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.CoachDaysSessionsListDataListenerEvent;
-import com.example.fitnessfactory.data.events.PersonnelEmailUpdateEvent;
+import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.observers.SingleDialogEvent;
 import com.example.fitnessfactory.data.views.SessionView;
@@ -25,9 +25,14 @@ import com.example.fitnessfactory.databinding.FragmentDaysSessionsListBinding;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.activities.editors.SessionEditorActivity;
 import com.example.fitnessfactory.ui.adapters.SessionsListAdapter;
+import com.example.fitnessfactory.ui.fragments.lists.ListListenerTabFragment;
 import com.example.fitnessfactory.ui.viewholders.lists.SessionsListViewHolder;
+import com.example.fitnessfactory.ui.viewmodels.editors.CoachEditorViewModel;
+import com.example.fitnessfactory.ui.viewmodels.factories.CoachEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachSessionsListTabViewModelFactory;
+import com.example.fitnessfactory.ui.viewmodels.factories.CoachesListTabViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.CoachSessionsListTabViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.personnelGymList.CoachGymsListTabViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
@@ -37,6 +42,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class CoachSessionsListTabFragment extends ListListenerTabFragment<SessionView, SessionsListViewHolder, SessionsListAdapter> {
 
@@ -48,9 +55,16 @@ public class CoachSessionsListTabFragment extends ListListenerTabFragment<Sessio
         return viewModel;
     }
 
+    private CoachEditorViewModel editorViewModel;
+
+    @Inject
+    CoachEditorViewModelFactory coachEditorViewModelFactory;
+
     @Override
     protected void defineViewModel() {
+        FFApp.get().getAppComponent().inject(this);
         viewModel = new ViewModelProvider(this, new CoachSessionsListTabViewModelFactory()).get(CoachSessionsListTabViewModel.class);
+        editorViewModel = new ViewModelProvider(this, coachEditorViewModelFactory).get(CoachEditorViewModel.class);
     }
 
     protected void initComponents() {
@@ -145,7 +159,7 @@ public class CoachSessionsListTabFragment extends ListListenerTabFragment<Sessio
             case REQUEST_SESSION:
                 if (resultCode == RESULT_OK) {
                     String sessionId = data.getStringExtra(AppConsts.SESSION_ID_EXTRA);
-                    getViewModel().addCoachToSession(sessionId);
+                    //getViewModel().addCoachToSession(sessionId);
                 }
                 break;
         }
@@ -154,12 +168,6 @@ public class CoachSessionsListTabFragment extends ListListenerTabFragment<Sessio
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCoachDaysSessionsListDataListenerEvent(CoachDaysSessionsListDataListenerEvent sessionListDataListenerEvent) {
         viewModel.getSessionsData(sessionListDataListenerEvent.getSessions());
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onPersonnelEmailUpdateEvent(PersonnelEmailUpdateEvent personnelEmailUpdateEvent) {
-        viewModel.resetCoachEmail(personnelEmailUpdateEvent.getPersonnelEmail());
-        viewModel.startDataListener();
     }
 
     public void closeProgress() {
@@ -174,5 +182,19 @@ public class CoachSessionsListTabFragment extends ListListenerTabFragment<Sessio
     public void showProgress() {
         getProgressBar().setVisibility(View.VISIBLE);
         getRecyclerView().setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (getViewModel() != null) {
+            editorViewModel.personnelEmail.observe(this, email -> getViewModel().startDataListener(email));
+        } else {
+            closeProgress();
+        }
+    }
+
+    protected void deleteItem(SessionView sessionView) {
+        editorViewModel.personnelEmail.observe(this, email -> getViewModel().deleteItem(email, sessionView));
     }
 }

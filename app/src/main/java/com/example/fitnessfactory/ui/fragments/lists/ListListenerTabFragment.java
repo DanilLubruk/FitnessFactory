@@ -43,8 +43,4 @@ public abstract class ListListenerTabFragment<
     }
 
     protected abstract void openSelectionActivity();
-
-    protected boolean doStartListenerInitially() {
-        return false;
-    }
 }
