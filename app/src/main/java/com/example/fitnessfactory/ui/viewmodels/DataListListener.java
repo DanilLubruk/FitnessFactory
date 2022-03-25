@@ -4,5 +4,7 @@ import com.example.fitnessfactory.data.dataListeners.DataListener;
 
 public interface DataListListener<ItemType> extends DataListener {
 
-    void deleteItem(ItemType item);
+    default void deleteItem(ItemType item) { }
+
+    default void deleteItem(String sessionId, ItemType item) { }
 }

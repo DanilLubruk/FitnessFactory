@@ -24,7 +24,6 @@ import io.reactivex.Completable;
 public abstract class SessionParticipantListTabViewModel<ItemType> extends ListViewModel<ItemType> {
 
     protected final SessionsDataManager sessionsDataManager;
-    private String sessionId;
 
     protected abstract ArgDataListener<String> getDataListener();
 
@@ -40,13 +39,8 @@ public abstract class SessionParticipantListTabViewModel<ItemType> extends ListV
         this.sessionsDataManager = sessionsDataManager;
     }
 
-
-    public void resetSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
-
     @Override
-    public void startDataListener() {
+    public void startDataListener(String sessionId) {
         if (StringUtils.isEmpty(sessionId)) {
             doInterruptProgress.setValue(true);
             return;
@@ -60,7 +54,7 @@ public abstract class SessionParticipantListTabViewModel<ItemType> extends ListV
         getDataListener().stopDataListener();
     }
 
-    public void addParticipantToSession(String participantId) {
+    public void addParticipantToSession(String sessionId, String participantId) {
         if (StringUtils.isEmpty(sessionId)) {
             handleSessionOperationNullError();
             return;
@@ -78,7 +72,7 @@ public abstract class SessionParticipantListTabViewModel<ItemType> extends ListV
     }
 
     @Override
-    public void deleteItem(ItemType item) {
+    public void deleteItem(String sessionId, ItemType item) {
         if (StringUtils.isEmpty(sessionId)) {
             handleSessionDeletingNullError();
             return;
@@ -108,6 +102,5 @@ public abstract class SessionParticipantListTabViewModel<ItemType> extends ListV
     @Override
     public void restoreState(Bundle savedState) {
         super.restoreState(savedState);
-        sessionId = (String) getHandle().get(AppConsts.SESSION_ID_EXTRA);
     }
 }

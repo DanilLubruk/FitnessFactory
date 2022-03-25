@@ -1,41 +1,31 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
 import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM_ID;
-import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM_NAME;
 import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_SESSION_TYPE;
 
 import android.content.Intent;
-import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
-import com.example.fitnessfactory.data.callbacks.EditorCallback;
-import com.example.fitnessfactory.data.events.SessionIdUpdateEvent;
 import com.example.fitnessfactory.data.observers.SingleDialogEvent;
-import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.databinding.ActivitySessionEditorBinding;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
-import com.example.fitnessfactory.ui.adapters.PersonnelPageAdapter;
 import com.example.fitnessfactory.ui.adapters.SessionPageAdapter;
 import com.example.fitnessfactory.ui.viewmodels.editors.SessionEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionEditorViewModelFactory;
-import com.example.fitnessfactory.utils.EventUtils;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.Date;
 
-public class SessionEditorActivity extends TabParentEditorActivity<SessionIdUpdateEvent> {
+public class SessionEditorActivity extends EditorActivity {
 
     private String id;
     private SessionEditorViewModel viewModel;
@@ -64,7 +54,6 @@ public class SessionEditorActivity extends TabParentEditorActivity<SessionIdUpda
                         getViewModel().setSessionDefaultTime(getIntentDefaultDate());
                     }
                 });
-        subscribeForSessionIdChangesForTabs();
         pageAdapter = new SessionPageAdapter(getSupportFragmentManager(), getLifecycle());
         binding.container.vpParticipants.setAdapter(pageAdapter);
         new TabLayoutMediator(binding.container.tlParticipants, binding.container.vpParticipants,
@@ -80,19 +69,6 @@ public class SessionEditorActivity extends TabParentEditorActivity<SessionIdUpda
                 }
         ).attach();
         binding.container.vpParticipants.setUserInputEnabled(false);
-    }
-
-    @Override
-    public MutableLiveData<String> getItemId() {
-        return getViewModel().sessionId;
-    }
-
-    private void subscribeForSessionIdChangesForTabs() {
-        getViewModel().getSessionId()
-                .observe(this, sessionId -> {
-                    getIntent().putExtra(AppConsts.SESSION_ID_EXTRA, sessionId);
-                    EventBus.getDefault().postSticky(new SessionIdUpdateEvent(sessionId));
-                });
     }
 
     private Date getIntentDefaultDate() {
@@ -187,10 +163,5 @@ public class SessionEditorActivity extends TabParentEditorActivity<SessionIdUpda
                 && !StringUtils.isEmpty(binding.container.edtEndTime.getText())
                 && !StringUtils.isEmpty(binding.container.edtGym.getText())
                 && !StringUtils.isEmpty(binding.container.edtSessionType.getText());
-    }
-
-    @Override
-    protected Class<SessionIdUpdateEvent> getEventType() {
-        return SessionIdUpdateEvent.class;
     }
 }

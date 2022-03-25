@@ -1,29 +1,29 @@
 package com.example.fitnessfactory.ui.fragments.lists.sessionParticipantList;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_CLIENT;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
-import com.example.fitnessfactory.data.events.SessionIdUpdateEvent;
 import com.example.fitnessfactory.data.events.SessionsClientsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.adapters.ClientsListAdapter;
 import com.example.fitnessfactory.ui.fragments.lists.ListListenerTabFragment;
 import com.example.fitnessfactory.ui.viewholders.lists.ClientsListViewHolder;
+import com.example.fitnessfactory.ui.viewmodels.editors.SessionEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.ClientsListTabViewModelFactory;
+import com.example.fitnessfactory.ui.viewmodels.factories.SessionEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.sessionParticipantList.SessionClientsListTabViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -33,13 +33,14 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<AppUs
 
     private SessionClientsListTabViewModel viewModel;
 
+    private SessionEditorViewModel editorViewModel;
+
     private final ActivityResultLauncher<Intent> openClientsSelection = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            result -> getBaseActivity().getItemId().observe(getViewLifecycleOwner(), (sessionId) -> {
-                getViewModel().resetSessionId(sessionId);
+            result -> editorViewModel.sessionId.observe(getViewLifecycleOwner(), sessionId -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     String clientEmail = result.getData().getStringExtra(AppConsts.CLIENT_EMAIL_EXTRA);
-                    getViewModel().addParticipantToSession(clientEmail);
+                    getViewModel().addParticipantToSession(sessionId, clientEmail);
                 }
             })
     );
@@ -57,6 +58,7 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<AppUs
     @Override
     protected void defineViewModel() {
         viewModel = new ViewModelProvider(this, new ClientsListTabViewModelFactory()).get(SessionClientsListTabViewModel.class);
+        editorViewModel = new ViewModelProvider(this, new SessionEditorViewModelFactory()).get(SessionEditorViewModel.class);
     }
 
     @Override
@@ -103,23 +105,22 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<AppUs
         getViewModel().resetClientsList(sessionsClientsListDataListenerEvent.getClientsEmails());
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onSessionIdUpdateEvent(SessionIdUpdateEvent sessionIdUpdateEvent) {
-        getViewModel().resetSessionId(getSessionId());
-        getViewModel().startDataListener();
-    }
-
-    private boolean isSessionIdRegistered() {
-        return getSessionId() != null && !getSessionId().isEmpty();
-    }
-
-    private String getSessionId() {
-        return getBaseActivity().getIntent().getStringExtra(AppConsts.SESSION_ID_EXTRA);
-    }
-
     @Override
     public void onSaveInstanceState(Bundle savedState) {
         super.onSaveInstanceState(savedState);
         getViewModel().saveState(savedState);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+        if (getViewModel() != null || doStartListenerInitially()) {
+            editorViewModel.sessionId.observe(this, sessionId -> getViewModel().startDataListener(sessionId));
+        }
+    }
+
+    protected void deleteItem(AppUser item) {
+        editorViewModel.sessionId.observe(this, sessionId -> getViewModel().deleteItem(sessionId, item));
     }
 }

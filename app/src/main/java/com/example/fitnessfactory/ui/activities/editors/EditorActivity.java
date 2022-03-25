@@ -44,10 +44,6 @@ public abstract class EditorActivity extends BaseActivity {
 
     protected abstract void initEntityKey();
 
-    public MutableLiveData<String> getItemId() {
-        return new MutableLiveData<String>();
-    }
-
     @Override
     protected void initActivity() {
         super.initActivity();

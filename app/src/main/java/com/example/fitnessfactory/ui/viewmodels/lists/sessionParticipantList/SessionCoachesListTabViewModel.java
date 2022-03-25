@@ -1,8 +1,11 @@
 package com.example.fitnessfactory.ui.viewmodels.lists.sessionParticipantList;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.dataListeners.ArgDataListener;
 import com.example.fitnessfactory.data.dataListeners.SessionsCoachesListDataListener;
 import com.example.fitnessfactory.data.managers.data.CoachesDataManager;
@@ -11,6 +14,7 @@ import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.utils.ResUtils;
+import com.example.fitnessfactory.utils.StringUtils;
 
 import java.util.List;
 

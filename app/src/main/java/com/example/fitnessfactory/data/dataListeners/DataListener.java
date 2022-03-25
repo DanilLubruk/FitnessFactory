@@ -2,7 +2,9 @@ package com.example.fitnessfactory.data.dataListeners;
 
 public interface DataListener {
 
-    void startDataListener();
+    default void startDataListener(String value) { }
+
+    default void startDataListener() { }
 
     void stopDataListener();
 }
