@@ -16,7 +16,7 @@ import com.example.fitnessfactory.ui.fragments.lists.SessionTypesListFragment;
 
 public class FragmentProvider {
 
-    public static <FragmentType extends Fragment> void attachFragment(AppCompatActivity activity, int fragmentId) {
+    public static <FragmentType extends Fragment> void attachFragmentSelectActivity(AppCompatActivity activity, int fragmentId) {
         FragmentType curFragment = null;
         String fragmentName = "";
 
@@ -61,5 +61,55 @@ public class FragmentProvider {
             fragmentTransaction.replace(R.id.container, curFragment, fragmentName);
             fragmentTransaction.commitAllowingStateLoss();
         }
+    }
+
+    public static void attachFragment(AppCompatActivity activity, int fragmentId) {
+        Fragment curFragment = null;
+        String fragmentName = "";
+
+        switch (fragmentId) {
+            case AppConsts.FRAGMENT_HOME_ID:
+                curFragment = new MenuFragment();
+                fragmentName = AppConsts.FRAGMENT_HOME_NAME;
+                break;
+            case AppConsts.FRAGMENT_ADMINS_ID:
+                curFragment = new AdminsListFragment();
+                fragmentName = AppConsts.FRAGMENT_ADMINS_NAME;
+                break;
+            case AppConsts.FRAGMENT_COACHES_ID:
+                curFragment = new CoachesListFragment();
+                fragmentName = AppConsts.FRAGMENT_COACHES_NAME;
+                break;
+            case AppConsts.FRAGMENT_GYMS_ID:
+                curFragment = new GymsListFragment();
+                fragmentName = AppConsts.FRAGMENT_GYMS_NAME;
+                break;
+            case AppConsts.FRAGMENT_CLIENTS_ID:
+                curFragment = new ClientsListFragment();
+                fragmentName = AppConsts.FRAGMENT_CLIENTS_NAME;
+                break;
+            case AppConsts.FRAGMENT_SESSION_TYPES_ID:
+                curFragment = new SessionTypesListFragment();
+                fragmentName = AppConsts.FRAGMENT_SESSION_TYPES_NAME;
+                break;
+            case AppConsts.FRAGMENT_DAYS_SESSIONS_ID:
+                curFragment = new DaySessionsListFragment();
+                fragmentName = AppConsts.FRAGMENT_DAYS_SESSIONS_NAME;
+                break;
+        }
+
+        if (curFragment != null) {
+            FragmentManager fragmentManager = activity.getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.attach(curFragment);
+            fragmentTransaction.commitAllowingStateLoss();
+        }
+    }
+
+    public static void detachFragment(AppCompatActivity activity, Fragment fragment) {
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.detach(fragment);
+        fragmentTransaction.commitAllowingStateLoss();
     }
 }

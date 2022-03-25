@@ -9,12 +9,13 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.SessionsClientsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.adapters.ClientsListAdapter;
+import com.example.fitnessfactory.ui.fragments.FragmentProvider;
 import com.example.fitnessfactory.ui.fragments.lists.ListListenerTabFragment;
 import com.example.fitnessfactory.ui.viewholders.lists.ClientsListViewHolder;
 import com.example.fitnessfactory.ui.viewmodels.editors.SessionEditorViewModel;
@@ -23,17 +24,21 @@ import com.example.fitnessfactory.ui.viewmodels.factories.SessionEditorViewModel
 import com.example.fitnessfactory.ui.viewmodels.lists.sessionParticipantList.SessionClientsListTabViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class SessionClientsListTabFragment extends ListListenerTabFragment<AppUser, ClientsListViewHolder, ClientsListAdapter> {
 
     private SessionClientsListTabViewModel viewModel;
 
     private SessionEditorViewModel editorViewModel;
+
+    @Inject
+    SessionEditorViewModelFactory sessionEditorViewModelFactory;
 
     private final ActivityResultLauncher<Intent> openClientsSelection = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -57,8 +62,9 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<AppUs
 
     @Override
     protected void defineViewModel() {
+        FFApp.get().getAppComponent().inject(this);
         viewModel = new ViewModelProvider(this, new ClientsListTabViewModelFactory()).get(SessionClientsListTabViewModel.class);
-        editorViewModel = new ViewModelProvider(this, new SessionEditorViewModelFactory()).get(SessionEditorViewModel.class);
+        editorViewModel = new ViewModelProvider(this, sessionEditorViewModelFactory).get(SessionEditorViewModel.class);
     }
 
     @Override
@@ -93,10 +99,8 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<AppUs
                 return;
             }
 
-            Intent intent = new Intent(getBaseActivity(), SelectionActivity.class);
-            intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, AppConsts.FRAGMENT_CLIENTS_ID);
-
-            openClientsSelection.launch(intent);
+            getBaseActivity().getIntent().putExtra(AppConsts.IS_SELECT_MODE_EXTRA, true);
+            FragmentProvider.attachFragmentSelectActivity(getBaseActivity(), AppConsts.FRAGMENT_CLIENTS_ID);
         });
     }
 
@@ -114,9 +118,10 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<AppUs
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
-        if (getViewModel() != null || doStartListenerInitially()) {
+        if (getViewModel() != null) {
             editorViewModel.sessionId.observe(this, sessionId -> getViewModel().startDataListener(sessionId));
+        } else {
+            closeProgress();
         }
     }
 

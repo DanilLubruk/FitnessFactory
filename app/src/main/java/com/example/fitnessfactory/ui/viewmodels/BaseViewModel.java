@@ -106,6 +106,10 @@ public abstract class BaseViewModel extends ViewModel {
         rxManager.subscribe(subscriber, onComplete, onError);
     }
 
+    public <T> void subscribeInIOThread(Completable subscriber, Action onComplete) {
+        rxManager.subscribeInIOThread(subscriber, onComplete, getErrorHandler()::handleError);
+    }
+
     public <T> void subscribeInIOThread(Completable subscriber) {
         rxManager.subscribeInIOThread(subscriber, getErrorHandler()::handleError);
     }

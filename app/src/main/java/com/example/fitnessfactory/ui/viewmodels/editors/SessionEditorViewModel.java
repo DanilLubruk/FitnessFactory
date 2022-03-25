@@ -31,7 +31,7 @@ public class SessionEditorViewModel extends EditorViewModel {
     public ObservableField<Session> session = new ObservableField<>();
     public ObservableField<String> sessionTypeName = new ObservableField<>();
     public ObservableField<String> gymName = new ObservableField<>();
-    public MutableLiveData<String> sessionId = new MutableLiveData<>();
+    public MutableLiveData<String> sessionId = new MutableLiveData<>("");
     private Session dbSession;
 
     private final String DB_ID_KEY = "DB_ID_KEY";
@@ -270,9 +270,7 @@ public class SessionEditorViewModel extends EditorViewModel {
                 new SingleData<>(
                         isSavedResult -> {
                             dbSession.copy(session);
-                            if (!session.getId().equals(sessionId.getValue())) {
-                                sessionId.setValue(session.getId());
-                            }
+                            sessionId.setValue(session.getId());
                             isSaved.setValue(isSavedResult);
                         },
                         throwable -> getErrorHandler().handleError(isSaved, throwable)));

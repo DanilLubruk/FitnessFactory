@@ -14,6 +14,4 @@ public abstract class EditorViewModel extends DataOperatingViewModel {
     public abstract SingleLiveEvent<Boolean> save();
 
     public abstract SingleLiveEvent<Boolean> delete();
-
-
 }

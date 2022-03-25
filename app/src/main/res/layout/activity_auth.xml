@@ -8,20 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.MainActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.ActionBar">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:titleTextColor="?attr/mainTextColor"/>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
     <include
         android:id="@+id/container"
         layout="@layout/activity_auth_content"/>

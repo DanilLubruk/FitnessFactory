@@ -189,7 +189,8 @@ ListListenerFragment<
         getFAB().setVisibility(View.VISIBLE);
         if (adapter != null) {
             getEmptyDataLabel().setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
-
+        } else {
+            getEmptyDataLabel().setVisibility(View.VISIBLE);
         }
     }
 

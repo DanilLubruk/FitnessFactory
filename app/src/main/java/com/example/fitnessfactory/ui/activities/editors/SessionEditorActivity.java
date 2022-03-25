@@ -7,14 +7,17 @@ import android.content.Intent;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.observers.SingleDialogEvent;
 import com.example.fitnessfactory.databinding.ActivitySessionEditorBinding;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.adapters.SessionPageAdapter;
+import com.example.fitnessfactory.ui.fragments.lists.personnelList.PersonnelListFragment;
 import com.example.fitnessfactory.ui.viewmodels.editors.SessionEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionEditorViewModelFactory;
 import com.example.fitnessfactory.utils.GuiUtils;
@@ -24,6 +27,9 @@ import com.example.fitnessfactory.utils.dialogs.DialogUtils;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.Date;
+import java.util.List;
+
+import javax.inject.Inject;
 
 public class SessionEditorActivity extends EditorActivity {
 
@@ -32,6 +38,9 @@ public class SessionEditorActivity extends EditorActivity {
     private ActivitySessionEditorBinding binding;
     private SessionPageAdapter pageAdapter;
 
+    @Inject
+    SessionEditorViewModelFactory sessionEditorViewModelFactory;
+
     @Override
     public Toolbar getToolbar() {
         return binding.toolbar;
@@ -39,15 +48,16 @@ public class SessionEditorActivity extends EditorActivity {
 
     @Override
     public void initActivity() {
+        FFApp.get().getAppComponent().inject(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_session_editor);
-        viewModel = new ViewModelProvider(this, new SessionEditorViewModelFactory()).get(SessionEditorViewModel.class);
+        viewModel = new ViewModelProvider(this, sessionEditorViewModelFactory).get(SessionEditorViewModel.class);
         super.initActivity();
         binding.setModel(getViewModel());
-        binding.container.edtDate.setOnClickListener(view -> trySelectDate());
-        binding.container.edtStartTime.setOnClickListener(view -> trySelectStartTime());
-        binding.container.edtEndTime.setOnClickListener(view -> trySelectEndTime());
-        binding.container.edtGym.setOnClickListener(view -> showGymSelectorActivity());
-        binding.container.edtSessionType.setOnClickListener(view -> showSessionTypeSelectorActivity());
+        binding.content.edtDate.setOnClickListener(view -> trySelectDate());
+        binding.content.edtStartTime.setOnClickListener(view -> trySelectStartTime());
+        binding.content.edtEndTime.setOnClickListener(view -> trySelectEndTime());
+        binding.content.edtGym.setOnClickListener(view -> showGymSelectorActivity());
+        binding.content.edtSessionType.setOnClickListener(view -> showSessionTypeSelectorActivity());
         getViewModel().getSession(getSessionId())
                 .observe(this, isObtained -> {
                     if (isObtained && isNewEntity()) {
@@ -55,8 +65,8 @@ public class SessionEditorActivity extends EditorActivity {
                     }
                 });
         pageAdapter = new SessionPageAdapter(getSupportFragmentManager(), getLifecycle());
-        binding.container.vpParticipants.setAdapter(pageAdapter);
-        new TabLayoutMediator(binding.container.tlParticipants, binding.container.vpParticipants,
+        binding.content.vpParticipants.setAdapter(pageAdapter);
+        new TabLayoutMediator(binding.content.tlParticipants, binding.content.vpParticipants,
                 (tab, position) -> {
                     switch (position) {
                         case 0:
@@ -68,7 +78,20 @@ public class SessionEditorActivity extends EditorActivity {
                     }
                 }
         ).attach();
-        binding.container.vpParticipants.setUserInputEnabled(false);
+        binding.content.vpParticipants.setUserInputEnabled(false);
+    }
+
+    @Override
+    public void onBackPressed() {
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+        Fragment topFragment = fragmentList.get(fragmentList.size() - 1);
+
+        if (topFragment instanceof PersonnelListFragment) {
+            PersonnelListFragment personnelListFragment = (PersonnelListFragment) topFragment;
+            personnelListFragment.closeFragment();
+        } else {
+            cancelAndClose();
+        }
     }
 
     private Date getIntentDefaultDate() {
@@ -158,10 +181,16 @@ public class SessionEditorActivity extends EditorActivity {
 
     @Override
     protected boolean isDataValid() {
-        return !StringUtils.isEmpty(binding.container.edtDate.getText())
-                && !StringUtils.isEmpty(binding.container.edtStartTime.getText())
-                && !StringUtils.isEmpty(binding.container.edtEndTime.getText())
-                && !StringUtils.isEmpty(binding.container.edtGym.getText())
-                && !StringUtils.isEmpty(binding.container.edtSessionType.getText());
+        return !StringUtils.isEmpty(binding.content.edtDate.getText())
+                && !StringUtils.isEmpty(binding.content.edtStartTime.getText())
+                && !StringUtils.isEmpty(binding.content.edtEndTime.getText())
+                && !StringUtils.isEmpty(binding.content.edtGym.getText())
+                && !StringUtils.isEmpty(binding.content.edtSessionType.getText());
+    }
+
+    @Override
+    protected void close() {
+        FFApp.get().initAppComponent();
+        super.close();
     }
 }

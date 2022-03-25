@@ -46,7 +46,7 @@ public class AuthActivity extends BaseActivity {
 
     @Override
     public Toolbar getToolbar() {
-        return binding.toolbar;
+        return null;
     }
 
     @Override
@@ -59,11 +59,6 @@ public class AuthActivity extends BaseActivity {
            }
         });
         binding.container.btnSignIn.setOnClickListener(view -> googleSignIn());
-        hideToolbar();
-    }
-
-    private void hideToolbar() {
-        getToolbar().setVisibility(View.GONE);
     }
 
     private void setFullScreen() {

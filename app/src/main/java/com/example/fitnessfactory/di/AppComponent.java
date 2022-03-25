@@ -1,5 +1,10 @@
 package com.example.fitnessfactory.di;
 
+import com.example.fitnessfactory.ui.activities.editors.SessionEditorActivity;
+import com.example.fitnessfactory.ui.fragments.lists.personnelList.ClientsListFragment;
+import com.example.fitnessfactory.ui.fragments.lists.personnelList.CoachesListFragment;
+import com.example.fitnessfactory.ui.fragments.lists.sessionParticipantList.SessionClientsListTabFragment;
+import com.example.fitnessfactory.ui.fragments.lists.sessionParticipantList.SessionCoachesListTabFragment;
 import com.example.fitnessfactory.ui.viewmodels.MainActivityViewModel;
 import com.example.fitnessfactory.ui.viewmodels.editors.OrganisationInfoViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.AdminEditorViewModelFactory;
@@ -54,4 +59,9 @@ public interface AppComponent {
     void inject(CoachGymsListTabViewModelFactory coachGymsListTabViewModelFactory);
     void inject(AdminGymsListTabViewModelFactory adminGymsListTabViewModelFactory);
     void inject(CoachSessionsListTabViewModelFactory coachSessionsListTabViewModelFactory);
+    void inject(SessionEditorActivity sessionEditorActivity);
+    void inject(SessionClientsListTabFragment sessionClientsListTabFragment);
+    void inject(SessionCoachesListTabFragment sessionCoachesListTabFragment);
+    void inject(ClientsListFragment clientsListFragment);
+    void inject(CoachesListFragment coachesListFragment);
 }

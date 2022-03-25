@@ -18,6 +18,7 @@
         <item name="warnColor">@color/scarletRed</item>
         <item name="tabBackground">@color/light_tab_background</item>
         <item name="accentColor">@color/gold</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
     <style name="FragmentDialogsTheme" parent="@android:style/Theme.Panel">
         <item name="android:windowAnimationStyle">@style/MyAnimation.Window</item>
@@ -28,7 +29,7 @@
         <item name="android:windowExitAnimation">@anim/anim_out</item>
     </style>
 
-    <style name="AppTheme.ActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <style name="AppTheme.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="android:textColorPrimary">?attr/mainTextColor</item>
         <item name="android:textColorSecondary">?attr/mainTextColor</item>
         <item name="actionMenuTextColor">?attr/mainTextColor</item>

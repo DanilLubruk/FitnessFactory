@@ -9,6 +9,7 @@ import com.example.fitnessfactory.data.dataListeners.ArgDataListener;
 import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.observers.SingleData;
+import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
@@ -54,17 +55,23 @@ public abstract class SessionParticipantListTabViewModel<ItemType> extends ListV
         getDataListener().stopDataListener();
     }
 
-    public void addParticipantToSession(String sessionId, String participantId) {
+    public SingleLiveEvent<Boolean> addParticipantToSession(String sessionId, String participantId) {
+        SingleLiveEvent<Boolean> event = new SingleLiveEvent<>();
+
         if (StringUtils.isEmpty(sessionId)) {
             handleSessionOperationNullError();
-            return;
+            event.setValue(false);
+            return event;
         }
         if (StringUtils.isEmpty(participantId)) {
             handleItemOperationError();
-            return;
+            event.setValue(false);
+            return event;
         }
 
-        subscribeInIOThread(getAddParticipantAction(sessionId, participantId));
+        subscribeInIOThread(getAddParticipantAction(sessionId, participantId), () -> event.setValue(true));
+
+        return event;
     }
 
     private void handleSessionOperationNullError() {

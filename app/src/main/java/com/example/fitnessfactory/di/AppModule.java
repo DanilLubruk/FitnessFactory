@@ -41,6 +41,9 @@ import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionTypeRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
+import com.example.fitnessfactory.ui.viewmodels.factories.SessionEditorViewModelFactory;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -327,5 +330,11 @@ public class AppModule {
                                                             OwnerClientsRepository ownerRepository,
                                                             ClientSessionsRepository clientSessionsRepository) {
         return new ClientsAccessManager(accessRepository, ownerRepository, clientSessionsRepository);
+    }
+
+    @Provides
+    @AppScope
+    public SessionEditorViewModelFactory provideSessionEditorViewModelFactory() {
+        return new SessionEditorViewModelFactory();
     }
 }

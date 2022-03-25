@@ -3,14 +3,12 @@ package com.example.fitnessfactory.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -20,7 +18,6 @@ import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.CurrentUserType;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.databinding.ActivityMainBinding;
-import com.example.fitnessfactory.system.FirebaseAuthManager;
 import com.example.fitnessfactory.ui.activities.editors.OrganisationInfoEditorActivity;
 import com.example.fitnessfactory.ui.fragments.FragmentProvider;
 import com.example.fitnessfactory.ui.viewmodels.MainActivityViewModel;
@@ -148,32 +145,32 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void openMainPage() {
-        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_HOME_ID);
+        FragmentProvider.attachFragmentSelectActivity(this, AppConsts.FRAGMENT_HOME_ID);
         setMenuChecked(R.id.nav_home);
     }
 
     private void openAdminsPage() {
-        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_ADMINS_ID);
+        FragmentProvider.attachFragmentSelectActivity(this, AppConsts.FRAGMENT_ADMINS_ID);
         setMenuChecked(R.id.nav_admins);
     }
 
     private void openCoachesPage() {
-        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_COACHES_ID);
+        FragmentProvider.attachFragmentSelectActivity(this, AppConsts.FRAGMENT_COACHES_ID);
         setMenuChecked(R.id.nav_coaches);
     }
 
     private void openGymsPage() {
-        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_GYMS_ID);
+        FragmentProvider.attachFragmentSelectActivity(this, AppConsts.FRAGMENT_GYMS_ID);
         setMenuChecked(R.id.nav_gyms);
     }
 
     private void openClientsPage() {
-        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_CLIENTS_ID);
+        FragmentProvider.attachFragmentSelectActivity(this, AppConsts.FRAGMENT_CLIENTS_ID);
         setMenuChecked(R.id.nav_clients);
     }
 
     private void openSessionTypesPage() {
-        FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_SESSION_TYPES_ID);
+        FragmentProvider.attachFragmentSelectActivity(this, AppConsts.FRAGMENT_SESSION_TYPES_ID);
         setMenuChecked(R.id.nav_session_types);
     }
 

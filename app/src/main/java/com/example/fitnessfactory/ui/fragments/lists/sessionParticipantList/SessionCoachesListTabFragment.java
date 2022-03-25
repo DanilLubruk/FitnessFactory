@@ -8,12 +8,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.SessionsCoachesListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
 import com.example.fitnessfactory.ui.adapters.PersonnelListAdapter;
+import com.example.fitnessfactory.ui.fragments.FragmentProvider;
 import com.example.fitnessfactory.ui.fragments.lists.ListListenerTabFragment;
 import com.example.fitnessfactory.ui.viewholders.lists.PersonnelListViewHolder;
 import com.example.fitnessfactory.ui.viewmodels.editors.SessionEditorViewModel;
@@ -21,12 +23,12 @@ import com.example.fitnessfactory.ui.viewmodels.factories.SessionCoachesListTabV
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.sessionParticipantList.SessionCoachesListTabViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
-
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class SessionCoachesListTabFragment extends ListListenerTabFragment<AppUser, PersonnelListViewHolder, PersonnelListAdapter> {
 
@@ -34,14 +36,18 @@ public class SessionCoachesListTabFragment extends ListListenerTabFragment<AppUs
 
     private SessionEditorViewModel editorViewModel;
 
+    @Inject
+    SessionEditorViewModelFactory sessionEditorViewModelFactory;
+
     private final ActivityResultLauncher<Intent> openCoachesSelection = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            result -> editorViewModel.sessionId.observe(getViewLifecycleOwner(), sessionId -> {
+            result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    String sessionId = result.getData().getStringExtra(AppConsts.SESSION_ID_EXTRA);
                     String coachEmail = result.getData().getStringExtra(AppConsts.COACH_EMAIL_EXTRA);
                     getViewModel().addParticipantToSession(sessionId, coachEmail);
                 }
-            })
+            }
     );
 
     protected void initComponents() {
@@ -56,8 +62,9 @@ public class SessionCoachesListTabFragment extends ListListenerTabFragment<AppUs
 
     @Override
     protected void defineViewModel() {
+        FFApp.get().getAppComponent().inject(this);
         tabViewModel = new ViewModelProvider(this, new SessionCoachesListTabViewModelFactory()).get(SessionCoachesListTabViewModel.class);
-        editorViewModel = new ViewModelProvider(this, new SessionEditorViewModelFactory()).get(SessionEditorViewModel.class);
+        editorViewModel = new ViewModelProvider(this, sessionEditorViewModelFactory).get(SessionEditorViewModel.class);
     }
 
     @Override
@@ -91,11 +98,8 @@ public class SessionCoachesListTabFragment extends ListListenerTabFragment<AppUs
             if (!isSaved) {
                 return;
             }
-
-            Intent intent = new Intent(getBaseActivity(), SelectionActivity.class);
-            intent.putExtra(AppConsts.FRAGMENT_ID_EXTRA, AppConsts.FRAGMENT_COACHES_ID);
-
-            openCoachesSelection.launch(intent);
+            getBaseActivity().getIntent().putExtra(AppConsts.IS_SELECT_MODE_EXTRA, true);
+            FragmentProvider.attachFragmentSelectActivity(getBaseActivity(), AppConsts.FRAGMENT_COACHES_ID);
         });
     }
 
@@ -107,9 +111,10 @@ public class SessionCoachesListTabFragment extends ListListenerTabFragment<AppUs
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
-        if (getViewModel() != null || doStartListenerInitially()) {
+        if (getViewModel() != null) {
             editorViewModel.sessionId.observe(this, sessionId -> getViewModel().startDataListener(sessionId));
+        } else {
+            closeProgress();
         }
     }
 

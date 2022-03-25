@@ -38,7 +38,7 @@ public class FFApp extends Application {
         initAppComponent();
     }
 
-    protected void initAppComponent() {
+    public void initAppComponent() {
        appComponent = DaggerAppComponent
                 .builder()
                 .appModule(getAppModule())

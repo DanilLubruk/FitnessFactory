@@ -11,7 +11,7 @@ public abstract class ListListenerSelectFragment<ItemType,
         ViewHolderType extends BaseRecyclerViewHolder<ItemType>,
         AdapterType extends ListAdapter<ItemType, ViewHolderType>> extends ListListenerFragment<ItemType, ViewHolderType, AdapterType> {
 
-    private boolean selectMode = false;
+    protected boolean selectMode = false;
 
     @Override
     protected void initComponents() {
@@ -30,7 +30,7 @@ public abstract class ListListenerSelectFragment<ItemType,
         }
     }
 
-    private void sendSelectResult(ItemType item) {
+    protected void sendSelectResult(ItemType item) {
         getBaseActivity().setResult(Activity.RESULT_OK, getResultIntent(item));
         getBaseActivity().finish();
     }

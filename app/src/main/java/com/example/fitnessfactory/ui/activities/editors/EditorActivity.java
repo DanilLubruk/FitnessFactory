@@ -4,16 +4,20 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.callbacks.EditorCallback;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.ui.activities.BaseActivity;
+import com.example.fitnessfactory.ui.fragments.lists.personnelList.PersonnelListFragment;
 import com.example.fitnessfactory.ui.viewmodels.editors.EditorViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
+
+import java.util.List;
 
 public abstract class EditorActivity extends BaseActivity {
 
@@ -106,7 +110,7 @@ public abstract class EditorActivity extends BaseActivity {
 
     protected abstract String getDeleteMessage();
 
-    private void cancelAndClose() {
+    protected void cancelAndClose() {
         isModified(isModified -> {
             if (isModified) {
                 askForClose();

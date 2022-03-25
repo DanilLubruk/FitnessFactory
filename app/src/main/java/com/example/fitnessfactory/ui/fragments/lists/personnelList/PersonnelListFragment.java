@@ -2,12 +2,14 @@ package com.example.fitnessfactory.ui.fragments.lists.personnelList;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.adapters.PersonnelListAdapter;
+import com.example.fitnessfactory.ui.fragments.FragmentProvider;
 import com.example.fitnessfactory.ui.fragments.lists.ListListenerSelectFragment;
 import com.example.fitnessfactory.ui.viewholders.lists.PersonnelListViewHolder;
 import com.example.fitnessfactory.ui.viewmodels.lists.personnelList.PersonnelListViewModel;
@@ -45,12 +47,18 @@ public abstract class PersonnelListFragment
         super.initComponents();
         getFAB().setOnMenuButtonClickListener(view -> showSendEmailInvitationDialog());
         getViewModel().getPersonnel().observe(getViewLifecycleOwner(), this::setListData);
+        getBaseActivity().getToolbar().setVisibility(selectMode ? View.GONE : View.VISIBLE);
     }
     @Override
     protected void showEditorActivity(AppUser personnel) {
         Intent intent = getEditorActivityIntent(personnel);
 
         startActivity(intent);
+    }
+
+    public void closeFragment() {
+        getBaseActivity().getToolbar().setVisibility(View.VISIBLE);
+        FragmentProvider.detachFragment(getBaseActivity(), this);
     }
 
     private void showSendEmailInvitationDialog() {
