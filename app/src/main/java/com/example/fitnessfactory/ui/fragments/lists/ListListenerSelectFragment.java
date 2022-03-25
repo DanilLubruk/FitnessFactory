@@ -2,9 +2,11 @@ package com.example.fitnessfactory.ui.fragments.lists;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.view.View;
 
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.ui.adapters.ListAdapter;
+import com.example.fitnessfactory.ui.fragments.FragmentProvider;
 import com.example.fitnessfactory.ui.viewholders.BaseRecyclerViewHolder;
 
 public abstract class ListListenerSelectFragment<ItemType,
@@ -18,7 +20,13 @@ public abstract class ListListenerSelectFragment<ItemType,
         super.initComponents();
         if (getBaseActivity().getIntent().hasExtra(AppConsts.IS_SELECT_MODE_EXTRA)) {
             selectMode = getBaseActivity().getIntent().getBooleanExtra(AppConsts.IS_SELECT_MODE_EXTRA, false);
+            getBaseActivity().getToolbar().setVisibility(selectMode ? View.GONE : View.VISIBLE);
         }
+    }
+
+    public void closeFragment() {
+        getBaseActivity().getToolbar().setVisibility(View.VISIBLE);
+        FragmentProvider.detachFragment(getBaseActivity(), this);
     }
 
     @Override

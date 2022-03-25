@@ -9,15 +9,19 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.ActivityRequestCodes;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.GymsListDataListenerEvent;
+import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.ui.activities.editors.GymEditorActivity;
 import com.example.fitnessfactory.ui.adapters.GymsListAdapter;
 import com.example.fitnessfactory.ui.viewholders.lists.GymsListViewHolder;
+import com.example.fitnessfactory.ui.viewmodels.editors.SessionEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.GymsListViewModelFactory;
+import com.example.fitnessfactory.ui.viewmodels.factories.SessionEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.GymsListViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 
@@ -26,9 +30,16 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class GymsListFragment extends ListListenerSelectFragment<Gym, GymsListViewHolder, GymsListAdapter> {
 
     private GymsListViewModel viewModel;
+
+    private SessionEditorViewModel editorViewModel;
+
+    @Inject
+    SessionEditorViewModelFactory sessionEditorViewModelFactory;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -47,7 +58,9 @@ public class GymsListFragment extends ListListenerSelectFragment<Gym, GymsListVi
 
     @Override
     protected void defineViewModel() {
+        FFApp.get().getAppComponent().inject(this);
         viewModel = new ViewModelProvider(this, new GymsListViewModelFactory()).get(GymsListViewModel.class);
+        editorViewModel = new ViewModelProvider(this, sessionEditorViewModelFactory).get(SessionEditorViewModel.class);
     }
 
     @Override
@@ -63,6 +76,12 @@ public class GymsListFragment extends ListListenerSelectFragment<Gym, GymsListVi
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGymsListDataListenerEvent(GymsListDataListenerEvent gymsListDataListenerEvent) {
         setListData(gymsListDataListenerEvent.getGyms());
+    }
+
+    @Override
+    protected void sendSelectResult(Gym gym) {
+        editorViewModel.setGym(gym.getId());
+        closeFragment();
     }
 
     @Override

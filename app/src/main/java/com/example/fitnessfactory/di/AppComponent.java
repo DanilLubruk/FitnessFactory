@@ -1,6 +1,8 @@
 package com.example.fitnessfactory.di;
 
 import com.example.fitnessfactory.ui.activities.editors.SessionEditorActivity;
+import com.example.fitnessfactory.ui.fragments.lists.GymsListFragment;
+import com.example.fitnessfactory.ui.fragments.lists.SessionTypesListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.personnelList.ClientsListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.personnelList.CoachesListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.sessionParticipantList.SessionClientsListTabFragment;
@@ -64,4 +66,6 @@ public interface AppComponent {
     void inject(SessionCoachesListTabFragment sessionCoachesListTabFragment);
     void inject(ClientsListFragment clientsListFragment);
     void inject(CoachesListFragment coachesListFragment);
+    void inject(GymsListFragment gymsListFragment);
+    void inject(SessionTypesListFragment sessionTypesListFragment);
 }

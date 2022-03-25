@@ -47,18 +47,13 @@ public abstract class PersonnelListFragment
         super.initComponents();
         getFAB().setOnMenuButtonClickListener(view -> showSendEmailInvitationDialog());
         getViewModel().getPersonnel().observe(getViewLifecycleOwner(), this::setListData);
-        getBaseActivity().getToolbar().setVisibility(selectMode ? View.GONE : View.VISIBLE);
     }
+
     @Override
     protected void showEditorActivity(AppUser personnel) {
         Intent intent = getEditorActivityIntent(personnel);
 
         startActivity(intent);
-    }
-
-    public void closeFragment() {
-        getBaseActivity().getToolbar().setVisibility(View.VISIBLE);
-        FragmentProvider.detachFragment(getBaseActivity(), this);
     }
 
     private void showSendEmailInvitationDialog() {
