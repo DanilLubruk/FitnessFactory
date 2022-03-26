@@ -1,5 +1,6 @@
 package com.example.fitnessfactory.ui.activities.editors;
 
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,9 +36,11 @@ public abstract class EditorActivity extends BaseActivity {
         MenuItem menuItem;
 
         menuItem = menu.add(0, MENU_SAVE, 0, R.string.caption_save);
+        menuItem.setIcon(ResUtils.getDrawable(R.drawable.ic_baseline_save_24));
         menuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         menuItem = menu.add(0, MENU_DELETE, 0, R.string.caption_delete);
+        menuItem.setIcon(ResUtils.getDrawable(R.drawable.ic_baseline_delete_24));
         menuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         return super.onCreateOptionsMenu(menu);
@@ -53,8 +56,10 @@ public abstract class EditorActivity extends BaseActivity {
     protected void initActivity() {
         super.initActivity();
         initEntityKey();
-        setTitle(isNewEntity() ? R.string.title_add_item : R.string.title_edit_item);
+        setTitle(getTitleCaption());
     }
+
+    protected abstract String getTitleCaption();
 
     @Override
     public void onBackPressed() {

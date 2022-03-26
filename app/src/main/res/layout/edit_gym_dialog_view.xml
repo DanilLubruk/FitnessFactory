@@ -1,24 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="@dimen/activity_vertical_margin">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/edtName"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ilName"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="@dimen/edit_text_width"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:hint="@string/caption_name"
-        android:layout_width="@dimen/edit_text_width"
-        android:layout_marginBottom="@dimen/dialog_vertical_margin"
-        android:layout_height="wrap_content"/>
+        app:hintEnabled="true">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/edtAddress"
-        android:layout_below="@+id/edtName"
-        android:hint="@string/caption_address"
-        android:layout_centerHorizontal="true"
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/edtName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="@dimen/edit_text_width"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ilAddress"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="@dimen/edit_text_width"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ilName"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/caption_address"
+        app:hintEnabled="true">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/edtAddress"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="@dimen/edit_text_width"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 </RelativeLayout>

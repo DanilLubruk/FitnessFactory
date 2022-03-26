@@ -45,6 +45,11 @@ public class SessionTypeEditorActivity extends EditorActivity {
     }
 
     @Override
+    protected String getTitleCaption() {
+        return ResUtils.getString(R.string.caption_session_type);
+    }
+
+    @Override
     protected SessionTypeEditorViewModel getViewModel() {
         return viewModel;
     }

@@ -48,6 +48,11 @@ public class AdminEditorActivity extends PersonnelEditorActivity {
     }
 
     @Override
+    protected String getTitleCaption() {
+        return ResUtils.getString(R.string.caption_admin_capital);
+    }
+
+    @Override
     protected void close() {
         FFApp.get().initAppComponent();
         super.close();

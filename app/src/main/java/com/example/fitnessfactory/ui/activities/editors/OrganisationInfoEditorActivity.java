@@ -30,11 +30,11 @@ public class OrganisationInfoEditorActivity extends EditorActivity {
         viewModel.getData().observe(this, viewModel::setData);
         super.initActivity();
         binding.setModel(viewModel);
-        setTitleNoMatterNewEntityOrNot();
     }
 
-    private void setTitleNoMatterNewEntityOrNot() {
-        setTitle(ResUtils.getString(R.string.title_organisation));
+    @Override
+    protected String getTitleCaption() {
+        return ResUtils.getString(R.string.title_organisation);
     }
 
     @Override

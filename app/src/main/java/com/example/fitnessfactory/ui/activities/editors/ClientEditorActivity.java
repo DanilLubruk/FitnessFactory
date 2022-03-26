@@ -30,6 +30,11 @@ public class ClientEditorActivity extends PersonnelEditorActivity {
     }
 
     @Override
+    protected String getTitleCaption() {
+        return ResUtils.getString(R.string.caption_client_capital);
+    }
+
+    @Override
     public void initActivity() {
         viewModel = new ViewModelProvider(this, new ClientEditorViewModelFactory()).get(ClientEditorViewModel.class);
         super.initActivity();

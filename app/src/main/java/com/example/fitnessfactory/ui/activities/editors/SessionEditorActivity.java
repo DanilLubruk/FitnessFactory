@@ -81,6 +81,11 @@ public class SessionEditorActivity extends EditorActivity {
         binding.content.vpParticipants.setUserInputEnabled(false);
     }
 
+    @Override
+    protected String getTitleCaption() {
+        return ResUtils.getString(R.string.caption_session);
+    }
+
     private Date getIntentDefaultDate() {
         long time = getIntent().getLongExtra(AppConsts.SESSION_DATE, AppConsts.UNDEFINED_VALUE);
 

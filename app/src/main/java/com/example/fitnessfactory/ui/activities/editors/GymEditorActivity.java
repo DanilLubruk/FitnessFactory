@@ -86,6 +86,11 @@ public class GymEditorActivity extends EditorActivity {
     }
 
     @Override
+    protected String getTitleCaption() {
+        return ResUtils.getString(R.string.caption_gym);
+    }
+
+    @Override
     protected void close() {
         FFApp.get().initAppComponent();
         super.close();

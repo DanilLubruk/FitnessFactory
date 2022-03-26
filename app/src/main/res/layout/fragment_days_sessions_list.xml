@@ -25,9 +25,10 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="@dimen/component_margin"
         android:layout_marginEnd="@dimen/component_margin"
-        android:layout_marginBottom="@dimen/component_margin"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/component_margin"
         android:hint="@string/caption_day"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:hintEnabled="true">
 
     <androidx.appcompat.widget.AppCompatEditText

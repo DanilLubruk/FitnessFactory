@@ -25,7 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginBottom="@dimen/component_margin"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:hint="@string/caption_name"
             app:hintEnabled="true">
 
@@ -46,7 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ilName"
-            android:layout_marginBottom="@dimen/component_margin"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:hint="@string/caption_people_amount"
             app:hintEnabled="true">
 
@@ -67,7 +69,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ilPeopleAmount"
-            android:layout_marginBottom="@dimen/component_margin"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:hint="@{@string/hint_price(AppPrefs.currencySign.getValue())}">
 
             <androidx.appcompat.widget.AppCompatEditText

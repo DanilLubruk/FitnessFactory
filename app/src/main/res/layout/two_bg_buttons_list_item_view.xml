@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_marginStart="@dimen/list_item_margin"
-    android:layout_marginEnd="@dimen/list_item_margin"
-    android:layout_marginBottom="@dimen/list_item_margin"
-    android:layout_marginTop="@dimen/list_item_margin"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:layout_height="@dimen/recycler_view_two_line_height">
 
     <RelativeLayout
         android:id="@+id/rowBG"
-        android:layout_alignParentEnd="true"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
-        <Button
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true">
+
+        <ImageButton
             android:id="@+id/btnEdit"
-            android:text="@string/caption_edit"
             android:layout_width="wrap_content"
-            android:layout_gravity="center"
             android:layout_height="match_parent"
-            android:layout_toStartOf="@+id/btnDelete"/>
-        <Button
-            android:id="@+id/btnDelete"
-            android:layout_alignParentEnd="true"
-            android:text="@string/caption_delete"
-            android:layout_width="wrap_content"
-            android:backgroundTint="?attr/warnColor"
             android:layout_gravity="center"
-            android:layout_height="match_parent"/>
+            android:layout_toStartOf="@+id/btnDelete"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_baseline_edit_24"
+            android:text="@string/caption_edit" />
+
+        <ImageButton
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_baseline_delete_24"
+            android:text="@string/caption_delete" />
     </RelativeLayout>
 
     <LinearLayout
@@ -39,7 +42,6 @@
 
     <LinearLayout
         android:id="@+id/rowFGLayer"
-        android:background="@drawable/list_item_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -48,11 +50,8 @@
             android:id="@+id/tvName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/list_item_margin"
-            android:layout_marginStart="@dimen/list_item_margin"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="?attr/mainTextColor"
-            android:textStyle="bold"
+            android:textAppearance="?android:attr/textAppearanceListItem"
+            android:textColor="@color/black"
             android:layout_weight="1"
             android:gravity="start|center" />
 
@@ -60,12 +59,9 @@
             android:id="@+id/tvEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/list_item_margin"
-            android:layout_marginBottom="@dimen/list_item_margin"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="?attr/mainTextColor"
             android:layout_weight="3"
-            android:gravity="start|center" />
+            android:gravity="start|top" />
 
     </LinearLayout>
     </LinearLayout>

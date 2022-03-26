@@ -21,6 +21,8 @@
     <string name="caption_name">Имя</string>
     <string name="caption_email">Почта</string>
     <string name="caption_address">Адрес</string>
+    <string name="caption_admin_capital">Администратор</string>
+    <string name="caption_client_capital">Клиент</string>
     <string name="caption_ok">ОК</string>
     <string name="caption_cancel">Отмена</string>
     <string name="caption_blank_fields">Нужно заполнить пустые поля!</string>
@@ -132,6 +134,7 @@
     <string name="caption_english_language">Английский</string>
     <string name="caption_system">Системный</string>
     <string name="caption_select_language">Выберите язык</string>
+    <string name="caption_session">Тренировка</string>
 
     <!--authentication-->
     <string name="caption_wrong_auth">Неуспешная аутентификация</string>

@@ -19,6 +19,7 @@
         android:layout_below="@id/calendarView"
         android:layout_marginStart="@dimen/component_margin"
         android:layout_marginEnd="@dimen/component_margin"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:background="@color/black"
         android:orientation="horizontal" />
 

@@ -23,7 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginBottom="@dimen/component_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:hint="@string/caption_name">
 
             <androidx.appcompat.widget.AppCompatEditText

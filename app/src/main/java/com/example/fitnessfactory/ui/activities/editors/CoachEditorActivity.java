@@ -57,6 +57,11 @@ public class CoachEditorActivity extends PersonnelEditorActivity {
     }
 
     @Override
+    protected String getTitleCaption() {
+        return ResUtils.getString(R.string.caption_coach_capitalized);
+    }
+
+    @Override
     protected void close() {
         FFApp.get().initAppComponent();
         super.close();
