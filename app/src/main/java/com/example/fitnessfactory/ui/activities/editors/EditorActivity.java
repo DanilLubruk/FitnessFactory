@@ -64,6 +64,12 @@ public abstract class EditorActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+
+        if (fragmentList.isEmpty()) {
+            cancelAndClose();
+            return;
+        }
+
         Fragment topFragment = fragmentList.get(fragmentList.size() - 1);
 
         if (topFragment instanceof ListListenerSelectFragment) {

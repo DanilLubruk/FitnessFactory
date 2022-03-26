@@ -44,7 +44,7 @@ public class GymsAccessManager extends BaseManager {
     }
 
     private Single<WriteBatch> getDeleteBatch(Gym gym) {
-        return sessionsRepository.isGymNameOccupiedAsync(gym.getName())
+        return sessionsRepository.isGymOccupiedAsync(gym.getId())
                 .flatMap(isOccupied -> isOccupied ?
                         Single.error(new Exception(getOccupiedMessage()))
                         : ownerGymRepository.getDeleteGymBatchAsync(gym.getId()))

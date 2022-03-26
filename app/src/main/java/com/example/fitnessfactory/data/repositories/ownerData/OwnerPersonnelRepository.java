@@ -21,9 +21,20 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
 
     public Single<List<String>> getPersonnelEmailsAsync(List<String> personnelIds) {
         return SingleCreate(emitter -> {
-           if (!emitter.isDisposed()) {
-               emitter.onSuccess(getPersonnelEmails(personnelIds));
-           }
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(getPersonnelEmails(personnelIds));
+            }
+        });
+    }
+
+    public Single<Boolean> isPersonnelOccupiedWithGyms(String personnelEmail) {
+        return SingleCreate(emitter -> {
+            Personnel personnel = getUniqueUserEntity(newQuery().whereUserEmailEquals(personnelEmail).build(), Personnel.class);
+            boolean isPersonnelOccupied = !personnel.getGymsIds().isEmpty();
+
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(isPersonnelOccupied);
+            }
         });
     }
 
@@ -204,7 +215,7 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
             Personnel personnel = getUniquePersonnelEntity(personnelEmail);
             personnelGymsIds =
                     personnel.getGymsIds() != null ?
-                    personnel.getGymsIds() : new ArrayList<>();
+                            personnel.getGymsIds() : new ArrayList<>();
         } catch (NoDataException noDataException) {
             personnelGymsIds = new ArrayList<>();
         }

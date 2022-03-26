@@ -60,7 +60,7 @@ public abstract class PersonnelAccessManager extends BaseManager {
                 .flatMapCompletable(this::commitBatchCompletable);
     }
 
-    private Single<WriteBatch> getDeleteBatch(String ownerId, String personnelEmail) {
+    protected Single<WriteBatch> getDeleteBatch(String ownerId, String personnelEmail) {
         return getAccessRepository().getDeletePersonnelAccessEntryBatchAsync(ownerId, personnelEmail)
                 .flatMap(writeBatch -> getOwnerRepository().getDeletePersonnelBatchAsync(writeBatch, personnelEmail));
     }

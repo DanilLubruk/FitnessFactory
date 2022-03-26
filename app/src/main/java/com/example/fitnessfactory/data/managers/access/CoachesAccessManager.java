@@ -4,6 +4,7 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.repositories.access.CoachesAccessRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.participantsData.CoachSessionsRepository;
+import com.example.fitnessfactory.system.SafeReference;
 import com.example.fitnessfactory.utils.ResUtils;
 
 import javax.inject.Inject;
@@ -25,7 +26,10 @@ public class CoachesAccessManager extends PersonnelAccessManager {
 
     @Override
     public Single<Boolean> deletePersonnelSingle(String ownerId, String personnelEmail) {
-        return ownerRepository.getPersonnelIdByEmailAsync(personnelEmail)
+        return ownerRepository.isPersonnelOccupiedWithGyms(personnelEmail)
+                .flatMap(isOccupiedWithGyms -> isOccupiedWithGyms ?
+                        Single.error(new Exception(getOccupiedMessage())) :
+                        ownerRepository.getPersonnelIdByEmailAsync(personnelEmail))
                 .flatMap(coachSessionsRepository::isParticipantOccupiedAsync)
                 .flatMap(isOccupied -> isOccupied ?
                         Single.error(new Exception(getOccupiedMessage()))
@@ -33,7 +37,10 @@ public class CoachesAccessManager extends PersonnelAccessManager {
     }
 
     public Completable deletePersonnelCompletable(String ownerId, String personnelEmail) {
-        return ownerRepository.getPersonnelIdByEmailAsync(personnelEmail)
+        return ownerRepository.isPersonnelOccupiedWithGyms(personnelEmail)
+                .flatMap(isOccupiedWithGyms -> isOccupiedWithGyms ?
+                        Single.error(new Exception(getOccupiedMessage())) :
+                        ownerRepository.getPersonnelIdByEmailAsync(personnelEmail))
                 .flatMap(coachSessionsRepository::isParticipantOccupiedAsync)
                 .flatMapCompletable(isOccupied -> isOccupied ?
                         Completable.error(new Exception(getOccupiedMessage()))

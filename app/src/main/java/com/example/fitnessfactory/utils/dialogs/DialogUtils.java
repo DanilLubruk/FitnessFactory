@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 
+import androidx.appcompat.widget.AppCompatEditText;
+
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.CurrentUserType;
@@ -189,7 +191,7 @@ public class DialogUtils {
             alertDialog.show();
 
             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((view) -> {
-                TextInputEditText edtField = dialogView.findViewById(R.id.edtField);
+                AppCompatEditText edtField = dialogView.findViewById(R.id.edtField);
                 String value = edtField.getText() != null ? edtField.getText().toString() : "";
                 if (!valueChecker.isValueValid(value)) {
                     GuiUtils.showMessage(valueChecker.getErrorMessage());
@@ -270,7 +272,7 @@ public class DialogUtils {
         public RelativeLayout build(BaseActivity context) {
             RelativeLayout dialogView = (RelativeLayout)
                     context.getLayoutInflater().inflate(R.layout.one_line_edit__dialog_view, null);
-            TextInputEditText edtField = dialogView.findViewById(R.id.edtField);
+            AppCompatEditText edtField = dialogView.findViewById(R.id.edtField);
             edtField.setHint(hint);
 
             return dialogView;

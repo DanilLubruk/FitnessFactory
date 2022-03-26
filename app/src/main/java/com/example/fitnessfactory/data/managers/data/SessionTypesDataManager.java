@@ -25,7 +25,7 @@ public class SessionTypesDataManager extends BaseManager {
     }
 
     public Completable deleteSessionTypeCompletable(SessionType sessionType) {
-        return sessionsRepository.isSessionTypeOccupiedAsync(sessionType.getName())
+        return sessionsRepository.isSessionTypeOccupiedAsync(sessionType.getId())
                 .flatMapCompletable(isOccupied -> isOccupied ?
                         Completable.error(new Exception(getOccupiedMessage()))
                         :
@@ -33,7 +33,7 @@ public class SessionTypesDataManager extends BaseManager {
     }
 
     public Single<Boolean> deleteSessionTypeSingle(SessionType sessionType) {
-        return sessionsRepository.isSessionTypeOccupiedAsync(sessionType.getName())
+        return sessionsRepository.isSessionTypeOccupiedAsync(sessionType.getId())
                 .flatMap(isOccupied -> isOccupied ?
                         Single.error(new Exception(getOccupiedMessage()))
                         :

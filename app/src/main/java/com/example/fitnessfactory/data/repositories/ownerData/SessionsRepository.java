@@ -88,28 +88,28 @@ public class SessionsRepository extends BaseRepository {
         return session.getClientsEmails().size() >= sessionType.getPeopleAmount();
     }
 
-    public Single<Boolean> isGymNameOccupiedAsync(String gymName) {
+    public Single<Boolean> isGymOccupiedAsync(String gymId) {
         return SingleCreate(emitter -> {
            if (!emitter.isDisposed()) {
-               emitter.onSuccess(isGymOccupied(gymName));
+               emitter.onSuccess(isGymOccupied(gymId));
            }
         });
     }
 
-    private boolean isGymOccupied(String gymName) throws ExecutionException, InterruptedException {
-        return getEntitiesAmount(newQuery().whereGymNameEquals(gymName).build()) > 0;
+    private boolean isGymOccupied(String gymId) throws ExecutionException, InterruptedException {
+        return getEntitiesAmount(newQuery().whereGymIdEquals(gymId).build()) > 0;
     }
 
-    public Single<Boolean> isSessionTypeOccupiedAsync(String sessionTypeName) {
+    public Single<Boolean> isSessionTypeOccupiedAsync(String sessionTypeId) {
         return SingleCreate(emitter -> {
            if (!emitter.isDisposed()) {
-               emitter.onSuccess(isSessionTypeOccupied(sessionTypeName));
+               emitter.onSuccess(isSessionTypeOccupied(sessionTypeId));
            }
         });
     }
 
-    private boolean isSessionTypeOccupied(String sessionTypeName) throws ExecutionException, InterruptedException {
-        return getEntitiesAmount(newQuery().whereSessionTypeNameEquals(sessionTypeName).build()) > 0;
+    private boolean isSessionTypeOccupied(String sessionTypeId) throws ExecutionException, InterruptedException {
+        return getEntitiesAmount(newQuery().whereSessionIdEquals(sessionTypeId).build()) > 0;
     }
 
     public Single<WriteBatch> getDeleteBatchAsync(Session session) {
@@ -126,20 +126,20 @@ public class SessionsRepository extends BaseRepository {
                 .delete(getCollection().document(session.getId()));
     }
 
-    public Single<WriteBatch> getRemoveCoachBatchAsync(String sessionId, String coachId) {
+    public Single<WriteBatch> getRemoveCoachBatchAsync(String sessionId, String coachEmail) {
         return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(getRemoveCoachBatch(sessionId, coachId));
+                emitter.onSuccess(getRemoveCoachBatch(sessionId, coachEmail));
             }
         });
     }
 
-    private WriteBatch getRemoveCoachBatch(String sessionId, String coachId) {
+    private WriteBatch getRemoveCoachBatch(String sessionId, String coachEmail) {
         return getFirestore()
                 .batch()
                 .update(getCollection().document(sessionId),
                         Session.COACHES_EMAILS_FIELD,
-                        FieldValue.arrayRemove(coachId));
+                        FieldValue.arrayRemove(coachEmail));
     }
 
     public Single<WriteBatch> getRemoveClientBatchAsync(String sessionId, String clientEmail) {
@@ -304,13 +304,13 @@ public class SessionsRepository extends BaseRepository {
             return this;
         }
 
-        public QueryBuilder whereSessionTypeNameEquals(String sessionTypeName) {
-            query = query.whereEqualTo(Session.SESSION_TYPE_ID_FIELD, sessionTypeName);
+        public QueryBuilder whereSessionIdEquals(String sessionTypeId) {
+            query = query.whereEqualTo(Session.SESSION_TYPE_ID_FIELD, sessionTypeId);
             return this;
         }
 
-        public QueryBuilder whereGymNameEquals(String gymName) {
-            query = query.whereEqualTo(Session.GYM_ID_FIELD, gymName);
+        public QueryBuilder whereGymIdEquals(String gymId) {
+            query = query.whereEqualTo(Session.GYM_ID_FIELD, gymId);
             return this;
         }
 

@@ -52,11 +52,13 @@
             android:layout_gravity="bottom"
             android:orientation="vertical">
 
-            <Button
+            <ImageButton
                 android:id="@+id/btnLogOut"
                 android:text="@string/caption_log_out"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/royalBlue"
+                android:src="@drawable/ic_baseline_login_24"/>
 
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>

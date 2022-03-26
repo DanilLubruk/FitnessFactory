@@ -115,7 +115,7 @@ public class SessionsDataManager extends BaseManager {
         return ownerCoachesRepository.getPersonnelIdByEmailAsync(coachEmail)
                 .flatMap(coachId -> {
                     coachIdRef.set(coachId);
-                    return sessionsRepository.getRemoveCoachBatchAsync(sessionId, coachId);
+                    return sessionsRepository.getRemoveCoachBatchAsync(sessionId, coachEmail);
                 })
                 .flatMap(writeBatch -> coachSessionsRepository.getRemoveSessionBatchAsync(writeBatch, sessionId, coachIdRef.getValue()))
                 .flatMapCompletable(this::commitBatchCompletable);

@@ -12,7 +12,7 @@
         android:layout_alignParentEnd="true">
 
         <ImageButton
-            android:id="@+id/btnDelete"
+            android:id="@+id/btnRemove"
             android:layout_alignParentEnd="true"
             android:text="@string/caption_delete"
             android:layout_width="wrap_content"

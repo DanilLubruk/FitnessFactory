@@ -18,39 +18,72 @@
 
         <RelativeLayout
             android:id="@+id/rlFields"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ilDate"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:hint="@string/caption_date"
-                app:hintEnabled="true">
+                android:orientation="horizontal">
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edtDate"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/ilDate"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusableInTouchMode="false"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:selectAllOnFocus="true"
-                    android:textDate="@{model.session.date}" />
+                    android:layout_marginEnd="@dimen/component_margin"
+                    android:layout_weight="1"
+                    android:hint="@string/caption_date"
+                    app:hintEnabled="true">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusableInTouchMode="false"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:selectAllOnFocus="true"
+                        android:textDate="@{model.session.date}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/ilGym"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/component_margin"
+                    android:layout_weight="1"
+                    android:hint="@string/caption_gym"
+                    app:hintEnabled="true">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtGym"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusableInTouchMode="false"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:selectAllOnFocus="true"
+                        android:text="@{model.gymName}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/llTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ilDate"
+                android:layout_below="@+id/llDate"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
                 android:orientation="horizontal">
 
@@ -103,34 +136,11 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ilGym"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/llTime"
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:hint="@string/caption_gym"
-                app:hintEnabled="true">
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edtGym"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusableInTouchMode="false"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:selectAllOnFocus="true"
-                    android:text="@{model.gymName}" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/ilSessionType"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ilGym"
+                android:layout_below="@+id/llTime"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
                 android:hint="@string/caption_session_type"
                 app:hintEnabled="true">
