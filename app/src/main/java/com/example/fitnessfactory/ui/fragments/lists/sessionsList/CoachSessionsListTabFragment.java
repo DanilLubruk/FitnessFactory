@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -73,7 +75,11 @@ public class CoachSessionsListTabFragment extends ListListenerTabFragment<Sessio
         tabBinding.edtDate.setOnClickListener(view -> trySelectDate());
         getViewModel().setDefaultDate();
         getViewModel().getSessions().observe(this, this::setListData);
-        getViewModel().getDate().observe(this, date -> getViewModel().startDataListener());
+        getViewModel().getDate().observe(this, date -> {
+            editorViewModel.personnelEmail.observe(this, email -> {
+                getViewModel().startDataListener(email);
+            });
+        });
         getFAB().setVisibility(View.GONE);
     }
 

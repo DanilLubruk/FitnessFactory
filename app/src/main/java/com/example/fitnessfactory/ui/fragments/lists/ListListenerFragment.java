@@ -118,7 +118,7 @@ ListListenerFragment<
     }
 
     protected void setListData(List<ItemType> listData) {
-        if (adapter == null) {
+       if (adapter == null) {
             adapter = createNewAdapter(listData);
             getRecyclerView().setAdapter(adapter);
         } else {

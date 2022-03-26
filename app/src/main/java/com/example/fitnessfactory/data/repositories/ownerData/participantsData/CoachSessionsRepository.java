@@ -15,6 +15,6 @@ public class CoachSessionsRepository extends ParticipantSessionsRepository {
 
     @Override
     protected List<String> getParticipantsIds(Session session) {
-        return session.getCoachesIds();
+        return session.getCoachesEmails();
     }
 }

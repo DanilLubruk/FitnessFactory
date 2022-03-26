@@ -13,7 +13,7 @@ public class Session {
     public static final String END_TIME_FIELD = "endTime";
     public static final String GYM_ID_FIELD = "gymId";
     public static final String SESSION_TYPE_ID_FIELD = "sessionTypeId";
-    public static final String COACHES_IDS_FIELD = "coachesIds";
+    public static final String COACHES_EMAILS_FIELD = "coachesEmails";
     public static final String CLIENTS_EMAILS_FIELD = "clientsEmails";
 
     private String id;
@@ -22,7 +22,7 @@ public class Session {
     private Date endTime;
     private String gymId;
     private String sessionTypeId;
-    private List<String> coachesIds;
+    private List<String> coachesEmails;
     private List<String> clientsEmails;
 
     public Session() {
@@ -44,7 +44,7 @@ public class Session {
         this.setEndTime(session.getEndTime());
         this.setGymId(session.getGymId());
         this.setSessionTypeId(session.getSessionTypeId());
-        this.setCoachesIds(session.getCoachesIds());
+        this.setCoachesEmails(session.getCoachesEmails());
         this.setClientsEmails(session.getClientsEmails());
     }
 
@@ -124,12 +124,12 @@ public class Session {
         this.sessionTypeId = sessionTypeId;
     }
 
-    public List<String> getCoachesIds() {
-        return coachesIds;
+    public List<String> getCoachesEmails() {
+        return coachesEmails;
     }
 
-    public void setCoachesIds(List<String> coachesIds) {
-        this.coachesIds = coachesIds;
+    public void setCoachesEmails(List<String> coachesEmails) {
+        this.coachesEmails = coachesEmails;
     }
 
     public List<String> getClientsEmails() {

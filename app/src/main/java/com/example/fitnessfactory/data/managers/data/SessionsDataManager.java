@@ -92,7 +92,7 @@ public class SessionsDataManager extends BaseManager {
                 .flatMap(sessionsIds -> sessionsRepository.doesSessionsTimeIntersectWithAnyAsync(sessionId, sessionsIds))
                 .flatMap(doesIntersect -> doesIntersect ?
                         Single.error(new Exception(getCoachOccupiedMessage()))
-                        : sessionsRepository.getAddCoachBatchAsync(sessionId, coachIdRef.getValue()))
+                        : sessionsRepository.getAddCoachBatchAsync(sessionId, coachEmail))
                 .flatMap(writeBatch -> coachSessionsRepository.getAddSessionBatchAsync(writeBatch, sessionId, coachIdRef.getValue()))
                 .flatMapCompletable(this::commitBatchCompletable);
     }

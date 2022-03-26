@@ -20,8 +20,7 @@ public class CoachesDataManager extends PersonnelDataManager {
         super(ownerRepository, userRepository, gymRepository);
     }
 
-    public Single<List<AppUser>> getCoachesUsers(List<String> coachesIds) {
-        return getOwnerRepository().getPersonnelEmailsAsync(coachesIds)
-                .flatMap(getUserRepository()::getUsersByEmailsAsync);
+    public Single<List<AppUser>> getCoachesUsers(List<String> coachesEmails) {
+        return getUserRepository().getUsersByEmailsAsync(coachesEmails);
     }
 }

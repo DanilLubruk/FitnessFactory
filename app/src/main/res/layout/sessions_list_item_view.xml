@@ -92,9 +92,9 @@
                         android:id="@+id/tvCaptionFrom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_gravity="end|center"
                         android:layout_weight="2"
-                        android:gravity="start|center"
+                        android:gravity="end|center"
                         android:text="@string/caption_from"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
@@ -102,9 +102,9 @@
                         android:id="@+id/tvStartTime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_gravity="end|center"
                         android:layout_weight="1"
-                        android:gravity="start|center"
+                        android:gravity="end|center"
                         android:textAppearance="?android:attr/textAppearanceSmall" />
                 </LinearLayout>
 
@@ -119,9 +119,9 @@
                         android:id="@+id/tvCaptionUntil"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="top"
+                        android:layout_gravity="end|top"
                         android:layout_weight="2"
-                        android:gravity="start|top"
+                        android:gravity="end|top"
                         android:text="@string/caption_until"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
@@ -129,9 +129,9 @@
                         android:id="@+id/tvEndTime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="top"
+                        android:layout_gravity="end|top"
                         android:layout_weight="1"
-                        android:gravity="start|top"
+                        android:gravity="end|top"
                         android:textAppearance="?android:attr/textAppearanceSmall" />
                 </LinearLayout>
 

@@ -1,11 +1,8 @@
 package com.example.fitnessfactory.ui.viewmodels.lists.sessionParticipantList;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fitnessfactory.R;
-import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.dataListeners.ArgDataListener;
 import com.example.fitnessfactory.data.dataListeners.SessionsCoachesListDataListener;
 import com.example.fitnessfactory.data.managers.data.CoachesDataManager;
@@ -14,7 +11,6 @@ import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.utils.ResUtils;
-import com.example.fitnessfactory.utils.StringUtils;
 
 import java.util.List;
 
@@ -42,9 +38,9 @@ public class SessionCoachesListTabViewModel extends SessionParticipantListTabVie
         return coaches;
     }
 
-    public void resetCoachesList(List<String> coachesIds) {
+    public void resetCoachesList(List<String> coachesEmails) {
         subscribeInIOThread(
-                coachesDataManager.getCoachesUsers(coachesIds),
+                coachesDataManager.getCoachesUsers(coachesEmails),
                 new SingleData<>(coaches::setValue, getErrorHandler()::handleError));
     }
 
@@ -65,7 +61,7 @@ public class SessionCoachesListTabViewModel extends SessionParticipantListTabVie
 
     @Override
     protected List<String> getParticipantsList(Session session) {
-        return session.getCoachesIds();
+        return session.getCoachesEmails();
     }
 
     @Override

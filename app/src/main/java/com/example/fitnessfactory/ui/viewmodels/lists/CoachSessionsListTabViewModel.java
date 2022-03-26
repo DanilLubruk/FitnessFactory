@@ -51,7 +51,7 @@ public class CoachSessionsListTabViewModel extends ListViewModel<SessionView> {
         this.dateField.set(date);
     }
 
-    public LiveData<Date> getDate() {
+    public MutableLiveData<Date> getDate() {
         return date;
     }
 
@@ -94,6 +94,7 @@ public class CoachSessionsListTabViewModel extends ListViewModel<SessionView> {
     public void startDataListener(String coachEmail) {
         if (StringUtils.isEmpty(coachEmail)) {
             handleItemDeletingNullError();
+            doInterruptProgress.setValue(true);
             return;
         }
         Date date = this.date.getValue();
@@ -101,11 +102,7 @@ public class CoachSessionsListTabViewModel extends ListViewModel<SessionView> {
             return;
         }
 
-        subscribeInIOThread(
-                ownerCoachesRepository.getPersonnelIdByEmailAsync(coachEmail),
-                new SingleData<>(
-                        coachId -> dataListener.startDataListener(date, coachId),
-                        getErrorHandler()::handleError));
+        dataListener.startDataListener(date, coachEmail);
     }
 
     private String getDateNullError() {

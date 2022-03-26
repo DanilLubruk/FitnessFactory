@@ -138,7 +138,7 @@ public class SessionsRepository extends BaseRepository {
         return getFirestore()
                 .batch()
                 .update(getCollection().document(sessionId),
-                        Session.COACHES_IDS_FIELD,
+                        Session.COACHES_EMAILS_FIELD,
                         FieldValue.arrayRemove(coachId));
     }
 
@@ -158,20 +158,20 @@ public class SessionsRepository extends BaseRepository {
                         FieldValue.arrayRemove(clientEmail));
     }
 
-    public Single<WriteBatch> getAddCoachBatchAsync(String sessionId, String coachId) {
+    public Single<WriteBatch> getAddCoachBatchAsync(String sessionId, String coachEmail) {
         return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(getAddCoachBatch(sessionId, coachId));
+                emitter.onSuccess(getAddCoachBatch(sessionId, coachEmail));
             }
         });
     }
 
-    private WriteBatch getAddCoachBatch(String sessionId, String coachId) {
+    private WriteBatch getAddCoachBatch(String sessionId, String coachEmail) {
         return getFirestore()
                 .batch()
                 .update(getCollection().document(sessionId),
-                        Session.COACHES_IDS_FIELD,
-                        FieldValue.arrayUnion(coachId));
+                        Session.COACHES_EMAILS_FIELD,
+                        FieldValue.arrayUnion(coachEmail));
     }
 
     public Single<WriteBatch> getAddClientBatchAsync(String sessionId, String clientEmail) {
