@@ -4,6 +4,7 @@ import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM_I
 import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_SESSION_TYPE;
 
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;

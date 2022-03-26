@@ -1,6 +1,11 @@
 package com.example.fitnessfactory.data.repositories.ownerData;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.firestoreCollections.SessionsCollection;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.models.SessionType;
@@ -8,8 +13,12 @@ import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.example.fitnessfactory.utils.TimeUtils;
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.WriteBatch;
@@ -19,6 +28,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
 
 public class SessionsRepository extends BaseRepository {
 
@@ -43,9 +53,9 @@ public class SessionsRepository extends BaseRepository {
 
     public Single<Boolean> doesSessionsTimeIntersectWithAnyAsync(String sessionId, List<String> sessionsIds) {
         return SingleCreate(emitter -> {
-             if (!emitter.isDisposed()) {
-                 emitter.onSuccess(doesSessionsTimeIntersectWithAny(sessionId, sessionsIds));
-             }
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(doesSessionsTimeIntersectWithAny(sessionId, sessionsIds));
+            }
         });
     }
 
@@ -90,9 +100,9 @@ public class SessionsRepository extends BaseRepository {
 
     public Single<Boolean> isGymOccupiedAsync(String gymId) {
         return SingleCreate(emitter -> {
-           if (!emitter.isDisposed()) {
-               emitter.onSuccess(isGymOccupied(gymId));
-           }
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(isGymOccupied(gymId));
+            }
         });
     }
 
@@ -102,9 +112,9 @@ public class SessionsRepository extends BaseRepository {
 
     public Single<Boolean> isSessionTypeOccupiedAsync(String sessionTypeId) {
         return SingleCreate(emitter -> {
-           if (!emitter.isDisposed()) {
-               emitter.onSuccess(isSessionTypeOccupied(sessionTypeId));
-           }
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(isSessionTypeOccupied(sessionTypeId));
+            }
         });
     }
 
@@ -194,6 +204,7 @@ public class SessionsRepository extends BaseRepository {
         return SingleCreate(emitter -> {
             Session session = getSession(sessionId);
 
+            Log.d(AppConsts.DEBUG_TAG, "isDisposed " + emitter.isDisposed());
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(session);
             }
