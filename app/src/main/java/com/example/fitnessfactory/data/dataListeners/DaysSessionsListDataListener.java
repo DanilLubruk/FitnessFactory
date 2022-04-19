@@ -31,8 +31,8 @@ public class DaysSessionsListDataListener extends BaseDataListener {
         return Single.create(emitter -> {
             ListenerRegistration listenerRegistration =
                     getCollection()
-                            .whereGreaterThan(Session.DATE_FIELD, TimeUtils.getStartOfDayDate(date))
-                            .whereLessThan(Session.DATE_FIELD, TimeUtils.getEndOfDayDate(date))
+                            .whereGreaterThanOrEqualTo(Session.DATE_FIELD, TimeUtils.getStartOfDayDate(date).getTime())
+                            .whereLessThanOrEqualTo(Session.DATE_FIELD, TimeUtils.getEndOfDayDate(date).getTime())
                             .addSnapshotListener(((value, error) -> {
                                 if (checkIsSnapshotInvalid(emitter, value, error)) {
                                     Log.d(AppConsts.DEBUG_TAG, "DaysSessionsListDataListener: value null");

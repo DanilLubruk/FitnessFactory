@@ -32,8 +32,8 @@ public class CoachDaysSessionsListDataListener extends BaseDataListener {
         return Single.create(emitter -> {
             ListenerRegistration listenerRegistration =
                     getCollection()
-                            .whereGreaterThan(Session.DATE_FIELD, TimeUtils.getStartOfDayDate(date))
-                            .whereLessThan(Session.DATE_FIELD, TimeUtils.getEndOfDayDate(date))
+                            .whereGreaterThanOrEqualTo(Session.DATE_FIELD, TimeUtils.getStartOfDayDate(date).getTime())
+                            .whereLessThanOrEqualTo(Session.DATE_FIELD, TimeUtils.getEndOfDayDate(date).getTime())
                             .whereArrayContains(Session.COACHES_EMAILS_FIELD, coachEmail)
                             .addSnapshotListener(((value, error) -> {
                                 if (checkIsSnapshotInvalid(emitter, error)) {

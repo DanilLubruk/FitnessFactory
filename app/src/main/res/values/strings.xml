@@ -134,6 +134,7 @@
     <string name="caption_system">System</string>
     <string name="caption_select_language">Select language</string>
     <string name="caption_session">Session</string>
+    <string name="message_gym_occupied">This gym is occupied from %1$s to %2$s</string>
 
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>

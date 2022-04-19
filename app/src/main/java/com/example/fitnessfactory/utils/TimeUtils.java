@@ -45,9 +45,11 @@ public class TimeUtils {
             int firstHourOfDay = calendar.getActualMinimum(Calendar.HOUR_OF_DAY);
             int firstMinute = calendar.getActualMinimum(Calendar.MINUTE);
             int firstSecond = calendar.getActualMinimum(Calendar.SECOND);
+            int firstMillisecond = calendar.getActualMinimum(Calendar.MILLISECOND);
             calendar.set(Calendar.HOUR_OF_DAY, firstHourOfDay);
             calendar.set(Calendar.MINUTE, firstMinute);
             calendar.set(Calendar.SECOND, firstSecond);
+            calendar.set(Calendar.MILLISECOND, firstMillisecond);
             return calendar.getTime();
         }
 
@@ -61,9 +63,11 @@ public class TimeUtils {
             int firstHourOfDay = calendar.getActualMaximum(Calendar.HOUR_OF_DAY);
             int firstMinute = calendar.getActualMaximum(Calendar.MINUTE);
             int firstSecond = calendar.getActualMaximum(Calendar.SECOND);
+            int firstMillisecond = calendar.getActualMinimum(Calendar.MILLISECOND);
             calendar.set(Calendar.HOUR_OF_DAY, firstHourOfDay);
             calendar.set(Calendar.MINUTE, firstMinute);
             calendar.set(Calendar.SECOND, firstSecond);
+            calendar.set(Calendar.MILLISECOND, firstMillisecond);
             return calendar.getTime();
         }
 

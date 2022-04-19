@@ -25,7 +25,10 @@ public class SessionGymSelectionListFragment extends GymsListFragment {
 
     @Override
     protected void sendSelectResult(Gym gym) {
-        editorViewModel.setGym(gym.getId());
-        closeFragment();
+        editorViewModel.setGym(gym).observe(this, isSet -> {
+          if (isSet) {
+              closeFragment();
+          }
+        });
     }
 }

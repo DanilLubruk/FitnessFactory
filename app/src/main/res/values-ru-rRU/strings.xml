@@ -135,6 +135,7 @@
     <string name="caption_system">Системный</string>
     <string name="caption_select_language">Выберите язык</string>
     <string name="caption_session">Тренировка</string>
+    <string name="message_gym_occupied">Этот зал занят с %1$s по %2$s</string>
 
     <!--authentication-->
     <string name="caption_wrong_auth">Неуспешная аутентификация</string>

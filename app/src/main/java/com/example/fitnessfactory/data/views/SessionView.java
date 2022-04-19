@@ -39,7 +39,7 @@ public class SessionView {
     }
 
     public Date getDate() {
-        return session.getDate();
+        return session.getDateValue();
     }
 
     public String getDateString() {
@@ -47,7 +47,7 @@ public class SessionView {
     }
 
     public void setDate(Date date) {
-        session.setDate(date);
+        session.setDateValue(date);
     }
 
     public Date getStartTime() {

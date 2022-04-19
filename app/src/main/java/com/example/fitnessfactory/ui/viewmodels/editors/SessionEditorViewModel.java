@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
+import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleDialogEvent;
@@ -17,10 +18,13 @@ import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
+import com.example.fitnessfactory.utils.TimeUtils;
 
 import java.util.Date;
 
 import javax.inject.Inject;
+
+import ch.qos.logback.core.util.TimeUtil;
 
 public class SessionEditorViewModel extends EditorViewModel {
 
@@ -110,6 +114,10 @@ public class SessionEditorViewModel extends EditorViewModel {
                 new SingleData<>(gymName::set, getErrorHandler()::handleError));
     }
 
+    private void setGymName(String name) {
+        gymName.set(name);
+    }
+
     public void setSessionDefaultTime(Date defaultDate) {
         setSessionDate(defaultDate);
         setSessionStartTime(defaultDate);
@@ -125,7 +133,7 @@ public class SessionEditorViewModel extends EditorViewModel {
         }
 
         subscribeInMainThread(
-                dialogEvent.showDialog(session.getDate()),
+                dialogEvent.showDialog(session.getDateValue()),
                 new SingleData<>(this::setSessionDate, getErrorHandler()::handleError));
     }
 
@@ -136,7 +144,7 @@ public class SessionEditorViewModel extends EditorViewModel {
             return;
         }
 
-        session.setDate(date);
+        session.setDateValue(date);
         this.session.notifyChange();
     }
 
@@ -150,15 +158,15 @@ public class SessionEditorViewModel extends EditorViewModel {
 
         addSubscription(
                 dialogEvent.showDialog(session.getStartTime())
-                .subscribeOn(getMainThreadScheduler())
-                .observeOn(getMainThreadScheduler())
-                .flatMap(startTime ->
-                        sessionsRepository.checkSessionStartTimeCorrectAsync(
-                                startTime,
-                                session.getEndTime()))
-                .subscribeOn(getIOScheduler())
-                .observeOn(getMainThreadScheduler())
-                .subscribe(this::setSessionStartTime, getErrorHandler()::handleError));
+                        .subscribeOn(getMainThreadScheduler())
+                        .observeOn(getMainThreadScheduler())
+                        .flatMap(startTime ->
+                                sessionsRepository.checkSessionStartTimeCorrectAsync(
+                                        startTime,
+                                        session.getEndTime()))
+                        .subscribeOn(getIOScheduler())
+                        .observeOn(getMainThreadScheduler())
+                        .subscribe(this::setSessionStartTime, getErrorHandler()::handleError));
     }
 
     private void setSessionStartTime(Date date) {
@@ -204,19 +212,36 @@ public class SessionEditorViewModel extends EditorViewModel {
         this.session.notifyChange();
     }
 
-    public void setGym(String gymId) {
-        if (StringUtils.isEmpty(gymId)) {
+    public SingleLiveEvent<Boolean> setGym(Gym gym) {
+        SingleLiveEvent<Boolean> isSet = new SingleLiveEvent<>();
+
+        if (gym == null || StringUtils.isEmpty(gym.getId())) {
             handleGymNullError();
-            return;
+            isSet.setValue(false);
+            return isSet;
         }
         Session session = this.session.get();
         if (session == null) {
             handleItemOperationError();
-            return;
+            isSet.setValue(false);
+            return isSet;
         }
 
-        session.setGymId(gymId);
-        setGymName();
+        subscribeInIOThread(
+                sessionsRepository.isGymAvailableAtTheTimeAsync(
+                        session.getDate(),
+                        session.getStartTime(),
+                        session.getEndTime(),
+                        gym.getId()),
+                new SingleData<>(isAvailable -> {
+                    if (isAvailable) {
+                        session.setGymId(gym.getId());
+                        setGymName(gym.getName());
+                        isSet.setValue(true);
+                    }
+                }, throwable -> getErrorHandler().handleError(isSet, throwable)));
+
+        return isSet;
     }
 
     private void handleGymNullError() {
@@ -316,7 +341,7 @@ public class SessionEditorViewModel extends EditorViewModel {
             return;
         }
         getHandle().put(Session.ID_FIELD, session.getId());
-        getHandle().put(Session.DATE_FIELD, session.getDate());
+        getHandle().put(Session.DATE_FIELD, session.getDateValue());
         getHandle().put(Session.START_TIME_FIELD, session.getStartTime());
         getHandle().put(Session.END_TIME_FIELD, session.getEndTime());
         getHandle().put(Session.GYM_ID_FIELD, session.getGymId());
@@ -328,7 +353,7 @@ public class SessionEditorViewModel extends EditorViewModel {
             return;
         }
         getHandle().put(DB_ID_KEY, dbSession.getId());
-        getHandle().put(DB_DATE_KEY, dbSession.getDate());
+        getHandle().put(DB_DATE_KEY, dbSession.getDateValue());
         getHandle().put(DB_START_TIME_KEY, dbSession.getStartTime());
         getHandle().put(DB_END_TIME_KEY, dbSession.getEndTime());
         getHandle().put(DB_GYM_ID_KEY, dbSession.getGymId());
@@ -345,7 +370,7 @@ public class SessionEditorViewModel extends EditorViewModel {
             session = new Session();
         }
         session.setId((String) getHandle().get(Session.ID_FIELD));
-        session.setDate((Date) getHandle().get(Session.DATE_FIELD));
+        session.setDateValue((Date) getHandle().get(Session.DATE_FIELD));
         session.setStartTime((Date) getHandle().get(Session.START_TIME_FIELD));
         session.setEndTime((Date) getHandle().get(Session.END_TIME_FIELD));
         session.setGymId((String) getHandle().get(Session.GYM_ID_FIELD));
@@ -357,7 +382,7 @@ public class SessionEditorViewModel extends EditorViewModel {
             dbSession = new Session();
         }
         dbSession.setId((String) getHandle().get(DB_ID_KEY));
-        dbSession.setDate((Date) getHandle().get(DB_DATE_KEY));
+        dbSession.setDateValue((Date) getHandle().get(DB_DATE_KEY));
         dbSession.setStartTime((Date) getHandle().get(DB_START_TIME_KEY));
         dbSession.setEndTime((Date) getHandle().get(DB_END_TIME_KEY));
         dbSession.setGymId((String) getHandle().get(DB_GYM_ID_KEY));

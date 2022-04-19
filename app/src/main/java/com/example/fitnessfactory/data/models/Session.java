@@ -17,9 +17,9 @@ public class Session {
     public static final String CLIENTS_EMAILS_FIELD = "clientsEmails";
 
     private String id;
-    private Date date;
-    private Date startTime;
-    private Date endTime;
+    private long date = 0;
+    private Date startTime = new Date();
+    private Date endTime = new Date();
     private String gymId;
     private String sessionTypeId;
     private List<String> coachesEmails;
@@ -32,14 +32,14 @@ public class Session {
     public static boolean isNotNull(Session session) {
         return session != null
                 && session.getId() != null
-                && session.getDate() != null
+                && session.getDateValue() != null
                 && session.getGymId() != null
                 && session.getSessionTypeId() != null;
     }
 
     public void copy(Session session) {
         this.setId(session.getId());
-        this.setDate(session.getDate());
+        this.setDateValue(session.getDateValue());
         this.setStartTime(session.getStartTime());
         this.setEndTime(session.getEndTime());
         this.setGymId(session.getGymId());
@@ -51,7 +51,7 @@ public class Session {
     public boolean equals(Session session) {
         return
                 this.getId().equals(session.getId())
-                        && this.getDate().equals(session.getDate())
+                        && this.getDateValue().equals(session.getDateValue())
                         && this.getStartTime().equals(session.getStartTime())
                         && this.getEndTime() == session.getEndTime()
                         && this.getGymId().equals(session.getGymId())
@@ -66,16 +66,27 @@ public class Session {
         this.id = id;
     }
 
-    public Date getDate() {
+    @Exclude
+    public Date getDateValue() {
+        return new Date(date);
+    }
+
+    public long getDate() {
         return date;
     }
 
     @Exclude
     public String getDateString() {
-        return TimeUtils.dateToLocaleStr(date);
+        return TimeUtils.dateToLocaleStr(getDateValue());
     }
 
-    public void setDate(Date date) {
+    @Exclude
+    public void setDateValue(Date date) {
+        this.date = date.getTime();
+        correctStartEndTimeDay();
+    }
+
+    public void setDate(long date) {
         this.date = date;
         correctStartEndTimeDay();
     }
@@ -141,11 +152,11 @@ public class Session {
     }
 
     private void correctStartEndTimeDay() {
-        if (!TimeUtils.isTheSameDay(getDate(), getStartTime())) {
-            setStartTime(TimeUtils.setDatesDay(getDate(), getStartTime()));
+        if (!TimeUtils.isTheSameDay(getDateValue(), getStartTime())) {
+            setStartTime(TimeUtils.setDatesDay(getDateValue(), getStartTime()));
         }
-        if (!TimeUtils.isTheSameDay(getDate(), getEndTime())) {
-            setEndTime(TimeUtils.setDatesDay(getDate(), getEndTime()));
+        if (!TimeUtils.isTheSameDay(getDateValue(), getEndTime())) {
+            setEndTime(TimeUtils.setDatesDay(getDateValue(), getEndTime()));
         }
     }
 }

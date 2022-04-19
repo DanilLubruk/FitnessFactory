@@ -29,8 +29,8 @@ public class SessionsCalendarDataListener extends BaseDataListener {
     private Single<ListenerRegistration> getDataListener(Date startDate, Date endDate) {
         return Single.create(emitter -> {
             ListenerRegistration listenerRegistration = getCollection()
-                    .whereGreaterThan(Session.DATE_FIELD, startDate)
-                    .whereLessThan(Session.DATE_FIELD, endDate)
+                    .whereGreaterThanOrEqualTo(Session.DATE_FIELD, startDate.getTime())
+                    .whereLessThanOrEqualTo(Session.DATE_FIELD, endDate.getTime())
                     .addSnapshotListener((value, error) -> {
                         if (checkIsSnapshotInvalid(emitter, value, error)) {
                             Log.d(AppConsts.DEBUG_TAG, "SessionsCalendarDataListener: value null");

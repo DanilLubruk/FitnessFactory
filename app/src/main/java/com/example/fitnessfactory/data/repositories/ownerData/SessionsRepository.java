@@ -2,23 +2,18 @@ package com.example.fitnessfactory.data.repositories.ownerData;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.firestoreCollections.SessionsCollection;
+import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.models.SessionType;
 import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.example.fitnessfactory.utils.TimeUtils;
-import com.google.android.gms.tasks.OnCanceledListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.WriteBatch;
@@ -28,13 +23,52 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
 
 public class SessionsRepository extends BaseRepository {
 
     @Override
     protected String getRoot() {
         return SessionsCollection.getRoot();
+    }
+
+    public Single<Boolean> isGymAvailableAtTheTimeAsync(Session session, String gymId) {
+        return SingleCreate(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(isGymAvailableAtTheTime(session.getDate(), session.getStartTime(), session.getEndTime(), gymId));
+            }
+        });
+    }
+
+    public Single<Boolean> isGymAvailableAtTheTimeAsync(long date, Date startTime, Date endTime, String gymId) {
+        return SingleCreate(emitter -> {
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(isGymAvailableAtTheTime(date, startTime, endTime, gymId));
+            }
+        });
+    }
+
+    private boolean isGymAvailableAtTheTime(long date, Date startTime, Date endTime, String gymId) throws Exception {
+        date = TimeUtils.getStartOfDayDate(new Date(date)).getTime();
+        List<Session> possibleIntersectSessionsList =
+                Tasks.await(
+                        getCollection()
+                                .whereEqualTo(Session.GYM_ID_FIELD, gymId)
+                                .whereEqualTo(Session.DATE_FIELD, date).get())
+                        .toObjects(Session.class);
+
+        Session session = new Session();
+        session.setDate(date);
+        session.setStartTime(startTime);
+        session.setEndTime(endTime);
+        for (Session possibleIntersectSession : possibleIntersectSessionsList) {
+            if (doesSessionsTimeIntersect(possibleIntersectSession, session)) {
+                throw new Exception(String.format(
+                        ResUtils.getString(R.string.message_gym_occupied),
+                        possibleIntersectSession.getStartTimeString(), possibleIntersectSession.getEndTimeString()));
+            }
+        }
+
+        return true;
     }
 
     public Single<Boolean> doesCoachWorkAtSessionsGymAsync(String sessionId, List<String> gymsIds) {
@@ -232,6 +266,10 @@ public class SessionsRepository extends BaseRepository {
     private boolean save(Session session) throws Exception {
         if (session == null) {
             throw new Exception(getEntitySavingNullMessage());
+        }
+        session.setDateValue(TimeUtils.getStartOfDayDate(session.getDateValue()));
+        if (!isGymAvailableAtTheTime(session.getDate(), session.getStartTime(), session.getEndTime(), session.getGymId())) {
+            return false;
         }
         boolean isNewEntity = StringUtils.isEmpty(session.getId());
 

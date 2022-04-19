@@ -132,8 +132,8 @@ public class SessionEditorActivity extends EditorActivity {
                     switch (requestCode) {
                         case REQUEST_GYM_ID:
 
-                            String gymId = data.getStringExtra(AppConsts.GYM_ID_EXTRA);
-                            getViewModel().setGym(gymId);
+                            /*String gymId = data.getStringExtra(AppConsts.GYM_ID_EXTRA);
+                            getViewModel().setGym(gymId);*/
                             break;
                         case REQUEST_SESSION_TYPE:
                             String sessionTypeId = data.getStringExtra(AppConsts.SESSION_TYPE_ID_EXTRA);
