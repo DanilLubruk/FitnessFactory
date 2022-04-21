@@ -120,7 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionNext"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:maxLines="1"
                     android:selectAllOnFocus="true"
                     android:text="@={model.organisation.taxId}" />
@@ -140,7 +140,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:maxLines="1"
                     android:selectAllOnFocus="true"
                     android:text="@={model.organisation.bankDetails}" />
