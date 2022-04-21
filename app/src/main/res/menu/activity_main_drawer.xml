@@ -7,6 +7,7 @@
         <item
             android:id="@+id/nav_home"
             android:checkable="true"
+            android:icon="@drawable/ic_baseline_home_24"
             android:title="@string/title_home" />
     </group>
 
@@ -14,16 +15,19 @@
         <item
             android:id="@+id/nav_admins"
             android:checkable="true"
+            android:icon="@drawable/ic_baseline_business_center_24"
             android:title="@string/title_admins"/>
 
         <item
             android:id="@+id/nav_coaches"
             android:checkable="true"
+            android:icon="@drawable/ic_baseline_sports_24"
             android:title="@string/title_coaches"/>
 
         <item
             android:id="@+id/nav_clients"
             android:checkable="true"
+            android:icon="@drawable/ic_baseline_group_24"
             android:title="@string/title_clients" />
     </group>
 
@@ -31,11 +35,13 @@
         <item
             android:id="@+id/nav_gyms"
             android:checkable="true"
+            android:icon="@drawable/ic_baseline_store_mall_directory_24"
             android:title="@string/title_gyms" />
 
         <item
             android:id="@+id/nav_session_types"
             android:checkable="true"
+            android:icon="@drawable/ic_baseline_sports_basketball_24"
             android:title="@string/title_session_types"/>
     </group>
 
@@ -43,6 +49,7 @@
         <item
             android:id="@+id/nav_organisation"
             android:checkable="true"
+            android:icon="@drawable/ic_baseline_info_24"
             android:title="@string/title_organisation" />
         <!--<item
             android:id="@+id/nav_settings"
