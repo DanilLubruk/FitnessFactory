@@ -36,7 +36,7 @@
         </activity>
         <activity android:name=".ui.activities.editors.SessionTypeEditorActivity">
         </activity>
-        <activity android:name=".ui.activities.editors.SessionEditorActivity">
+        <activity android:name=".ui.activities.editors.session.SessionEditorActivity">
         </activity>
     </application>
 

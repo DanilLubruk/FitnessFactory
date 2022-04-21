@@ -14,13 +14,13 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.SessionsClientsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
+import com.example.fitnessfactory.ui.activities.editors.session.SessionEditorViewModelFactoryProvider;
 import com.example.fitnessfactory.ui.adapters.ClientsListAdapter;
 import com.example.fitnessfactory.ui.fragments.FragmentProvider;
 import com.example.fitnessfactory.ui.fragments.lists.ListListenerTabFragment;
 import com.example.fitnessfactory.ui.viewholders.lists.ClientsListViewHolder;
 import com.example.fitnessfactory.ui.viewmodels.editors.SessionEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.ClientsListTabViewModelFactory;
-import com.example.fitnessfactory.ui.viewmodels.factories.SessionEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.sessionParticipantList.SessionClientsListTabViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 
@@ -29,16 +29,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 public class SessionClientsListTabFragment extends ListListenerTabFragment<AppUser, ClientsListViewHolder, ClientsListAdapter> {
 
     private SessionClientsListTabViewModel viewModel;
 
     private SessionEditorViewModel editorViewModel;
-
-    @Inject
-    SessionEditorViewModelFactory sessionEditorViewModelFactory;
 
     private final ActivityResultLauncher<Intent> openClientsSelection = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -64,7 +59,10 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<AppUs
     protected void defineViewModel() {
         FFApp.get().getAppComponent().inject(this);
         viewModel = new ViewModelProvider(this, new ClientsListTabViewModelFactory()).get(SessionClientsListTabViewModel.class);
-        editorViewModel = new ViewModelProvider(this, sessionEditorViewModelFactory).get(SessionEditorViewModel.class);
+        editorViewModel = new ViewModelProvider(
+                this,
+                SessionEditorViewModelFactoryProvider.getFactory())
+                .get(SessionEditorViewModel.class);
     }
 
     @Override

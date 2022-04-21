@@ -44,4 +44,8 @@ public class FFApp extends Application {
                 .appModule(getAppModule())
                 .build();
     }
+
+    public void initSessionEditorComponent() {
+
+    }
 }

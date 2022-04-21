@@ -1,14 +1,9 @@
-package com.example.fitnessfactory.ui.activities.editors;
-
-import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_GYM_ID;
-import static com.example.fitnessfactory.data.ActivityRequestCodes.REQUEST_SESSION_TYPE;
+package com.example.fitnessfactory.ui.activities.editors.session;
 
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.FFApp;
@@ -16,11 +11,10 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.observers.SingleDialogEvent;
 import com.example.fitnessfactory.databinding.ActivitySessionEditorBinding;
+import com.example.fitnessfactory.ui.activities.editors.EditorActivity;
 import com.example.fitnessfactory.ui.adapters.SessionPageAdapter;
 import com.example.fitnessfactory.ui.fragments.FragmentProvider;
-import com.example.fitnessfactory.ui.fragments.lists.ListListenerSelectFragment;
 import com.example.fitnessfactory.ui.viewmodels.editors.SessionEditorViewModel;
-import com.example.fitnessfactory.ui.viewmodels.factories.SessionEditorViewModelFactory;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
@@ -28,9 +22,6 @@ import com.example.fitnessfactory.utils.dialogs.DialogUtils;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.Date;
-import java.util.List;
-
-import javax.inject.Inject;
 
 public class SessionEditorActivity extends EditorActivity {
 
@@ -38,9 +29,6 @@ public class SessionEditorActivity extends EditorActivity {
     private SessionEditorViewModel viewModel;
     private ActivitySessionEditorBinding binding;
     private SessionPageAdapter pageAdapter;
-
-    @Inject
-    SessionEditorViewModelFactory sessionEditorViewModelFactory;
 
     @Override
     public Toolbar getToolbar() {
@@ -51,7 +39,7 @@ public class SessionEditorActivity extends EditorActivity {
     public void initActivity() {
         FFApp.get().getAppComponent().inject(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_session_editor);
-        viewModel = new ViewModelProvider(this, sessionEditorViewModelFactory).get(SessionEditorViewModel.class);
+        viewModel = new ViewModelProvider(this, SessionEditorViewModelFactoryProvider.getFactory()).get(SessionEditorViewModel.class);
         super.initActivity();
         binding.setModel(getViewModel());
         binding.content.edtDate.setOnClickListener(view -> trySelectDate());
@@ -121,7 +109,7 @@ public class SessionEditorActivity extends EditorActivity {
             GuiUtils.showMessage(ResUtils.getString(R.string.message_selection_failed));
             return;
         }
-        getViewModel().getSession(getSessionId())
+        /*getViewModel().getSession(getSessionId())
                 .observe(this, isObtained -> {
                     if (isObtained && isNewEntity()) {
                         getViewModel().setSessionDefaultTime(getIntentDefaultDate());
@@ -132,15 +120,15 @@ public class SessionEditorActivity extends EditorActivity {
                     switch (requestCode) {
                         case REQUEST_GYM_ID:
 
-                            /*String gymId = data.getStringExtra(AppConsts.GYM_ID_EXTRA);
-                            getViewModel().setGym(gymId);*/
+                            *//*String gymId = data.getStringExtra(AppConsts.GYM_ID_EXTRA);
+                            getViewModel().setGym(gymId);*//*
                             break;
                         case REQUEST_SESSION_TYPE:
                             String sessionTypeId = data.getStringExtra(AppConsts.SESSION_TYPE_ID_EXTRA);
                             getViewModel().setSessionType(sessionTypeId);
                             break;
                     }
-                });
+                });*/
 
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -179,8 +167,8 @@ public class SessionEditorActivity extends EditorActivity {
     }
 
     @Override
-    protected void close() {
-        FFApp.get().initAppComponent();
-        super.close();
+    public void onDestroy() {
+        super.onDestroy();
+        SessionEditorViewModelFactoryProvider.clear();
     }
 }

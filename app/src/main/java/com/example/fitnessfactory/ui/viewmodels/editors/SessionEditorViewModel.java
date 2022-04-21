@@ -144,7 +144,7 @@ public class SessionEditorViewModel extends EditorViewModel {
             return;
         }
 
-        session.setDateValue(date);
+        session.setDateValue(TimeUtils.getStartOfDayDate(date));
         this.session.notifyChange();
     }
 

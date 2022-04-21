@@ -62,8 +62,8 @@ public class CoachEditorActivity extends PersonnelEditorActivity {
     }
 
     @Override
-    protected void close() {
+    public void onDestroy() {
+        super.onDestroy();
         FFApp.get().initAppComponent();
-        super.close();
     }
 }

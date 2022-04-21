@@ -337,12 +337,6 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public SessionEditorViewModelFactory provideSessionEditorViewModelFactory() {
-        return new SessionEditorViewModelFactory();
-    }
-
-    @Provides
-    @Singleton
     public AdminEditorViewModelFactory provideAdminEditorViewModelFactory() {
         return new AdminEditorViewModelFactory();
     }

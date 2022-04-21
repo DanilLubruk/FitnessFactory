@@ -8,14 +8,12 @@ import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.SessionTypesListDataListenerEvent;
-import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.models.SessionType;
+import com.example.fitnessfactory.ui.activities.editors.session.SessionEditorViewModelFactoryProvider;
 import com.example.fitnessfactory.ui.activities.editors.SessionTypeEditorActivity;
 import com.example.fitnessfactory.ui.adapters.SessionTypesListAdapter;
 import com.example.fitnessfactory.ui.viewholders.lists.SessionTypesListViewHolder;
-import com.example.fitnessfactory.ui.viewmodels.DataListListener;
 import com.example.fitnessfactory.ui.viewmodels.editors.SessionEditorViewModel;
-import com.example.fitnessfactory.ui.viewmodels.factories.SessionEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionTypesListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.SessionTypesListViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
@@ -25,17 +23,12 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 public class SessionTypesListFragment extends
         ListListenerSelectFragment<SessionType, SessionTypesListViewHolder, SessionTypesListAdapter> {
 
     private SessionTypesListViewModel viewModel;
 
     private SessionEditorViewModel editorViewModel;
-
-    @Inject
-    SessionEditorViewModelFactory sessionEditorViewModelFactory;
 
     @Override
     protected SessionTypesListViewModel getViewModel() {
@@ -56,7 +49,10 @@ public class SessionTypesListFragment extends
     protected void defineViewModel() {
         FFApp.get().getAppComponent().inject(this);
         viewModel = new ViewModelProvider(this, new SessionTypesListViewModelFactory()).get(SessionTypesListViewModel.class);
-        editorViewModel = new ViewModelProvider(this, sessionEditorViewModelFactory).get(SessionEditorViewModel.class);
+        editorViewModel = new ViewModelProvider(
+                this,
+                SessionEditorViewModelFactoryProvider.getFactory())
+                .get(SessionEditorViewModel.class);
     }
 
     @Override
