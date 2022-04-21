@@ -50,7 +50,7 @@
                         android:inputType="text"
                         android:maxLines="1"
                         android:selectAllOnFocus="true"
-                        android:textDate="@{model.session.dateValue}" />
+                        android:text="@{model.session.dateString}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

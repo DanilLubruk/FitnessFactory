@@ -38,6 +38,13 @@ public class TimeUtils {
         return null;
     }
 
+    public static Date getStartOfNextDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        return getStartOfDayDate(calendar.getTime());
+    }
+
     public static Date getStartOfDayDate(Date date) {
         if (date != null) {
             Calendar calendar = Calendar.getInstance();

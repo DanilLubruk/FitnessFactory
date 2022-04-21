@@ -5,7 +5,6 @@ import android.util.Log;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.firestoreCollections.SessionsCollection;
-import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.models.SessionType;
 import com.example.fitnessfactory.data.repositories.BaseRepository;
@@ -31,12 +30,20 @@ public class SessionsRepository extends BaseRepository {
         return SessionsCollection.getRoot();
     }
 
+    public static Query getDayEqualsQuery(Query query, Date date) {
+        return getDayInPeriodQuery(query, date, date);
+    }
+
+    public static Query getDayInPeriodQuery(Query query, Date startDate, Date endDate) {
+        return query.whereGreaterThanOrEqualTo(Session.START_TIME_FIELD, TimeUtils.getStartOfDayDate(startDate))
+                .whereLessThan(Session.START_TIME_FIELD, TimeUtils.getStartOfNextDay(endDate));
+    }
+
     public Single<Boolean> isGymAvailableAtTheTimeAsync(Session session, String gymId) {
         return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(isGymAvailableAtTheTime(
                         session.getId(),
-                        session.getDate(),
                         session.getStartTime(),
                         session.getEndTime(),
                         gymId));
@@ -45,7 +52,6 @@ public class SessionsRepository extends BaseRepository {
     }
 
     public Single<Boolean> isGymAvailableAtTheTimeAsync(String sessionId,
-                                                        long date,
                                                         Date startTime,
                                                         Date endTime,
                                                         String gymId) {
@@ -53,7 +59,6 @@ public class SessionsRepository extends BaseRepository {
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(isGymAvailableAtTheTime(
                         sessionId,
-                        date,
                         startTime,
                         endTime,
                         gymId));
@@ -65,25 +70,18 @@ public class SessionsRepository extends BaseRepository {
                                             String gymId) throws Exception {
         return isGymAvailableAtTheTime(
                 session.getId(),
-                session.getDate(),
                 session.getStartTime(),
                 session.getEndTime(),
                 gymId);
     }
 
     private boolean isGymAvailableAtTheTime(String sessionId,
-                                            long date,
-                                            Date startTime,
-                                            Date endTime,
+                                            Date sessionStartTime,
+                                            Date sessionEndTime,
                                             String gymId) throws Exception {
-        date = TimeUtils.getStartOfDayDate(new Date(date)).getTime();
         Query query = getCollection()
-                .whereEqualTo(Session.GYM_ID_FIELD, gymId)
-                .whereEqualTo(Session.DATE_FIELD, date);
-
-        if (!StringUtils.isEmpty(sessionId)) {
-            query = query.whereNotEqualTo(Session.ID_FIELD, sessionId);
-        }
+                .whereEqualTo(Session.GYM_ID_FIELD, gymId);
+        query = getDayEqualsQuery(query, sessionStartTime);
 
         List<Session> possibleIntersectSessionsList =
                 Tasks.await(
@@ -91,11 +89,11 @@ public class SessionsRepository extends BaseRepository {
                         .toObjects(Session.class);
 
         Session session = new Session();
-        session.setDate(date);
-        session.setStartTime(startTime);
-        session.setEndTime(endTime);
+        session.setStartTime(sessionStartTime);
+        session.setEndTime(sessionEndTime);
         for (Session possibleIntersectSession : possibleIntersectSessionsList) {
-            if (doesSessionsTimeIntersect(possibleIntersectSession, session)) {
+            if (!possibleIntersectSession.getId().equals(sessionId) &&
+                    doesSessionsTimeIntersect(possibleIntersectSession, session)) {
                 throw new Exception(String.format(
                         ResUtils.getString(R.string.message_gym_occupied),
                         possibleIntersectSession.getStartTimeString(), possibleIntersectSession.getEndTimeString()));
@@ -304,7 +302,6 @@ public class SessionsRepository extends BaseRepository {
         if (session == null) {
             throw new Exception(getEntitySavingNullMessage());
         }
-        session.setDateValue(TimeUtils.getStartOfDayDate(session.getDateValue()));
         if (!isGymAvailableAtTheTime(
                 session,
                 session.getGymId())) {
@@ -327,7 +324,6 @@ public class SessionsRepository extends BaseRepository {
         DocumentReference documentReference = getCollection().document(session.getId());
         Tasks.await(getFirestore().batch()
                 .update(documentReference, Session.ID_FIELD, session.getId())
-                .update(documentReference, Session.DATE_FIELD, session.getDate())
                 .update(documentReference, Session.START_TIME_FIELD, session.getStartTime())
                 .update(documentReference, Session.END_TIME_FIELD, session.getEndTime())
                 .update(documentReference, Session.GYM_ID_FIELD, session.getGymId())

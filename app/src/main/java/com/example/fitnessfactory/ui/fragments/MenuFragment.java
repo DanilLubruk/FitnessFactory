@@ -191,7 +191,7 @@ public class MenuFragment extends BaseFragment implements RobotoCalendarView.Rob
 
     private void updateCalendar(List<Session> sessions) {
         for (Session session : sessions) {
-            binding.calendarView.markCircleImage1(session.getDateValue());
+            binding.calendarView.markCircleImage1(session.getStartTime());
         }
     }
 

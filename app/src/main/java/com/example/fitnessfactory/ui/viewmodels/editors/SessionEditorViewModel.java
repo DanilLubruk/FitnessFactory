@@ -133,7 +133,7 @@ public class SessionEditorViewModel extends EditorViewModel {
         }
 
         subscribeInMainThread(
-                dialogEvent.showDialog(session.getDateValue()),
+                dialogEvent.showDialog(session.getStartTime()),
                 new SingleData<>(this::setSessionDate, getErrorHandler()::handleError));
     }
 
@@ -144,7 +144,7 @@ public class SessionEditorViewModel extends EditorViewModel {
             return;
         }
 
-        session.setDateValue(TimeUtils.getStartOfDayDate(date));
+        session.setDate(date);
         this.session.notifyChange();
     }
 
@@ -339,7 +339,6 @@ public class SessionEditorViewModel extends EditorViewModel {
             return;
         }
         getHandle().put(Session.ID_FIELD, session.getId());
-        getHandle().put(Session.DATE_FIELD, session.getDateValue());
         getHandle().put(Session.START_TIME_FIELD, session.getStartTime());
         getHandle().put(Session.END_TIME_FIELD, session.getEndTime());
         getHandle().put(Session.GYM_ID_FIELD, session.getGymId());
@@ -351,7 +350,6 @@ public class SessionEditorViewModel extends EditorViewModel {
             return;
         }
         getHandle().put(DB_ID_KEY, dbSession.getId());
-        getHandle().put(DB_DATE_KEY, dbSession.getDateValue());
         getHandle().put(DB_START_TIME_KEY, dbSession.getStartTime());
         getHandle().put(DB_END_TIME_KEY, dbSession.getEndTime());
         getHandle().put(DB_GYM_ID_KEY, dbSession.getGymId());
@@ -368,7 +366,6 @@ public class SessionEditorViewModel extends EditorViewModel {
             session = new Session();
         }
         session.setId((String) getHandle().get(Session.ID_FIELD));
-        session.setDateValue((Date) getHandle().get(Session.DATE_FIELD));
         session.setStartTime((Date) getHandle().get(Session.START_TIME_FIELD));
         session.setEndTime((Date) getHandle().get(Session.END_TIME_FIELD));
         session.setGymId((String) getHandle().get(Session.GYM_ID_FIELD));
@@ -380,7 +377,6 @@ public class SessionEditorViewModel extends EditorViewModel {
             dbSession = new Session();
         }
         dbSession.setId((String) getHandle().get(DB_ID_KEY));
-        dbSession.setDateValue((Date) getHandle().get(DB_DATE_KEY));
         dbSession.setStartTime((Date) getHandle().get(DB_START_TIME_KEY));
         dbSession.setEndTime((Date) getHandle().get(DB_END_TIME_KEY));
         dbSession.setGymId((String) getHandle().get(DB_GYM_ID_KEY));

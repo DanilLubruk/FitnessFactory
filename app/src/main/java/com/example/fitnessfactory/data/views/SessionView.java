@@ -38,16 +38,8 @@ public class SessionView {
         session.setId(id);
     }
 
-    public Date getDate() {
-        return session.getDateValue();
-    }
-
     public String getDateString() {
         return session.getDateString();
-    }
-
-    public void setDate(Date date) {
-        session.setDateValue(date);
     }
 
     public Date getStartTime() {

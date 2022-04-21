@@ -2,13 +2,14 @@ package com.example.fitnessfactory.data.models;
 
 import com.example.fitnessfactory.utils.TimeUtils;
 import com.google.firebase.firestore.Exclude;
+
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class Session {
 
     public static final String ID_FIELD = "id";
-    public static final String DATE_FIELD = "date";
     public static final String START_TIME_FIELD = "startTime";
     public static final String END_TIME_FIELD = "endTime";
     public static final String GYM_ID_FIELD = "gymId";
@@ -17,7 +18,6 @@ public class Session {
     public static final String CLIENTS_EMAILS_FIELD = "clientsEmails";
 
     private String id;
-    private long date = 0;
     private Date startTime = new Date();
     private Date endTime = new Date();
     private String gymId;
@@ -32,14 +32,12 @@ public class Session {
     public static boolean isNotNull(Session session) {
         return session != null
                 && session.getId() != null
-                && session.getDateValue() != null
                 && session.getGymId() != null
                 && session.getSessionTypeId() != null;
     }
 
     public void copy(Session session) {
         this.setId(session.getId());
-        this.setDateValue(session.getDateValue());
         this.setStartTime(session.getStartTime());
         this.setEndTime(session.getEndTime());
         this.setGymId(session.getGymId());
@@ -51,7 +49,6 @@ public class Session {
     public boolean equals(Session session) {
         return
                 this.getId().equals(session.getId())
-                        && this.getDateValue().equals(session.getDateValue())
                         && this.getStartTime().equals(session.getStartTime())
                         && this.getEndTime() == session.getEndTime()
                         && this.getGymId().equals(session.getGymId())
@@ -67,28 +64,8 @@ public class Session {
     }
 
     @Exclude
-    public Date getDateValue() {
-        return new Date(date);
-    }
-
-    public long getDate() {
-        return date;
-    }
-
-    @Exclude
     public String getDateString() {
-        return TimeUtils.dateToLocaleStr(getDateValue());
-    }
-
-    @Exclude
-    public void setDateValue(Date date) {
-        this.date = date.getTime();
-        correctStartEndTimeDay();
-    }
-
-    public void setDate(long date) {
-        this.date = date;
-        correctStartEndTimeDay();
+        return TimeUtils.dateToLocaleStr(getStartTime());
     }
 
     public Date getStartTime() {
@@ -97,7 +74,11 @@ public class Session {
 
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
-        correctStartEndTimeDay();
+    }
+
+    public void setDate(Date date) {
+        setStartTime(TimeUtils.setDatesDay(date, getStartTime()));
+        setEndTime(TimeUtils.setDatesDay(date, getEndTime()));
     }
 
     @Exclude
@@ -111,7 +92,6 @@ public class Session {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
-        correctStartEndTimeDay();
     }
 
     @Exclude
@@ -149,14 +129,5 @@ public class Session {
 
     public void setClientsEmails(List<String> clientsEmails) {
         this.clientsEmails = clientsEmails;
-    }
-
-    private void correctStartEndTimeDay() {
-        if (!TimeUtils.isTheSameDay(getDateValue(), getStartTime())) {
-            setStartTime(TimeUtils.setDatesDay(getDateValue(), getStartTime()));
-        }
-        if (!TimeUtils.isTheSameDay(getDateValue(), getEndTime())) {
-            setEndTime(TimeUtils.setDatesDay(getDateValue(), getEndTime()));
-        }
     }
 }

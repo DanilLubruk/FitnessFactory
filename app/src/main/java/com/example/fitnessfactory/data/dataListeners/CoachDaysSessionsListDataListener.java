@@ -6,7 +6,7 @@ import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.CoachDaysSessionsListDataListenerEvent;
 import com.example.fitnessfactory.data.firestoreCollections.SessionsCollection;
 import com.example.fitnessfactory.data.models.Session;
-import com.example.fitnessfactory.utils.TimeUtils;
+import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository;
 import com.google.firebase.firestore.ListenerRegistration;
 
 import org.greenrobot.eventbus.EventBus;
@@ -31,9 +31,7 @@ public class CoachDaysSessionsListDataListener extends BaseDataListener {
     private Single<ListenerRegistration> getDataListener(Date date, String coachEmail) {
         return Single.create(emitter -> {
             ListenerRegistration listenerRegistration =
-                    getCollection()
-                            .whereGreaterThanOrEqualTo(Session.DATE_FIELD, TimeUtils.getStartOfDayDate(date).getTime())
-                            .whereLessThanOrEqualTo(Session.DATE_FIELD, TimeUtils.getEndOfDayDate(date).getTime())
+                    SessionsRepository.getDayEqualsQuery(getCollection(), date)
                             .whereArrayContains(Session.COACHES_EMAILS_FIELD, coachEmail)
                             .addSnapshotListener(((value, error) -> {
                                 if (checkIsSnapshotInvalid(emitter, error)) {
