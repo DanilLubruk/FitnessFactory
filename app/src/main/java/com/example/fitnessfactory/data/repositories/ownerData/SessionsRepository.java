@@ -34,26 +34,60 @@ public class SessionsRepository extends BaseRepository {
     public Single<Boolean> isGymAvailableAtTheTimeAsync(Session session, String gymId) {
         return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(isGymAvailableAtTheTime(session.getDate(), session.getStartTime(), session.getEndTime(), gymId));
+                emitter.onSuccess(isGymAvailableAtTheTime(
+                        session.getId(),
+                        session.getDate(),
+                        session.getStartTime(),
+                        session.getEndTime(),
+                        gymId));
             }
         });
     }
 
-    public Single<Boolean> isGymAvailableAtTheTimeAsync(long date, Date startTime, Date endTime, String gymId) {
+    public Single<Boolean> isGymAvailableAtTheTimeAsync(String sessionId,
+                                                        long date,
+                                                        Date startTime,
+                                                        Date endTime,
+                                                        String gymId) {
         return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(isGymAvailableAtTheTime(date, startTime, endTime, gymId));
+                emitter.onSuccess(isGymAvailableAtTheTime(
+                        sessionId,
+                        date,
+                        startTime,
+                        endTime,
+                        gymId));
             }
         });
     }
 
-    private boolean isGymAvailableAtTheTime(long date, Date startTime, Date endTime, String gymId) throws Exception {
+    private boolean isGymAvailableAtTheTime(Session session,
+                                            String gymId) throws Exception {
+        return isGymAvailableAtTheTime(
+                session.getId(),
+                session.getDate(),
+                session.getStartTime(),
+                session.getEndTime(),
+                gymId);
+    }
+
+    private boolean isGymAvailableAtTheTime(String sessionId,
+                                            long date,
+                                            Date startTime,
+                                            Date endTime,
+                                            String gymId) throws Exception {
         date = TimeUtils.getStartOfDayDate(new Date(date)).getTime();
+        Query query = getCollection()
+                .whereEqualTo(Session.GYM_ID_FIELD, gymId)
+                .whereEqualTo(Session.DATE_FIELD, date);
+
+        if (!StringUtils.isEmpty(sessionId)) {
+            query = query.whereNotEqualTo(Session.ID_FIELD, sessionId);
+        }
+
         List<Session> possibleIntersectSessionsList =
                 Tasks.await(
-                        getCollection()
-                                .whereEqualTo(Session.GYM_ID_FIELD, gymId)
-                                .whereEqualTo(Session.DATE_FIELD, date).get())
+                        query.get())
                         .toObjects(Session.class);
 
         Session session = new Session();
@@ -98,6 +132,9 @@ public class SessionsRepository extends BaseRepository {
 
         for (String sessionId : sessionsIds) {
             Session session = getSession(sessionId);
+            if (session == null) {
+                continue;
+            }
             if (doesSessionsTimeIntersect(comparedSession, session)) {
                 return true;
             }
@@ -268,7 +305,9 @@ public class SessionsRepository extends BaseRepository {
             throw new Exception(getEntitySavingNullMessage());
         }
         session.setDateValue(TimeUtils.getStartOfDayDate(session.getDateValue()));
-        if (!isGymAvailableAtTheTime(session.getDate(), session.getStartTime(), session.getEndTime(), session.getGymId())) {
+        if (!isGymAvailableAtTheTime(
+                session,
+                session.getGymId())) {
             return false;
         }
         boolean isNewEntity = StringUtils.isEmpty(session.getId());

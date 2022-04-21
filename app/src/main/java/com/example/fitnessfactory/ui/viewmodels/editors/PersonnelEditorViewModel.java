@@ -1,6 +1,7 @@
 package com.example.fitnessfactory.ui.viewmodels.editors;
 
 import android.content.Intent;
+import android.os.Bundle;
 
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;

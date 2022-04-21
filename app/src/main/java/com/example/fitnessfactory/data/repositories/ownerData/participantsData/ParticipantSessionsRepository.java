@@ -17,13 +17,17 @@ import io.reactivex.Single;
 
 public abstract class ParticipantSessionsRepository extends BaseRepository {
 
+    private DocumentReference getSessionDocumentWithEmail(String sessionId, String participantEmail) throws Exception {
+        return getCollection(getParticipantId(participantEmail)).document(sessionId);
+    }
+
     private DocumentReference getSessionDocument(String sessionId, String participantId) {
         return getCollection(participantId).document(sessionId);
     }
 
     protected abstract CollectionReference getCollection(String participantId);
 
-    protected abstract List<String> getParticipantsIds(Session session);
+    protected abstract List<String> getParticipantsEmails(Session session);
 
     public Single<List<String>> getParticipantSessionsIdsAsync(String participantId) {
         return SingleCreate(emitter -> {
@@ -70,14 +74,14 @@ public abstract class ParticipantSessionsRepository extends BaseRepository {
     }
 
     private WriteBatch getDeleteSessionBatch(WriteBatch writeBatch,
-                                             Session session) {
-        List<String> participantsIds = getParticipantsIds(session);
-        if (participantsIds == null) {
+                                             Session session) throws Exception {
+        List<String> participantsEmails = getParticipantsEmails(session);
+        if (participantsEmails == null) {
             return writeBatch;
         }
 
-        for (String participantId : participantsIds) {
-            writeBatch = writeBatch.delete(getSessionDocument(session.getId(), participantId));
+        for (String participantEmail : participantsEmails) {
+            writeBatch = writeBatch.delete(getSessionDocumentWithEmail(session.getId(), participantEmail));
         }
 
         return writeBatch;
@@ -85,19 +89,22 @@ public abstract class ParticipantSessionsRepository extends BaseRepository {
 
     public Single<WriteBatch> getRemoveSessionBatchAsync(WriteBatch writeBatch,
                                                          String sessionId,
-                                                         String clientId) {
+                                                         String participantId) {
         return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(getRemoveSessionBatch(writeBatch, sessionId, clientId));
+                emitter.onSuccess(getRemoveSessionBatch(writeBatch, sessionId, participantId));
             }
         });
     }
 
     private WriteBatch getRemoveSessionBatch(WriteBatch writeBatch,
                                              String sessionId,
-                                             String clientId) {
-        return writeBatch.delete(getSessionDocument(sessionId, clientId));
+                                             String participantId) {
+
+        return writeBatch.delete(getSessionDocument(sessionId, participantId));
     }
+
+    protected abstract String getParticipantId(String participantEmail) throws Exception;
 
     public Single<WriteBatch> getAddSessionBatchAsync(WriteBatch writeBatch,
                                                       String sessionId,

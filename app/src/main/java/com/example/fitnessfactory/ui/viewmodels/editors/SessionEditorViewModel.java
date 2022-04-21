@@ -229,9 +229,7 @@ public class SessionEditorViewModel extends EditorViewModel {
 
         subscribeInIOThread(
                 sessionsRepository.isGymAvailableAtTheTimeAsync(
-                        session.getDate(),
-                        session.getStartTime(),
-                        session.getEndTime(),
+                        session,
                         gym.getId()),
                 new SingleData<>(isAvailable -> {
                     if (isAvailable) {
