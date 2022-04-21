@@ -337,18 +337,6 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public AdminEditorViewModelFactory provideAdminEditorViewModelFactory() {
-        return new AdminEditorViewModelFactory();
-    }
-
-    @Provides
-    @Singleton
-    public CoachEditorViewModelFactory provideCoachEditorViewModelFactory() {
-        return new CoachEditorViewModelFactory();
-    }
-
-    @Provides
-    @Singleton
     public GymEditorViewModelFactory provideGymEditorViewModelFactory() {
         return new GymEditorViewModelFactory();
     }

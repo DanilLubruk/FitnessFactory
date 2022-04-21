@@ -24,11 +24,11 @@
         </activity>
         <activity android:name=".ui.activities.editors.GymEditorActivity">
         </activity>
-        <activity android:name=".ui.activities.editors.AdminEditorActivity">
+        <activity android:name=".ui.activities.editors.admin.AdminEditorActivity">
         </activity>
         <activity android:name=".ui.activities.SelectionActivity">
         </activity>
-        <activity android:name=".ui.activities.editors.CoachEditorActivity">
+        <activity android:name=".ui.activities.editors.coach.CoachEditorActivity">
         </activity>
         <activity android:name=".ui.activities.editors.OrganisationInfoEditorActivity">
         </activity>

@@ -1,4 +1,4 @@
-package com.example.fitnessfactory.ui.activities.editors;
+package com.example.fitnessfactory.ui.activities.editors.admin;
 
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -6,6 +6,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.events.AdminGymsListListenerEvent;
+import com.example.fitnessfactory.ui.activities.editors.PersonnelEditorActivity;
+import com.example.fitnessfactory.ui.activities.editors.session.SessionEditorViewModelFactoryProvider;
 import com.example.fitnessfactory.ui.adapters.AdminGymsPageAdapter;
 import com.example.fitnessfactory.ui.adapters.CoachGymsPageAdapter;
 import com.example.fitnessfactory.ui.viewmodels.editors.AdminEditorViewModel;
@@ -21,9 +23,6 @@ import javax.inject.Inject;
 public class AdminEditorActivity extends PersonnelEditorActivity {
 
     private AdminEditorViewModel viewModel;
-
-    @Inject
-    AdminEditorViewModelFactory adminEditorViewModelFactory;
 
     @Override
     protected AdminEditorViewModel getViewModel() {
@@ -43,7 +42,10 @@ public class AdminEditorActivity extends PersonnelEditorActivity {
     @Override
     public void initActivity() {
         FFApp.get().getAppComponent().inject(this);
-        viewModel = new ViewModelProvider(this, adminEditorViewModelFactory).get(AdminEditorViewModel.class);
+        viewModel = new ViewModelProvider(
+                this,
+                AdminEditorViewModelFactoryProvider.getFactory())
+                .get(AdminEditorViewModel.class);
         super.initActivity();
     }
 
@@ -53,9 +55,9 @@ public class AdminEditorActivity extends PersonnelEditorActivity {
     }
 
     @Override
-    protected void close() {
-        FFApp.get().initAppComponent();
-        super.close();
+    public void onDestroy() {
+        super.onDestroy();
+        AdminEditorViewModelFactoryProvider.clear();
     }
 }
 

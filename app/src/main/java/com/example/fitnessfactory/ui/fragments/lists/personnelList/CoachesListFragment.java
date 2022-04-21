@@ -10,7 +10,7 @@ import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.events.CoachesListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.ui.activities.editors.CoachEditorActivity;
+import com.example.fitnessfactory.ui.activities.editors.coach.CoachEditorActivity;
 import com.example.fitnessfactory.ui.activities.editors.session.SessionEditorViewModelFactoryProvider;
 import com.example.fitnessfactory.ui.viewmodels.editors.SessionEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachesListViewModelFactory;

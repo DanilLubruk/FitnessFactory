@@ -6,6 +6,7 @@ import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.AdminGymsListListenerEvent;
 import com.example.fitnessfactory.data.models.Gym;
+import com.example.fitnessfactory.ui.activities.editors.admin.AdminEditorViewModelFactoryProvider;
 import com.example.fitnessfactory.ui.fragments.FragmentProvider;
 import com.example.fitnessfactory.ui.viewmodels.editors.AdminEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.AdminEditorViewModelFactory;
@@ -24,14 +25,14 @@ public class AdminGymsListTabFragment extends PersonnelGymsListTabFragment {
 
     private AdminEditorViewModel editorViewModel;
 
-    @Inject
-    AdminEditorViewModelFactory adminEditorViewModelFactory;
-
     @Override
     protected void defineViewModel() {
         FFApp.get().getAppComponent().inject(this);
         viewModel = new ViewModelProvider(this, new AdminGymsListTabViewModelFactory()).get(AdminGymsListTabViewModel.class);
-        editorViewModel = new ViewModelProvider(this, adminEditorViewModelFactory).get(AdminEditorViewModel.class);
+        editorViewModel = new ViewModelProvider(
+                this,
+                AdminEditorViewModelFactoryProvider.getFactory())
+                .get(AdminEditorViewModel.class);
     }
 
     @Override

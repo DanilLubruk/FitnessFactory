@@ -22,6 +22,7 @@ import com.example.fitnessfactory.data.observers.SingleDialogEvent;
 import com.example.fitnessfactory.data.views.SessionView;
 import com.example.fitnessfactory.databinding.FragmentDaysSessionsListBinding;
 import com.example.fitnessfactory.ui.activities.SelectionActivity;
+import com.example.fitnessfactory.ui.activities.editors.coach.CoachEditorViewModelFactoryProvider;
 import com.example.fitnessfactory.ui.activities.editors.session.SessionEditorActivity;
 import com.example.fitnessfactory.ui.adapters.SessionsListAdapter;
 import com.example.fitnessfactory.ui.fragments.lists.ListListenerTabFragment;
@@ -54,14 +55,14 @@ public class CoachSessionsListTabFragment extends ListListenerTabFragment<Sessio
 
     private CoachEditorViewModel editorViewModel;
 
-    @Inject
-    CoachEditorViewModelFactory coachEditorViewModelFactory;
-
     @Override
     protected void defineViewModel() {
         FFApp.get().getAppComponent().inject(this);
         viewModel = new ViewModelProvider(this, new CoachSessionsListTabViewModelFactory()).get(CoachSessionsListTabViewModel.class);
-        editorViewModel = new ViewModelProvider(this, coachEditorViewModelFactory).get(CoachEditorViewModel.class);
+        editorViewModel = new ViewModelProvider(
+                this,
+                CoachEditorViewModelFactoryProvider.getFactory())
+                .get(CoachEditorViewModel.class);
     }
 
     protected void initComponents() {

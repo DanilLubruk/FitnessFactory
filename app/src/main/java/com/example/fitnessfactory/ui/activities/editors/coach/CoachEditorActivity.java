@@ -1,10 +1,11 @@
-package com.example.fitnessfactory.ui.activities.editors;
+package com.example.fitnessfactory.ui.activities.editors.coach;
 
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.ui.activities.editors.PersonnelEditorActivity;
 import com.example.fitnessfactory.ui.adapters.CoachGymsPageAdapter;
 import com.example.fitnessfactory.ui.viewmodels.editors.CoachEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachEditorViewModelFactory;
@@ -16,9 +17,6 @@ import javax.inject.Inject;
 public class CoachEditorActivity extends PersonnelEditorActivity {
 
     private CoachEditorViewModel viewModel;
-
-    @Inject
-    CoachEditorViewModelFactory coachEditorViewModelFactory;
 
     @Override
     protected CoachEditorViewModel getViewModel() {
@@ -38,7 +36,10 @@ public class CoachEditorActivity extends PersonnelEditorActivity {
     @Override
     public void initActivity() {
         FFApp.get().getAppComponent().inject(this);
-        viewModel = new ViewModelProvider(this, coachEditorViewModelFactory).get(CoachEditorViewModel.class);
+        viewModel = new ViewModelProvider(
+                this,
+                CoachEditorViewModelFactoryProvider.getFactory())
+                .get(CoachEditorViewModel.class);
         super.initActivity();
     }
 
@@ -64,6 +65,6 @@ public class CoachEditorActivity extends PersonnelEditorActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        FFApp.get().initAppComponent();
+        CoachEditorViewModelFactoryProvider.clear();
     }
 }

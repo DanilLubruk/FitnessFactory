@@ -8,7 +8,7 @@ import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.events.AdminsListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.ui.activities.editors.AdminEditorActivity;
+import com.example.fitnessfactory.ui.activities.editors.admin.AdminEditorActivity;
 import com.example.fitnessfactory.ui.viewmodels.factories.AdminsListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.personnelList.AdminListViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
