@@ -7,7 +7,10 @@
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.29259259259259257" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/drawable/divider.xml" value="0.29259259259259257" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/drawable/ic_add.xml" value="0.29259259259259257" />
+        <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/drawable/ic_baseline_business_center_24.xml" value="0.1495" />
+        <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.1495" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/drawable/ic_baseline_fitness_center_36.xml" value="0.1495" />
+        <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/drawable/ic_baseline_group_24.xml" value="0.1495" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/drawable/ic_baseline_login_24.xml" value="0.1495" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/drawable/ic_baseline_save_24.xml" value="0.1495" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/drawable/ic_fitness_center_in_app.xml" value="0.1495" />
@@ -34,6 +37,7 @@
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/activity_session_type_editor.xml" value="0.17777777777777778" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/activity_session_type_editor_content.xml" value="0.17777777777777778" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/activity_sessions_editor_content.xml" value="0.18085106382978725" />
+        <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/activity_splash.xml" value="0.1717325227963526" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/admin_invitation_dialog_view.xml" value="0.1884498480243161" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/admins_gyms_list_item_view.xml" value="0.24139492753623187" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/admins_list_item_view.xml" value="0.1884498480243161" />

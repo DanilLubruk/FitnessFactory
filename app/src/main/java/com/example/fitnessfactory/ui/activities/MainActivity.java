@@ -164,6 +164,27 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         setMenuChecked(R.id.nav_gyms);
     }
 
+    @Override
+    public void onBackPressed() {
+        subscribeInMainThread(
+                DialogUtils.showAskDialog(
+                        this,
+                        ResUtils.getString(R.string.caption_log_out) + "?",
+                        ResUtils.getString(R.string.caption_ok),
+                        ResUtils.getString(R.string.caption_cancel)),
+                new SingleData<>(
+                        doLogout -> {
+                            if (doLogout) {
+                                logOut();
+                            }
+                        },
+                        throwable -> {
+                            throwable.printStackTrace();
+                            GuiUtils.showMessage(throwable.getLocalizedMessage());
+                        }
+                ));
+    }
+
     private void openClientsPage() {
         FragmentProvider.attachFragment(this, AppConsts.FRAGMENT_CLIENTS_ID);
         setMenuChecked(R.id.nav_clients);

@@ -31,23 +31,11 @@ public class AuthViewModel extends BaseViewModel {
     private AuthManager authManager;
     private FirebaseAuthManager firebaseAuthManager;
 
-    public MutableLiveData<Boolean> isLoading = new MutableLiveData<>(true);
-
     @Inject
     public AuthViewModel(AuthManager authManager,
                          FirebaseAuthManager firebaseAuthManager) {
         this.authManager = authManager;
         this.firebaseAuthManager = firebaseAuthManager;
-    }
-
-    public SingleLiveEvent<Boolean> isLoggedIn() {
-        SingleLiveEvent<Boolean> observer = new SingleLiveEvent<>();
-
-        subscribeInIOThread(
-                firebaseAuthManager.isLoggedIn(),
-                new SingleData<>(observer::setValue, getErrorHandler()::handleError));
-
-        return observer;
     }
 
     public SingleLiveEvent<Intent> getSignInIntent() {

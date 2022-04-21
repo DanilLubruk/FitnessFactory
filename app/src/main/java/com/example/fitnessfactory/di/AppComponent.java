@@ -41,6 +41,7 @@ import com.example.fitnessfactory.ui.viewmodels.factories.SessionEditorViewModel
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionTypeEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionTypesListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionsListViewModelFactory;
+import com.example.fitnessfactory.ui.viewmodels.factories.SplashActivityViewModelFactory;
 
 import javax.inject.Singleton;
 
@@ -92,4 +93,5 @@ public interface AppComponent {
     void inject(GymCoachSelectionListFragment gymCoachSelectionListFragment);
     void inject(GymAdminsListTabFragment gymAdminsListTabFragment);
     void inject(GymCoachesListTabFragment gymCoachesListTabFragment);
+    void inject(SplashActivityViewModelFactory splashActivityViewModelFactory);
 }
