@@ -23,6 +23,11 @@ public class OrganisationInfoViewModel extends EditorViewModel {
     public ObservableField<OrganisationData> organisation = new ObservableField<>();
 
     private final String NAME_KEY = "NAME_KEY";
+    private final String ADDRESS_KEY = "ADDRESS_KEY";
+    private final String EMAIL_KEY = "EMAIL_KEY";
+    private final String PHONE_KEY = "PHONE_KEY";
+    private final String TAX_ID_KEY = "TAX_ID_KEY";
+    private final String BANK_DETAILS_KEY = "BANK_DETAILS_KEY";
 
     public OrganisationInfoViewModel() {
         FFApp.get().getAppComponent().inject(this);
@@ -115,6 +120,11 @@ public class OrganisationInfoViewModel extends EditorViewModel {
             return;
         }
         getHandle().put(NAME_KEY, organisationData.getName());
+        getHandle().put(ADDRESS_KEY, organisationData.getAddress());
+        getHandle().put(EMAIL_KEY, organisationData.getEmail());
+        getHandle().put(PHONE_KEY, organisationData.getPhone());
+        getHandle().put(TAX_ID_KEY, organisationData.getTaxId());
+        getHandle().put(BANK_DETAILS_KEY, organisationData.getBankDetails());
     }
 
     private void saveInfoDbState() {
@@ -122,6 +132,11 @@ public class OrganisationInfoViewModel extends EditorViewModel {
             return;
         }
         getHandle().put(OrganisationData.NAME_FIELD, dbOrganisationData.getName());
+        getHandle().put(OrganisationData.ADDRESS_FIELD, dbOrganisationData.getAddress());
+        getHandle().put(OrganisationData.EMAIL_FIELD, dbOrganisationData.getEmail());
+        getHandle().put(OrganisationData.PHONE_FIELD, dbOrganisationData.getPhone());
+        getHandle().put(OrganisationData.TAX_ID_FIELD, dbOrganisationData.getTaxId());
+        getHandle().put(OrganisationData.BANK_DETAILS_FIELD, dbOrganisationData.getBankDetails());
     }
 
     @Override
@@ -135,6 +150,11 @@ public class OrganisationInfoViewModel extends EditorViewModel {
             return;
         }
         organisationData.setName((String) getHandle().get(NAME_KEY));
+        organisationData.setAddress((String) getHandle().get(ADDRESS_KEY));
+        organisationData.setEmail((String) getHandle().get(EMAIL_KEY));
+        organisationData.setPhone((String) getHandle().get(PHONE_KEY));
+        organisationData.setTaxId((String) getHandle().get(TAX_ID_KEY));
+        organisationData.setBankDetails((String) getHandle().get(BANK_DETAILS_KEY));
     }
 
     private void setInfoDbState() {
@@ -142,5 +162,10 @@ public class OrganisationInfoViewModel extends EditorViewModel {
             return;
         }
         dbOrganisationData.setName((String) getHandle().get(OrganisationData.NAME_FIELD));
+        dbOrganisationData.setAddress((String) getHandle().get(OrganisationData.ADDRESS_FIELD));
+        dbOrganisationData.setEmail((String) getHandle().get(OrganisationData.EMAIL_FIELD));
+        dbOrganisationData.setPhone((String) getHandle().get(OrganisationData.PHONE_FIELD));
+        dbOrganisationData.setTaxId((String) getHandle().get(OrganisationData.TAX_ID_FIELD));
+        dbOrganisationData.setBankDetails((String) getHandle().get(OrganisationData.BANK_DETAILS_FIELD));
     }
 }

@@ -1,4 +1,5 @@
 package com.example.fitnessfactory.ui.activities.editors;
+import android.text.InputFilter;
 import android.view.Menu;
 
 import androidx.appcompat.widget.AppCompatEditText;
@@ -6,9 +7,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.AppConsts;
+import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.databinding.ActivityOrganisationInfoEditorBinding;
+import com.example.fitnessfactory.ui.components.filters.InputFilterEmail;
+import com.example.fitnessfactory.ui.components.filters.InputFilterMinMax;
+import com.example.fitnessfactory.ui.components.filters.ValueCheckers.EmailValueChecker;
 import com.example.fitnessfactory.ui.viewmodels.editors.EditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.editors.OrganisationInfoViewModel;
+import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.material.textfield.TextInputEditText;
@@ -53,6 +60,22 @@ public class OrganisationInfoEditorActivity extends EditorActivity {
     @Override
     protected String getDeleteMessage() {
         return "";
+    }
+
+    @Override
+    protected boolean checkScreenDataValidity() {
+        String email = binding.container.edtEmail.getText().toString().trim();
+
+        if (!StringUtils.isEmpty(email) && !EmailValueChecker.getInstance().isValueValid(email)) {
+            binding.container.edtEmail.setError(ResUtils.getString(R.string.message_error_email_invalid));
+            return false;
+        }
+
+        return super.checkScreenDataValidity();
+    }
+
+    protected String getInvalidDataMessage() {
+        return ResUtils.getString(R.string.caption_blank_organisation_name);
     }
 
     @Override

@@ -1,9 +1,12 @@
 package com.example.fitnessfactory.data.repositories;
 
+import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.FirestoreCollections;
 import com.example.fitnessfactory.data.firestoreCollections.BaseCollection;
 import com.example.fitnessfactory.data.models.OrganisationData;
+import com.example.fitnessfactory.ui.components.filters.ValueCheckers.EmailValueChecker;
+import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.StringUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
@@ -26,7 +29,8 @@ public class OrganisationInfoRepository extends BaseRepository {
         });
     }
 
-    private boolean saveOrganisationInfo(OrganisationData organisationData) throws ExecutionException, InterruptedException {
+    private boolean saveOrganisationInfo(OrganisationData organisationData) throws Exception {
+        organisationData.trimStrings();
         Tasks.await(
                 getCollection().document(
                         FirestoreCollections.ORGANISATION_DATA)

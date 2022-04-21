@@ -135,6 +135,11 @@
     <string name="caption_select_language">Select language</string>
     <string name="caption_session">Session</string>
     <string name="message_gym_occupied">This gym is occupied from %1$s to %2$s</string>
+    <string name="caption_phone">Phone</string>
+    <string name="caption_tax_id">Tax Id</string>
+    <string name="caption_bank_details">Bank Details</string>
+    <string name="caption_blank_organisation_name">You need to fill in organisation name!</string>
+
 
     <!--authentication-->
     <string name="caption_wrong_auth">Authentication failed</string>

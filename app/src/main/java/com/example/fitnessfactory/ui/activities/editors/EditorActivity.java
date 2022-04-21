@@ -177,9 +177,13 @@ public abstract class EditorActivity extends BaseActivity {
         if (isDataValid()) {
             return true;
         } else {
-            GuiUtils.showMessage(ResUtils.getString(R.string.caption_blank_fields));
+            GuiUtils.showMessage(getInvalidDataMessage());
             return false;
         }
+    }
+
+    protected String getInvalidDataMessage() {
+        return ResUtils.getString(R.string.caption_blank_fields);
     }
 
     public void save(EditorCallback callback) {

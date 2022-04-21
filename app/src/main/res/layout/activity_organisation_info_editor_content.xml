@@ -5,38 +5,147 @@
 
         <variable
             name="model"
-            type="com.example.fitnessfactory.ui.viewmodels.editors.OrganisationInfoViewModel"/>
+            type="com.example.fitnessfactory.ui.viewmodels.editors.OrganisationInfoViewModel" />
     </data>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/activity_vertical_margin"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_vertical_margin"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ilName"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:hint="@string/caption_name">
+            android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/edtName"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ilName"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
-                android:selectAllOnFocus="true"
-                android:maxLines="1"
-                android:inputType="text"
-                android:text="@={model.organisation.name}"/>
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:hint="@string/caption_name">
 
-        </com.google.android.material.textfield.TextInputLayout>
-    </RelativeLayout>
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:selectAllOnFocus="true"
+                    android:text="@={model.organisation.name}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ilAddress"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ilName"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:hint="@string/caption_address">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:selectAllOnFocus="true"
+                    android:text="@={model.organisation.address}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ilEmail"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ilAddress"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:hint="@string/caption_email">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:selectAllOnFocus="true"
+                    android:text="@={model.organisation.email}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ilPhone"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ilEmail"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:hint="@string/caption_phone">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:selectAllOnFocus="true"
+                    android:text="@={model.organisation.phone}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ilTaxId"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ilPhone"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:hint="@string/caption_tax_id">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtTaxId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:selectAllOnFocus="true"
+                    android:text="@={model.organisation.taxId}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ilBankDetails"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ilTaxId"
+                android:hint="@string/caption_bank_details">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtBankDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:selectAllOnFocus="true"
+                    android:text="@={model.organisation.bankDetails}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </RelativeLayout>
+    </ScrollView>
 </layout>

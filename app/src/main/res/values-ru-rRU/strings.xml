@@ -136,6 +136,10 @@
     <string name="caption_select_language">Выберите язык</string>
     <string name="caption_session">Тренировка</string>
     <string name="message_gym_occupied">Этот зал занят с %1$s по %2$s</string>
+    <string name="caption_phone">Телефон</string>
+    <string name="caption_tax_id">ИНН</string>
+    <string name="caption_bank_details">Банковские реквизиты</string>
+    <string name="caption_blank_organisation_name">Нужно заполнить наименование организации!</string>
 
     <!--authentication-->
     <string name="caption_wrong_auth">Неуспешная аутентификация</string>
