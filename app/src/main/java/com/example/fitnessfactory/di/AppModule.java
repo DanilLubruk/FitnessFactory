@@ -334,10 +334,4 @@ public class AppModule {
                                                             ClientSessionsRepository clientSessionsRepository) {
         return new ClientsAccessManager(accessRepository, ownerRepository, clientSessionsRepository);
     }
-
-    @Provides
-    @Singleton
-    public GymEditorViewModelFactory provideGymEditorViewModelFactory() {
-        return new GymEditorViewModelFactory();
-    }
 }

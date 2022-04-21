@@ -1,4 +1,4 @@
-package com.example.fitnessfactory.ui.activities.editors;
+package com.example.fitnessfactory.ui.activities.editors.gym;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
@@ -8,6 +8,8 @@ import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.databinding.ActivityGymEditorBinding;
+import com.example.fitnessfactory.ui.activities.editors.EditorActivity;
+import com.example.fitnessfactory.ui.activities.editors.coach.CoachEditorViewModelFactoryProvider;
 import com.example.fitnessfactory.ui.adapters.PersonnelPageAdapter;
 import com.example.fitnessfactory.ui.viewmodels.editors.GymEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.GymEditorViewModelFactory;
@@ -24,9 +26,6 @@ public class GymEditorActivity extends EditorActivity {
     private ActivityGymEditorBinding binding;
     private PersonnelPageAdapter pageAdapter;
 
-    @Inject
-    GymEditorViewModelFactory gymEditorViewModelFactory;
-
     @Override
     public Toolbar getToolbar() {
         return binding.toolbar;
@@ -41,7 +40,10 @@ public class GymEditorActivity extends EditorActivity {
     public void initActivity() {
         FFApp.get().getAppComponent().inject(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_gym_editor);
-        viewModel = new ViewModelProvider(this, gymEditorViewModelFactory).get(GymEditorViewModel.class);
+        viewModel = new ViewModelProvider(
+                this,
+                GymEditorViewModelFactoryProvider.getFactory())
+                .get(GymEditorViewModel.class);
         super.initActivity();
         binding.setModel(viewModel);
 
@@ -91,8 +93,8 @@ public class GymEditorActivity extends EditorActivity {
     }
 
     @Override
-    protected void close() {
-        FFApp.get().initAppComponent();
-        super.close();
+    public void onDestroy() {
+        super.onDestroy();
+        GymEditorViewModelFactoryProvider.clear();
     }
 }

@@ -2,7 +2,7 @@ package com.example.fitnessfactory.di;
 
 import com.example.fitnessfactory.ui.activities.editors.admin.AdminEditorActivity;
 import com.example.fitnessfactory.ui.activities.editors.coach.CoachEditorActivity;
-import com.example.fitnessfactory.ui.activities.editors.GymEditorActivity;
+import com.example.fitnessfactory.ui.activities.editors.gym.GymEditorActivity;
 import com.example.fitnessfactory.ui.activities.editors.session.SessionEditorActivity;
 import com.example.fitnessfactory.ui.fragments.lists.SessionTypesListFragment;
 import com.example.fitnessfactory.ui.fragments.lists.gymPersonnelList.GymAdminsListTabFragment;

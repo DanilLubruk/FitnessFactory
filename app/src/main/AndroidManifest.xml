@@ -22,7 +22,7 @@
         </activity>
         <activity android:name=".ui.activities.MainActivity">
         </activity>
-        <activity android:name=".ui.activities.editors.GymEditorActivity">
+        <activity android:name=".ui.activities.editors.gym.GymEditorActivity">
         </activity>
         <activity android:name=".ui.activities.editors.admin.AdminEditorActivity">
         </activity>

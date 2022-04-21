@@ -9,20 +9,15 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
-import com.example.fitnessfactory.data.ActivityRequestCodes;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.GymsListDataListenerEvent;
-import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Gym;
-import com.example.fitnessfactory.ui.activities.editors.GymEditorActivity;
+import com.example.fitnessfactory.ui.activities.editors.gym.GymEditorActivity;
 import com.example.fitnessfactory.ui.adapters.GymsListAdapter;
 import com.example.fitnessfactory.ui.fragments.lists.ListListenerSelectFragment;
 import com.example.fitnessfactory.ui.viewholders.lists.GymsListViewHolder;
-import com.example.fitnessfactory.ui.viewmodels.editors.SessionEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.GymsListViewModelFactory;
-import com.example.fitnessfactory.ui.viewmodels.factories.SessionEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.GymsListViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
 
@@ -30,8 +25,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
-
-import javax.inject.Inject;
 
 public class GymsListFragment extends ListListenerSelectFragment<Gym, GymsListViewHolder, GymsListAdapter> {
 

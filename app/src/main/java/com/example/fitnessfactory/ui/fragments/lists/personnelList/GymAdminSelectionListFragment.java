@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.models.AppUser;
+import com.example.fitnessfactory.ui.activities.editors.gym.GymEditorViewModelFactoryProvider;
 import com.example.fitnessfactory.ui.viewmodels.editors.GymEditorViewModel;
 import com.example.fitnessfactory.ui.viewmodels.factories.AdminsListTabViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.GymEditorViewModelFactory;
@@ -17,15 +18,15 @@ public class GymAdminSelectionListFragment extends AdminsListFragment {
 
     private GymEditorViewModel editorViewModel;
 
-    @Inject
-    GymEditorViewModelFactory gymEditorViewModelFactory;
-
     @Override
     protected void defineViewModel() {
         super.defineViewModel();
         FFApp.get().getAppComponent().inject(this);
         tabViewModel = new ViewModelProvider(this, new AdminsListTabViewModelFactory()).get(GymAdminsListTabViewModel.class);
-        editorViewModel = new ViewModelProvider(this, gymEditorViewModelFactory).get(GymEditorViewModel.class);
+        editorViewModel = new ViewModelProvider(
+                this,
+                GymEditorViewModelFactoryProvider.getFactory())
+                .get(GymEditorViewModel.class);
     }
 
     @Override
