@@ -139,6 +139,7 @@
     <string name="caption_tax_id">Tax Id</string>
     <string name="caption_bank_details">Bank Details</string>
     <string name="caption_blank_organisation_name">You need to fill in organisation name!</string>
+    <string name="caption_search">Search</string>
 
 
     <!--authentication-->

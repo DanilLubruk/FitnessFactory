@@ -31,7 +31,7 @@ public abstract class PersonnelListViewModel extends ListViewModel<AppUser> {
 
     private DataListener dataListener;
 
-    private final MutableLiveData<List<AppUser>> personnel = new MutableLiveData<>();
+    protected final MutableLiveData<List<AppUser>> personnel = new MutableLiveData<>();
 
     public PersonnelListViewModel(PersonnelAccessManager accessManager,
                                   PersonnelDataManager dataManager,
@@ -98,9 +98,13 @@ public abstract class PersonnelListViewModel extends ListViewModel<AppUser> {
         return personnel;
     }
 
+    protected void setPersonnel(List<AppUser> appUsers) {
+        personnel.setValue(appUsers);
+    }
+
     public void getPersonnelListData() {
         subscribeInIOThread(getDataManager().getPersonnelListAsync(),
-                new SingleData<>(personnel::setValue, getErrorHandler()::handleError));
+                new SingleData<>(this::setPersonnel, getErrorHandler()::handleError));
     }
 
     @Override

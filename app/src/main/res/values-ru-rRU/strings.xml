@@ -140,6 +140,7 @@
     <string name="caption_tax_id">ИНН</string>
     <string name="caption_bank_details">Банковские реквизиты</string>
     <string name="caption_blank_organisation_name">Нужно заполнить наименование организации!</string>
+    <string name="caption_search">Поиск</string>
 
     <!--authentication-->
     <string name="caption_wrong_auth">Неуспешная аутентификация</string>

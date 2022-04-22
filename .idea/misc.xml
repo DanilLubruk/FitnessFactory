@@ -12,6 +12,7 @@
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/drawable/ic_baseline_fitness_center_36.xml" value="0.1495" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/drawable/ic_baseline_group_24.xml" value="0.1495" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/drawable/ic_baseline_login_24.xml" value="0.1495" />
+        <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/drawable/ic_baseline_more_vert_24.xml" value="0.242" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/drawable/ic_baseline_save_24.xml" value="0.1495" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/drawable/ic_fitness_center_in_app.xml" value="0.1495" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/drawable/ic_launcher_background.xml" value="0.29259259259259257" />
@@ -48,12 +49,14 @@
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/dialog_fragment_list.xml" value="0.1884498480243161" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/edit_gym_dialog_view.xml" value="0.1884498480243161" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/fragment_admins_list.xml" value="0.1884498480243161" />
+        <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/fragment_client_search_list.xml" value="0.25" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/fragment_coaches_list.xml" value="0.18085106382978725" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/fragment_days_sessions_list.xml" value="0.18085106382978725" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/fragment_gym_list_tab.xml" value="0.24139492753623187" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/fragment_gyms_list.xml" value="0.1884498480243161" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/fragment_list.xml" value="0.18055555555555555" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/fragment_main_menu.xml" value="0.1884498480243161" />
+        <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/fragment_search_list.xml" value="0.1884498480243161" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/gyms_list_item_view.xml" value="0.1884498480243161" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/nav_header_main.xml" value="0.1884498480243161" />
         <entry key="..\:/Users/maste/AndroidStudioProjects/FitnessFactory/app/src/main/res/layout/one_bg_button_list_item_view.xml" value="0.17777777777777778" />
