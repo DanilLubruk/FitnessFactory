@@ -1,8 +1,17 @@
 package com.example.fitnessfactory.ui.fragments.lists.personnelList;
 
 import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
@@ -10,6 +19,7 @@ import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.events.CoachesListDataListenerEvent;
 import com.example.fitnessfactory.data.models.AppUser;
+import com.example.fitnessfactory.databinding.FragmentCoachesSearchListBinding;
 import com.example.fitnessfactory.ui.activities.editors.coach.CoachEditorActivity;
 import com.example.fitnessfactory.ui.activities.editors.session.SessionEditorViewModelFactoryProvider;
 import com.example.fitnessfactory.ui.viewmodels.editors.SessionEditorViewModel;
@@ -18,6 +28,7 @@ import com.example.fitnessfactory.ui.viewmodels.factories.SessionCoachesListTabV
 import com.example.fitnessfactory.ui.viewmodels.lists.personnelList.CoachesListViewModel;
 import com.example.fitnessfactory.ui.viewmodels.lists.sessionParticipantList.SessionCoachesListTabViewModel;
 import com.example.fitnessfactory.utils.ResUtils;
+import com.github.clans.fab.FloatingActionMenu;
 import com.tiromansev.prefswrapper.typedprefs.BooleanPreference;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -31,6 +42,46 @@ public class CoachesListFragment extends PersonnelListFragment {
 
     private SessionEditorViewModel editorViewModel;
 
+    public FragmentCoachesSearchListBinding binding;
+
+    @Override
+    protected void initBinding(LayoutInflater inflater, ViewGroup container) {
+        binding = FragmentCoachesSearchListBinding.inflate(inflater, container, false);
+    }
+
+    @Override
+    protected View getRootView() {
+        return binding.getRoot();
+    }
+
+    protected RecyclerView getRecyclerView() {
+        return binding.rvData;
+    }
+
+    protected FloatingActionMenu getFAB() {
+        return binding.fabAddItem;
+    }
+
+    protected ProgressBar getProgressBar() {
+        return binding.pkProgress;
+    }
+
+    protected TextView getEmptyDataLabel() {
+        return binding.tvEmptyData;
+    }
+
+    protected AppCompatEditText getEdtSearch() {
+        return binding.edtSearch;
+    }
+
+    protected LinearLayoutCompat getLlSearch() {
+        return binding.llSearch;
+    }
+
+    protected ImageButton getIbSearchOptions() {
+        return binding.ibSearchOptions;
+    }
+
     @Override
     protected void defineViewModel() {
         FFApp.get().getAppComponent().inject(this);
@@ -40,6 +91,7 @@ public class CoachesListFragment extends PersonnelListFragment {
                 this,
                 SessionEditorViewModelFactoryProvider.getFactory())
                 .get(SessionEditorViewModel.class);
+        binding.setModel(viewModel);
     }
 
     @Override

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.FFApp;
-import com.example.fitnessfactory.ui.viewmodels.lists.personnelList.client.ClientsListViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.personnelList.ClientsListViewModel;
 
 import javax.inject.Inject;
 

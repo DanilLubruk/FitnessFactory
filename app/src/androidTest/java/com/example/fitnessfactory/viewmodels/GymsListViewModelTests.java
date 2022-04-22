@@ -11,7 +11,7 @@ import com.example.fitnessfactory.data.repositories.ownerData.OwnerGymRepository
 import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository;
 import com.example.fitnessfactory.mockHelpers.mockers.OwnerGymRepositoryMocker;
 import com.example.fitnessfactory.mockHelpers.mockers.access.GymAccessManagerMocker;
-import com.example.fitnessfactory.ui.viewmodels.lists.GymsListViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.gym.GymsListViewModel;
 
 import org.junit.Before;
 import org.junit.Test;

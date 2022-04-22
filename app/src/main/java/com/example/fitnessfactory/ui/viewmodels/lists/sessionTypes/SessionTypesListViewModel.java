@@ -1,4 +1,4 @@
-package com.example.fitnessfactory.ui.viewmodels.lists;
+package com.example.fitnessfactory.ui.viewmodels.lists.sessionTypes;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.dataListeners.SessionTypesListDataListener;
@@ -7,13 +7,16 @@ import com.example.fitnessfactory.data.models.SessionType;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionTypeRepository;
 import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
 import com.example.fitnessfactory.ui.viewmodels.DataListListener;
+import com.example.fitnessfactory.ui.viewmodels.lists.ListViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.SearchFieldState;
+import com.example.fitnessfactory.ui.viewmodels.lists.SearchViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.google.android.gms.common.internal.ResourceUtils;
 
 import javax.inject.Inject;
 
-public class SessionTypesListViewModel extends ListViewModel<SessionType> {
+public class SessionTypesListViewModel extends SearchViewModel<SessionType, SearchFieldState<SessionType>> {
 
     private final SessionTypesDataManager sessionTypesDataManager;
     private final SessionTypesListDataListener dataListener;
@@ -47,5 +50,10 @@ public class SessionTypesListViewModel extends ListViewModel<SessionType> {
     @Override
     protected String getItemNullClause() {
         return getErrorMessageBreak().concat(ResUtils.getString(R.string.message_session_type_null));
+    }
+
+    @Override
+    protected SearchFieldState<SessionType> getDefaultSearchField() {
+        return new SessionTypeNameSearchField();
     }
 }

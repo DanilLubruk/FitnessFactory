@@ -1,23 +1,20 @@
-package com.example.fitnessfactory.ui.viewmodels.lists.personnelList.client;
+package com.example.fitnessfactory.ui.viewmodels.lists.gym;
 
 import androidx.annotation.NonNull;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.models.AppUser;
+import com.example.fitnessfactory.data.models.Gym;
+import com.example.fitnessfactory.ui.viewmodels.lists.SearchFieldState;
 import com.example.fitnessfactory.utils.ResUtils;
 
 import java.util.Locale;
 
-public class ClientNameSearchField extends ClientSearchFieldState {
+public class GymNameSearchField extends SearchFieldState<Gym> {
 
     @Override
-    public String getSearchField(AppUser appUser) {
-        return appUser.getName().toLowerCase(Locale.ROOT);
-    }
-
-    @Override
-    public int getTitle() {
-        return R.string.caption_name;
+    public String getSearchField(Gym gym) {
+        return gym.getName().toLowerCase(Locale.ROOT);
     }
 
     @NonNull

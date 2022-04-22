@@ -1,8 +1,5 @@
 package com.example.fitnessfactory.ui.viewmodels.lists.personnelList;
 
-import androidx.lifecycle.MutableLiveData;
-
-import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.AppPrefs;
 import com.example.fitnessfactory.data.dataListeners.DataListener;
 import com.example.fitnessfactory.data.managers.access.PersonnelAccessManager;
@@ -11,27 +8,20 @@ import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
 import com.example.fitnessfactory.system.SafeReference;
-import com.example.fitnessfactory.ui.viewmodels.BaseViewModel;
-import com.example.fitnessfactory.ui.viewmodels.DataListListener;
-import com.example.fitnessfactory.ui.viewmodels.lists.ListViewModel;
-import com.example.fitnessfactory.utils.GuiUtils;
-import com.example.fitnessfactory.utils.ResUtils;
-import com.example.fitnessfactory.utils.RxUtils;
+import com.example.fitnessfactory.ui.viewmodels.lists.SearchViewModel;
+import com.example.fitnessfactory.ui.viewmodels.lists.personnelList.searchFields.PersonnelNameSearchField;
+import com.example.fitnessfactory.ui.viewmodels.lists.SearchFieldState;
 import com.example.fitnessfactory.utils.dialogs.exceptions.DialogCancelledException;
-
-import java.util.List;
 
 import io.reactivex.Single;
 
-public abstract class PersonnelListViewModel extends ListViewModel<AppUser> {
+public abstract class PersonnelListViewModel extends SearchViewModel<AppUser, SearchFieldState<AppUser>> {
 
     private PersonnelAccessManager accessManager;
 
     private PersonnelDataManager dataManager;
 
     private DataListener dataListener;
-
-    protected final MutableLiveData<List<AppUser>> personnel = new MutableLiveData<>();
 
     public PersonnelListViewModel(PersonnelAccessManager accessManager,
                                   PersonnelDataManager dataManager,
@@ -94,17 +84,9 @@ public abstract class PersonnelListViewModel extends ListViewModel<AppUser> {
         return observer;
     }
 
-    public MutableLiveData<List<AppUser>> getPersonnel() {
-        return personnel;
-    }
-
-    protected void setPersonnel(List<AppUser> appUsers) {
-        personnel.setValue(appUsers);
-    }
-
     public void getPersonnelListData() {
         subscribeInIOThread(getDataManager().getPersonnelListAsync(),
-                new SingleData<>(this::setPersonnel, getErrorHandler()::handleError));
+                new SingleData<>(this::setItems, getErrorHandler()::handleError));
     }
 
     @Override
@@ -128,5 +110,10 @@ public abstract class PersonnelListViewModel extends ListViewModel<AppUser> {
                         .deletePersonnelCompletable(
                                 AppPrefs.gymOwnerId().getValue(),
                                 personnel.getEmail()));
+    }
+
+    @Override
+    protected SearchFieldState<AppUser> getDefaultSearchField() {
+        return new PersonnelNameSearchField();
     }
 }

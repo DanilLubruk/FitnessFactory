@@ -1,12 +1,15 @@
 package com.example.fitnessfactory.ui.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.observers.SingleData;
+import com.example.fitnessfactory.ui.KeyboardHandler;
 
 import java.util.HashMap;
 import icepick.Icepick;
@@ -36,10 +40,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected Bundle savedState = null;
     private final CompositeDisposable disposables = new CompositeDisposable();
     private HashMap<Integer, Bundle> customBundles = new HashMap<>();
+    protected KeyboardHandler keyboardHandler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        keyboardHandler = new KeyboardHandler();
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         Icepick.restoreInstanceState(this, savedInstanceState);
         savedState = savedInstanceState;
@@ -47,6 +53,31 @@ public abstract class BaseActivity extends AppCompatActivity {
         initToolbar();
         initComponents();
         disableAutofill();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        attachKeyboardHandler();
+    }
+
+    @Override
+    protected void onPause() {
+        tryToHideKeyboard();
+        keyboardHandler.detach();
+        super.onPause();
+    }
+
+    public void attachKeyboardHandler() {
+        keyboardHandler.attach(this);
+    }
+
+    public void tryToHideKeyboard() {
+        keyboardHandler.tryToHideKeyboard();
+    }
+
+    public void tryToShowKeyboard() {
+        keyboardHandler.tryToShowKeyBoard();
     }
 
     protected void setFullScreen() {
@@ -111,7 +142,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void initActivity() {
-
+        attachKeyboardHandler();
     }
 
     @Override
