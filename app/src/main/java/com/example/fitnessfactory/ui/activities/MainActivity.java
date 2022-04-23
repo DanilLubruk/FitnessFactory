@@ -20,11 +20,15 @@ import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.databinding.ActivityMainBinding;
 import com.example.fitnessfactory.ui.activities.editors.OrganisationInfoEditorActivity;
 import com.example.fitnessfactory.ui.fragments.FragmentProvider;
+import com.example.fitnessfactory.ui.fragments.MenuFragment;
+import com.example.fitnessfactory.ui.fragments.lists.ListListenerSelectFragment;
 import com.example.fitnessfactory.ui.viewmodels.MainActivityViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.List;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -166,6 +170,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void onBackPressed() {
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+
+        if (fragmentList.isEmpty()) {
+            super.onBackPressed();
+            return;
+        }
+
+        Fragment topFragment = fragmentList.get(fragmentList.size() - 1);
+
+        if (topFragment instanceof MenuFragment) {
+            askForLogout();
+        } else {
+            openMainPage();
+        }
+    }
+
+    private void askForLogout() {
         subscribeInMainThread(
                 DialogUtils.showAskDialog(
                         this,

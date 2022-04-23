@@ -1,7 +1,11 @@
 package com.example.fitnessfactory.ui.viewmodels.lists;
 
+import android.os.Bundle;
+
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
+
+import com.example.fitnessfactory.data.models.Session;
 
 import java.util.List;
 import java.util.Locale;
@@ -9,6 +13,8 @@ import java.util.stream.Collectors;
 
 public abstract class SearchViewModel<ItemType, FieldStateType extends SearchFieldState<ItemType>>
         extends ListViewModel<ItemType> {
+    private static final String searchFieldKey = "searchFieldKey";
+
     protected final MutableLiveData<List<ItemType>> items = new MutableLiveData<>();
 
     public MutableLiveData<Boolean> showSearch = new MutableLiveData<>(false);
@@ -51,4 +57,15 @@ public abstract class SearchViewModel<ItemType, FieldStateType extends SearchFie
     public MutableLiveData<List<ItemType>> getItems() {
         return filteredItems;
     }
+
+    /*@Override
+    public void saveState(Bundle savedState) {
+        super.saveState(savedState);
+        getHandle().put(searchFieldKey, )
+    }
+
+    @Override
+    public void restoreState(Bundle savedState) {
+        super.restoreState(savedState);
+    }*/
 }
