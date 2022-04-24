@@ -109,7 +109,7 @@ public abstract class PersonnelListViewModel extends SearchViewModel<AppUser, Se
                 getAccessManager()
                         .deletePersonnelCompletable(
                                 AppPrefs.gymOwnerId().getValue(),
-                                personnel.getEmail()));
+                                personnel.getId()));
     }
 
     @Override

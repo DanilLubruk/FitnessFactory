@@ -22,7 +22,7 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
     public Single<Boolean> isPersonnelOccupiedWithGyms(String personnelId) {
         return SingleCreate(emitter -> {
             Personnel personnel = Tasks.await(getCollection().document(personnelId).get()).toObject(Personnel.class);
-            boolean isPersonnelOccupied = !personnel.getGymsIds().isEmpty();
+            boolean isPersonnelOccupied = personnel.getGymsIds() != null && !personnel.getGymsIds().isEmpty();
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(isPersonnelOccupied);

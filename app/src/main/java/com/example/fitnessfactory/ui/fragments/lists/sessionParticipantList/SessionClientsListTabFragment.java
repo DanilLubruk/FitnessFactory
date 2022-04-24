@@ -35,16 +35,6 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<AppUs
 
     private SessionEditorViewModel editorViewModel;
 
-    private final ActivityResultLauncher<Intent> openClientsSelection = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> editorViewModel.sessionId.observe(getViewLifecycleOwner(), sessionId -> {
-                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    String clientEmail = result.getData().getStringExtra(AppConsts.CLIENT_EMAIL_EXTRA);
-                    getViewModel().addParticipantToSession(sessionId, clientEmail);
-                }
-            })
-    );
-
     protected void initComponents() {
         super.initComponents();
         viewModel.getClients().observe(this, this::setListData);

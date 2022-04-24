@@ -50,13 +50,13 @@ public class SessionCoachesListTabViewModel extends SessionParticipantListTabVie
     }
 
     @Override
-    protected Completable getAddParticipantAction(String sessionId, String coachEmail) {
-        return sessionsDataManager.addCoachToSession(sessionId, coachEmail);
+    protected Completable getAddParticipantAction(String sessionId, String coachUserId) {
+        return sessionsDataManager.addCoachToSession(sessionId, coachUserId);
     }
 
     @Override
-    protected Completable getDeleteParticipantAction(String sessionId, String coachEmail) {
-        return sessionsDataManager.removeCoachFromSession(sessionId, coachEmail);
+    protected Completable getDeleteParticipantAction(String sessionId, String coachUserId) {
+        return sessionsDataManager.removeCoachFromSession(sessionId, coachUserId);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class SessionCoachesListTabViewModel extends SessionParticipantListTabVie
 
     @Override
     protected String getParticipantId(AppUser coach) {
-        return coach.getEmail();
+        return coach.getId();
     }
 
     @Override

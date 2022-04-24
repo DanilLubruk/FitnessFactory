@@ -51,8 +51,8 @@ public class SessionClientsListTabViewModel extends SessionParticipantListTabVie
     }
 
     @Override
-    protected Completable getAddParticipantAction(String sessionId, String clientEmail) {
-        return sessionsDataManager.addClientToSession(sessionId, clientEmail);
+    protected Completable getAddParticipantAction(String sessionId, String coachUserId) {
+        return sessionsDataManager.addClientToSession(sessionId, coachUserId);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class SessionClientsListTabViewModel extends SessionParticipantListTabVie
 
     @Override
     protected String getParticipantId(AppUser client) {
-        return client.getEmail();
+        return client.getId();
     }
 
     @Override
