@@ -1,6 +1,6 @@
 <resources>
     <!--development-->
-    <string name="app_name">FitnessFactory</string>
+    <string name="app_name">FitnessAdmin</string>
     <string name="title_home">Home</string>
     <string name="title_gyms">Gyms</string>
     <string name="title_session_types">Session types</string>

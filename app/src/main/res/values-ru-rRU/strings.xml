@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--development-->
-    <string name="app_name">FitnessFactory</string>
+    <string name="app_name">FitnessAdmin</string>
     <string name="title_home">Главная</string>
     <string name="title_gyms">Залы</string>
     <string name="title_session_types">Виды тренировок</string>
