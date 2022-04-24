@@ -2,27 +2,26 @@ package com.example.fitnessfactory.data.models;
 
 public class PersonnelAccessEntry {
 
-    public static final String USER_EMAIL_FIELD = "userEmail";
+    public static final String USER_ID_FIELD = "userId";
     public static final String OWNER_ID_FIELD = "ownerId";
 
-    private String userEmail;
-
+    private String userId;
     private String ownerId;
 
     public PersonnelAccessEntry() {
 
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getUserId() {
+        return userId;
     }
 
     public String getOwnerId() {
         return ownerId;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public void setOwnerId(String ownerId) {
@@ -35,8 +34,8 @@ public class PersonnelAccessEntry {
 
     public class Builder {
 
-        public PersonnelAccessEntry.Builder setUserEmail(String userEmail) {
-            PersonnelAccessEntry.this.userEmail = userEmail;
+        public PersonnelAccessEntry.Builder setUserId(String userEmail) {
+            PersonnelAccessEntry.this.userId = userEmail;
             return this;
         }
 

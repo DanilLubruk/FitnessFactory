@@ -1,18 +1,18 @@
 package com.example.fitnessfactory.data.events;
 
-import com.example.fitnessfactory.data.models.Client;
+import com.example.fitnessfactory.data.models.Personnel;
 
 import java.util.List;
 
 public class ClientsListDataListenerEvent {
 
-    private List<Client> clientsList;
+    private List<Personnel> clientsList;
 
-    public ClientsListDataListenerEvent(List<Client> clientsList) {
+    public ClientsListDataListenerEvent(List<Personnel> clientsList) {
         this.clientsList = clientsList;
     }
 
-    public List<Client> getClientsList() {
+    public List<Personnel> getClientsList() {
         return clientsList;
     }
 }

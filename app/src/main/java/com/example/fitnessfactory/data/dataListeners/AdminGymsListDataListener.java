@@ -19,14 +19,14 @@ public class AdminGymsListDataListener extends BaseDataListener implements ArgDa
     }
 
     @Override
-    public void startDataListener(String adminEmail) {
-        setListenerRegistration(getDataListener(adminEmail));
+    public void startDataListener(String adminUserId) {
+        setListenerRegistration(getDataListener(adminUserId));
     }
 
-    private Single<ListenerRegistration> getDataListener(String adminEmail) {
+    private Single<ListenerRegistration> getDataListener(String adminUserId) {
         return Single.create(emitter -> {
             ListenerRegistration listenerRegistration =
-                    getAdminQueryByEmail(adminEmail)
+                    getCollection().document(adminUserId)
                             .addSnapshotListener(((value, error) -> {
                                 if (checkIsSnapshotInvalid(emitter, error)) {
                                     return;
@@ -39,9 +39,5 @@ public class AdminGymsListDataListener extends BaseDataListener implements ArgDa
                 emitter.onSuccess(listenerRegistration);
             }
         });
-    }
-
-    private Query getAdminQueryByEmail(String adminEmail) {
-        return getCollection().whereEqualTo(Personnel.USER_EMAIL_FIELD, adminEmail);
     }
 }

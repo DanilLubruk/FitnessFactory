@@ -1,7 +1,6 @@
 package com.example.fitnessfactory.mockHelpers.mockers.access;
 
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.models.Personnel;
 import com.example.fitnessfactory.data.models.PersonnelAccessEntry;
 import com.example.fitnessfactory.data.repositories.access.AdminsAccessRepository;
 import com.example.fitnessfactory.mockHelpers.mockdata.personnel.PersonnelDataProvider;
@@ -25,7 +24,7 @@ public class AdminsAccessRepositoryMocker {
                     ownerIds.add(appUser.getId());
 
                     for (PersonnelAccessEntry adminEntry : dataProvider.getAccessEntries()) {
-                        if (adminEntry.getUserEmail().equals(appUser.getEmail())) {
+                        if (adminEntry.getUserId().equals(appUser.getEmail())) {
                             ownerIds.add(adminEntry.getOwnerId());
                         }
                     }

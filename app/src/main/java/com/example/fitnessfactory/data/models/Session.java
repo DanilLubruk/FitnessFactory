@@ -3,7 +3,6 @@ package com.example.fitnessfactory.data.models;
 import com.example.fitnessfactory.utils.TimeUtils;
 import com.google.firebase.firestore.Exclude;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -14,16 +13,16 @@ public class Session {
     public static final String END_TIME_FIELD = "endTime";
     public static final String GYM_ID_FIELD = "gymId";
     public static final String SESSION_TYPE_ID_FIELD = "sessionTypeId";
-    public static final String COACHES_EMAILS_FIELD = "coachesEmails";
-    public static final String CLIENTS_EMAILS_FIELD = "clientsEmails";
+    public static final String COACHES_IDS_FIELD = "coachesIds";
+    public static final String CLIENTS_IDS_FIELD = "clientsIds";
 
     private String id;
     private Date startTime = new Date();
     private Date endTime = new Date();
     private String gymId;
     private String sessionTypeId;
-    private List<String> coachesEmails;
-    private List<String> clientsEmails;
+    private List<String> coachesIds;
+    private List<String> clientsIds;
 
     public Session() {
 
@@ -42,8 +41,8 @@ public class Session {
         this.setEndTime(session.getEndTime());
         this.setGymId(session.getGymId());
         this.setSessionTypeId(session.getSessionTypeId());
-        this.setCoachesEmails(session.getCoachesEmails());
-        this.setClientsEmails(session.getClientsEmails());
+        this.setCoachesIds(session.getCoachesIds());
+        this.setClientsIds(session.getClientsIds());
     }
 
     public boolean equals(Session session) {
@@ -115,19 +114,19 @@ public class Session {
         this.sessionTypeId = sessionTypeId;
     }
 
-    public List<String> getCoachesEmails() {
-        return coachesEmails;
+    public List<String> getCoachesIds() {
+        return coachesIds;
     }
 
-    public void setCoachesEmails(List<String> coachesEmails) {
-        this.coachesEmails = coachesEmails;
+    public void setCoachesIds(List<String> coachesIds) {
+        this.coachesIds = coachesIds;
     }
 
-    public List<String> getClientsEmails() {
-        return clientsEmails;
+    public List<String> getClientsIds() {
+        return clientsIds;
     }
 
-    public void setClientsEmails(List<String> clientsEmails) {
-        this.clientsEmails = clientsEmails;
+    public void setClientsIds(List<String> clientsIds) {
+        this.clientsIds = clientsIds;
     }
 }

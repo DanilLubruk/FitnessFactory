@@ -24,7 +24,6 @@ public class SessionClientsListDataListener extends BaseDataListener implements 
     }
 
     public void startDataListener(String sessionId) {
-
         setListenerRegistration(getDataListener(sessionId));
     }
 
@@ -48,7 +47,7 @@ public class SessionClientsListDataListener extends BaseDataListener implements 
                                 }
 
                                 Session session = sessions.get(0);
-                                EventBus.getDefault().post(new SessionsClientsListDataListenerEvent(session.getClientsEmails()));
+                                EventBus.getDefault().post(new SessionsClientsListDataListenerEvent(session.getClientsIds()));
                             }));
 
             if (!emitter.isDisposed()) {

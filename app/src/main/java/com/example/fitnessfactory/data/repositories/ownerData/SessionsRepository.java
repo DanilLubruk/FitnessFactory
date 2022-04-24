@@ -160,11 +160,11 @@ public class SessionsRepository extends BaseRepository {
     }
 
     private boolean isSessionPacked(Session session, SessionType sessionType) {
-        if (session.getClientsEmails() == null) {
+        if (session.getClientsIds() == null) {
             return false;
         }
 
-        return session.getClientsEmails().size() >= sessionType.getPeopleAmount();
+        return session.getClientsIds().size() >= sessionType.getPeopleAmount();
     }
 
     public Single<Boolean> isGymOccupiedAsync(String gymId) {
@@ -205,68 +205,68 @@ public class SessionsRepository extends BaseRepository {
                 .delete(getCollection().document(session.getId()));
     }
 
-    public Single<WriteBatch> getRemoveCoachBatchAsync(String sessionId, String coachEmail) {
+    public Single<WriteBatch> getRemoveCoachBatchAsync(String sessionId, String coachId) {
         return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(getRemoveCoachBatch(sessionId, coachEmail));
+                emitter.onSuccess(getRemoveCoachBatch(sessionId, coachId));
             }
         });
     }
 
-    private WriteBatch getRemoveCoachBatch(String sessionId, String coachEmail) {
+    private WriteBatch getRemoveCoachBatch(String sessionId, String coachId) {
         return getFirestore()
                 .batch()
                 .update(getCollection().document(sessionId),
-                        Session.COACHES_EMAILS_FIELD,
-                        FieldValue.arrayRemove(coachEmail));
+                        Session.COACHES_IDS_FIELD,
+                        FieldValue.arrayRemove(coachId));
     }
 
-    public Single<WriteBatch> getRemoveClientBatchAsync(String sessionId, String clientEmail) {
+    public Single<WriteBatch> getRemoveClientBatchAsync(String sessionId, String clientId) {
         return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(getRemoveClientBatch(sessionId, clientEmail));
+                emitter.onSuccess(getRemoveClientBatch(sessionId, clientId));
             }
         });
     }
 
-    private WriteBatch getRemoveClientBatch(String sessionId, String clientEmail) {
+    private WriteBatch getRemoveClientBatch(String sessionId, String clientId) {
         return getFirestore()
                 .batch()
                 .update(getCollection().document(sessionId),
-                        Session.CLIENTS_EMAILS_FIELD,
-                        FieldValue.arrayRemove(clientEmail));
+                        Session.CLIENTS_IDS_FIELD,
+                        FieldValue.arrayRemove(clientId));
     }
 
-    public Single<WriteBatch> getAddCoachBatchAsync(String sessionId, String coachEmail) {
+    public Single<WriteBatch> getAddCoachBatchAsync(String sessionId, String coachId) {
         return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(getAddCoachBatch(sessionId, coachEmail));
+                emitter.onSuccess(getAddCoachBatch(sessionId, coachId));
             }
         });
     }
 
-    private WriteBatch getAddCoachBatch(String sessionId, String coachEmail) {
+    private WriteBatch getAddCoachBatch(String sessionId, String coachId) {
         return getFirestore()
                 .batch()
                 .update(getCollection().document(sessionId),
-                        Session.COACHES_EMAILS_FIELD,
-                        FieldValue.arrayUnion(coachEmail));
+                        Session.COACHES_IDS_FIELD,
+                        FieldValue.arrayUnion(coachId));
     }
 
-    public Single<WriteBatch> getAddClientBatchAsync(String sessionId, String clientEmail) {
+    public Single<WriteBatch> getAddClientBatchAsync(String sessionId, String clientId) {
         return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(getAddClientBatch(sessionId, clientEmail));
+                emitter.onSuccess(getAddClientBatch(sessionId, clientId));
             }
         });
     }
 
-    private WriteBatch getAddClientBatch(String sessionId, String clientEmail) {
+    private WriteBatch getAddClientBatch(String sessionId, String clientId) {
         return getFirestore()
                 .batch()
                 .update(getCollection().document(sessionId),
-                        Session.CLIENTS_EMAILS_FIELD,
-                        FieldValue.arrayUnion(clientEmail));
+                        Session.CLIENTS_IDS_FIELD,
+                        FieldValue.arrayUnion(clientId));
     }
 
     public Single<Session> getSessionAsync(String sessionId) {

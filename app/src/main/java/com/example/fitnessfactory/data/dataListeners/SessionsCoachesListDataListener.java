@@ -47,7 +47,7 @@ public class SessionsCoachesListDataListener extends BaseDataListener implements
                         }
 
                         Session session = sessions.get(0);
-                        EventBus.getDefault().post(new SessionsCoachesListDataListenerEvent(session.getCoachesEmails()));
+                        EventBus.getDefault().post(new SessionsCoachesListDataListenerEvent(session.getCoachesIds()));
                     });
 
             if (!emitter.isDisposed()) {

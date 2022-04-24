@@ -112,7 +112,7 @@ public class AdminsListFragment extends PersonnelListFragment {
     @Override
     protected Intent getResultIntent(AppUser personnel) {
         Intent result = new Intent();
-        result.putExtra(AppConsts.ADMIN_EMAIL_EXTRA, personnel.getEmail());
+        result.putExtra(AppConsts.ADMIN_EMAIL_EXTRA, personnel.getId());
 
         return result;
     }

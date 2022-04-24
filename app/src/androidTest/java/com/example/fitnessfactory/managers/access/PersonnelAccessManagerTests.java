@@ -5,11 +5,10 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.managers.access.PersonnelAccessManager;
 import com.example.fitnessfactory.data.repositories.access.PersonnelAccessRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
-import com.example.fitnessfactory.data.repositories.ownerData.participantsData.ParticipantSessionsRepository;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
-import org.junit.Before;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -43,7 +42,7 @@ public abstract class PersonnelAccessManagerTests extends BaseTests {
 
     @Test
     public void tryRegisterAddedPersonnelTest() {
-        Mockito.when(getOwnersRepository().isPersonnelWithThisEmailAddedAsync(Mockito.anyString()))
+        Mockito.when(getOwnersRepository().isPersonnelWithThisIdAddedAsync(Mockito.anyString()))
                 .thenAnswer(invocation -> {
                     String email = invocation.getArgument(0);
 

@@ -47,12 +47,12 @@ public abstract class PersonnelGymsListTabViewModel extends ListViewModel<Gym> {
         return gyms;
     }
 
-    public void getGymsData(String personnelEmail) {
-        if (StringUtils.isEmpty(personnelEmail)) {
+    public void getGymsData(String userId) {
+        if (StringUtils.isEmpty(userId)) {
             return;
         }
 
-        subscribeInIOThread(getDataManager().getPersonnelGymsByEmail(personnelEmail),
+        subscribeInIOThread(getDataManager().getPersonnelGymsById(userId),
                 new SingleData<>(gyms::setValue, getErrorHandler()::handleError));
     }
 
@@ -74,8 +74,8 @@ public abstract class PersonnelGymsListTabViewModel extends ListViewModel<Gym> {
     }
 
     @Override
-    public void deleteItem(String personnelEmail, Gym gym) {
-        if (StringUtils.isEmpty(personnelEmail)) {
+    public void deleteItem(String userId, Gym gym) {
+        if (StringUtils.isEmpty(userId)) {
             handleItemDeletingNullError();
             return;
         }
@@ -84,7 +84,7 @@ public abstract class PersonnelGymsListTabViewModel extends ListViewModel<Gym> {
             return;
         }
 
-        subscribeInIOThread(getOwnerRepository().removeGymFromPersonnelAsync(personnelEmail, gym.getId()));
+        subscribeInIOThread(getOwnerRepository().removeGymFromPersonnelAsync(userId, gym.getId()));
     }
 
     private void handleGymDeletingNullError() {

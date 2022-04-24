@@ -32,7 +32,7 @@ public class GymCoachSelectionListFragment extends CoachesListFragment {
     @Override
     protected void sendSelectResult(AppUser admin) {
         editorViewModel.getGymId().observe(this, gymId -> {
-            tabViewModel.addPersonnelToGym(gymId, admin.getEmail());
+            tabViewModel.addPersonnelToGym(gymId, admin.getId());
             closeFragment();
         });
     }

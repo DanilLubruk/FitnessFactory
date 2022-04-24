@@ -9,15 +9,12 @@ import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.ui.activities.editors.admin.AdminEditorViewModelFactoryProvider;
 import com.example.fitnessfactory.ui.fragments.FragmentProvider;
 import com.example.fitnessfactory.ui.viewmodels.editors.AdminEditorViewModel;
-import com.example.fitnessfactory.ui.viewmodels.factories.AdminEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.AdminGymsListTabViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.personnelGymList.AdminGymsListTabViewModel;
 import com.example.fitnessfactory.ui.viewmodels.lists.personnelGymList.PersonnelGymsListTabViewModel;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import javax.inject.Inject;
 
 public class AdminGymsListTabFragment extends PersonnelGymsListTabFragment {
 
@@ -42,7 +39,7 @@ public class AdminGymsListTabFragment extends PersonnelGymsListTabFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAdminEditorGymsListenerEvent(AdminGymsListListenerEvent adminGymsListListenerEvent) {
-        editorViewModel.personnelEmail.observe(this, email -> getViewModel().getGymsData(email));
+        editorViewModel.personnelId.observe(this, id -> getViewModel().getGymsData(id));
     }
 
     @Override
@@ -55,13 +52,13 @@ public class AdminGymsListTabFragment extends PersonnelGymsListTabFragment {
     public void onStart() {
         super.onStart();
         if (getViewModel() != null) {
-            editorViewModel.personnelEmail.observe(this, email -> getViewModel().startDataListener(email));
+            editorViewModel.personnelId.observe(this, email -> getViewModel().startDataListener(email));
         } else {
             closeProgress();
         }
     }
 
     protected void deleteItem(Gym gym) {
-        editorViewModel.personnelEmail.observe(this, email -> getViewModel().deleteItem(email, gym));
+        editorViewModel.personnelId.observe(this, id -> getViewModel().deleteItem(id, gym));
     }
 }

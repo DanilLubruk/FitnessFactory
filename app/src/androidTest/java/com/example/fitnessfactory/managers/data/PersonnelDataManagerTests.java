@@ -124,7 +124,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
     @Test
     public void getGymsByPersonnelEmailTests() {
         TestObserver<List<Gym>> subscriber =
-                subscribeInTestThread(dataManager.getPersonnelGymsByEmail("useremail1"));
+                subscribeInTestThread(dataManager.getPersonnelGymsById("useremail1"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -136,7 +136,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
         assertEquals("gymName1", gyms.get(0).getName());
         assertEquals("gymAddress1", gyms.get(0).getAddress());
 
-        subscriber = subscribeInTestThread(dataManager.getPersonnelGymsByEmail("useremail2"));
+        subscriber = subscribeInTestThread(dataManager.getPersonnelGymsById("useremail2"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -148,7 +148,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
         assertEquals("gymName1", gyms.get(0).getName());
         assertEquals("gymAddress1", gyms.get(0).getAddress());
 
-        subscriber = subscribeInTestThread(dataManager.getPersonnelGymsByEmail("useremail3"));
+        subscriber = subscribeInTestThread(dataManager.getPersonnelGymsById("useremail3"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();
@@ -160,7 +160,7 @@ public abstract class PersonnelDataManagerTests extends BaseTests {
         assertEquals("gymName2", gyms.get(0).getName());
         assertEquals("gymAddress2", gyms.get(0).getAddress());
 
-        subscriber = subscribeInTestThread(dataManager.getPersonnelGymsByEmail("useremail4"));
+        subscriber = subscribeInTestThread(dataManager.getPersonnelGymsById("useremail4"));
 
         subscriber.assertNoErrors();
         subscriber.assertComplete();

@@ -1,7 +1,6 @@
 package com.example.fitnessfactory.mockHelpers.mockers.data;
 
 import com.example.fitnessfactory.data.models.Personnel;
-import com.example.fitnessfactory.data.models.PersonnelAccessEntry;
 import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerPersonnelRepository;
 import com.example.fitnessfactory.mockHelpers.mockdata.personnel.PersonnelDataProvider;
@@ -19,12 +18,12 @@ abstract class PersonnelDataManagerMocker {
     static void setupMock(PersonnelDataProvider dataProvider,
                    OwnerPersonnelRepository ownerRepository,
                    UserRepository userRepository) {
-        Mockito.when(ownerRepository.getPersonnelEmailsAsync())
+        Mockito.when(ownerRepository.getPersonnelIdsAsync())
                 .thenAnswer(invocation -> {
                     List<String> emails = new ArrayList<>();
 
                     for (Personnel personnel : dataProvider.getPersonnel()) {
-                        emails.add(personnel.getUserEmail());
+                        emails.add(personnel.getUserId());
                     }
 
                     return Single.just(emails);
@@ -32,7 +31,7 @@ abstract class PersonnelDataManagerMocker {
 
         userRepository = UserRepositoryMocker.createMocker(userRepository);
 
-        Mockito.when(ownerRepository.getPersonnelEmailsByGymIdAsync(Mockito.anyString()))
+        Mockito.when(ownerRepository.getPersonnelIdsByGymIdAsync(Mockito.anyString()))
                 .thenAnswer(invocation -> {
                     String gymId = invocation.getArgument(0);
                     List<String> emails = new ArrayList<>();
@@ -40,19 +39,19 @@ abstract class PersonnelDataManagerMocker {
                     for (Personnel personnel : dataProvider.getPersonnel()) {
                         if (personnel.getGymsIds() != null &&
                                 personnel.getGymsIds().contains(gymId)) {
-                            emails.add(personnel.getUserEmail());
+                            emails.add(personnel.getUserId());
                         }
                     }
 
                     return Single.just(emails);
                 });
 
-        Mockito.when(ownerRepository.getPersonnelGymsIdsByEmailAsync(Mockito.anyString()))
+        Mockito.when(ownerRepository.getPersonnelGymsIdsByIdAsync(Mockito.anyString()))
                 .thenAnswer(invocation -> {
                     String personnelEmail = invocation.getArgument(0);
 
                     for (Personnel personnel : dataProvider.getPersonnel()) {
-                        if (personnel.getUserEmail().equals(personnelEmail)) {
+                        if (personnel.getUserId().equals(personnelEmail)) {
                             return Single.just(personnel.getGymsIds());
                         }
                     }

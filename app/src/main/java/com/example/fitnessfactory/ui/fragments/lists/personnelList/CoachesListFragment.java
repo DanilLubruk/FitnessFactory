@@ -128,7 +128,7 @@ public class CoachesListFragment extends PersonnelListFragment {
     @Override
     protected void sendSelectResult(AppUser personnel) {
         editorViewModel.sessionId.observe(this, sessionId -> {
-            tabViewModel.addParticipantToSession(sessionId, personnel.getEmail()).observe(this,
+            tabViewModel.addParticipantToSession(sessionId, personnel.getId()).observe(this,
                     isSaved -> closeFragment());
         });
     }

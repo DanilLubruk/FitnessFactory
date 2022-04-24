@@ -3,7 +3,6 @@ package com.example.fitnessfactory.ui.adapters;
 import android.view.View;
 
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.models.Client;
 import com.example.fitnessfactory.ui.viewholders.lists.ClientsListViewHolder;
 
 import java.util.List;

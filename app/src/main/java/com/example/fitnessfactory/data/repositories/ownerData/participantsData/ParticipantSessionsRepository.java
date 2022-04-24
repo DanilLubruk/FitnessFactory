@@ -17,17 +17,13 @@ import io.reactivex.Single;
 
 public abstract class ParticipantSessionsRepository extends BaseRepository {
 
-    private DocumentReference getSessionDocumentWithEmail(String sessionId, String participantEmail) throws Exception {
-        return getCollection(getParticipantId(participantEmail)).document(sessionId);
-    }
-
     private DocumentReference getSessionDocument(String sessionId, String participantId) {
         return getCollection(participantId).document(sessionId);
     }
 
     protected abstract CollectionReference getCollection(String participantId);
 
-    protected abstract List<String> getParticipantsEmails(Session session);
+    protected abstract List<String> getParticipantsIds(Session session);
 
     public Single<List<String>> getParticipantSessionsIdsAsync(String participantId) {
         return SingleCreate(emitter -> {
@@ -75,13 +71,13 @@ public abstract class ParticipantSessionsRepository extends BaseRepository {
 
     private WriteBatch getDeleteSessionBatch(WriteBatch writeBatch,
                                              Session session) throws Exception {
-        List<String> participantsEmails = getParticipantsEmails(session);
-        if (participantsEmails == null) {
+        List<String> participantsIds = getParticipantsIds(session);
+        if (participantsIds == null) {
             return writeBatch;
         }
 
-        for (String participantEmail : participantsEmails) {
-            writeBatch = writeBatch.delete(getSessionDocumentWithEmail(session.getId(), participantEmail));
+        for (String participantId : participantsIds) {
+            writeBatch = writeBatch.delete(getSessionDocument(session.getId(), participantId));
         }
 
         return writeBatch;
@@ -103,8 +99,6 @@ public abstract class ParticipantSessionsRepository extends BaseRepository {
 
         return writeBatch.delete(getSessionDocument(sessionId, participantId));
     }
-
-    protected abstract String getParticipantId(String participantEmail) throws Exception;
 
     public Single<WriteBatch> getAddSessionBatchAsync(WriteBatch writeBatch,
                                                       String sessionId,

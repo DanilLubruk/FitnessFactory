@@ -24,15 +24,15 @@ public class CoachDaysSessionsListDataListener extends BaseDataListener {
         return SessionsCollection.getRoot();
     }
 
-    public void startDataListener(Date date, String coachEmail) {
-        setListenerRegistration(getDataListener(date, coachEmail));
+    public void startDataListener(Date date, String coachUserId) {
+        setListenerRegistration(getDataListener(date, coachUserId));
     }
 
-    private Single<ListenerRegistration> getDataListener(Date date, String coachEmail) {
+    private Single<ListenerRegistration> getDataListener(Date date, String coachUserId) {
         return Single.create(emitter -> {
             ListenerRegistration listenerRegistration =
                     SessionsRepository.getDayEqualsQuery(getCollection(), date)
-                            .whereArrayContains(Session.COACHES_EMAILS_FIELD, coachEmail)
+                            .whereArrayContains(Session.COACHES_IDS_FIELD, coachUserId)
                             .addSnapshotListener(((value, error) -> {
                                 if (checkIsSnapshotInvalid(emitter, error)) {
                                     Log.d(AppConsts.DEBUG_TAG, "CoachDaysSessionsListDataListener: value null");

@@ -57,9 +57,9 @@ public abstract class PersonnelListTabViewModelTests extends BaseTests {
         checkLiveDataNotSet(viewModel.getPersonnel());
 
         Mockito.verify(getOwnerRepository(), Mockito.times(0))
-                .getPersonnelEmailsByGymIdAsync(Mockito.anyString());
+                .getPersonnelIdsByGymIdAsync(Mockito.anyString());
         Mockito.verify(userRepository, Mockito.times(0))
-                .getUsersByEmailsAsync(Mockito.anyList());
+                .getUsersByIdsAsync(Mockito.anyList());
 
         viewModel.resetGymId("gymId2");
 
@@ -70,8 +70,8 @@ public abstract class PersonnelListTabViewModelTests extends BaseTests {
         viewModel.getPersonnelData();
         testScheduler.triggerActions();
 
-        Mockito.verify(getOwnerRepository()).getPersonnelEmailsByGymIdAsync("gymId2");
-        Mockito.verify(userRepository).getUsersByEmailsAsync(Mockito.anyList());
+        Mockito.verify(getOwnerRepository()).getPersonnelIdsByGymIdAsync("gymId2");
+        Mockito.verify(userRepository).getUsersByIdsAsync(Mockito.anyList());
 
         List<AppUser> personnel = getOrAwaitValue(viewModel.getPersonnel());
 

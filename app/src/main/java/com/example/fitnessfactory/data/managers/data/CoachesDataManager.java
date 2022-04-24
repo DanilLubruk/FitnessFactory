@@ -21,6 +21,6 @@ public class CoachesDataManager extends PersonnelDataManager {
     }
 
     public Single<List<AppUser>> getCoachesUsers(List<String> coachesEmails) {
-        return getUserRepository().getUsersByEmailsAsync(coachesEmails);
+        return getUserRepository().getUsersByIdsAsync(coachesEmails);
     }
 }

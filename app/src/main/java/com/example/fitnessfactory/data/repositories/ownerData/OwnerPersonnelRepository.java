@@ -19,17 +19,9 @@ import io.reactivex.Single;
 
 public abstract class OwnerPersonnelRepository extends BaseRepository {
 
-    public Single<List<String>> getPersonnelEmailsAsync(List<String> personnelIds) {
+    public Single<Boolean> isPersonnelOccupiedWithGyms(String personnelId) {
         return SingleCreate(emitter -> {
-            if (!emitter.isDisposed()) {
-                emitter.onSuccess(getPersonnelEmails(personnelIds));
-            }
-        });
-    }
-
-    public Single<Boolean> isPersonnelOccupiedWithGyms(String personnelEmail) {
-        return SingleCreate(emitter -> {
-            Personnel personnel = getUniqueUserEntity(newQuery().whereUserEmailEquals(personnelEmail).build(), Personnel.class);
+            Personnel personnel = Tasks.await(getCollection().document(personnelId).get()).toObject(Personnel.class);
             boolean isPersonnelOccupied = !personnel.getGymsIds().isEmpty();
 
             if (!emitter.isDisposed()) {
@@ -38,45 +30,9 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
         });
     }
 
-    private List<String> getPersonnelEmails(List<String> personnelIds) throws ExecutionException, InterruptedException {
-        if (personnelIds == null || personnelIds.isEmpty()) {
-            return new ArrayList<>();
-        }
-        List<Personnel> personnelList =
-                Tasks.await(newQuery()
-                        .whereIdInArray(personnelIds)
-                        .build()
-                        .get())
-                        .toObjects(Personnel.class);
-
-        List<String> personnelEmails = new ArrayList<>();
-        for (Personnel personnel : personnelList) {
-            personnelEmails.add(personnel.getUserEmail());
-        }
-
-        return personnelEmails;
-    }
-
-    public Single<String> getPersonnelIdByEmailAsync(String personnelEmail) {
+    public Single<Boolean> isPersonnelWithThisIdAddedAsync(String userId) {
         return SingleCreate(emitter -> {
-            if (!emitter.isDisposed()) {
-                emitter.onSuccess(getPersonnelIdByEmail(personnelEmail));
-            }
-        });
-    }
-
-    private String getPersonnelIdByEmail(String personnelEmail) throws Exception {
-        Personnel personnel =
-                getUniqueUserEntity(
-                        newQuery().whereUserEmailEquals(personnelEmail).build(),
-                        Personnel.class);
-
-        return personnel.getId();
-    }
-
-    public Single<Boolean> isPersonnelWithThisEmailAddedAsync(String userEmail) {
-        return SingleCreate(emitter -> {
-            boolean isAdminAdded = isPersonnelWithThisEmailAdded(userEmail);
+            boolean isAdminAdded = isPersonnelWithThisIdAdded(userId);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(isAdminAdded);
@@ -84,32 +40,31 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
         });
     }
 
-    private boolean isPersonnelWithThisEmailAdded(String userEmail) throws ExecutionException, InterruptedException {
+    private boolean isPersonnelWithThisIdAdded(String userId) throws ExecutionException, InterruptedException {
         List<DocumentSnapshot> admins =
-                Tasks.await(newQuery().whereUserEmailEquals(userEmail).build().get()).getDocuments();
+                Tasks.await(newQuery().whereUserIdEquals(userId).build().get()).getDocuments();
         return admins.size() > 0;
     }
 
-    public Single<WriteBatch> getAddPersonnelBatchAsync(WriteBatch writeBatch, String userEmail) {
+    public Single<WriteBatch> getAddPersonnelBatchAsync(WriteBatch writeBatch, String userId) {
         return SingleCreate(emitter -> {
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(getAddPersonnelBatch(writeBatch, userEmail));
+                emitter.onSuccess(getAddPersonnelBatch(writeBatch, userId));
             }
         });
     }
 
-    private WriteBatch getAddPersonnelBatch(WriteBatch writeBatch, String userEmail) {
-        DocumentReference documentReference = getCollection().document();
+    private WriteBatch getAddPersonnelBatch(WriteBatch writeBatch, String userId) {
+        DocumentReference documentReference = getCollection().document(userId);
         Personnel personnel = new Personnel();
-        personnel.setId(documentReference.getId());
-        personnel.setUserEmail(userEmail);
+        personnel.setUserId(userId);
 
         return writeBatch.set(documentReference, personnel);
     }
 
-    public Single<WriteBatch> getDeletePersonnelBatchAsync(WriteBatch writeBatch, String userEmail) {
+    public Single<WriteBatch> getDeletePersonnelBatchAsync(WriteBatch writeBatch, String userId) {
         return SingleCreate(emitter -> {
-            WriteBatch deleteBatch = getDeletePersonnelBatch(writeBatch, userEmail);
+            WriteBatch deleteBatch = getDeletePersonnelBatch(writeBatch, userId);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(deleteBatch);
@@ -117,34 +72,34 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
         });
     }
 
-    private WriteBatch getDeletePersonnelBatch(WriteBatch writeBatch, String userEmail) throws Exception {
-        return writeBatch.delete(getPersonnelDocumentReference(userEmail));
+    private WriteBatch getDeletePersonnelBatch(WriteBatch writeBatch, String userId) throws Exception {
+        return writeBatch.delete(getPersonnelDocumentReference(userId));
     }
 
-    public Single<List<String>> getPersonnelEmailsAsync() {
+    public Single<List<String>> getPersonnelIdsAsync() {
         return SingleCreate(emitter -> {
-            List<String> personnelEmails = getPersonnelEmails();
+            List<String> personnelIds = getPersonnelIds();
 
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(personnelEmails);
+                emitter.onSuccess(personnelIds);
             }
         });
     }
 
-    private List<String> getPersonnelEmails() throws ExecutionException, InterruptedException {
+    private List<String> getPersonnelIds() throws ExecutionException, InterruptedException {
         List<Personnel> personnelList = Tasks.await(getCollection().get()).toObjects(Personnel.class);
 
-        List<String> personnelEmails = new ArrayList<>();
+        List<String> personnelIds = new ArrayList<>();
         for (Personnel personnel : personnelList) {
-            personnelEmails.add(personnel.getUserEmail());
+            personnelIds.add(personnel.getUserId());
         }
 
-        return personnelEmails;
+        return personnelIds;
     }
 
-    public Single<List<String>> getPersonnelEmailsByGymIdAsync(String gymId) {
+    public Single<List<String>> getPersonnelIdsByGymIdAsync(String gymId) {
         return SingleCreate(emitter -> {
-            List<String> personnelEmails = getPersonnelEmailsByGymId(gymId);
+            List<String> personnelEmails = getPersonnelIdsByGymId(gymId);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(personnelEmails);
@@ -152,7 +107,7 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
         });
     }
 
-    private List<String> getPersonnelEmailsByGymId(String gymId) throws ExecutionException, InterruptedException {
+    private List<String> getPersonnelIdsByGymId(String gymId) throws ExecutionException, InterruptedException {
         List<Personnel> personnelList =
                 Tasks.await(newQuery()
                         .wherePersonnelHasGym(gymId)
@@ -160,17 +115,17 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
                         .get())
                         .toObjects(Personnel.class);
 
-        List<String> personnelEmails = new ArrayList<>();
+        List<String> personnelIds = new ArrayList<>();
         for (Personnel personnel : personnelList) {
-            personnelEmails.add(personnel.getUserEmail());
+            personnelIds.add(personnel.getUserId());
         }
 
-        return personnelEmails;
+        return personnelIds;
     }
 
-    public Completable addGymToPersonnelAsync(String personnelEmail, String gymId) {
+    public Completable addGymToPersonnelAsync(String userId, String gymId) {
         return CompletableCreate(emitter -> {
-            addGymToPersonnel(personnelEmail, gymId);
+            addGymToPersonnel(userId, gymId);
 
             if (!emitter.isDisposed()) {
                 emitter.onComplete();
@@ -178,14 +133,14 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
         });
     }
 
-    private void addGymToPersonnel(String personnelEmail, String gymId) throws Exception {
-        Tasks.await(getPersonnelDocumentReference(personnelEmail)
+    private void addGymToPersonnel(String userId, String gymId) throws Exception {
+        Tasks.await(getPersonnelDocumentReference(userId)
                 .update(Personnel.GYMS_ARRAY_FIELD, FieldValue.arrayUnion(gymId)));
     }
 
-    public Completable removeGymFromPersonnelAsync(String personnelEmail, String gymId) {
+    public Completable removeGymFromPersonnelAsync(String userId, String gymId) {
         return CompletableCreate(emitter -> {
-            removeGymFromPersonnel(personnelEmail, gymId);
+            removeGymFromPersonnel(userId, gymId);
 
             if (!emitter.isDisposed()) {
                 emitter.onComplete();
@@ -193,14 +148,14 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
         });
     }
 
-    private void removeGymFromPersonnel(String personnelEmail, String gymId) throws Exception {
-        Tasks.await(getPersonnelDocumentReference(personnelEmail)
+    private void removeGymFromPersonnel(String userId, String gymId) throws Exception {
+        Tasks.await(getPersonnelDocumentReference(userId)
                 .update(Personnel.GYMS_ARRAY_FIELD, FieldValue.arrayRemove(gymId)));
     }
 
-    public Single<List<String>> getPersonnelGymsIdsByEmailAsync(String personnelEmail) {
+    public Single<List<String>> getPersonnelGymsIdsByIdAsync(String userId) {
         return SingleCreate(emitter -> {
-            List<String> gymsIds = getPersonnelGymsIdsByEmail(personnelEmail);
+            List<String> gymsIds = getPersonnelGymsIdsById(userId);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(gymsIds);
@@ -208,11 +163,14 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
         });
     }
 
-    private List<String> getPersonnelGymsIdsByEmail(String personnelEmail) throws Exception {
+    private List<String> getPersonnelGymsIdsById(String userId) throws Exception {
         List<String> personnelGymsIds;
 
         try {
-            Personnel personnel = getUniquePersonnelEntity(personnelEmail);
+            Personnel personnel = Tasks.await(getCollection().document(userId).get()).toObject(Personnel.class);
+            if (personnel == null) {
+                throw new NoDataException("");
+            }
             personnelGymsIds =
                     personnel.getGymsIds() != null ?
                             personnel.getGymsIds() : new ArrayList<>();
@@ -245,16 +203,8 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
         return Tasks.await(newQuery().wherePersonnelHasGym(gymId).build().get()).getDocuments();
     }
 
-    private DocumentReference getPersonnelDocumentReference(String personnelEmail) throws Exception {
-        return getPersonnelSnapshot(personnelEmail).getReference();
-    }
-
-    private Personnel getUniquePersonnelEntity(String personnelEmail) throws Exception {
-        return getPersonnelSnapshot(personnelEmail).toObject(Personnel.class);
-    }
-
-    private DocumentSnapshot getPersonnelSnapshot(String personnelEmail) throws Exception {
-        return getUniqueUserEntitySnapshot(newQuery().whereUserEmailEquals(personnelEmail).build());
+    private DocumentReference getPersonnelDocumentReference(String userId) {
+        return getCollection().document(userId);
     }
 
     protected abstract OwnerPersonnelRepository.QueryBuilder newQuery();
@@ -263,13 +213,8 @@ public abstract class OwnerPersonnelRepository extends BaseRepository {
 
         private Query query = getCollection();
 
-        public QueryBuilder whereIdInArray(List<String> personnelIds) {
-            query = query.whereIn(Personnel.ID_FIELD, personnelIds);
-            return this;
-        }
-
-        public QueryBuilder whereUserEmailEquals(String userEmail) {
-            query = query.whereEqualTo(Personnel.USER_EMAIL_FIELD, userEmail);
+        public QueryBuilder whereUserIdEquals(String userId) {
+            query = query.whereEqualTo(Personnel.USER_ID_FIELD, userId);
             return this;
         }
 

@@ -28,7 +28,6 @@ import com.example.fitnessfactory.ui.adapters.SessionsListAdapter;
 import com.example.fitnessfactory.ui.fragments.lists.ListListenerTabFragment;
 import com.example.fitnessfactory.ui.viewholders.lists.SessionsListViewHolder;
 import com.example.fitnessfactory.ui.viewmodels.editors.CoachEditorViewModel;
-import com.example.fitnessfactory.ui.viewmodels.factories.CoachEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachSessionsListTabViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.CoachSessionsListTabViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
@@ -40,8 +39,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
-
-import javax.inject.Inject;
 
 public class CoachSessionsListTabFragment extends ListListenerTabFragment<SessionView, SessionsListViewHolder, SessionsListAdapter> {
 
@@ -72,7 +69,7 @@ public class CoachSessionsListTabFragment extends ListListenerTabFragment<Sessio
         getViewModel().setDefaultDate();
         getViewModel().getSessions().observe(this, this::setListData);
         getViewModel().getDate().observe(this, date -> {
-            editorViewModel.personnelEmail.observe(this, email -> {
+            editorViewModel.personnelId.observe(this, email -> {
                 getViewModel().startDataListener(email);
             });
         });
@@ -190,13 +187,13 @@ public class CoachSessionsListTabFragment extends ListListenerTabFragment<Sessio
     public void onStart() {
         super.onStart();
         if (getViewModel() != null) {
-            editorViewModel.personnelEmail.observe(this, email -> getViewModel().startDataListener(email));
+            editorViewModel.personnelId.observe(this, email -> getViewModel().startDataListener(email));
         } else {
             closeProgress();
         }
     }
 
     protected void deleteItem(SessionView sessionView) {
-        editorViewModel.personnelEmail.observe(this, email -> getViewModel().deleteItem(email, sessionView));
+        editorViewModel.personnelId.observe(this, id -> getViewModel().deleteItem(id, sessionView));
     }
 }

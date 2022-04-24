@@ -61,7 +61,7 @@ public class SessionCoachesListTabViewModel extends SessionParticipantListTabVie
 
     @Override
     protected List<String> getParticipantsList(Session session) {
-        return session.getCoachesEmails();
+        return session.getCoachesIds();
     }
 
     @Override

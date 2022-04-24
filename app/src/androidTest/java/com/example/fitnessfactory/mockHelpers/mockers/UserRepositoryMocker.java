@@ -72,7 +72,7 @@ public class UserRepositoryMocker {
                     return Single.just(appUsers.get(0));
                 });
 
-        Mockito.when(userRepository.getUsersByEmailsAsync(Mockito.anyList()))
+        Mockito.when(userRepository.getUsersByIdsAsync(Mockito.anyList()))
                 .thenAnswer(invocation -> {
                     List<String> emails = invocation.getArgument(0);
                     List<AppUser> users = new ArrayList<>();

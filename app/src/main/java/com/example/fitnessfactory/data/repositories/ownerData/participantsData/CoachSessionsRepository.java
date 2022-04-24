@@ -4,12 +4,9 @@ import com.example.fitnessfactory.data.firestoreCollections.CoachesSessionsColle
 import com.example.fitnessfactory.data.firestoreCollections.OwnerCoachesCollection;
 import com.example.fitnessfactory.data.models.Personnel;
 import com.example.fitnessfactory.data.models.Session;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class CoachSessionsRepository extends ParticipantSessionsRepository {
 
@@ -23,15 +20,8 @@ public class CoachSessionsRepository extends ParticipantSessionsRepository {
     }
 
     @Override
-    protected List<String> getParticipantsEmails(Session session) {
-        return session.getCoachesEmails();
-    }
-
-    protected String getParticipantId(String participantEmail) throws Exception {
-        return getUniqueUserEntity(
-                getCoachCollection().whereEqualTo(Personnel.USER_EMAIL_FIELD, participantEmail),
-                Personnel.class)
-                .getId();
+    protected List<String> getParticipantsIds(Session session) {
+        return session.getCoachesIds();
     }
 
 }

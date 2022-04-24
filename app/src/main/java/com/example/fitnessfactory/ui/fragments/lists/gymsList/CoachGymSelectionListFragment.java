@@ -6,14 +6,8 @@ import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.data.models.Gym;
 import com.example.fitnessfactory.ui.activities.editors.coach.CoachEditorViewModelFactoryProvider;
 import com.example.fitnessfactory.ui.viewmodels.editors.CoachEditorViewModel;
-import com.example.fitnessfactory.ui.viewmodels.factories.AdminGymsListTabViewModelFactory;
-import com.example.fitnessfactory.ui.viewmodels.factories.CoachEditorViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.factories.CoachGymsListTabViewModelFactory;
-import com.example.fitnessfactory.ui.viewmodels.factories.CoachesListTabViewModelFactory;
-import com.example.fitnessfactory.ui.viewmodels.lists.personnelGymList.AdminGymsListTabViewModel;
 import com.example.fitnessfactory.ui.viewmodels.lists.personnelGymList.CoachGymsListTabViewModel;
-
-import javax.inject.Inject;
 
 public class CoachGymSelectionListFragment extends GymsListFragment {
 
@@ -34,8 +28,8 @@ public class CoachGymSelectionListFragment extends GymsListFragment {
 
     @Override
     protected void sendSelectResult(Gym gym) {
-        editorViewModel.personnelEmail.observe(this, email -> {
-            tabViewModel.addGym(email, gym.getId());
+        editorViewModel.personnelId.observe(this, id -> {
+            tabViewModel.addGym(id, gym.getId());
             closeFragment();
         });
     }

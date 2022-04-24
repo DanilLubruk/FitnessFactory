@@ -1,4 +1,5 @@
 package com.example.fitnessfactory.data.repositories;
+
 import com.example.fitnessfactory.data.firestoreCollections.UsersCollection;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.utils.UsersUtils;
@@ -22,6 +23,16 @@ public class UserRepository extends BaseRepository {
         return UsersCollection.getRoot();
     }
 
+    public Single<String> getUserIdByEmail(String userEmail) {
+        return SingleCreate(emitter -> {
+            AppUser appUser = getAppUserByEmail(userEmail);
+
+            if (!emitter.isDisposed()) {
+                emitter.onSuccess(appUser.getId());
+            }
+        });
+    }
+
     public Single<AppUser> registerUser(String email, String userName) {
         return SingleCreate(emitter -> {
             DocumentReference documentReference = getCollection().document();
@@ -37,32 +48,15 @@ public class UserRepository extends BaseRepository {
         });
     }
 
-    public Single<List<AppUser>> getUsersByIdsAsync(List<String> usersIds) {
-        return SingleCreate(emitter -> {
-            if (!emitter.isDisposed()) {
-                emitter.onSuccess(getAppUsersByIds(usersIds));
-            }
-        });
-    }
-
     public Single<List<AppUser>> getOwnersByIds(List<String> ownerIds, String currentUserId) {
         return SingleCreate(emitter -> {
-            List<AppUser> owners = getAppUsersByIds(ownerIds);
+            List<AppUser> owners = getUsersByIds(ownerIds);
             owners = UsersUtils.makeCurrentUserFirstInList(owners, currentUserId);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(owners);
             }
         });
-    }
-
-    private List<AppUser> getAppUsersByIds(List<String> usersIds) throws Exception {
-        if (usersIds.isEmpty()) {
-            return new ArrayList<>();
-        }
-        QuerySnapshot querySnapshot = Tasks.await(newQuery().whereIdIn(usersIds).build().get());
-
-        return querySnapshot.toObjects(AppUser.class);
     }
 
     public Single<AppUser> getAppUserByEmailAsync(String email) {
@@ -95,9 +89,9 @@ public class UserRepository extends BaseRepository {
         return usersAmount > 0;
     }
 
-    public Single<List<AppUser>> getUsersByEmailsAsync(List<String> emails) {
+    public Single<List<AppUser>> getUsersByIdsAsync(List<String> userIds) {
         return SingleCreate(emitter -> {
-            List<AppUser> admins = getUsersByEmails(emails);
+            List<AppUser> admins = getUsersByIds(userIds);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(admins);
@@ -105,13 +99,18 @@ public class UserRepository extends BaseRepository {
         });
     }
 
-    private List<AppUser> getUsersByEmails(List<String> emails) throws Exception {
-        if (emails == null || emails.size() == 0) {
+    private List<AppUser> getUsersByIds(List<String> userIds) throws Exception {
+        if (userIds == null || userIds.size() == 0) {
             return new ArrayList<>();
         }
-        QuerySnapshot adminsQuery = Tasks.await(newQuery().whereEmailIn(emails).build().get());
+        List<AppUser> appUsers = new ArrayList<>();
+        for (AppUser appUser : Tasks.await(getCollection().get()).toObjects(AppUser.class)) {
+            if (userIds.contains(appUser.getId())) {
+                appUsers.add(appUser);
+            }
+        }
 
-        return adminsQuery.toObjects(AppUser.class);
+        return appUsers;
     }
 
     private UserRepository.QueryBuilder newQuery() {

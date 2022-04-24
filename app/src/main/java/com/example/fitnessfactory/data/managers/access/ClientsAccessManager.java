@@ -1,6 +1,7 @@
 package com.example.fitnessfactory.data.managers.access;
 
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.data.repositories.access.ClientsAccessRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerClientsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.participantsData.ClientSessionsRepository;
@@ -18,26 +19,26 @@ public class ClientsAccessManager extends PersonnelAccessManager {
     @Inject
     public ClientsAccessManager(ClientsAccessRepository accessRepository,
                                 OwnerClientsRepository ownerRepository,
-                                ClientSessionsRepository clientSessionsRepository) {
-        super(accessRepository, ownerRepository);
+                                ClientSessionsRepository clientSessionsRepository,
+                                UserRepository userRepository) {
+        super(accessRepository, ownerRepository, userRepository);
         this.clientSessionsRepository = clientSessionsRepository;
     }
 
     @Override
-    public Single<Boolean> deletePersonnelSingle(String ownerId, String personnelEmail) {
-        return ownerRepository.getPersonnelIdByEmailAsync(personnelEmail)
-                .flatMap(clientSessionsRepository::isParticipantOccupiedAsync)
+    public Single<Boolean> deletePersonnelSingle(String ownerId, String userId) {
+        return
+                clientSessionsRepository.isParticipantOccupiedAsync(userId)
                 .flatMap(isOccupied -> isOccupied ?
                         Single.error(new Exception(getOccupiedMessage()))
-                        : super.deletePersonnelSingle(ownerId, personnelEmail));
+                        : super.deletePersonnelSingle(ownerId, userId));
     }
 
-    public Completable deletePersonnelCompletable(String ownerId, String personnelEmail) {
-        return ownerRepository.getPersonnelIdByEmailAsync(personnelEmail)
-                .flatMap(clientSessionsRepository::isParticipantOccupiedAsync)
+    public Completable deletePersonnelCompletable(String ownerId, String userId) {
+        return clientSessionsRepository.isParticipantOccupiedAsync(userId)
                 .flatMapCompletable(isOccupied -> isOccupied ?
                         Completable.error(new Exception(getOccupiedMessage()))
-                        : super.deletePersonnelCompletable(ownerId, personnelEmail));
+                        : super.deletePersonnelCompletable(ownerId, userId));
     }
 
     private String getOccupiedMessage() {

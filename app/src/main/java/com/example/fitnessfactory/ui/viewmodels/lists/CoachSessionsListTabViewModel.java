@@ -65,8 +65,8 @@ public class CoachSessionsListTabViewModel extends ListViewModel<SessionView> {
                 new SingleData<>(sessions::setValue, getErrorHandler()::handleError));
     }
 
-    public void addCoachToSession(String coachEmail, String sessionId) {
-        if (StringUtils.isEmpty(coachEmail)) {
+    public void addCoachToSession(String userId, String sessionId) {
+        if (StringUtils.isEmpty(userId)) {
             handleItemDeletingNullError();
             return;
         }
@@ -75,7 +75,7 @@ public class CoachSessionsListTabViewModel extends ListViewModel<SessionView> {
             return;
         }
 
-        subscribeInIOThread(sessionsDataManager.addCoachToSession(sessionId, coachEmail));
+        subscribeInIOThread(sessionsDataManager.addCoachToSession(sessionId, userId));
     }
 
     public void changeSessionDate(SingleDialogEvent<Date, Date> dialogEvent) {
@@ -91,8 +91,8 @@ public class CoachSessionsListTabViewModel extends ListViewModel<SessionView> {
     }
 
     @Override
-    public void startDataListener(String coachEmail) {
-        if (StringUtils.isEmpty(coachEmail)) {
+    public void startDataListener(String userId) {
+        if (StringUtils.isEmpty(userId)) {
             handleItemDeletingNullError();
             doInterruptProgress.setValue(true);
             return;
@@ -102,7 +102,7 @@ public class CoachSessionsListTabViewModel extends ListViewModel<SessionView> {
             return;
         }
 
-        dataListener.startDataListener(date, coachEmail);
+        dataListener.startDataListener(date, userId);
     }
 
     private String getDateNullError() {
@@ -115,8 +115,8 @@ public class CoachSessionsListTabViewModel extends ListViewModel<SessionView> {
     }
 
     @Override
-    public void deleteItem(String coachEmail, SessionView item) {
-        if (StringUtils.isEmpty(coachEmail)) {
+    public void deleteItem(String userId, SessionView item) {
+        if (StringUtils.isEmpty(userId)) {
             handleItemDeletingNullError();
             return;
         }
@@ -130,7 +130,7 @@ public class CoachSessionsListTabViewModel extends ListViewModel<SessionView> {
             return;
         }
 
-        subscribeInIOThread(sessionsDataManager.removeCoachFromSession(session.getId(), coachEmail));
+        subscribeInIOThread(sessionsDataManager.removeCoachFromSession(session.getId(), userId));
     }
 
     private void handleSessionDeletingNullError() {

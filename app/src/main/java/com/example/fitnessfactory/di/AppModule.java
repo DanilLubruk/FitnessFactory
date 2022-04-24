@@ -31,7 +31,6 @@ import com.example.fitnessfactory.data.repositories.access.CoachesAccessReposito
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerClientsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnersRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.participantsData.ClientSessionsRepository;
-import com.example.fitnessfactory.data.repositories.ownerData.ClientsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.participantsData.CoachSessionsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
@@ -41,12 +40,6 @@ import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionTypeRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.SessionsRepository;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
-import com.example.fitnessfactory.ui.viewmodels.factories.AdminEditorViewModelFactory;
-import com.example.fitnessfactory.ui.viewmodels.factories.CoachEditorViewModelFactory;
-import com.example.fitnessfactory.ui.viewmodels.factories.GymEditorViewModelFactory;
-import com.example.fitnessfactory.ui.viewmodels.factories.SessionEditorViewModelFactory;
-
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -81,8 +74,9 @@ public class AppModule {
     @Provides
     @AppScope
     public AdminsAccessManager provideAdminsAccessManager(AdminsAccessRepository accessRepository,
-                                                          OwnerAdminsRepository ownerAdminsRepository) {
-        return new AdminsAccessManager(accessRepository, ownerAdminsRepository);
+                                                          OwnerAdminsRepository ownerAdminsRepository,
+                                                          UserRepository userRepository) {
+        return new AdminsAccessManager(accessRepository, ownerAdminsRepository, userRepository);
     }
 
     @Provides
@@ -170,8 +164,9 @@ public class AppModule {
     @AppScope
     public CoachesAccessManager provideCoachesAccessManager(CoachSessionsRepository coachSessionsRepository,
                                                             CoachesAccessRepository coachesAccessRepository,
-                                                            OwnerCoachesRepository ownerCoachesRepository) {
-        return new CoachesAccessManager(coachSessionsRepository, coachesAccessRepository, ownerCoachesRepository);
+                                                            OwnerCoachesRepository ownerCoachesRepository,
+                                                            UserRepository userRepository) {
+        return new CoachesAccessManager(coachSessionsRepository, coachesAccessRepository, ownerCoachesRepository, userRepository);
     }
 
     @Provides
@@ -198,12 +193,6 @@ public class AppModule {
     @AppScope
     public ClientsListDataListener provideClientsListDataListener() {
         return new ClientsListDataListener();
-    }
-
-    @Provides
-    @AppScope
-    public ClientsRepository provideClientsRepository() {
-        return new ClientsRepository();
     }
 
     @Provides
@@ -249,18 +238,14 @@ public class AppModule {
                                                           ClientSessionsRepository clientSessionsRepository,
                                                           CoachSessionsRepository coachSessionsRepository,
                                                           OwnerCoachesRepository ownerCoachesRepository,
-                                                          SessionViewRepository sessionViewRepository,
-                                                          OwnerClientsRepository ownerClientsRepository,
-                                                          ClientsRepository clientsRepository) {
+                                                          SessionViewRepository sessionViewRepository) {
         return new SessionsDataManager(
                 sessionsRepository,
                 sessionTypeRepository,
                 clientSessionsRepository,
                 coachSessionsRepository,
                 ownerCoachesRepository,
-                sessionViewRepository,
-                ownerClientsRepository,
-                clientsRepository);
+                sessionViewRepository);
     }
 
     @Provides
@@ -331,7 +316,8 @@ public class AppModule {
     @AppScope
     public ClientsAccessManager provideClientsAccessManager(ClientsAccessRepository accessRepository,
                                                             OwnerClientsRepository ownerRepository,
-                                                            ClientSessionsRepository clientSessionsRepository) {
-        return new ClientsAccessManager(accessRepository, ownerRepository, clientSessionsRepository);
+                                                            ClientSessionsRepository clientSessionsRepository,
+                                                            UserRepository userRepository) {
+        return new ClientsAccessManager(accessRepository, ownerRepository, clientSessionsRepository, userRepository);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.fitnessfactory.data.managers.access;
 
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.data.repositories.access.AdminsAccessRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerAdminsRepository;
 import com.example.fitnessfactory.utils.ResUtils;
@@ -14,15 +15,16 @@ public class AdminsAccessManager extends PersonnelAccessManager {
 
     @Inject
     public AdminsAccessManager(AdminsAccessRepository accessRepository,
-                               OwnerAdminsRepository ownerRepository) {
-        super(accessRepository, ownerRepository);
+                               OwnerAdminsRepository ownerRepository,
+                               UserRepository userRepository) {
+        super(accessRepository, ownerRepository, userRepository);
     }
 
-    protected Single<WriteBatch> getDeleteBatch(String ownerId, String personnelEmail) {
-        return ownerRepository.isPersonnelOccupiedWithGyms(personnelEmail)
+    protected Single<WriteBatch> getDeleteBatch(String ownerId, String userId) {
+        return ownerRepository.isPersonnelOccupiedWithGyms(userId)
                 .flatMap(isOccupied -> isOccupied ?
                         Single.error(new Exception(getOccupiedMessage()))
-                        : super.getDeleteBatch(ownerId, personnelEmail));
+                        : super.getDeleteBatch(ownerId, userId));
     }
 
     @Override

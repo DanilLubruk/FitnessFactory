@@ -34,7 +34,7 @@ public class PersonnelDataProvider {
     private PersonnelAccessEntry createPersonnelAccessEntry(String userEmail, String ownerId) {
         return PersonnelAccessEntry
                 .builder()
-                .setUserEmail(userEmail)
+                .setUserId(userEmail)
                 .setOwnerId(ownerId)
                 .build();
     }

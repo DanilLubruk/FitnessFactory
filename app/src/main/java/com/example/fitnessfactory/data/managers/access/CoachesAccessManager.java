@@ -1,6 +1,7 @@
 package com.example.fitnessfactory.data.managers.access;
 
 import com.example.fitnessfactory.R;
+import com.example.fitnessfactory.data.repositories.UserRepository;
 import com.example.fitnessfactory.data.repositories.access.CoachesAccessRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.OwnerCoachesRepository;
 import com.example.fitnessfactory.data.repositories.ownerData.participantsData.CoachSessionsRepository;
@@ -19,32 +20,31 @@ public class CoachesAccessManager extends PersonnelAccessManager {
     @Inject
     public CoachesAccessManager(CoachSessionsRepository coachSessionsRepository,
                                 CoachesAccessRepository accessRepository,
-                                OwnerCoachesRepository ownerRepository) {
-        super(accessRepository, ownerRepository);
+                                OwnerCoachesRepository ownerRepository,
+                                UserRepository userRepository) {
+        super(accessRepository, ownerRepository, userRepository);
         this.coachSessionsRepository = coachSessionsRepository;
     }
 
     @Override
-    public Single<Boolean> deletePersonnelSingle(String ownerId, String personnelEmail) {
-        return ownerRepository.isPersonnelOccupiedWithGyms(personnelEmail)
+    public Single<Boolean> deletePersonnelSingle(String ownerId, String userId) {
+        return ownerRepository.isPersonnelOccupiedWithGyms(userId)
                 .flatMap(isOccupiedWithGyms -> isOccupiedWithGyms ?
                         Single.error(new Exception(getOccupiedMessage())) :
-                        ownerRepository.getPersonnelIdByEmailAsync(personnelEmail))
-                .flatMap(coachSessionsRepository::isParticipantOccupiedAsync)
+                        coachSessionsRepository.isParticipantOccupiedAsync(userId))
                 .flatMap(isOccupied -> isOccupied ?
                         Single.error(new Exception(getOccupiedMessage()))
-                        : super.deletePersonnelSingle(ownerId, personnelEmail));
+                        : super.deletePersonnelSingle(ownerId, userId));
     }
 
-    public Completable deletePersonnelCompletable(String ownerId, String personnelEmail) {
-        return ownerRepository.isPersonnelOccupiedWithGyms(personnelEmail)
+    public Completable deletePersonnelCompletable(String ownerId, String userId) {
+        return ownerRepository.isPersonnelOccupiedWithGyms(userId)
                 .flatMap(isOccupiedWithGyms -> isOccupiedWithGyms ?
                         Single.error(new Exception(getOccupiedMessage())) :
-                        ownerRepository.getPersonnelIdByEmailAsync(personnelEmail))
-                .flatMap(coachSessionsRepository::isParticipantOccupiedAsync)
+                        coachSessionsRepository.isParticipantOccupiedAsync(userId))
                 .flatMapCompletable(isOccupied -> isOccupied ?
                         Completable.error(new Exception(getOccupiedMessage()))
-                        : super.deletePersonnelCompletable(ownerId, personnelEmail));
+                        : super.deletePersonnelCompletable(ownerId, userId));
     }
 
     private String getOccupiedMessage() {

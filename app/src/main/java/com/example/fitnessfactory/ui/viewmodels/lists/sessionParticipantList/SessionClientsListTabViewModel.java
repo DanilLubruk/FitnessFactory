@@ -6,13 +6,11 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.dataListeners.ArgDataListener;
 import com.example.fitnessfactory.data.dataListeners.SessionClientsListDataListener;
-import com.example.fitnessfactory.data.managers.data.ClientsDataManager;
 import com.example.fitnessfactory.data.managers.data.SessionsDataManager;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.models.Session;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.repositories.UserRepository;
-import com.example.fitnessfactory.data.repositories.ownerData.ClientsRepository;
 import com.example.fitnessfactory.utils.ResUtils;
 
 import java.util.List;
@@ -25,17 +23,14 @@ public class SessionClientsListTabViewModel extends SessionParticipantListTabVie
 
     private final UserRepository userRepository;
     private final SessionClientsListDataListener dataListener;
-    private final ClientsRepository clientsRepository;
 
     private final MutableLiveData<List<AppUser>> clients = new MutableLiveData<>();
 
     @Inject
     public SessionClientsListTabViewModel(SessionsDataManager sessionsDataManager,
-                                          ClientsRepository clientsRepository,
                                           UserRepository userRepository,
                                           SessionClientsListDataListener dataListener) {
         super(sessionsDataManager);
-        this.clientsRepository = clientsRepository;
         this.userRepository = userRepository;
         this.dataListener = dataListener;
     }
@@ -44,9 +39,9 @@ public class SessionClientsListTabViewModel extends SessionParticipantListTabVie
         return clients;
     }
 
-    public void resetClientsList(List<String> clientsEmails) {
+    public void resetClientsList(List<String> clientsIds) {
         subscribeInIOThread(
-                userRepository.getUsersByEmailsAsync(clientsEmails),
+                userRepository.getUsersByIdsAsync(clientsIds),
                 new SingleData<>(clients::setValue, getErrorHandler()::handleError));
     }
 
@@ -67,7 +62,7 @@ public class SessionClientsListTabViewModel extends SessionParticipantListTabVie
 
     @Override
     protected List<String> getParticipantsList(Session session) {
-        return session.getClientsEmails();
+        return session.getClientsIds();
     }
 
     @Override

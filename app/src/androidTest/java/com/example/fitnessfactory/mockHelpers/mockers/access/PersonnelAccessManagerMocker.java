@@ -18,14 +18,14 @@ abstract class PersonnelAccessManagerMocker {
                    OwnerPersonnelRepository ownersRepository) {
         Mockito.when(
                 accessRepository
-                        .isPersonnelWithThisEmailRegisteredAsync(Mockito.anyString(), Mockito.anyString()))
+                        .isPersonnelWithThisIdRegisteredAsync(Mockito.anyString(), Mockito.anyString()))
                 .thenAnswer(invocation -> {
                     String id = invocation.getArgument(0);
                     String email = invocation.getArgument(1);
 
                     for (PersonnelAccessEntry accessEntry : dataProvider.getAccessEntries()) {
                         if (id.equals(accessEntry.getOwnerId()) &&
-                                email.equals(accessEntry.getUserEmail())) {
+                                email.equals(accessEntry.getUserId())) {
                             return Single.just(true);
                         }
                     }
@@ -41,12 +41,12 @@ abstract class PersonnelAccessManagerMocker {
                 .getAddPersonnelBatchAsync(Mockito.any(), Mockito.anyString()))
                 .thenReturn(Single.just(FirebaseFirestore.getInstance().batch()));
 
-        Mockito.when(ownersRepository.isPersonnelWithThisEmailAddedAsync(Mockito.anyString()))
+        Mockito.when(ownersRepository.isPersonnelWithThisIdAddedAsync(Mockito.anyString()))
                 .thenAnswer(invocation -> {
                     String email = invocation.getArgument(0);
 
                     for (Personnel personnel : dataProvider.getPersonnel()) {
-                        if (email.equals(personnel.getUserEmail())) {
+                        if (email.equals(personnel.getUserId())) {
                             return Single.just(true);
                         }
                     }

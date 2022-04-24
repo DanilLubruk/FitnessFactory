@@ -40,17 +40,17 @@ public abstract class PersonnelDataManager extends BaseManager {
     }
 
     public Single<List<AppUser>> getPersonnelListAsync() {
-        return getOwnerRepository().getPersonnelEmailsAsync()
-                .flatMap(getUserRepository()::getUsersByEmailsAsync);
+        return getOwnerRepository().getPersonnelIdsAsync()
+                .flatMap(getUserRepository()::getUsersByIdsAsync);
     }
 
     public Single<List<AppUser>> getPersonnelListByGymIdAsync(String gymId) {
-        return getOwnerRepository().getPersonnelEmailsByGymIdAsync(gymId)
-                .flatMap(getUserRepository()::getUsersByEmailsAsync);
+        return getOwnerRepository().getPersonnelIdsByGymIdAsync(gymId)
+                .flatMap(getUserRepository()::getUsersByIdsAsync);
     }
 
-    public Single<List<Gym>> getPersonnelGymsByEmail(String personnelEmail) {
-        return getOwnerRepository().getPersonnelGymsIdsByEmailAsync(personnelEmail)
+    public Single<List<Gym>> getPersonnelGymsById(String personnelId) {
+        return getOwnerRepository().getPersonnelGymsIdsByIdAsync(personnelId)
                 .flatMap(getGymRepository()::getGymsByIdsAsync);
     }
 }

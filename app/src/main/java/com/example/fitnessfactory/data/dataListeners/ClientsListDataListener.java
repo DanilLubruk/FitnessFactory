@@ -5,7 +5,7 @@ import android.util.Log;
 import com.example.fitnessfactory.data.AppConsts;
 import com.example.fitnessfactory.data.events.ClientsListDataListenerEvent;
 import com.example.fitnessfactory.data.firestoreCollections.ClientsCollection;
-import com.example.fitnessfactory.data.models.Client;
+import com.example.fitnessfactory.data.models.Personnel;
 import com.google.firebase.firestore.ListenerRegistration;
 
 import org.greenrobot.eventbus.EventBus;
@@ -34,7 +34,7 @@ public class ClientsListDataListener extends BaseDataListener implements DataLis
                             return;
                         }
 
-                        List<Client> clientsList = value.toObjects(Client.class);
+                        List<Personnel> clientsList = value.toObjects(Personnel.class);
                         EventBus.getDefault().post(new ClientsListDataListenerEvent(clientsList));
                     }));
 

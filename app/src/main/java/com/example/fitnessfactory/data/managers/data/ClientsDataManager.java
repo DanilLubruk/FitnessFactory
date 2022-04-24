@@ -24,24 +24,4 @@ public class ClientsDataManager extends PersonnelDataManager {
         super(clientsRepository, userRepository, gymRepository);
         this.clientSessionsRepository = clientSessionsRepository;
     }
-
-    /*public Single<Boolean> deleteClientSingle(Client client) {
-        return clientSessionsRepository.isParticipantOccupiedAsync(client.getId())
-                .flatMap(isOccupied -> isOccupied ?
-                        Single.error(new Exception(getOccupiedMessage()))
-                        : clientsRepository.deleteClientSingle(client));
-    }
-
-    public Completable deleteClientCompletable(Client client) {
-        return clientSessionsRepository.isParticipantOccupiedAsync(client.getId())
-                .flatMapCompletable(isOccupied -> isOccupied ?
-                        Completable.error(new Exception(getOccupiedMessage()))
-                        : clientsRepository.deleteClientCompletable(client));
-    }
-
-    private String getOccupiedMessage() {
-        return String.format(
-                ResUtils.getString(R.string.message_error_item_occupied),
-                ResUtils.getString(R.string.caption_client));
-    }*/
 }

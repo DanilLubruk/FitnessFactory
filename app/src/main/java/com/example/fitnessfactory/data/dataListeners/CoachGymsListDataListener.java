@@ -18,14 +18,14 @@ public class CoachGymsListDataListener extends BaseDataListener implements ArgDa
     }
 
     @Override
-    public void startDataListener(String coachEmail) {
-        setListenerRegistration(getDataListener(coachEmail));
+    public void startDataListener(String coachUserId) {
+        setListenerRegistration(getDataListener(coachUserId));
     }
 
-    private Single<ListenerRegistration> getDataListener(String coachEmail) {
+    private Single<ListenerRegistration> getDataListener(String coachUserId) {
         return Single.create(emitter -> {
             ListenerRegistration listenerRegistration =
-                    getCoachQueryByEmail(coachEmail)
+                    getCollection().document(coachUserId)
                             .addSnapshotListener((value, error) -> {
                                 if (checkIsSnapshotInvalid(emitter, error)) {
                                     return;
@@ -38,9 +38,5 @@ public class CoachGymsListDataListener extends BaseDataListener implements ArgDa
                 emitter.onSuccess(listenerRegistration);
             }
         });
-    }
-
-    private Query getCoachQueryByEmail(String coachEmail) {
-        return getCollection().whereEqualTo(Personnel.USER_EMAIL_FIELD, coachEmail);
     }
 }

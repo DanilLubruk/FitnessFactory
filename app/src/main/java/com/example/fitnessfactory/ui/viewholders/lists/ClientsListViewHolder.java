@@ -5,7 +5,6 @@ import android.widget.TextView;
 
 import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.models.AppUser;
-import com.example.fitnessfactory.data.models.Client;
 import com.example.fitnessfactory.ui.viewholders.BaseRecyclerViewHolder;
 
 public class ClientsListViewHolder extends BaseRecyclerViewHolder<AppUser> {

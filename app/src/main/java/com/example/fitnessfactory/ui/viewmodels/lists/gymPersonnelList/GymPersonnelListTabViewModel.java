@@ -55,13 +55,13 @@ public abstract class GymPersonnelListTabViewModel extends ListViewModel<AppUser
         return personnel;
     }
 
-    public void addPersonnelToGym(String gymId, String personnelEmail) {
+    public void addPersonnelToGym(String gymId, String userId) {
         if (TextUtils.isEmpty(gymId)) {
             handleItemOperationError();
             return;
         }
 
-        subscribeInIOThread(getOwnerRepository().addGymToPersonnelAsync(personnelEmail, gymId));
+        subscribeInIOThread(getOwnerRepository().addGymToPersonnelAsync(userId, gymId));
     }
 
     public void deleteItem(String gymId, AppUser personnel) {
@@ -70,7 +70,7 @@ public abstract class GymPersonnelListTabViewModel extends ListViewModel<AppUser
             return;
         }
 
-        subscribeInIOThread(getOwnerRepository().removeGymFromPersonnelAsync(personnel.getEmail(), gymId));
+        subscribeInIOThread(getOwnerRepository().removeGymFromPersonnelAsync(personnel.getId(), gymId));
     }
 
     public void startDataListener(String gymId) {

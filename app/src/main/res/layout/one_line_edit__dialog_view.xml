@@ -19,6 +19,7 @@
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/edtField"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:imeOptions="actionDone"
             android:layout_width="@dimen/edit_text_width"
             android:layout_height="wrap_content" />
 
