@@ -16,6 +16,11 @@ public class PersonnelEmailSearchField extends SearchFieldState<AppUser> {
         return appUser.getEmail().toLowerCase(Locale.ROOT);
     }
 
+    @Override
+    public int getIndex() {
+        return 1;
+    }
+
     @NonNull
     @Override
     public String toString() {

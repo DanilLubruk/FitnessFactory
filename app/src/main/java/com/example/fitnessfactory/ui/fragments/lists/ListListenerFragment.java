@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,6 +53,9 @@ ListListenerFragment<
                 closeProgress();
             }
         });
+        if (savedInstanceState != null) {
+            getViewModel().saveState(savedInstanceState);
+        }
         super.onActivityCreated(savedInstanceState);
         initComponents();
         setTitle();
@@ -202,5 +206,11 @@ ListListenerFragment<
         getProgressBar().setVisibility(View.VISIBLE);
         getRecyclerView().setVisibility(View.GONE);
         getFAB().setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getViewModel().saveState(outState);
     }
 }

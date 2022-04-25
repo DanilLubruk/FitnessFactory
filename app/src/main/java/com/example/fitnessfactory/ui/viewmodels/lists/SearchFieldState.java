@@ -14,6 +14,11 @@ import java.util.List;
 
 public abstract class SearchFieldState<ItemType> {
     public abstract String getSearchField(ItemType item);
+    public abstract int getIndex();
+
+    public static SearchFieldState<AppUser> getPersonnelSearchField(int index) {
+        return getPersonnelSearchFields().get(index);
+    }
 
     public static List<SearchFieldState<AppUser>> getPersonnelSearchFields() {
         List<SearchFieldState<AppUser>> list = new ArrayList<>();
@@ -22,10 +27,18 @@ public abstract class SearchFieldState<ItemType> {
         return list;
     }
 
+    public static SearchFieldState<SessionType> getSessionTypeSearchField(int index) {
+        return getSessionTypesSearchFields().get(index);
+    }
+
     public static List<SearchFieldState<SessionType>> getSessionTypesSearchFields() {
         List<SearchFieldState<SessionType>> list = new ArrayList<>();
         list.add(new SessionTypeNameSearchField());
         return list;
+    }
+
+    public static SearchFieldState<Gym> getGymSearchField(int index) {
+        return getGymsSearchFields().get(index);
     }
 
     public static List<SearchFieldState<Gym>> getGymsSearchFields() {

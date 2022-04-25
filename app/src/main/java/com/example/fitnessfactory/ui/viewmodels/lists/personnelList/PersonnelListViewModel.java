@@ -116,4 +116,9 @@ public abstract class PersonnelListViewModel extends SearchViewModel<AppUser, Se
     protected SearchFieldState<AppUser> getDefaultSearchField() {
         return new PersonnelNameSearchField();
     }
+
+    @Override
+    protected SearchFieldState<AppUser> getRestoredSearchField(int index) {
+        return SearchFieldState.getPersonnelSearchField(index);
+    }
 }

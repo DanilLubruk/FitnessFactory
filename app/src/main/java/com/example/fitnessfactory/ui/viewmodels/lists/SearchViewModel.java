@@ -13,7 +13,9 @@ import java.util.stream.Collectors;
 
 public abstract class SearchViewModel<ItemType, FieldStateType extends SearchFieldState<ItemType>>
         extends ListViewModel<ItemType> {
-    private static final String searchFieldKey = "searchFieldKey";
+    private static final String SHOW_SEARCH_KEY = "SHOW_SEARCH_KEY";
+    private static final String SEARCH_TEXT_KEY = "SEARCH_TEXT_KEY";
+    private static final String SEARCH_FIELD_KEY = "SEARCH_FIELD_KEY";
 
     protected final MutableLiveData<List<ItemType>> items = new MutableLiveData<>();
 
@@ -51,21 +53,32 @@ public abstract class SearchViewModel<ItemType, FieldStateType extends SearchFie
 
     public void setItems(List<ItemType> itemsList) {
         items.setValue(itemsList);
-        filteredItems.setValue(itemsList);
+        if (hasHandle()) {
+            applySearch(searchText.getValue());
+        } else {
+            filteredItems.setValue(itemsList);
+        }
     }
 
     public MutableLiveData<List<ItemType>> getItems() {
         return filteredItems;
     }
 
-    /*@Override
+    @Override
     public void saveState(Bundle savedState) {
         super.saveState(savedState);
-        getHandle().put(searchFieldKey, )
+        getHandle().put(SEARCH_FIELD_KEY, searchField.get().getIndex());
+        getHandle().put(SHOW_SEARCH_KEY, showSearch.getValue());
+        getHandle().put(SEARCH_TEXT_KEY, searchText.getValue());
     }
 
     @Override
     public void restoreState(Bundle savedState) {
         super.restoreState(savedState);
-    }*/
+        searchField.set(getRestoredSearchField((int) getHandle().get(SEARCH_FIELD_KEY)));
+        showSearch.setValue((boolean) getHandle().get(SHOW_SEARCH_KEY));
+        searchText.setValue((String) getHandle().get(SEARCH_TEXT_KEY));
+    }
+
+    protected abstract FieldStateType getRestoredSearchField(int index);
 }

@@ -16,6 +16,11 @@ public class GymAddressSearchField extends SearchFieldState<Gym> {
         return gym.getAddress().toLowerCase(Locale.ROOT);
     }
 
+    @Override
+    public int getIndex() {
+        return 1;
+    }
+
     @NonNull
     @Override
     public String toString() {

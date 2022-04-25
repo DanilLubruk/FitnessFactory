@@ -56,4 +56,9 @@ public class SessionTypesListViewModel extends SearchViewModel<SessionType, Sear
     protected SearchFieldState<SessionType> getDefaultSearchField() {
         return new SessionTypeNameSearchField();
     }
+
+    @Override
+    protected SearchFieldState<SessionType> getRestoredSearchField(int index) {
+        return SearchFieldState.getSessionTypeSearchField(index);
+    }
 }

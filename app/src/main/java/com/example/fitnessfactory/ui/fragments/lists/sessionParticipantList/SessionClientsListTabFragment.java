@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fitnessfactory.FFApp;
@@ -98,7 +99,7 @@ public class SessionClientsListTabFragment extends ListListenerTabFragment<AppUs
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedState) {
+    public void onSaveInstanceState(@NonNull Bundle savedState) {
         super.onSaveInstanceState(savedState);
         getViewModel().saveState(savedState);
     }

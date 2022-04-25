@@ -17,6 +17,11 @@ public class SessionTypeNameSearchField extends SearchFieldState<SessionType> {
         return sessionType.getName().toLowerCase(Locale.ROOT);
     }
 
+    @Override
+    public int getIndex() {
+        return 0;
+    }
+
     @NonNull
     @Override
     public String toString() {

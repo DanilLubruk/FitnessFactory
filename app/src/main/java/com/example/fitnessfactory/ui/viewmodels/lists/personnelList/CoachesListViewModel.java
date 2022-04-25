@@ -4,6 +4,8 @@ import com.example.fitnessfactory.R;
 import com.example.fitnessfactory.data.dataListeners.CoachesListDataListener;
 import com.example.fitnessfactory.data.managers.access.CoachesAccessManager;
 import com.example.fitnessfactory.data.managers.data.CoachesDataManager;
+import com.example.fitnessfactory.data.models.AppUser;
+import com.example.fitnessfactory.ui.viewmodels.lists.SearchFieldState;
 import com.example.fitnessfactory.utils.ResUtils;
 
 import javax.inject.Inject;

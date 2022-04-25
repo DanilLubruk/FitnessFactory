@@ -53,4 +53,9 @@ public class GymsListViewModel extends SearchViewModel<Gym, SearchFieldState<Gym
     protected SearchFieldState<Gym> getDefaultSearchField() {
         return new GymNameSearchField();
     }
+
+    @Override
+    protected SearchFieldState<Gym> getRestoredSearchField(int index) {
+        return SearchFieldState.getGymSearchField(index);
+    }
 }
