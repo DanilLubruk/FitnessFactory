@@ -81,7 +81,7 @@ public class AuthActivity extends BaseActivity {
 
     private void handleSignIn(Intent data) {
         setObtainingDataText();
-        SingleDialogEvent<Integer, List<AppUser>> dialogEvent =
+        SingleDialogEvent<AppUser, List<AppUser>> dialogEvent =
                 new SingleDialogEvent<>(this, DialogUtils::showAskOwnerDialog);
         viewModel.signInUser(data, dialogEvent)
                 .observe(this, isRegistered -> {

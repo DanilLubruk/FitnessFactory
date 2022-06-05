@@ -6,11 +6,9 @@ import com.example.fitnessfactory.data.models.Owner;
 import com.example.fitnessfactory.data.repositories.BaseRepository;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.concurrent.ExecutionException;
 
-import io.reactivex.Completable;
 import io.reactivex.Single;
 
 public class OwnersRepository extends BaseRepository {
@@ -20,9 +18,9 @@ public class OwnersRepository extends BaseRepository {
         return OwnersCollection.getRoot();
     }
 
-    public Single<AppUser> setOwnersIdAsync(AppUser appUser) {
+    public Single<AppUser> createOwnerAsync(AppUser appUser) {
         return SingleCreate(emitter -> {
-            setOwnersId(appUser);
+            createOwner(appUser);
 
             if (!emitter.isDisposed()) {
                 emitter.onSuccess(appUser);
@@ -30,7 +28,7 @@ public class OwnersRepository extends BaseRepository {
         });
     }
 
-    private void setOwnersId(AppUser appUser) throws ExecutionException, InterruptedException {
+    private void createOwner(AppUser appUser) throws ExecutionException, InterruptedException {
         DocumentReference documentReference = getCollection().document(appUser.getId());
         Owner owner = new Owner();
         owner.setId(appUser.getId());

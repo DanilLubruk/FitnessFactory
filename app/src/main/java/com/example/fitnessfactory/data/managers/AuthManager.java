@@ -55,8 +55,7 @@ public class AuthManager extends BaseManager {
                                 userRepository.getAppUserByEmailAsync(user.getValue().getEmail()) :
                                 userRepository.registerUser(
                                         user.getValue().getEmail(),
-                                        user.getValue().getName())
-                                .flatMap(authUser -> ownersRepository.setOwnersIdAsync(authUser)))
+                                        user.getValue().getName()))
                 .observeOn(getIOScheduler())
                 .flatMap(authUser -> adminsAccessRepository.getOwnersByInvitedEmail(authUser))
                 .observeOn(getIOScheduler())
@@ -69,7 +68,12 @@ public class AuthManager extends BaseManager {
         return organisationInfoRepository.getOrganisationNameAsync()
                 .subscribeOn(getIOScheduler())
                 .observeOn(getIOScheduler())
-                .flatMapCompletable(organisationInfoRepository::checkOrganisationNameAsync)
+                .flatMap(organisationInfoRepository::checkOrganisationNameAsync)
+                .subscribeOn(getIOScheduler())
+                .observeOn(getIOScheduler())
+                .flatMapCompletable(value -> Completable.complete())
+                .subscribeOn(getMainThreadScheduler())
                 .observeOn(getMainThreadScheduler());
+
     }
 }

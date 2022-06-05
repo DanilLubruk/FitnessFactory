@@ -2,40 +2,38 @@ package com.example.fitnessfactory.ui.viewmodels;
 
 import android.content.Intent;
 
-import androidx.lifecycle.MutableLiveData;
-
-import com.example.fitnessfactory.FFApp;
 import com.example.fitnessfactory.R;
-import com.example.fitnessfactory.data.AppPrefs;
-import com.example.fitnessfactory.data.beans.UsersList;
-import com.example.fitnessfactory.data.callbacks.UsersListCallback;
+import com.example.fitnessfactory.data.CurrentUserType;
 import com.example.fitnessfactory.data.managers.AuthManager;
 import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.observers.SingleDialogEvent;
 import com.example.fitnessfactory.data.observers.SingleLiveEvent;
+import com.example.fitnessfactory.data.repositories.ownerData.OwnersRepository;
 import com.example.fitnessfactory.system.FirebaseAuthManager;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
-import com.example.fitnessfactory.utils.RxUtils;
 
 import java.util.List;
-import java.util.Objects;
 
 import javax.inject.Inject;
 
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class AuthViewModel extends BaseViewModel {
 
     private AuthManager authManager;
     private FirebaseAuthManager firebaseAuthManager;
+    private OwnersRepository ownersRepository;
 
     @Inject
     public AuthViewModel(AuthManager authManager,
-                         FirebaseAuthManager firebaseAuthManager) {
+                         FirebaseAuthManager firebaseAuthManager,
+                         OwnersRepository ownersRepository) {
         this.authManager = authManager;
         this.firebaseAuthManager = firebaseAuthManager;
+        this.ownersRepository = ownersRepository;
     }
 
     public SingleLiveEvent<Intent> getSignInIntent() {
@@ -54,7 +52,7 @@ public class AuthViewModel extends BaseViewModel {
     }
 
     public SingleLiveEvent<Boolean> signInUser(Intent authData,
-                                               SingleDialogEvent<Integer, List<AppUser>> dialogEvent) {
+                                               SingleDialogEvent<AppUser, List<AppUser>> dialogEvent) {
         SingleLiveEvent<Boolean> isSignedIn = new SingleLiveEvent<>();
 
         addSubscription(authManager.handleSignIn(authData)
@@ -65,10 +63,20 @@ public class AuthViewModel extends BaseViewModel {
                         return Single.error(new Exception("Sign in failed"));
                     }
                 })
-                .flatMapCompletable(userType -> {
-                    AppPrefs.currentUserType().setValue(userType);
-                    return authManager.checkOrganisationName();
+                .subscribeOn(getIOScheduler())
+                .observeOn(getIOScheduler())
+                .flatMap(user -> {
+                    if (CurrentUserType.isOwner()) {
+                        return ownersRepository.createOwnerAsync(user);
+                    } else {
+                        return Single.just(user);
+                    }
                 })
+                .subscribeOn(getIOScheduler())
+                .observeOn(getIOScheduler())
+                .flatMapCompletable(value -> authManager.checkOrganisationName())
+                .subscribeOn(getMainThreadScheduler())
+                .observeOn(getMainThreadScheduler())
                 .subscribe(
                         () -> isSignedIn.setValue(true),
                         throwable -> getErrorHandler().handleError(isSignedIn, throwable)));

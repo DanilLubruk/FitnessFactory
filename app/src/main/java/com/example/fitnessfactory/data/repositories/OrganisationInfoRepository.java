@@ -77,12 +77,12 @@ public class OrganisationInfoRepository extends BaseRepository {
         }
     }
 
-    public Completable checkOrganisationNameAsync(String organisationName) {
-        return CompletableCreate(emitter -> {
+    public Single<Boolean> checkOrganisationNameAsync(String organisationName) {
+        return SingleCreate(emitter -> {
             checkOrganisationName(organisationName);
 
             if (!emitter.isDisposed()) {
-                emitter.onComplete();
+                emitter.onSuccess(true);
             }
         });
     }

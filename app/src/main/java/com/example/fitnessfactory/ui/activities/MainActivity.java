@@ -26,6 +26,7 @@ import com.example.fitnessfactory.ui.viewmodels.MainActivityViewModel;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
 import com.example.fitnessfactory.utils.dialogs.DialogUtils;
+import com.example.fitnessfactory.utils.dialogs.exceptions.DialogCancelledException;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
@@ -76,8 +77,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                             AppPrefs.askForOrganisationName().setValue(false);
                         },
                         throwable -> {
-                            throwable.printStackTrace();
-                            GuiUtils.showMessage(throwable.getLocalizedMessage());
+                            if (throwable instanceof DialogCancelledException) {
+
+                            } else {
+                                throwable.printStackTrace();
+                                GuiUtils.showMessage(throwable.getLocalizedMessage());
+                            }
                         }));
     }
 

@@ -75,7 +75,7 @@ public class DialogUtils {
         });
     }
 
-    public static Single<Integer> showAskOwnerDialog(BaseActivity context,
+    public static Single<AppUser> showAskOwnerDialog(BaseActivity context,
                                                      List<AppUser> gymOwners) {
         return Single.create(emitter -> {
             String[] userTypes = new String[gymOwners.size()];
@@ -89,7 +89,7 @@ public class DialogUtils {
             new AlertDialog.Builder(context)
                     .setTitle(ResUtils.getString(R.string.title_ask_gym_owner))
                     .setItems(userTypes, ((dialog, which) -> {
-                        handlePickedOwnerOption(which, gymOwners, emitter);
+                        handlePickedOwnerOption(which, gymOwners, emitter, gymOwners.get(0));
                     }))
                     .setOnCancelListener(dialog -> emitter.onError(new Exception(ResUtils.getString(R.string.caption_wrong_auth))))
                     .show();
@@ -98,17 +98,18 @@ public class DialogUtils {
 
     private static void handlePickedOwnerOption(int option,
                                                 List<AppUser> gymOwners,
-                                                SingleEmitter<Integer> emitter) {
+                                                SingleEmitter<AppUser> emitter,
+                                                AppUser currentUser) {
         String ownerId = gymOwners.get(option).getId();
         AppPrefs.gymOwnerId().setValue(ownerId);
 
         boolean isOptionMyOwnGym = option == 0;
 
         if (!emitter.isDisposed()) {
-            emitter.onSuccess(
-                    isOptionMyOwnGym ?
-                            CurrentUserType.CURRENT_USER_OWNER :
-                            CurrentUserType.CURRENT_USER_STAFF);
+            AppPrefs.currentUserType().setValue(isOptionMyOwnGym ?
+                    CurrentUserType.CURRENT_USER_OWNER :
+                    CurrentUserType.CURRENT_USER_STAFF);
+            emitter.onSuccess(currentUser);
         }
     }
 
