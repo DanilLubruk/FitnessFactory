@@ -53,7 +53,7 @@ public abstract class SearchViewModel<ItemType, FieldStateType extends SearchFie
 
     public void setItems(List<ItemType> itemsList) {
         items.setValue(itemsList);
-        if (hasHandle()) {
+        if (hasHandle() && showSearch.getValue()) {
             applySearch(searchText.getValue());
         } else {
             filteredItems.setValue(itemsList);
