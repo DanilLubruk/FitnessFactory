@@ -1,10 +1,14 @@
 package com.example.fitnessfactory;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.example.fitnessfactory.di.AppComponent;
 import com.example.fitnessfactory.di.AppModule;
 import com.example.fitnessfactory.di.DaggerAppComponent;
+
+import io.reactivex.exceptions.UndeliverableException;
+import io.reactivex.plugins.RxJavaPlugins;
 
 public class FFApp extends Application {
 
@@ -36,10 +40,20 @@ public class FFApp extends Application {
         super.onCreate();
         setInstance(this);
         initAppComponent();
+        RxJavaPlugins.setErrorHandler(e -> {
+                    if (e instanceof UndeliverableException) {
+                        e.printStackTrace();
+                    } else if (e instanceof InterruptedException) {
+                        e.printStackTrace();
+                    } else {
+                        Thread.currentThread().getUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
+                    }
+                }
+        );
     }
 
     public void initAppComponent() {
-       appComponent = DaggerAppComponent
+        appComponent = DaggerAppComponent
                 .builder()
                 .appModule(getAppModule())
                 .build();

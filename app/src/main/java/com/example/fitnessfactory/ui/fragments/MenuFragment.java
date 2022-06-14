@@ -18,6 +18,7 @@ import com.example.fitnessfactory.data.observers.SingleData;
 import com.example.fitnessfactory.data.views.SessionView;
 import com.example.fitnessfactory.databinding.FragmentMainMenuBinding;
 import com.example.fitnessfactory.ui.activities.editors.session.SessionEditorActivity;
+import com.example.fitnessfactory.ui.activities.editors.session.SessionEditorViewModelFactoryProvider;
 import com.example.fitnessfactory.ui.adapters.SessionsListAdapter;
 import com.example.fitnessfactory.ui.viewmodels.factories.SessionsListViewModelFactory;
 import com.example.fitnessfactory.ui.viewmodels.lists.SessionsListViewModel;

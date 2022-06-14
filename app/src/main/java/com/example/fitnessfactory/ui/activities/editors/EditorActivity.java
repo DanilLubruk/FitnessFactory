@@ -36,11 +36,11 @@ public abstract class EditorActivity extends BaseActivity {
         MenuItem menuItem;
 
         menuItem = menu.add(0, MENU_SAVE, 0, R.string.caption_save);
-        menuItem.setIcon(ResUtils.getDrawable(R.drawable.ic_baseline_save_24));
+        menuItem.setIcon(ResUtils.getDrawable(getBaseContext(), R.drawable.ic_baseline_save_24));
         menuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         menuItem = menu.add(0, MENU_DELETE, 0, R.string.caption_delete);
-        menuItem.setIcon(ResUtils.getDrawable(R.drawable.ic_baseline_delete_24));
+        menuItem.setIcon(ResUtils.getDrawable(getBaseContext(), R.drawable.ic_baseline_delete_24));
         menuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         return super.onCreateOptionsMenu(menu);

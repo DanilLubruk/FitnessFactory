@@ -1,6 +1,10 @@
 package com.example.fitnessfactory.utils;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+
+import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.fitnessfactory.FFApp;
 
@@ -18,7 +22,7 @@ public class ResUtils {
         return FFApp.get().getResources().getString(id);
     }
 
-    public static Drawable getDrawable(int id) {
-        return FFApp.get().getResources().getDrawable(id);
+    public static Drawable getDrawable(Context context, int id) {
+        return AppCompatResources.getDrawable(context, id);
     }
 }

@@ -53,7 +53,7 @@ public class GuiUtils {
         if (useDivider) {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,
                     layoutManager.getOrientation());
-            dividerItemDecoration.setDrawable(ResUtils.getDrawable(R.drawable.divider));
+            dividerItemDecoration.setDrawable(ResUtils.getDrawable(context, R.drawable.divider));
             recyclerView.addItemDecoration(dividerItemDecoration);
         }
     }

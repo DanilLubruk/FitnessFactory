@@ -61,13 +61,33 @@ public class SessionEditorViewModel extends EditorViewModel {
     public SingleLiveEvent<Boolean> getSession(String sessionId) {
         SingleLiveEvent<Boolean> isObtained = new SingleLiveEvent<>();
 
+        addSubscription(
+                sessionsRepository.getSessionAsync(sessionId)
+                        .subscribeOn(getIOScheduler())
+                        .observeOn(getMainThreadScheduler())
+                        .subscribe(obtainedSession -> setSession(obtainedSession, isObtained), throwable -> {
+                            if (throwable instanceof InterruptedException) {
+                                getSessionAgain(isObtained, sessionId);
+                            } else {
+                                throwable.printStackTrace();
+                            }
+                        }));
+
+        return isObtained;
+    }
+
+    private void getSessionAgain(SingleLiveEvent<Boolean> event, String sessionId) {
         subscribeInIOThread(
                 sessionsRepository.getSessionAsync(sessionId),
                 new SingleData<>(
-                        obtainedSession -> setSession(obtainedSession, isObtained),
-                        getErrorHandler()::handleError));
-
-        return isObtained;
+                        obtainedSession -> setSession(obtainedSession, event),
+                        throwable -> {
+                            if (throwable instanceof InterruptedException) {
+                                getSessionAgain(event, sessionId);
+                            } else {
+                                throwable.printStackTrace();
+                            }
+                        }));
     }
 
     private void setSession(Session session, SingleLiveEvent<Boolean> isObtained) {

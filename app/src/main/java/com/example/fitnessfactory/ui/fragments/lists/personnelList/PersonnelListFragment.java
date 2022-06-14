@@ -100,7 +100,7 @@ public abstract class PersonnelListFragment
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         MenuItem menuItem = menu.add(0, MENU_SEARCH, 0, R.string.caption_search);
-        menuItem.setIcon(ResUtils.getDrawable(R.drawable.ic_baseline_search_24));
+        menuItem.setIcon(ResUtils.getDrawable(getContext(), R.drawable.ic_baseline_search_24));
         menuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
         super.onCreateOptionsMenu(menu, inflater);
     }
