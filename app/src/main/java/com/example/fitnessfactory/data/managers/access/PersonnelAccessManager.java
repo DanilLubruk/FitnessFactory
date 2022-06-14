@@ -36,6 +36,16 @@ public abstract class PersonnelAccessManager extends BaseManager {
 
     protected abstract String getAlreadyRegisteredMessage();
 
+    public Single<Boolean> isUserRegistered(String userEmail) {
+        return userRepository.getUserIdByEmail(userEmail)
+                .flatMap(userId -> Single.just(!userId.isEmpty()));
+    }
+
+    public Single<String> createUser(String userEmail, String userName) {
+        return userRepository.registerUser(userEmail, userName)
+                .flatMap(appUser -> Single.just(appUser.getEmail()));
+    }
+
     public Single<Boolean> createPersonnel(String ownerId, String userEmail) {
         SafeReference<WriteBatch> registerBatch = new SafeReference<>();
         SafeReference<String> userIdRef = new SafeReference<>();

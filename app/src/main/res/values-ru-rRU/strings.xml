@@ -51,6 +51,7 @@
     <string name="title_invite_personnel">Добавить пользователя</string>
     <string name="caption_send">Добавить</string>
     <string name="caption_job_offer">Предложение о работе</string>
+    <string name="message_error_name_invalid">Введите имя</string>
     <string name="text_invitation_to_personnel">Привет! Вы были выбраны одним из %1$s нашего зала! Мы ожидаем вас в нашем приложении FitnessFactory! Просто войдите в приложение используя вашу почту!</string>
     <string name="caption_admins">администраторов</string>
     <string name="caption_coaches">тренеров</string>

@@ -19,6 +19,7 @@ import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.ui.activities.BaseActivity;
 import com.example.fitnessfactory.ui.components.filters.ValueCheckers.EmailValueChecker;
 import com.example.fitnessfactory.ui.components.filters.ValueCheckers.NoConditionChecker;
+import com.example.fitnessfactory.ui.components.filters.ValueCheckers.NotEmptyNameValueChecker;
 import com.example.fitnessfactory.ui.components.filters.ValueCheckers.ValueChecker;
 import com.example.fitnessfactory.utils.GuiUtils;
 import com.example.fitnessfactory.utils.ResUtils;
@@ -149,6 +150,15 @@ public class DialogUtils {
                 ResUtils.getString(R.string.caption_send),
                 ResUtils.getString(R.string.caption_cancel),
                 EmailValueChecker.getInstance());
+    }
+
+    public static Single<String> getAskUserNameDialog(BaseActivity context) {
+        return DialogUtils.showOneLineEditDialog(context,
+                ResUtils.getString(R.string.title_invite_personnel),
+                ResUtils.getString(R.string.caption_name),
+                ResUtils.getString(R.string.caption_send),
+                ResUtils.getString(R.string.caption_cancel),
+                NotEmptyNameValueChecker.getInstance());
     }
 
     public static Single<String> showOneLineEditDialog(BaseActivity context,

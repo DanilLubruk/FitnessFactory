@@ -5,6 +5,7 @@ import com.example.fitnessfactory.data.models.AppUser;
 import com.example.fitnessfactory.utils.UsersUtils;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -25,10 +26,15 @@ public class UserRepository extends BaseRepository {
 
     public Single<String> getUserIdByEmail(String userEmail) {
         return SingleCreate(emitter -> {
-            AppUser appUser = getAppUserByEmail(userEmail);
+            List<DocumentSnapshot> users = Tasks.await(newQuery().whereEmailEquals(userEmail).build().get()).getDocuments();
+            if (users.size() == 0) {
+                if (!emitter.isDisposed()) {
+                    emitter.onSuccess("");
+                }
+            }
 
             if (!emitter.isDisposed()) {
-                emitter.onSuccess(appUser.getId());
+                emitter.onSuccess(users.get(0).toObject(AppUser.class).getId());
             }
         });
     }

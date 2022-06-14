@@ -44,6 +44,7 @@ public abstract class PersonnelListViewModel extends SearchViewModel<AppUser, Se
     }
 
     public SingleLiveEvent<String> registerPersonnel(Single<String> emailDialog,
+                                                     Single<String> userNameDialog,
                                                      Single<Boolean> sendInvitationDialog,
                                                      boolean askForSendingInvite) {
         SingleLiveEvent<String> observer = new SingleLiveEvent<>();
@@ -58,6 +59,22 @@ public abstract class PersonnelListViewModel extends SearchViewModel<AppUser, Se
                             personnelEmail.set(email);
                             return Single.just(email);
                         })
+                        .subscribeOn(getIOScheduler())
+                        .observeOn(getIOScheduler())
+                        .flatMap(userEmail -> getAccessManager().isUserRegistered(userEmail))
+                        .subscribeOn(getIOScheduler())
+                        .observeOn(getIOScheduler())
+                        .subscribeOn(getMainThreadScheduler())
+                        .observeOn(getMainThreadScheduler())
+                        .flatMap(isUserRegistered -> isUserRegistered ? Single.just("") : userNameDialog)
+                        .subscribeOn(getMainThreadScheduler())
+                        .observeOn(getMainThreadScheduler())
+                        .subscribeOn(getIOScheduler())
+                        .observeOn(getIOScheduler())
+                        .flatMap(enteredName ->
+                                enteredName.isEmpty() ?
+                                        Single.just(personnelEmail.getValue()) :
+                                        getAccessManager().createUser(personnelEmail.getValue(), enteredName))
                         .subscribeOn(getIOScheduler())
                         .observeOn(getIOScheduler())
                         .flatMap(email ->

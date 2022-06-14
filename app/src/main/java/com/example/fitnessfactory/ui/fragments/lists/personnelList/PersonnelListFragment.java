@@ -130,6 +130,7 @@ public abstract class PersonnelListFragment
     private void showSendEmailInvitationDialog() {
         getViewModel().registerPersonnel(
                 DialogUtils.getAskEmailDialog(getBaseActivity()),
+                DialogUtils.getAskUserNameDialog(getBaseActivity()),
                 getAskToSendInvitationDialog(),
                 getAskToSendInvitationPrefs().getValue())
                 .observe(this, this::sendEmailInvitation);
